@@ -2,6 +2,67 @@
 # 使用此文件来配置您的系统环境 (it replaces /etc/nixos/configuration.nix)
 
 { inputs, outputs, lib, config, pkgs, ... }: {
+  environment.systemPackages = with pkgs; [
+  nixos-conf-editor
+  nix-software-center
+  alacritty
+  libnotify
+  wl-clipboard
+  wlr-randr
+  wayland
+  wayland-scanner
+  wayland-utils
+  egl-wayland
+  wayland-protocols
+  pkgs.xorg.xeyes
+  glfw-wayland
+  xwayland
+  pkgs.qt6.qtwayland
+  pcmanfm
+  polkit_gnome
+  networkmanagerapplet
+  wev
+  wf-recorder
+  alsa-lib
+  alsa-utils
+  flac
+  pulsemixer
+  linux-firmware
+  sshpass
+  pkgs.rust-bin.stable.latest.default
+  lxappearance
+  imagemagick
+  pkgs.sway-contrib.grimshot
+  flameshot
+  grim
+  git
+  neovim
+  helix
+  wget
+  neofetch
+  exa
+  gcc
+  clang
+  cargo
+  zig
+  p7zip
+  atool
+  unzip
+  joshuto
+  ffmpeg
+  ffmpegthumbnailer
+  glib
+  xdg-utils
+  pciutils
+  gdb
+  killall
+  nodejs
+  socat
+  zip
+  rar
+  frp
+];
+  
   nix.settings.substituters = [ "https://mirrors.bfsu.edu.cn/nix-channels/store" ];
   # 可以在这里导入其他 NixOS 模块
   imports = [
