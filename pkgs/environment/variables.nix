@@ -5,11 +5,6 @@
       EDITOR = "helix";
       BROWSER = "firefox";
       TERMINAL = "alacritty";
-      GTK_IM_MODULE = "fcitx";
-      QT_IM_MODULE = "fcitx";
-      XMODIFIERS = "@im=fcitx";
-      SDL_IM_MODULE = "fcitx";
-      GLFW_IM_MODULE = "ibus";
       QT_QPA_PLATFORMTHEME = "qt5ct";
       QT_SCALE_FACTOR = "1";
       MOZ_ENABLE_WAYLAND = "1";

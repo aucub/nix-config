@@ -1,0 +1,177 @@
+{
+    "name": "main-bar",
+    "id": "main-bar",
+    "layer": "top",
+    "mode": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "height": 32,
+    "spacing": 6,
+    "margin": 0,
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    "fixed-center": true,
+    "ipc": true,
+    "modules-left": [
+        "wlr/workspaces",
+        "cpu",
+        "memory",
+        "disk"
+    ],
+    "modules-center": [
+        "mpd",
+        "tray"
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "network",
+        "battery",
+        "clock"
+    ],
+    "backlight": {
+        "interval": 2,
+        "align": 0,
+        "rotate": 0,
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "",
+            "",
+            "",
+            ""
+        ],
+        "on-click": "",
+        "on-click-middle": "",
+        "on-click-right": "",
+        "on-update": "",
+        "on-scroll-up": "light -A 5%",
+        "on-scroll-down": "light -U 5%",
+        "smooth-scrolling-threshold": 1
+    },
+    "wlr/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "all-outputs": true,
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "ﭮ",
+            "6": "",
+            "7": "",
+            "8": "",
+            "9": "",
+            "10": "﮼",
+            "focused": "",
+            "default": ""
+        }
+    },
+    "battery": {
+        "interval": 60,
+        "align": 0,
+        "rotate": 0,
+        "full-at": 100,
+        "design-capacity": false,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-full": "{icon} Full",
+        "format-alt": "{icon} {time}",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "format-time": "{H}h {M}min",
+        "tooltip": true
+    },
+    "clock": {
+        "interval": 60,
+        "align": 0,
+        "rotate": 0,
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": " {:%H:%M}",
+        "format-alt": " {:%a %b %d, %G}"
+    },
+    "cpu": {
+        "interval": 5,
+        "format": " LOAD: {usage}%"
+    },
+    "disk": {
+        "interval": 30,
+        "format": " FREE: {free}"
+    },
+    "memory": {
+        "interval": 10,
+        "format": " USED: {used:0.1f}G"
+    },
+    "mpd": {
+        "interval": 2,
+        "unknown-tag": "N/A",
+        "format": "{stateIcon} {artist} - {title}",
+        "format-disconnected": " Disconnected",
+        "format-paused": "{stateIcon} {artist} - {title}",
+        "format-stopped": "Stopped ",
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc toggle",
+        "on-click-middle": "mpc prev",
+        "on-click-right": "mpc next",
+        "on-update": "",
+        "on-scroll-up": "mpc seek +00:00:01",
+        "on-scroll-down": "mpc seek -00:00:01",
+        "smooth-scrolling-threshold": 1
+    },
+    "network": {
+        "interval": 5,
+        "format-wifi": " {essid}",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "睊 Disconnected",
+        "format-disabled": "睊 Disabled",
+        "format-alt": " {bandwidthUpBits} |  {bandwidthDownBits}",
+        "tooltip-format": " {ifname} via {gwaddr}"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": " Mute",
+        "format-bluetooth": " {volume}% {format_source}",
+        "format-bluetooth-muted": " Mute",
+        "format-source": " {volume}%",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "scroll-step": 5.0,
+        "on-click": "amixer set Master toggle",
+        "on-click-right": "pavucontrol",
+        "smooth-scrolling-threshold": 1
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 10
+    }
+}

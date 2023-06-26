@@ -3,12 +3,106 @@
 
 { inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
+  # 命令行工具
+  neofetch
+  nnn
+  ranger
+
+  # utils
+  exa
+  fzf 
+  bat
+  fd
+  rigrep
+  mcfly
+  du-dust
+  duf
+  jq
+
+  # networking tools
+  networkmanagerapplet
+  wget
+  curl
+  aria2 
+  socat
+
+  # system tools
+  pciutils
+  dmidecode 
+
+  # xdg
+  xdg-utils 
+  xdg-user-dirs
+
+  # productivity
+  btop
+  htop
+  nvtop
+  gcc
+  clang
+
+  # archives
+  zip
+  rar
+  xz
+  unzip
+  p7zip
+  atool
+
+  # misc
+  cowsay
+  file
+  which
+  tree
+  gnused
+  gnutar
+  gawk
+  zstd
+  gnupg
+  dkms
+
+  # nix related
   nixos-conf-editor
-  nix-software-center
-  alacritty
-  libnotify
-  wl-clipboard
-  wlr-randr
+  
+  # video
+  ffmpeg-full
+
+  # audio control
+  pavucontrol
+  playerctl
+  pulsemixer
+  pipewire 
+  pipewire-alsa 
+  pipewire-audio 
+  pipewire-jack 
+  pipewire-pulse 
+  alsa-lib
+  alsa-utils
+  flac
+
+  # video/audio tools
+  libva
+  libva-utils
+  vdpauinfo
+  vulkan-loader
+  vulkan-validation-layers
+  vulkan-tools
+  glxinfo
+  mesa 
+  mesa-utils
+
+  # images
+  viu 
+  imagemagick
+  graphviz
+
+  # live streaming
+  obs-studio
+
+  # 用于播放系统音效
+  mpd # for playing system sounds
+
+  # wayland
   wayland
   wayland-scanner
   wayland-utils
@@ -18,52 +112,27 @@
   glfw-wayland
   xwayland
   pkgs.qt6.qtwayland
+
+  # GUI
+  alacritty
   pcmanfm
+  
+  # security
   polkit_gnome
-  networkmanagerapplet
-  wev
-  wf-recorder
-  alsa-lib
-  alsa-utils
-  flac
-  pulsemixer
+  
+  # system
   linux-firmware
-  sshpass
-  pkgs.rust-bin.stable.latest.default
-  lxappearance
-  imagemagick
-  pkgs.sway-contrib.grimshot
-  flameshot
-  grim
-  git
+
+  # bluetooth
+  bluez
+  bluez-libs 
+
+  # editor
   neovim
   helix
-  wget
-  neofetch
-  exa
-  gcc
-  clang
-  cargo
-  zig
-  p7zip
-  atool
-  unzip
-  joshuto
-  ffmpeg
-  ffmpegthumbnailer
-  glib
-  xdg-utils
-  pciutils
-  gdb
-  killall
-  nodejs
-  socat
-  zip
-  rar
-  frp
-];
   
-  nix.settings.substituters = [ "https://mirrors.bfsu.edu.cn/nix-channels/store" ];
+];
+
   # 可以在这里导入其他 NixOS 模块
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -122,9 +191,13 @@
     };
   };
 
+
   # 添加您当前配置的其余部分
 
+  programs.dconf.enable = true;
+
   networking = {
+    firewall.enable = false;
     hostName = "legion";
     networkmanager.enable = true;
   };
@@ -135,10 +208,16 @@
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-chinese-addons fcitx5-table-extra ];
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "zh_CN.UTF-8";
+    LC_IDENTIFICATION = "zh_CN.UTF-8";
+    LC_MEASUREMENT = "zh_CN.UTF-8";
+    LC_MONETARY = "zh_CN.UTF-8";
+    LC_NAME = "zh_CN.UTF-8";
+    LC_NUMERIC = "zh_CN.UTF-8";
+    LC_PAPER = "zh_CN.UTF-8";
+    LC_TELEPHONE = "zh_CN.UTF-8";
+    LC_TIME = "zh_CN.UTF-8";
   };
 
   # 设置您的主机名
@@ -182,7 +261,12 @@
       };
     };
   };
+
   security.polkit.enable = true;
+  security.rtkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
   security.sudo = {
     enable = false;
     extraConfig = ''
@@ -196,23 +280,28 @@
     '';
   };
 
-  services = {
-    dbus = {
-      packages = with pkgs; [dconf gcr udisks2];
-      enable = true;
-    };
-    udev.packages = with pkgs; [gnome.gnome-settings-daemon android-udev-rules ledger-udev-rules];
-    journald.extraConfig = ''
-      SystemMaxUse=50M
-      RuntimeMaxUse=10M
-    '';
-    udisks2.enable = true;
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    xdgOpenUsePortal = false;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
+      xdg-desktop-portal-gtk # for gtk
+      # xdg-desktop-portal-kde  # for kde
+    ];
   };
 
   zramSwap = {
     enable = true;
     algorithm = "zstd";
   };
+
+  environment.shells = with pkgs; [
+    bash
+    zsh
+    fish
+  ];
+  users.defaultUserShell = pkgs.zsh;
 
   # 配置您的全局用户，组设置，根据需要添加更多用户
   users.users = {
@@ -228,8 +317,19 @@
       ];
       uid = 1000;
       # 要添加您需要的任何其他组 (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "users" "networkmanager" ];
     };
+  };
+
+  services = {
+    dbus.packages = [ pkgs.gcr ];
+    geoclue2.enable = true;
+    udev.packages = with pkgs; [gnome.gnome-settings-daemon   platformio android-udev-rules ledger-udev-rules];
+    journald.extraConfig = ''
+      SystemMaxUse=50M
+      RuntimeMaxUse=10M
+    '';
+    udisks2.enable = true;
   };
 
   services.getty.autologinUser = "nix";
@@ -237,11 +337,36 @@
   # 设置一个SSH服务器，如果您正在设置一个无需显示器的系统，则非常重要。如果您不需要它，请随意将其删除
   services.openssh = {
     enable = false;
-    # 禁止通过SSH登录root账户
-    permitRootLogin = "no";
-    # 仅使用密钥进行 SSH 登录，如果要使用密码进行 SSH 登录，请删除此设置
-    passwordAuthentication = true;
+    settings = {
+      # 禁止通过SSH登录root账户
+      PermitRootLogin = "no"; # 仅使用密钥进行 SSH 登录
+      PasswordAuthentication = false;
+    };
+    openFirewall = true;
   };
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  services.gvfs.enable = true; # Mount, trash, and other functionalities
+  services.tumbler.enable = true; # Thumbnail support for images
+  services.upower.enable = true;
+  services.blueman.enable = true;
+  services.flatpak.enable = true;
+
+  sound.enable = false;
+  hardware.pulseaudio.enable = false;
+  hardware.bluetooth.enable = true;
+
+  power-profiles-daemon = {
+    enable = true;
+  };
+
+  programs.ssh.startAgent = true;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";

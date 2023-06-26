@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
   services = {
     tlp.enable = true;
     auto-cpufreq.enable = true;
@@ -33,12 +31,6 @@
   environment = {
     systemPackages = with pkgs; [
       nvidia-offload
-      libva
-      libva-utils
-      glxinfo
-      vulkan-loader
-      vulkan-validation-layers
-      vulkan-tools
     ];
   };
 }

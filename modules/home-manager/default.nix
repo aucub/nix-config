@@ -4,4 +4,8 @@
 {
   # 列出您的模块文件在此处
   # my-module = import ./my-module.nix;
+  home = import ./home.nix;
+  alacritty = import ./alacritty/default.nix
+  fcitx5 = import ./fcitx5/default.nix
+
 }
