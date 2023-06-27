@@ -4,7 +4,7 @@
   services = {
     tlp.enable = true;
     auto-cpufreq.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
+    xserver.videoDrivers = [ "amdgpu-pro" "nvidia" ];
   };
 
   hardware = {
