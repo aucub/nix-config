@@ -3,135 +3,138 @@
 
 { inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
-  # 命令行工具
-  neofetch
-  nnn
-  ranger
+    # 命令行工具
+    neofetch
+    nnn
+    ranger
 
-  # utils
-  exa
-  fzf 
-  bat
-  fd
-  rigrep
-  mcfly
-  du-dust
-  duf
-  jq
+    # utils
+    exa
+    fzf
+    bat
+    fd
+    rigrep
+    mcfly
+    du-dust
+    duf
+    jq
 
-  # networking tools
-  networkmanagerapplet
-  wget
-  curl
-  aria2 
-  socat
+    # 网络
+    networkmanagerapplet
+    wget
+    curl
+    aria2
+    socat
 
-  # system tools
-  pciutils
-  dmidecode 
+    # system tools
+    pciutils
+    dmidecode
 
-  # xdg
-  xdg-utils 
-  xdg-user-dirs
+    # xdg
+    xdg-utils
+    xdg-user-dirs
 
-  # productivity
-  btop
-  htop
-  nvtop
-  gcc
-  clang
+    # productivity
+    btop
+    htop
+    nvtop
+    gcc
+    clang
 
-  # archives
-  zip
-  rar
-  xz
-  unzip
-  p7zip
-  atool
+    # archives
+    zip
+    rar
+    xz
+    unzip
+    p7zip
+    atool
 
-  # misc
-  cowsay
-  file
-  which
-  tree
-  gnused
-  gnutar
-  gawk
-  zstd
-  gnupg
-  dkms
+    # misc
+    bc
+    cowsay
+    file
+    which
+    tree
+    gnused
+    gnutar
+    gawk
+    zstd
+    gnupg
+    dkms
 
-  # nix related
-  nixos-conf-editor
-  
-  # video
-  ffmpeg-full
+    # nix related
+    nixos-conf-editor
 
-  # audio control
-  pavucontrol
-  playerctl
-  pulsemixer
-  pipewire 
-  pipewire-alsa 
-  pipewire-audio 
-  pipewire-jack 
-  pipewire-pulse 
-  alsa-lib
-  alsa-utils
-  flac
+    # video
+    ffmpeg-full
 
-  # video/audio tools
-  libva
-  libva-utils
-  vdpauinfo
-  vulkan-loader
-  vulkan-validation-layers
-  vulkan-tools
-  glxinfo
-  mesa 
-  mesa-utils
+    # audio control
+    pavucontrol
+    playerctl
+    pulsemixer
+    pipewire
+    pipewire-alsa
+    pipewire-audio
+    pipewire-jack
+    pipewire-pulse
+    alsa-lib
+    alsa-utils
+    flac
 
-  # images
-  viu 
-  imagemagick
-  graphviz
+    # video/audio tools
+    libva
+    libva-utils
+    vaapiVdpau
+    libvdpau-va-gl
+    vdpauinfo
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-tools
+    glxinfo
+    mesa
+    mesa-utils
 
-  # live streaming
-  obs-studio
+    # images
+    viu
+    imagemagick
+    graphviz
 
-  # 用于播放系统音效
-  mpd # for playing system sounds
+    # live streaming
+    obs-studio
 
-  # wayland
-  wayland
-  wayland-scanner
-  wayland-utils
-  egl-wayland
-  wayland-protocols
-  pkgs.xorg.xeyes
-  glfw-wayland
-  xwayland
-  pkgs.qt6.qtwayland
+    # 用于播放系统音效
+    mpd # for playing system sounds
 
-  # GUI
-  alacritty
-  pcmanfm
-  
-  # security
-  polkit_gnome
-  
-  # system
-  linux-firmware
+    # wayland
+    wayland
+    wayland-scanner
+    wayland-utils
+    egl-wayland
+    wayland-protocols
+    pkgs.xorg.xeyes
+    glfw-wayland
+    xwayland
+    pkgs.qt6.qtwayland
 
-  # bluetooth
-  bluez
-  bluez-libs 
+    # security
+    polkit_gnome
 
-  # editor
-  neovim
-  helix
-  
-];
+    # system
+    linux-firmware
+
+    # bluetooth
+    bluez
+    bluez-libs
+
+    # editor
+    neovim
+    helix
+
+    # GUI
+    alacritty
+    pcmanfm
+
+  ];
 
   # 可以在这里导入其他 NixOS 模块
   imports = [
@@ -181,7 +184,8 @@
 
     # 使您的输入进一步添加到系统通道中
     # 同时使传统的nix命令保持一致
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
+      config.nix.registry;
 
     settings = {
       # Enable flakes and new 'nix' command
@@ -189,12 +193,32 @@
       # 去重和优化nix存储
       auto-optimise-store = true;
     };
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+    };
+
+    # 防止构建中出现杂质
+    useSandbox = true;
+
+    # 授予 root 用户和 wheel 组特殊权限
+    trustedUsers = ["root" "@wheel"];
+
   };
 
-
   # 添加您当前配置的其余部分
-
-  programs.dconf.enable = true;
+  programs = { 
+    dconf.enable = true; 
+    ssh.startAgent = true;
+    fuse.userAllowOther = true;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+    jq.enable = true;
+    man.enable = true;
+  };
 
   networking = {
     firewall.enable = false;
@@ -207,23 +231,25 @@
     hardwareClockInLocalTime = true;
   };
 
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "zh_CN.UTF-8";
-    LC_IDENTIFICATION = "zh_CN.UTF-8";
-    LC_MEASUREMENT = "zh_CN.UTF-8";
-    LC_MONETARY = "zh_CN.UTF-8";
-    LC_NAME = "zh_CN.UTF-8";
-    LC_NUMERIC = "zh_CN.UTF-8";
-    LC_PAPER = "zh_CN.UTF-8";
-    LC_TELEPHONE = "zh_CN.UTF-8";
-    LC_TIME = "zh_CN.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+    extraLocaleSettings = {
+      LC_ADDRESS = "zh_CN.UTF-8";
+      LC_IDENTIFICATION = "zh_CN.UTF-8";
+      LC_MEASUREMENT = "zh_CN.UTF-8";
+      LC_MONETARY = "zh_CN.UTF-8";
+      LC_NAME = "zh_CN.UTF-8";
+      LC_NUMERIC = "zh_CN.UTF-8";
+      LC_PAPER = "zh_CN.UTF-8";
+      LC_TELEPHONE = "zh_CN.UTF-8";
+      LC_TIME = "zh_CN.UTF-8";
+    };
   };
 
-  # 设置您的主机名
-  networking.hostName = "nix";
+  console.keyMap = "us";
 
-  # 只是一个例子，请务必使用您喜欢的启动程序
+  # 启动程序
   boot = {
     kernelPackages = pkgs.linuxPackages_xanmod_latest;
     bootspec.enable = true;
@@ -245,6 +271,12 @@
     ];
     consoleLogLevel = 3;
     initrd.verbose = false;
+    initrd.kernelModules = [ "amdgpu" ];
+    kernelModules = [ "v4l2loopback" ];
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    extraModprobeConfig = ''
+      options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
+    '';
   };
 
   systemd = {
@@ -254,7 +286,8 @@
       after = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        ExecStart =
+          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
@@ -262,28 +295,50 @@
     };
   };
 
-  security.polkit.enable = true;
-  security.rtkit.enable = true;
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd.enableGnomeKeyring = true;
-
-  security.sudo = {
-    enable = false;
-    extraConfig = ''
-      nix ALL=(ALL) NOPASSWD:ALL
-    '';
+  nvidia = {
+      modesetting.enable = true;
+      prime = {
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
+      };
+    };
   };
-  security.doas = {
-    enable = true;
-    extraConfig = ''
-      permit nopass :wheel
-    '';
+
+  security = {
+    polkit.enable = true;
+    rtkit.enable = true;
+    pam.services.greetd.enableGnomeKeyring = true;
+    sudo = {
+      enable = false;
+      extraConfig = ''
+        nix ALL=(ALL) NOPASSWD:ALL
+      '';
+    };
+    doas = {
+      enable = true;
+      extraConfig = ''
+        permit nopass :wheel
+      '';
+    };
   };
 
   xdg.portal = {
     enable = true;
     wlr.enable = true;
     xdgOpenUsePortal = false;
+    userDirs = {
+      enable = true;
+      createDirectories = false;
+      desktop = "$HOME/Desktop";
+      documents = "$HOME/Documents";
+      download = "$HOME/Downloads";
+      music = "$HOME/Music";
+      pictures = "$HOME/Pictures";
+      videos = "$HOME/Videos";
+    };
+    gtkUsePortal = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
       xdg-desktop-portal-gtk # for gtk
@@ -296,46 +351,56 @@
     algorithm = "zstd";
   };
 
-  environment.shells = with pkgs; [
-    bash
-    zsh
-    fish
-  ];
-  users.defaultUserShell = pkgs.zsh;
+  environment.shells = with pkgs; [ bash zsh fish ];
 
   # 配置您的全局用户，组设置，根据需要添加更多用户
-  users.users = {
-    # 将其替换为您的用户名
-    nix = {
-      # 可以为您的用户设置一个初始密码，如果您这样做了，您可以通过在nixos-install中传递“--no-root-passwd”来过设置根密码
-      # 在重新启动后一定记得用passwd更改密码
-      shell = pkgs.zsh;
-      initialPassword = "nix";
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        # 如果您打算使用SSH连接，请在此处添加您的SSH公钥
-      ];
-      uid = 1000;
-      # 要添加您需要的任何其他组 (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" "users" "networkmanager" ];
+  users = {
+    mutableUsers = true;
+    defaultUserShell = pkgs.zsh;
+    users = {
+      # 将其替换为您的用户名
+      nix = {
+        # 可以为您的用户设置一个初始密码，如果您这样做了，您可以通过在nixos-install中传递“--no-root-passwd”来过设置根密码
+        # 在重新启动后一定记得用passwd更改密码
+        shell = pkgs.zsh;
+        initialPassword = "nix";
+        isNormalUser = true;
+        openssh.authorizedKeys.keys = [
+          # 如果您打算使用SSH连接，请在此处添加您的SSH公钥
+        ];
+        uid = 1000;
+        # 要添加您需要的任何其他组 (such as networkmanager, audio, docker, etc)
+        extraGroups = [ "wheel" "users" "networkmanager" ];
+      };
     };
   };
 
   services = {
+    btrfs.autoScrub.enable = true;
+    xserver = {
+      enable = true;
+      videoDrivers = [ "nvidia" ];
+      libinput = {
+        enable = true;
+        # 鼠标加速
+        mouse.accelProfile = "adaptive";
+        # 触摸板设置
+        touchpad.naturalScrolling = true;
+      };
+    };
+    getty.autologinUser = "nix";
+    gnome.gnome-keyring.enable = true;
     dbus.packages = [ pkgs.gcr ];
     geoclue2.enable = true;
-    udev.packages = with pkgs; [gnome.gnome-settings-daemon   platformio android-udev-rules ledger-udev-rules];
-    journald.extraConfig = ''
-      SystemMaxUse=50M
-      RuntimeMaxUse=10M
-    '';
+    udev.packages = with pkgs; [
+      gnome.gnome-settings-daemon
+      platformio
+      android-udev-rules
+      ledger-udev-rules
+    ];
     udisks2.enable = true;
-  };
-
-  services.getty.autologinUser = "nix";
-
-  # 设置一个SSH服务器，如果您正在设置一个无需显示器的系统，则非常重要。如果您不需要它，请随意将其删除
-  services.openssh = {
+    # 设置SSH服务器
+    openssh = {
     enable = false;
     settings = {
       # 禁止通过SSH登录root账户
@@ -344,30 +409,45 @@
     };
     openFirewall = true;
   };
-
-  services.pipewire = {
+  pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
+    jack.enable = true;
     pulse.enable = true;
+    wireplumber.enable = true;
   };
-
-  services.gvfs.enable = true; # Mount, trash, and other functionalities
-  services.tumbler.enable = true; # Thumbnail support for images
-  services.upower.enable = true;
-  services.blueman.enable = true;
-  services.flatpak.enable = true;
-
+  journald.extraConfig = ''
+      SystemMaxUse=50M
+      RuntimeMaxUse=10M
+    '';
+  fstrim.enable = true;
+  printing.enable = true;
+  fwupd.enable = true;
+  gvfs.enable = true; # Mount, trash, and other functionalities
+  tumbler.enable = true; # Thumbnail support for images
+  upower.enable = true;
+  blueman.enable = true;
+  flatpak.enable = true;
+  };
+  
   sound.enable = false;
-  hardware.pulseaudio.enable = false;
-  hardware.bluetooth.enable = true;
 
-  power-profiles-daemon = {
-    enable = true;
+  hardware = {
+    pulseaudio.enable = false;
+    opengl = {
+      enable = true;
+      driSupport = true;
+    };
+    # smooth backlight control
+    brillo.enable = true;
+    bluetooth.enable = true;
+    cpu.amd.updateMicrocode = true;
   };
 
-  programs.ssh.startAgent = true;
+  power-profiles-daemon = { enable = true; };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
 }
+
