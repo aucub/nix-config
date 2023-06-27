@@ -342,7 +342,6 @@
 
   # 配置您的全局用户，组设置，根据需要添加更多用户
   users = {
-    mutableUsers = true;
     defaultUserShell = pkgs.zsh;
     users = {
       root.initialPassword = "root";
@@ -358,7 +357,7 @@
         ];
         uid = 1000;
         # 要添加您需要的任何其他组 (such as networkmanager, audio, docker, etc)
-        extraGroups = [ "wheel" "users" "networkmanager" ];
+        extraGroups = [ "wheel" "users" "networkmanager" "systemd-journal" "audio" "video" "input" "lp" "power" "nix" ];
       };
     };
   };
