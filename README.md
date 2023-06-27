@@ -21,8 +21,8 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 flatpak install netease-cloud-music-gtk
 
 # 从 flathub 搜索应用程序
-flatpak search <keyword>
 # 网站搜索: https://flathub.org/
+flatpak search <keyword>
 ```
 
 ## 在 NixOS 上运行未修改的二进制文件
@@ -34,4 +34,4 @@ $ fhs
 (fhs) $ ./bin/code
 ```
 
-对于其他方法: [在 Nixos 上运行非 nixos 可执行文件的方法](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos).
+对于其他方法: [在 Nixos 上运行非 nixos 可执行文件的方法](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos)
