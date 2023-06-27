@@ -18,10 +18,10 @@ nix develop --extra-experimental-features nix-command --extra-experimental-featu
 5. 拷贝 /mnt/etc/nixos 中的 `hardware-configuration.nix` 
 6. 安装
 ```bash
-nixos-install --no-root-passwd --flake .
+nixos-install --flake .nixos
 
 #或者指定源：
-nixos-install --option substituters "https://mirrors.bfsu.edu.cn/nix-channels/store" --no-root-passwd --flake .
+nixos-install --option substituters "https://mirrors.bfsu.edu.cn/nix-channels/store" --flake .nixos
 ```
 
 ### 重建
