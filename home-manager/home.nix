@@ -81,6 +81,10 @@
       package = pkgs.papirus-icon-theme;
       name = "Papirus";
     };
+    theme = {
+      name = "Orchis theme";
+      package = pkgs.orchis-theme;
+    };
   };
 
   qt = {

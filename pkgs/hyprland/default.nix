@@ -7,26 +7,21 @@
 
   programs = {
     light.enable = true;
-  };
-
-  programs.hyprland = {
-    enable = true;
-
-    xwayland = {
+    hyprland = {
       enable = true;
-      hidpi = true;
+      xwayland = {
+        enable = true;
+        hidpi = true;
+      };
+      nvidiaPatches = true;
     };
-
-    nvidiaPatches = true;
   };
 
   services.xserver = {
     enable = true;
-
     desktopManager = {
       xterm.enable = false;
     };
-
     displayManager = {
       defaultSession = "hyprland";
       lightdm.enable = false;
@@ -56,13 +51,5 @@
     swaylock-effects
     pamixer
   ];
-
-  security.pam.services.swaylock = { };
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-  };
-
-  fonts.fontconfig.enable = true;
 
 }

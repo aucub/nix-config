@@ -85,7 +85,6 @@
     libva
     libva-utils
     vaapiVdpau
-    libvdpau-va-gl
     vdpauinfo
     vulkan-loader
     vulkan-validation-layers
@@ -249,9 +248,8 @@
 
   console.keyMap = "us";
 
-  # 启动程序
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod_latest;
+    kernelPackages = pkgs.linuxKernel.kernels.linux_lqx;
     bootspec.enable = true;
     loader = {
       systemd-boot = {
@@ -271,7 +269,7 @@
     ];
     consoleLogLevel = 3;
     initrd.verbose = false;
-    initrd.kernelModules = [ "amdgpu" ];
+    initrd.kernelModules = [ "amdgpu" "btrfs" ];
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
     extraModprobeConfig = ''
@@ -291,17 +289,6 @@
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
-      };
-    };
-  };
-
-  nvidia = {
-      modesetting.enable = true;
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
       };
     };
   };
@@ -360,7 +347,7 @@
     users = {
       # 将其替换为您的用户名
       nix = {
-        # 可以为您的用户设置一个初始密码，如果您这样做了，您可以通过在nixos-install中传递“--no-root-passwd”来过设置根密码
+        # 可以为您的用户设置一个初始密码，如果您这样做了，您可以通过在nixos-install中传递“--no-root-passwd”来跳过设置根密码
         # 在重新启动后一定记得用passwd更改密码
         shell = pkgs.zsh;
         initialPassword = "nix";
@@ -379,7 +366,7 @@
     btrfs.autoScrub.enable = true;
     xserver = {
       enable = true;
-      videoDrivers = [ "nvidia" ];
+      layout = "us";
       libinput = {
         enable = true;
         # 鼠标加速
@@ -401,11 +388,11 @@
     udisks2.enable = true;
     # 设置SSH服务器
     openssh = {
-    enable = false;
-    settings = {
-      # 禁止通过SSH登录root账户
-      PermitRootLogin = "no"; # 仅使用密钥进行 SSH 登录
-      PasswordAuthentication = false;
+      enable = false;
+      settings = {
+        # 禁止通过SSH登录root账户
+        PermitRootLogin = "no"; # 仅使用密钥进行 SSH 登录
+        PasswordAuthentication = false;
     };
     openFirewall = true;
   };
@@ -439,7 +426,7 @@
       enable = true;
       driSupport = true;
     };
-    # smooth backlight control
+    # 平滑背光控制
     brillo.enable = true;
     bluetooth.enable = true;
     cpu.amd.updateMicrocode = true;

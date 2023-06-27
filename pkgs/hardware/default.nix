@@ -6,15 +6,19 @@
     auto-cpufreq.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
   };
+
   hardware = {
     nvidia = {
+      package = linuxKernel.packages.linux_lqx.nvidia_x11_production_open;
       powerManagement.enable = true;
       open = true;
       modesetting.enable = true;
       prime = {
-        offload.enable = true;
+        offload = {
+          enable = true;
+          enableOffloadCmd = true;
+        };
       };
-
     };
     opengl = {
       enable = true;
@@ -22,7 +26,6 @@
       driSupport32Bit = true;
       extraPackages = with pkgs; [
         nvidia-vaapi-driver
-        vaapiVdpau
         libvdpau-va-gl
       ];
     };
