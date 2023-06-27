@@ -85,6 +85,10 @@
       name = "Orchis theme";
       package = pkgs.orchis-theme;
     };
+    font = {
+      name = config.fontProfiles.regular.family;
+      size = 12;
+    };
   };
 
   qt = {
