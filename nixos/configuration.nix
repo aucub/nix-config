@@ -298,7 +298,7 @@
     rtkit.enable = true;
     pam.services.greetd.enableGnomeKeyring = true;
     sudo = {
-      enable = false;
+      enable = true;
       extraConfig = ''
         nix ALL=(ALL) NOPASSWD:ALL
       '';
@@ -345,6 +345,7 @@
     mutableUsers = true;
     defaultUserShell = pkgs.zsh;
     users = {
+      root.initialPassword = "root";
       # 将其替换为您的用户名
       nix = {
         # 可以为您的用户设置一个初始密码，如果您这样做了，您可以通过在nixos-install中传递“--no-root-passwd”来跳过设置根密码

@@ -26,7 +26,7 @@
       defaultSession = "hyprland";
       lightdm.enable = false;
       gdm = {
-        enable = true;
+        enable = false;
         wayland = true;
       };
     };
