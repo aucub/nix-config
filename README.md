@@ -14,29 +14,24 @@ sudo nixos-rebuild switch --flake .
 可以从 flathub 安装应用程序，其中有很多应用程序在 nixpkgs 中得不到支持
 
 ```bash
-# Add the Flathub repository
+# 添加 flathub 存储库
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-# install apps from flathub
+# 从 flathub 安装应用程序
 flatpak install netease-cloud-music-gtk
 
-# install 3d printer slicer - cura
-flatpak install flathub com.ultimaker.cura
-
-# or you can search apps from flathub
+# 从 flathub 搜索应用程序
 flatpak search <keyword>
-# search on website is also supported: https://flathub.org/
+# 网站搜索: https://flathub.org/
 ```
 
 ## 在 NixOS 上运行未修改的二进制文件
 
-> the `fhs` command is defined at [./modules/nixos/core-desktop.nix#L145](https://github.com/ryan4yin/nix-config/blob/v0.0.5/modules/nixos/core-desktop.nix#L145)
-
 ```shell
-# Activating FHS drops me in a shell which looks like a "normal" Linux
+# 激活 FHS 会进入一个像普通 Linux 的 shell
 $ fhs
 (fhs) $ ls /usr/bin
 (fhs) $ ./bin/code
 ```
 
-for other methods, check out [Different methods to run a non-nixos executable on Nixos](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos).
+对于其他方法: [在 Nixos 上运行非 nixos 可执行文件的方法](https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos).
