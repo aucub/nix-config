@@ -18,36 +18,7 @@
       };
       nvidiaPatches = true;
     };
-    bash = {
-      initExtra = ''
-        if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
-            exec  Hyprland
-        fi
-      '';
-    };
-    fish = {
-      loginShellInit = ''
-        set TTY1 (tty)
-        [ "$TTY1" = "/dev/tty1" ] && exec Hyprland
-      '';
-    };
   };
-
-  services.xserver = {
-    enable = true;
-    desktopManager = {
-      xterm.enable = false;
-    };
-    displayManager = {
-      defaultSession = "hyprland";
-      lightdm.enable = false;
-      gdm = {
-        enable = false;
-        wayland = true;
-      };
-    };
-  };
-
 
   environment.systemPackages = with pkgs; [
     waybar # the status bar
