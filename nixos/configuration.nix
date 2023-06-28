@@ -146,7 +146,7 @@
     extraSpecialArgs = { inherit inputs; };
     users = {
       # 导入home-manager配置
-      nix = import ../home-manager;
+      nix = import ../home-manager/home.nix;
     };
   };
 
