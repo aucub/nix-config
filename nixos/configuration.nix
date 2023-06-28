@@ -230,7 +230,6 @@
   console.keyMap = "us";
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_lqx;
     bootspec.enable = true;
     loader = {
       systemd-boot = {
