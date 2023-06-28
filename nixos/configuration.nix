@@ -277,9 +277,6 @@
     sudo = {
       enable = true;
     };
-    doas = {
-      enable = true;
-    };
   };
 
   xdg.portal = {
@@ -324,17 +321,6 @@
 
   services = {
     btrfs.autoScrub.enable = true;
-    xserver = {
-      enable = true;
-      layout = "us";
-      libinput = {
-        enable = true;
-        # 鼠标加速
-        mouse.accelProfile = "adaptive";
-        # 触摸板设置
-        touchpad.naturalScrolling = true;
-      };
-    };
     getty.autologinUser = "nix";
     gnome.gnome-keyring.enable = true;
     dbus.packages = [ pkgs.gcr ];
