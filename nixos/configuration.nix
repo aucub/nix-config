@@ -37,7 +37,6 @@
     # productivity
     btop
     htop
-    nvtop
     gcc
     clang
 
@@ -129,6 +128,13 @@
   # 可以在这里导入其他 NixOS 模块
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    home-manager = {
+      extraSpecialArgs = { inherit inputs; };
+      users = {
+        # 导入home-manager配置
+        nix = import ../home-manager;
+      };
+    };
     # 在 flake 中使用模块（来自 modules/nixos）:
     # outputs.nixosModules.example
 
@@ -240,7 +246,7 @@
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      timeout = 3;
+      timeout = 4;
     };
     kernelParams = [
       "nvidia-drm.modeset=1"
@@ -289,7 +295,6 @@
     enable = true;
     wlr.enable = true;
     xdgOpenUsePortal = false;
-    gtkUsePortal = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
       xdg-desktop-portal-gtk # for gtk
@@ -394,9 +399,8 @@
     brillo.enable = true;
     bluetooth.enable = true;
     cpu.amd.updateMicrocode = true;
-  };
+  }; 
   
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
 }
 

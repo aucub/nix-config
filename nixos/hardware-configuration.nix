@@ -1,9 +1,7 @@
 # 示例，使用 nixos-generate-config 生成您自己的配置文件，并将其放在这里
 { config, lib, pkgs, modulesPath, ...
 }: {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+
   boot.initrd.availableKernelModules = [
     "nvme""xhci_pci""ahci""usbhid""usb_storage""sd_mod"
   ];
