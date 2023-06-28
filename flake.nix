@@ -3,7 +3,6 @@
 
   nixConfig = {
     substituters = [
-      "https://mirrors.bfsu.edu.cn/nix-channels/store"
       "https://cache.nixos.org/"
     ];
 
@@ -25,8 +24,6 @@
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    hardware.url = "github:nixos/nixos-hardware/lenovo/legion/15arh05h/default.nix";
 
   };
 

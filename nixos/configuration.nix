@@ -13,7 +13,7 @@
     fzf
     bat
     fd
-    rigrep
+    ripgrep
     mcfly
     du-dust
     duf
@@ -60,10 +60,6 @@
     gawk
     zstd
     gnupg
-    dkms
-
-    # nix related
-    nixos-conf-editor
 
     # video
     ffmpeg-full
@@ -73,10 +69,6 @@
     playerctl
     pulsemixer
     pipewire
-    pipewire-alsa
-    pipewire-audio
-    pipewire-jack
-    pipewire-pulse
     alsa-lib
     alsa-utils
     flac
@@ -91,7 +83,6 @@
     vulkan-tools
     glxinfo
     mesa
-    mesa-utils
 
     # images
     viu
@@ -110,7 +101,6 @@
     wayland-utils
     egl-wayland
     wayland-protocols
-    pkgs.xorg.xeyes
     glfw-wayland
     xwayland
     pkgs.qt6.qtwayland
@@ -123,7 +113,8 @@
 
     # bluetooth
     bluez
-    bluez-libs
+    bluez-alsa
+    bluez-tools
 
     # editor
     neovim
@@ -191,6 +182,7 @@
       experimental-features = "nix-command flakes";
       # 去重和优化nix存储
       auto-optimise-store = true;
+      substituters = [ "https://mirrors.bfsu.edu.cn/nix-channels/store" ];
     };
 
     gc = {
@@ -198,25 +190,14 @@
       dates = "weekly";
     };
 
-    # 防止构建中出现杂质
-    useSandbox = true;
-
-    # 授予 root 用户和 wheel 组特殊权限
-    trustedUsers = ["root" "@wheel"];
-
   };
 
   # 添加您当前配置的其余部分
   programs = { 
+    zsh.enable = true;
     dconf.enable = true; 
     ssh.startAgent = true;
     fuse.userAllowOther = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-    jq.enable = true;
-    man.enable = true;
   };
 
   networking = {
@@ -249,7 +230,7 @@
   console.keyMap = "us";
 
   boot = {
-    kernelPackages = pkgs.linuxKernel.kernels.linux_lqx;
+    kernelPackages = pkgs.linuxPackages_lqx;
     bootspec.enable = true;
     loader = {
       systemd-boot = {
@@ -299,15 +280,9 @@
     pam.services.greetd.enableGnomeKeyring = true;
     sudo = {
       enable = true;
-      extraConfig = ''
-        nix ALL=(ALL) NOPASSWD:ALL
-      '';
     };
     doas = {
       enable = true;
-      extraConfig = ''
-        permit nopass :wheel
-      '';
     };
   };
 
@@ -315,16 +290,6 @@
     enable = true;
     wlr.enable = true;
     xdgOpenUsePortal = false;
-    userDirs = {
-      enable = true;
-      createDirectories = false;
-      desktop = "$HOME/Desktop";
-      documents = "$HOME/Documents";
-      download = "$HOME/Downloads";
-      music = "$HOME/Music";
-      pictures = "$HOME/Pictures";
-      videos = "$HOME/Videos";
-    };
     gtkUsePortal = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
@@ -431,9 +396,7 @@
     bluetooth.enable = true;
     cpu.amd.updateMicrocode = true;
   };
-
-  power-profiles-daemon = { enable = true; };
-
+  
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.05";
 }

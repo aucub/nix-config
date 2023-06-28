@@ -9,7 +9,6 @@
 
   hardware = {
     nvidia = {
-      package = linuxKernel.packages.linux_lqx.nvidia_x11_production_open;
       powerManagement.enable = true;
       open = true;
       modesetting.enable = true;
@@ -31,9 +30,5 @@
     };
     pulseaudio.support32Bit = true;
   };
-  environment = {
-    systemPackages = with pkgs; [
-      nvidia-offload
-    ];
-  };
+  
 }

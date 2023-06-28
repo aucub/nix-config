@@ -4,13 +4,13 @@
 {
   # 列出您的模块文件在此处
   # my-module = import ./my-module.nix;
-  alacritty = import ./alacritty/default.nix
-  btop = import ./btop/default.nix
-  fcitx5 = import ./fcitx5/default.nix
-  fish = import ./fish/default.nix
-  helix = import ./helix/default.nix
-  htop = import ./htop/default.nix
-  neofetch = import ./neofetch/default.nix
-  ranger = import ./ranger/default.nix
+  alacritty = import ./alacritty/default.nix;
+  btop = import ./btop/default.nix;
+  fcitx5 = import ./fcitx5/default.nix;
+  fish = import ./fish/default.nix;
+  helix = import ./helix/default.nix;
+  htop = import ./htop/default.nix;
+  neofetch = import ./neofetch/default.nix;
+  ranger = import ./ranger/default.nix;
 
 }

@@ -12,16 +12,17 @@ nixos-generate-config --root /mnt
 ```
 4. 克隆仓库
 ```bash
-nix-shell -p git
+nix-shell -p git 
+
 nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
 ```
 5. 拷贝 /mnt/etc/nixos 中的 `hardware-configuration.nix` 
 6. 安装
 ```bash
-nixos-install --flake .#nixos
+nixos-install --flake .#nix@legion 
 
 #或者指定源：
-nixos-install --option substituters "https://mirrors.bfsu.edu.cn/nix-channels/store" --flake .#nixos
+nixos-install --option substituters "https://mirrors.bfsu.edu.cn/nix-channels/store" --flake .#nix@legion
 ```
 
 ### 重建
