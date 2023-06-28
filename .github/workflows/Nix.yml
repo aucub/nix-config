@@ -24,11 +24,11 @@ jobs:
         uses: cachix/install-nix-action@v22
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-      - run: nix flake check        
+      - run: nix flake check --show-trace
       
       - name: "Build NixOS config"
         run: |
-          nix --experimental-features 'nix-command flakes' build -L '.#legion'
+          nix --experimental-features 'nix-command flakes' build -L '.#legion' --show-trace
 
       - name: "Print nixpkgs version"
         run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
