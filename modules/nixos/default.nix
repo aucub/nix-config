@@ -4,7 +4,7 @@
 {
   # 列出您的模块文件在此处
   # my-module = import ./my-module.nix;
-  environment = import ./environment/default.nix;
+  environment = import ./environment/variables.nix;
   fonts = import ./fonts/default.nix;
   hardware = import ./hardware/default.nix;
   hyprland = import ./hyprland/default.nix;
