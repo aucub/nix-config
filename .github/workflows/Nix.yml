@@ -28,7 +28,7 @@ jobs:
       
       - name: "Build NixOS config"
         run: |
-          nix --experimental-features 'nix-command flakes' build -L '.#legion' --show-trace
+          nix --experimental-features 'nix-command flakes' build -L '.#nix@legion' --show-trace
 
       - name: "Print nixpkgs version"
         run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
