@@ -11,7 +11,7 @@
 
     # 在这里，您也可以分割您的配置并导入其各个部分
     # ./nvim.nix
-  ] ++ (builtins.attrValues outputs.homeManagerModules);;
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   nixpkgs = {
     # 可以在这里添加overlays（覆盖）
