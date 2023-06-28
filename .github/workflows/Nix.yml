@@ -8,13 +8,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3.5.3
 
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          large-packages: true
-          swap-storage: true
-
       - name: "Create Dir for Mounting moar Disk Space"
         run: |
           sudo mkdir /nix
