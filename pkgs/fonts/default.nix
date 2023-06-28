@@ -25,5 +25,5 @@
         emoji = [ "Noto Color Emoji" ];
       };
     };
-}；
+  };
 }
