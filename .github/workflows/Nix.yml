@@ -1,4 +1,4 @@
-name: nix-config:
+name: nix-config
 on:
   workflow_dispatch:
 jobs:
