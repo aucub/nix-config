@@ -228,7 +228,6 @@
   console.keyMap = "us";
 
   boot = {
-    bootspec.enable = true;
     loader = {
       systemd-boot = {
         enable = true;
@@ -247,7 +246,7 @@
     ];
     consoleLogLevel = 3;
     initrd.verbose = false;
-    initrd.kernelModules = [ "amdgpu" "btrfs" ];
+    initrd.kernelModules = [ "btrfs" ];
     kernelModules = [ "fuse" "v4l2loopback" ];
     extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
     extraModprobeConfig = ''
