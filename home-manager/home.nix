@@ -5,6 +5,7 @@
   # 您可以在此处导入其他的home-manager模块
   imports = [
     # 如果您想使用您自己的flake导出的模块，可以按下面的方式配置(from modules/home-manager):
+    outputs.homeManagerModules.alacritty
 
     # 或者使用其他flake导出的模块也可以按下面的方式配置(such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
