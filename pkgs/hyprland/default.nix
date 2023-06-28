@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 {
+  import ./home.nix;
   home.file.".config/hypr" = {
     source = ./hypr-conf;
     recursive = true;
