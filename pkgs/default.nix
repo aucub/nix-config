@@ -7,4 +7,3 @@
   hardware = pkgs.callPackage ./hardware/default.nix { };
   hyprland = pkgs.callPackage ./hyprland/default.nix { };
 }
-
