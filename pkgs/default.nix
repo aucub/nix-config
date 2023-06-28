@@ -3,7 +3,5 @@
 
 { pkgs ? (import ../nixpkgs.nix) { } }: {
   # example = pkgs.callPackage ./example { };
-  fonts = pkgs.callPackage ./fonts { };
-  hardware = pkgs.callPackage ./hardware { };
-  hyprland = pkgs.callPackage ./hyprland { };
+  
 }
