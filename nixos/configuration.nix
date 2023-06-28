@@ -127,7 +127,6 @@
 
   # 可以在这里导入其他 NixOS 模块
   imports = [
-    inputs.home-manager.nixosModules.home-manager
     # 在 flake 中使用模块（来自 modules/nixos）:
     # outputs.nixosModules.example
 
@@ -141,14 +140,6 @@
     # 导入您生成的（nixos-generate-config）硬件配置
     ./hardware-configuration.nix
   ];
-
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      # 导入home-manager配置
-      nix = import ../home-manager/home.nix;
-    };
-  };
 
   nixpkgs = {
     # 可以在此添加覆盖

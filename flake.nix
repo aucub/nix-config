@@ -47,7 +47,7 @@
       # 通过 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
         # 请更改为您的主机名
-        legion = inputs.nixpkgs.lib.nixosSystem {
+        legion = lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
             # > 主要 NixOS 配置文件 <
