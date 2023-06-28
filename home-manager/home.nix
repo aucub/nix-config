@@ -6,7 +6,14 @@
   imports = [
     # 如果您想使用您自己的flake导出的模块，可以按下面的方式配置(from modules/home-manager):
     outputs.homeManagerModules.alacritty
-
+    outputs.homeManagerModules.btop
+    outputs.homeManagerModules.fcitx5
+    outputs.homeManagerModules.fish
+    outputs.homeManagerModules.helix
+    outputs.homeManagerModules.htop
+    outputs.homeManagerModules.neofetch
+    outputs.homeManagerModules.ranger
+  
     # 或者使用其他flake导出的模块也可以按下面的方式配置(such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
 
