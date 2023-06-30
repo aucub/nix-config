@@ -14,6 +14,7 @@
     homeManagerModules.htop
     homeManagerModules.neofetch
     homeManagerModules.ranger
+    homeManagerModules.hypr
   
     # 或者使用其他flake导出的模块也可以按下面的方式配置(such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default

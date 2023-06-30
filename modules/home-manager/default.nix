@@ -12,5 +12,5 @@
   htop = import ./htop/default.nix;
   neofetch = import ./neofetch/default.nix;
   ranger = import ./ranger/default.nix;
-
+  hypr = import ./hypr/default.nix;
 }

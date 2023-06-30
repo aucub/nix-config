@@ -1,12 +1,5 @@
 { config, lib, pkgs, ... }:
 {
-  imports = [
-    (import ../environment/variables.nix)
-  ];
-  home.file.".config/hypr" = {
-    source = ./hypr-conf;
-    recursive = true;
-  };
 
   programs = {
     light.enable = true;
