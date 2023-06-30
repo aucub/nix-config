@@ -12,7 +12,7 @@
       source-serif 
       source-han-sans 
       source-han-serif 
-      Iosevka
+      iosevka
     ];
 
     fontconfig = {
