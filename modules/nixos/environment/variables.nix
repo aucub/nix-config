@@ -1,6 +1,6 @@
 { config, pkgs, ...}: 
 {
-  home = {
+  environment = {
     sessionVariables = {
       EDITOR = "helix";
       BROWSER = "firefox";
