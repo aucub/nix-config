@@ -12,7 +12,6 @@
       source-serif 
       source-han-sans 
       source-han-serif 
-      FiraCode
       Iosevka
     ];
 

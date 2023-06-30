@@ -28,6 +28,7 @@
       ];
     };
     pulseaudio.support32Bit = true;
+    ledger.enable = true;
   };
   
 }

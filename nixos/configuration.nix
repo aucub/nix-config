@@ -133,7 +133,7 @@
     outputs.nixosModules.fonts 
     outputs.nixosModules.hardware  
     outputs.nixosModules.hyprland
-    
+
     # 或者来自其他 flake 的模块(such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
@@ -256,6 +256,7 @@
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
     '';
+    supportedFilesystems = lib.mkForce ["btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs" "ext4" "vfat"];
   };
 
   systemd = {
@@ -271,6 +272,11 @@
         RestartSec = 1;
         TimeoutStopSec = 10;
       };
+    };
+    services.NetworkManager-wait-online.enable = false;
+    oomd = {
+      enableRootSlice = true;
+      enableUserServices = true;
     };
   };
 
