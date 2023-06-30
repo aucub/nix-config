@@ -2,7 +2,7 @@
 # 使用此文件来配置您的主目录环境(it replaces ~/.config/nixpkgs/home.nix)
 
 { inputs, outputs, lib, config, pkgs, ... }: {
-  homeManagerModules = import ./modules/home-manager;
+  homeManagerModules = import ../modules/home-manager;
   # 您可以在此处导入其他的home-manager模块
   imports = [
     # 如果您想使用您自己的flake导出的模块，可以按下面的方式配置(from modules/home-manager):

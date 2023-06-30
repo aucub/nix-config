@@ -1,9 +1,6 @@
 {
   description = "nix config";
 
-  nixConfig = {
-  };
-
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
