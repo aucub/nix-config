@@ -286,6 +286,7 @@
       };
     };
     services.NetworkManager-wait-online.enable = false;
+    services.seatd.enable = true;
     oomd = {
       enableRootSlice = true;
       enableUserServices = true;
