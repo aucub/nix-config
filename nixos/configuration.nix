@@ -240,7 +240,6 @@
 
   console = {
     keyMap = "us";
-    useXkbConfig = true;
   };
 
   boot = {
