@@ -158,10 +158,9 @@
 
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
-    modules = {
-      # Import your home-manager configuration
-      nix = import ../home-manager/home.nix;
-    };
+    modules = [
+      ../home-manager/home.nix
+    ];
   };
 
   nixpkgs = {
