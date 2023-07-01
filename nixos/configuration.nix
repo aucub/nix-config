@@ -245,9 +245,9 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_lqx;
     loader = {
-      systemd-boot = {
+      grub = {
         enable = true;
-        consoleMode = "auto";
+        device = "/dev/vda";
       };
       efi = {
         canTouchEfiVariables = true;
