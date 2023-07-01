@@ -1,6 +1,11 @@
 { config, lib, pkgs, ... }:
 {
   home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
+  home.file.".config/hypr/hyprland.conf-bak".source = ./hyprland.conf;
+
+  home.activation.removeExistingHyprlandProfile = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    rm -f "${config.xdg.configHome}/hypr/hyprland.conf"
+  '';
   home.file.".config/gtk-3.0".source = ./gtk-3.0;
   home.file.".config/mako" = {
     source = ./mako;
