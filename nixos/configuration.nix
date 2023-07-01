@@ -303,18 +303,15 @@
     };
   };
 
-  xdg = {
+  xdg.portal = {
     enable = true;
-    portal = {
-      enable = true;
-      wlr.enable = true;
-      xdgOpenUsePortal = false;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr # for   wlroots   based compositors(hyprland/  sway)
-        xdg-desktop-portal-gtk # for gtk
-        # xdg-desktop-portal-kde  # for kde
-      ];
-    };
+    wlr.enable = true;
+    xdgOpenUsePortal = false;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr # for   wlroots   based compositors(hyprland/  sway)
+      xdg-desktop-portal-gtk # for gtk
+      # xdg-desktop-portal-kde  # for kde
+    ];
   };
 
   zramSwap = {
