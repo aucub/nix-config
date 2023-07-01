@@ -26,12 +26,11 @@
 
   nixpkgs = {
     # 可以在这里添加overlays（覆盖）
-    overlays = import ./overlays { inherit inputs; };
     overlays = [
       # （您可以）为您自己的flake导出添加覆盖 (from overlays and pkgs dir):
-      overlays.additions
-      overlays.modifications
-      overlays.unstable-packages
+      ../overlays.additions
+      ../overlays.modifications
+      ../overlays.unstable-packages
 
       # 也可以添加从其他flakes导出的覆盖层:
       # neovim-nightly-overlay.overlays.default
