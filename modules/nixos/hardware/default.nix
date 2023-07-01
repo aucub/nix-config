@@ -30,7 +30,6 @@
     };
     pulseaudio.support32Bit = true;
     ledger.enable = true;
-    sensors.enable = true;
   };
 
   # Often used values: “ondemand”, “powersave”, “performance”
