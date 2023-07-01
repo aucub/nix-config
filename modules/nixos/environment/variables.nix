@@ -15,6 +15,7 @@
       CLUTTER_BACKEND = "wayland";
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
       LIBVA_DRIVER_NAME = "nvidia";
+      IBSEAT_BACKEND=logind 
       WLR_RENDERER = "vulkan";
       XDG_CURRENT_DESKTOP = "Hyprland";
       XDG_SESSION_DESKTOP = "Hyprland";

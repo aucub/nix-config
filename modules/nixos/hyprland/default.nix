@@ -29,6 +29,7 @@
     hyprpicker
     swaylock-effects
     pamixer
+    seatd
     obs-studio-plugins.wlrobs
   ];
 
