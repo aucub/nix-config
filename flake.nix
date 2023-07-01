@@ -32,7 +32,6 @@
     in
     rec {
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-        inherit system;
         modules = [
           ({ ... }: {
             # 使用 nixos-cn flake 提供的包
