@@ -20,6 +20,7 @@
     jq
 
     # 网络
+    ethtool
     networkmanagerapplet
     wget
     curl
@@ -27,6 +28,10 @@
     socat
 
     # system tools
+    libnotify
+    sysstat
+    lm_sensors
+    hdparm
     pciutils
     dmidecode
 
@@ -105,6 +110,7 @@
     glfw-wayland
     xwayland
     pkgs.qt6.qtwayland
+    qt5ct
 
     # security
     polkit_gnome
@@ -124,6 +130,7 @@
     # GUI
     alacritty
     pcmanfm
+    xfce.xfce4-appfinder
 
   ];
 
@@ -136,6 +143,8 @@
     outputs.nixosModules.hardware  
     outputs.nixosModules.hyprland
 
+    inputs.home-manager.nixosModules.home-manager
+
     # 或者来自其他 flake 的模块(such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
@@ -146,6 +155,14 @@
     # 导入您生成的（nixos-generate-config）硬件配置
     ./hardware-configuration.nix
   ];
+
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      # Import your home-manager configuration
+      nix = import ../home-manager;
+    };
+  };
 
   nixpkgs = {
     # 可以在此添加覆盖
@@ -209,6 +226,7 @@
     dconf.enable = true; 
     ssh.startAgent = true;
     fuse.userAllowOther = true;
+    neovim.enable = true;
   };
 
   networking = {

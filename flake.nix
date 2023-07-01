@@ -52,19 +52,6 @@
           ];
         };
       };
-
-      # 独立的 home-manager 配置入口
-      # 通过 'home-manager --flake .#your-username@your-hostname'
-      homeConfigurations = {
-        # 请更改为您的 username@hostname
-        "nix@legion" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            # > 主 home-manager 配置文件 <
-            ./home-manager/home.nix
-          ];
-        };
-      };
+      
     };
 }
