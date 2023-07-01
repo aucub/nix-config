@@ -143,7 +143,7 @@
     outputs.nixosModules.hardware  
     outputs.nixosModules.hyprland
 
-    inputs.home-manager.nixosModules.home-manager
+    # inputs.home-manager.nixosModules.home-manager
 
     # 或者来自其他 flake 的模块(such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
