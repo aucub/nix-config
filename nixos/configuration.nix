@@ -109,6 +109,7 @@
     wayland-protocols
     glfw-wayland
     xwayland
+    xorg.xrdb
     pkgs.qt6.qtwayland
     qt5ct
 
