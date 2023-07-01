@@ -14,7 +14,7 @@
     };
     nur = {
       url = "github:nix-community/NUR";
-      nur.inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Home manager
@@ -51,6 +51,7 @@
               nixos-cn.nixosModules.nixos-cn
             ];
           })
+          nur.nixosModules.nur
           ({ config, ... }: {
             # 使用 NUR 提供的包
             environment.systemPackages = [ 
