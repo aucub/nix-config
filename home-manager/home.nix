@@ -106,7 +106,7 @@
       package = pkgs.orchis-theme;
     };
     font = {
-      name = Sarasa UI SC;
+      name = "Sarasa UI SC";
       size = 12;
     };
   };
