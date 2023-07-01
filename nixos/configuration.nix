@@ -216,7 +216,6 @@
     firewall.enable = false;
     hostName = "legion";
     networkmanager.enable = true;
-    wireless.enable = true;
   };
 
   time = {
