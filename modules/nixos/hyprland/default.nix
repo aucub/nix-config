@@ -29,6 +29,7 @@
     hyprpicker
     swaylock-effects
     pamixer
+    obs-studio-plugins.wlrobs
   ];
 
   systemd.user.targets.hyprland-session.wants = [ "xdg-desktop-autostart.target" ];

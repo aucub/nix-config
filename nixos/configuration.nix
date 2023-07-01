@@ -91,7 +91,6 @@
 
     # live streaming
     obs-studio
-    obs-studio-plugins.wlrobs
 
     # 用于播放系统音效
     mpd # for playing system sounds
