@@ -14,7 +14,7 @@
 
   };
 
-  outputs = { self, nixpkgs, nixos-cn, nur, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
