@@ -2,6 +2,7 @@
 
 {
   fonts = {
+    enableDefaultFonts = true;
     fontDir.enable = true;
     fonts = with pkgs; [
       noto-fonts 
@@ -12,6 +13,8 @@
       source-serif 
       source-han-sans 
       source-han-serif 
+      fira-code
+      fira-code-symbols
       iosevka
     ];
 

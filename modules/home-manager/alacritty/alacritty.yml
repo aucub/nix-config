@@ -542,7 +542,7 @@ key_bindings:
   - { key: LBracket,                    mods: Command,    action: ToggleViMode            }
   - { key: U,      mods: Command,       mode: ~Vi|~Search,action: ScrollHalfPageUp        }
   - { key: D,      mods: Command,       mode: ~Vi|~Search,action: ScrollHalfPageDown      }
-  - { key: LBracket,  mods: Control,mode: Vi|~Search,     action: ClearSelection          }
+  - { key: LBracket,  mods: Control,    mode: Vi|~Search,     action: ClearSelection          }
   - { key: C,      mods: Control,       mode: Vi|~Search, action: ToggleViMode            }
   - { key: G,                           mode: Vi|~Search, action: ScrollToTop             }
   - { key: G,      mods: Shift,         mode: Vi|~Search, action: ScrollToBottom          }

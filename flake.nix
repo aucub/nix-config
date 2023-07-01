@@ -8,13 +8,22 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # 此外，请查看“overlays/default.nix”中的“unstable-packages”覆盖
 
+    nixos-cn = {
+      url = "github:nixos-cn/flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nur = {
+      url = "github:nix-community/NUR";
+      nur.inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixos-cn, nur, home-manager, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -22,6 +31,35 @@
       ];
     in
     rec {
+      nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ({ ... }: {
+            # 使用 nixos-cn flake 提供的包
+            # environment.systemPackages = [ nixos-cn.legacyPackages.${system}.netease-cloud-music ];
+            # 使用 nixos-cn 的 binary cache
+            nix.binaryCaches = [
+              "https://nixos-cn.cachix.org"
+            ];
+            nix.binaryCachePublicKeys = [ "nixos-cn.cachix.org-1:L0jEaL6w7kwQOPlLoCR3ADx+E3Q8SEFEcB9Jaibl0Xg=" ];
+
+            imports = [
+              # 将nixos-cn flake提供的registry添加到全局registry列表中
+              # 可在`nixos-rebuild switch`之后通过`nix registry list`查看
+              nixos-cn.nixosModules.nixos-cn-registries
+
+              # 引入nixos-cn flake提供的NixOS模块
+              nixos-cn.nixosModules.nixos-cn
+            ];
+          })
+          ({ config, ... }: {
+            # 使用 NUR 提供的包
+            environment.systemPackages = [ 
+              # config.nur.repos.YisuiMilena.hyfetch
+            ];
+          })
+        ];
+      };
       # custom packages
       packages = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};

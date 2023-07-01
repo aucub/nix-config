@@ -23,7 +23,7 @@
     networkmanagerapplet
     wget
     curl
-    aria2
+    aria
     socat
 
     # system tools
@@ -61,7 +61,7 @@
     gnupg
 
     # video
-    ffmpeg-full
+    ffmpeg_6-full
 
     # audio control
     pavucontrol
@@ -71,6 +71,7 @@
     alsa-lib
     alsa-utils
     flac
+    # 录音 audacity
 
     # video/audio tools
     libva
@@ -90,6 +91,7 @@
 
     # live streaming
     obs-studio
+    wlrobs
 
     # 用于播放系统音效
     mpd # for playing system sounds
@@ -98,6 +100,7 @@
     wayland
     wayland-scanner
     wayland-utils
+    wev
     egl-wayland
     wayland-protocols
     glfw-wayland
@@ -185,6 +188,8 @@
       # 去重和优化nix存储
       auto-optimise-store = true;
       substituters = [ "https://mirrors.bfsu.edu.cn/nix-channels/store" ];
+      trusted-users = [ "root" "alice" "@wheel"];
+      warn-dirty = false;
     };
 
     gc = {
@@ -196,7 +201,16 @@
 
   # 添加您当前配置的其余部分
   programs = { 
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      enableGlobalCompInit = false;
+      promptInit = "";
+    };
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
     dconf.enable = true; 
     ssh.startAgent = true;
     fuse.userAllowOther = true;
@@ -206,6 +220,7 @@
     firewall.enable = false;
     hostName = "legion";
     networkmanager.enable = true;
+    wireless.enable = true;
   };
 
   time = {
@@ -229,9 +244,13 @@
     };
   };
 
-  console.keyMap = "us";
+  console = {
+    keyMap = "us";
+    useXkbConfig = true;
+  };
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_lqx;
     loader = {
       systemd-boot = {
         enable = true;
@@ -251,12 +270,12 @@
     consoleLogLevel = 3;
     initrd.verbose = false;
     initrd.kernelModules = [ "btrfs" ];
-    kernelModules = [ "fuse" "v4l2loopback" ];
-    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    kernelModules = [ "fuse" "v4l2loopback" "acpi_call" "bbswitch" ];
+    extraModulePackages = [ pkgs.linuxKernel.packages.linux_lqx.bbswitch pkgs.linuxKernel.packages.linux_lqx.acpi_call pkgs.linuxKernel.packages.linux_lqx.v4l2loopback ];
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
     '';
-    supportedFilesystems = lib.mkForce ["btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs" "ext4" "vfat"];
+    supportedFilesystems = lib.mkForce ["btrfs" "reiserfs" "vfat" "f2fs" "xfs" "ntfs" "cifs" "ext4"];
   };
 
   systemd = {
@@ -283,21 +302,23 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
-    pam.services.greetd.enableGnomeKeyring = true;
     sudo = {
       enable = true;
     };
   };
 
-  xdg.portal = {
+  xdg = {
     enable = true;
-    wlr.enable = true;
-    xdgOpenUsePortal = false;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
-      xdg-desktop-portal-gtk # for gtk
-      # xdg-desktop-portal-kde  # for kde
-    ];
+    portal = {
+      enable = true;
+      wlr.enable = true;
+      xdgOpenUsePortal = false;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr # for   wlroots   based compositors(hyprland/  sway)
+        xdg-desktop-portal-gtk # for gtk
+        # xdg-desktop-portal-kde  # for kde
+      ];
+    };
   };
 
   zramSwap = {
@@ -309,6 +330,7 @@
 
   # 配置您的全局用户，组设置，根据需要添加更多用户
   users = {
+    mutableUsers = true;
     defaultUserShell = pkgs.zsh;
     users = {
       root.initialPassword = "root";
@@ -324,12 +346,13 @@
         ];
         uid = 1000;
         # 要添加您需要的任何其他组 (such as networkmanager, audio, docker, etc)
-        extraGroups = [ "wheel" "users" "networkmanager" "systemd-journal" "audio" "video" "input" "lp" "power" "nix" ];
+        extraGroups = [ "wheel" "docker" "libvirtd" "users" "networkmanager" "systemd-journal" "audio" "video" "input" "lp" "power" "nix" ];
       };
     };
   };
 
   services = {
+    acpid.enable = true;
     btrfs.autoScrub.enable = true;
     getty.autologinUser = "nix";
     gnome.gnome-keyring.enable = true;
@@ -348,30 +371,49 @@
       settings = {
         # 禁止通过SSH登录root账户
         PermitRootLogin = "no"; # 仅使用密钥进行 SSH 登录
-        PasswordAuthentication = false;
+        PasswordAuthentication = true;
+      };
+      openFirewall = true;
     };
-    openFirewall = true;
-  };
-  pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    jack.enable = true;
-    pulse.enable = true;
-    wireplumber.enable = true;
-  };
-  journald.extraConfig = ''
-      SystemMaxUse=50M
-      RuntimeMaxUse=10M
-    '';
-  fstrim.enable = true;
-  printing.enable = true;
-  fwupd.enable = true;
-  gvfs.enable = true; # Mount, trash, and other functionalities
-  tumbler.enable = true; # Thumbnail support for images
-  upower.enable = true;
-  blueman.enable = true;
-  flatpak.enable = true;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      jack.enable = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
+    journald.extraConfig = ''
+        SystemMaxUse=50M
+        RuntimeMaxUse=10M
+      '';
+    fstrim.enable = true;
+    printing = {
+      enable = true;
+      drivers = [ pkgs.epson-escpr ];
+    };
+    fwupd.enable = true;
+    gvfs.enable = true; # Mount, trash, and   other functionalities
+    tumbler.enable = true; # Thumbnail   support for images
+    upower.enable = true;
+    blueman.enable = true;
+    flatpak.enable = true;
+    xserver = {
+      enable = true;
+      layout = "us";
+      libinput = {
+        enable = true;
+        touchpad = {
+          tapping = true;
+          naturalScrolling = true;
+          disableWhileTyping = true;
+        };
+      };
+    };
+    avahi = {
+      enable = true;
+      nssmdns = true;
+    };
   };
   
   sound.enable = false;
