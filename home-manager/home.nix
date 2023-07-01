@@ -2,19 +2,20 @@
 # 使用此文件来配置您的主目录环境(it replaces ~/.config/nixpkgs/home.nix)
 
 { inputs, outputs, lib, config, pkgs, ... }: {
+  homeManagerModules = import ./modules/home-manager;
   # 您可以在此处导入其他的home-manager模块
   imports = [
     # 如果您想使用您自己的flake导出的模块，可以按下面的方式配置(from modules/home-manager):
     # outputs.homeManagerModules.example
-    outputs.homeManagerModules.alacritty
-    outputs.homeManagerModules.btop
-    outputs.homeManagerModules.fcitx5
-    outputs.homeManagerModules.fish
-    outputs.homeManagerModules.helix
-    outputs.homeManagerModules.htop
-    outputs.homeManagerModules.neofetch
-    outputs.homeManagerModules.ranger
-    outputs.homeManagerModules.hypr
+    homeManagerModules.alacritty
+    homeManagerModules.btop
+    homeManagerModules.fcitx5
+    homeManagerModules.fish
+    homeManagerModules.helix
+    homeManagerModules.htop
+    homeManagerModules.neofetch
+    homeManagerModules.ranger
+    homeManagerModules.hypr
   
     # 或者使用其他flake导出的模块也可以按下面的方式配置(such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
@@ -25,11 +26,12 @@
 
   nixpkgs = {
     # 可以在这里添加overlays（覆盖）
+    overlays = import ./overlays { inherit inputs; };
     overlays = [
       # （您可以）为您自己的flake导出添加覆盖 (from overlays and pkgs dir):
-      # outputs.overlays.additions
-      # outputs.overlays.modifications
-      # outputs.overlays.unstable-packages
+      overlays.additions
+      overlays.modifications
+      overlays.unstable-packages
 
       # 也可以添加从其他flakes导出的覆盖层:
       # neovim-nightly-overlay.overlays.default
