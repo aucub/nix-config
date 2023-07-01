@@ -207,10 +207,6 @@
       enableGlobalCompInit = false;
       promptInit = "";
     };
-    fzf = {
-      enable = true;
-      enableZshIntegration = true;
-    };
     dconf.enable = true; 
     ssh.startAgent = true;
     fuse.userAllowOther = true;
