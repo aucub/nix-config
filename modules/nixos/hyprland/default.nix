@@ -13,6 +13,19 @@
     };
   };
 
+  services.greetd = {
+  enable = true;
+  vt = 1;
+  restart = false;
+  settings = rec {
+    initial_session = {
+      command = "Hyprland";
+      user = "nix";
+      };
+    default_session = initial_session;
+    };
+  };
+
 
   environment.systemPackages = with pkgs; [
     waybar # the status bar
@@ -32,7 +45,6 @@
     hyprpicker
     swaylock-effects
     pamixer
-    seatd
     obs-studio-plugins.wlrobs
   ];
 

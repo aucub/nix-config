@@ -7,7 +7,7 @@
     # 如果您想使用您自己的flake导出的模块，可以按下面的方式配置(from modules/home-manager):
     # outputs.homeManagerModules.example
     ../modules/home-manager
-    
+
     hyprland.homeManagerModules.default
     # 或者使用其他flake导出的模块也可以按下面的方式配置(such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
@@ -118,6 +118,7 @@
   };
 
   services = {
+    printing.enable = false;
     network-manager-applet.enable = true;
     blueman-applet.enable = true;
   };
