@@ -6,3 +6,5 @@ function fish_greeting
 end
 set -x EDITOR helix
 mcfly init fish | source
+thefuck --alias | source
+zoxide init fish | source

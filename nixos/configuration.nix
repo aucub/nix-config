@@ -1,8 +1,7 @@
 # 系统配置文件
 # 使用此文件来配置您的系统环境 (it replaces /etc/nixos/configuration.nix)
 
-{ inputs, outputs, lib, config, pkgs, ...
-}: {
+{ inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     # 命令行工具
     neofetch
@@ -78,7 +77,9 @@
     alsa-lib
     alsa-utils
     flac
-    # 录音 audacity
+
+    # 录音 
+    audacity
 
     # video/audio tools
     libva
@@ -142,9 +143,9 @@
   imports = [
     # 在 flake 中使用模块（来自 modules/nixos）:
     # outputs.nixosModules.example
-    outputs.nixosModules.environment 
-    outputs.nixosModules.fonts 
-    outputs.nixosModules.hardware  
+    outputs.nixosModules.environment
+    outputs.nixosModules.fonts
+    outputs.nixosModules.hardware
     outputs.nixosModules.hyprland
 
     inputs.home-manager.nixosModules.home-manager
@@ -161,8 +162,7 @@
   ];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs;
-    };
+    extraSpecialArgs = { inherit inputs; };
     users = {
       # Import your home-manager configuration
       nix = import ../home-manager/home.nix;
@@ -183,12 +183,9 @@
       # 或者内联定义它，例如:
       # (final: prev: {
       #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch
-          ];
-      #
-        });
-      #
-      })
+      #     patches = [ ./change-hello-to-hi.patch ];
+      # });
+      #})
     ];
     # 配置 nixpkgs 实例
     config = {
@@ -199,8 +196,7 @@
 
   nix = {
     # 将每个 flake 输入作为注册表添加到 nix3 命令中，以使它们与您的 flake 保持一致
-    registry = lib.mapAttrs (_: value: { flake = value;
-    }) inputs;
+    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
 
     # 使您的输入进一步添加到系统通道中
     # 同时使传统的nix命令保持一致
@@ -212,9 +208,7 @@
       experimental-features = "nix-command flakes";
       # 去重和优化nix存储
       auto-optimise-store = true;
-      trusted-users = [
-        "root""alice""@wheel"
-      ];
+      trusted-users = [ "root" "@wheel" ];
       warn-dirty = false;
     };
     gc = {
@@ -224,14 +218,14 @@
   };
 
   # 添加您当前配置的其余部分
-  programs = { 
+  programs = {
     zsh = {
       enable = true;
       enableCompletion = true;
       enableGlobalCompInit = false;
       promptInit = "";
     };
-    dconf.enable = true; 
+    dconf.enable = true;
     ssh.startAgent = true;
     fuse.userAllowOther = true;
     neovim.enable = true;
@@ -250,10 +244,7 @@
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = [
-      "zh_CN.UTF-8/UTF-8"
-      "en_US.UTF-8/UTF-8"
-    ];
+    supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
     extraLocaleSettings = {
       LC_ADDRESS = "zh_CN.UTF-8";
       LC_IDENTIFICATION = "zh_CN.UTF-8";
@@ -283,37 +274,42 @@
       timeout = 4;
     };
     kernelParams = [
-      "nvidia-drm.modeset=1""NVreg_PreserveVideoMemoryAllocations=1""amd_pstate=passive"
+      "amd_pstate=passive" 
+      "amdgpu.vm_update_mode=3" 
+      "radeon.dpm=0"
+      "nvidia-drm.modeset=1"
+      "NVreg_PreserveVideoMemoryAllocations=1"
+      "amd_pstate=passive"
     ];
     consoleLogLevel = 3;
     initrd.verbose = false;
-    initrd.kernelModules = [
-      "btrfs"
-    ];
-    kernelModules = [
-      "fuse""v4l2loopback""acpi_call""bbswitch"
-    ];
-    extraModulePackages = [ pkgs.linuxKernel.packages.linux_lqx.bbswitch pkgs.linuxKernel.packages.linux_lqx.acpi_call pkgs.linuxKernel.packages.linux_lqx.v4l2loopback
+    initrd.kernelModules = [ "btrfs" ];
+    kernelModules = [ "fuse" "v4l2loopback" "acpi_call" "bbswitch" ];
+    extraModulePackages = [
+      pkgs.linuxKernel.packages.linux_lqx.bbswitch
+      pkgs.linuxKernel.packages.linux_lqx.acpi_call
+      pkgs.linuxKernel.packages.linux_lqx.v4l2loopback
     ];
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
     '';
     supportedFilesystems = lib.mkForce [
-      "btrfs""reiserfs""vfat""f2fs""xfs""ntfs""cifs""ext4"
+      "btrfs"
+      "reiserfs"
+      "vfat"
+      "f2fs"
+      "xfs"
+      "ntfs"
+      "cifs"
+      "ext4"
     ];
   };
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
-      wantedBy = [
-        "graphical-session.target"
-      ];
-      wants = [
-        "graphical-session.target"
-      ];
-      after = [
-        "graphical-session.target"
-      ];
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "simple";
         ExecStart =
@@ -333,9 +329,7 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
-    sudo = {
-      enable = true;
-    };
+    sudo = { enable = true; };
   };
 
   xdg.portal = {
@@ -354,8 +348,7 @@
     algorithm = "zstd";
   };
 
-  environment.shells = with pkgs; [ bash zsh fish
-  ];
+  environment.shells = with pkgs; [ bash zsh fish ];
 
   # 配置您的全局用户，组设置，根据需要添加更多用户
   users = {
@@ -376,7 +369,18 @@
         uid = 1000;
         # 要添加您需要的任何其他组 (such as networkmanager, audio, docker, etc)
         extraGroups = [
-          "wheel""docker""libvirtd""users""networkmanager""systemd-journal""audio""video""input""lp""power""nix"
+          "wheel"
+          "docker"
+          "libvirtd"
+          "users"
+          "networkmanager"
+          "systemd-journal"
+          "audio"
+          "video"
+          "input"
+          "lp"
+          "power"
+          "nix"
         ];
       };
     };
@@ -387,8 +391,7 @@
     btrfs.autoScrub.enable = true;
     getty.autologinUser = "nix";
     gnome.gnome-keyring.enable = true;
-    dbus.packages = [ pkgs.gcr
-    ];
+    dbus.packages = [ pkgs.gcr ];
     geoclue2.enable = true;
     udev.packages = with pkgs; [
       gnome.gnome-settings-daemon
@@ -416,14 +419,13 @@
       wireplumber.enable = true;
     };
     journald.extraConfig = ''
-        SystemMaxUse=50M
-        RuntimeMaxUse=10M
-      '';
+      SystemMaxUse=50M
+      RuntimeMaxUse=10M
+    '';
     fstrim.enable = true;
     printing = {
       enable = true;
-      drivers = [ pkgs.epson-escpr
-      ];
+      drivers = [ pkgs.epson-escpr ];
     };
     fwupd.enable = true;
     gvfs.enable = true; # Mount, trash, and   other functionalities
@@ -448,7 +450,7 @@
       nssmdns = true;
     };
   };
-  
+
   sound.enable = true;
 
   hardware = {
@@ -461,7 +463,7 @@
     brillo.enable = true;
     bluetooth.enable = true;
     cpu.amd.updateMicrocode = true;
-  }; 
-  
+  };
+
   system.stateVersion = "23.05";
 }

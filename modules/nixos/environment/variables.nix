@@ -1,5 +1,4 @@
-{ config, pkgs, ...}: 
-{
+{ config, pkgs, ... }: {
   environment = {
     sessionVariables = {
       EDITOR = "helix";

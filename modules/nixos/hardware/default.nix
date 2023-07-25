@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  services = {
-    tlp.enable = true;
-  };
+  services = { tlp.enable = true; };
 
   hardware = {
     nvidia = {
@@ -22,10 +20,7 @@
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        nvidia-vaapi-driver
-        libvdpau-va-gl
-      ];
+      extraPackages = with pkgs; [ nvidia-vaapi-driver libvdpau-va-gl ];
     };
     pulseaudio.support32Bit = true;
     ledger.enable = true;
@@ -33,5 +28,5 @@
 
   # Often used values: “ondemand”, “powersave”, “performance”
   powerManagement.cpuFreqGovernor = "“ondemand”";
-  
+
 }

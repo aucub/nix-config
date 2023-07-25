@@ -5,14 +5,14 @@
     enableDefaultFonts = true;
     fontDir.enable = true;
     fonts = with pkgs; [
-      noto-fonts 
+      noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-emoji
       sarasa-gothic
       source-sans
-      source-serif 
-      source-han-sans 
-      source-han-serif 
+      source-serif
+      source-han-sans
+      source-han-serif
       fira-code
       fira-code-symbols
       iosevka

@@ -1,6 +1,5 @@
 # 您的home-manager配置文件
 # 使用此文件来配置您的主目录环境(it replaces ~/.config/nixpkgs/home.nix)
-
 { inputs, outputs, lib, config, pkgs, ... }: {
   # 您可以在此处导入其他的home-manager模块
   imports = [
@@ -39,7 +38,7 @@
       # 如果你不想要不自由的软件包，可以禁用它
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = (_: true);
+      allowUnfreePredicate = _: true;
     };
   };
 
@@ -65,11 +64,22 @@
       ".cache/"
       ".DS_Store"
       ".idea/"
+      ".fastRequest/"
       "node_modules"
-      ".vscode"
+      ".vscode/"
+      ".gradle"
+      "build/"
+      "!**/src/main/**/build/"
+      "!**/src/test/**/build/"
+      "*.iws"
+      "*.iml"
+      "*.ipr"
+      "out/"
+      "!**/src/main/**/out/"
+      "!**/src/test/**/out/"
     ];
     extraConfig = {
-      init.defaultBranch = "master"; 
+      init.defaultBranch = "master";
       core.editor = "nvim";
     };
   };
@@ -77,7 +87,7 @@
   # 通过 home.packages 安装一些常用的软件
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
-  home.packages = with pkgs;[
+  home.packages = with pkgs; [
     wezterm
     firefox
     flameshot
@@ -106,7 +116,7 @@
 
   qt = {
     enable = true;
-    platformTheme = "gtk";
+    platformTheme = "qtct";
   };
 
   home.pointerCursor = {

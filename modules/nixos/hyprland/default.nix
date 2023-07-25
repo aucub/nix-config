@@ -1,5 +1,4 @@
-{ config, lib, pkgs, ...
-}: {
+{ config, lib, pkgs, ... }: {
   programs = {
     light.enable = true;
     hyprland = {
@@ -14,18 +13,17 @@
   };
 
   services.greetd = {
-  enable = true;
-  vt = 1;
-  restart = false;
-  settings = rec {
-    initial_session = {
-      command = "Hyprland";
-      user = "nix";
+    enable = true;
+    vt = 1;
+    restart = false;
+    settings = rec {
+      initial_session = {
+        command = "Hyprland";
+        user = "nix";
       };
-    default_session = initial_session;
+      default_session = initial_session;
     };
   };
-
 
   environment.systemPackages = with pkgs; [
     waybar # the status bar
@@ -39,7 +37,7 @@
     wf-recorder # creen recording
     grim # taking screenshots
     slurp # selecting a region   to screenshot
-    wofi 
+    wofi
     mako # the notification   daemon, the same as dunst
     yad # a fork of zenity, for   creating dialogs
     hyprpicker
@@ -48,7 +46,6 @@
     obs-studio-plugins.wlrobs
   ];
 
-  systemd.user.targets.hyprland-session.wants = [
-    "xdg-desktop-autostart.target"
-  ];
+  systemd.user.targets.hyprland-session.wants =
+    [ "xdg-desktop-autostart.target" ];
 }

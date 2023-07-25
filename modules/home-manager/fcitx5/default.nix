@@ -5,14 +5,19 @@
   home.file.".config/fcitx5/conf".source = ./conf;
   home.file.".config/fcitx5/profile-bak".source = ./profile;
 
-  home.activation.removeExistingFcitx5Profile = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
-    rm -f "${config.xdg.configHome}/fcitx5/profile"
-  '';
+  home.activation.removeExistingFcitx5Profile =
+    lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+      rm -f "${config.xdg.configHome}/fcitx5/profile"
+    '';
 
   i18n.inputMethod = {
     enabled = "fcitx5";
     fcitx5.addons = with pkgs; [
-      fcitx5-configtool fcitx5-gtk libsForQt5.fcitx5-qt fcitx5-chinese-addons fcitx5-table-extra
+      fcitx5-configtool
+      fcitx5-gtk
+      libsForQt5.fcitx5-qt
+      fcitx5-chinese-addons
+      fcitx5-table-extra
     ];
   };
 

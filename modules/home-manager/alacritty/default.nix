@@ -1,9 +1,10 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
-  programs.alacritty = {
-    enable = true;
-  };
+  programs.alacritty = { enable = true; };
 
-  xdg.configFile."alacritty/alacritty.yml".source = ./alacritty.yml;
+  home.file.".config/alacritty/alacritty.yml" = {
+    source = ./alacritty.yml;
+    recursive = true;
+  };
 }
