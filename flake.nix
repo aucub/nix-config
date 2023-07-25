@@ -32,8 +32,6 @@
       overlays = import ./overlays { inherit inputs; };
       # 您可能希望导出可重用的 NixOS 模块，这些通常是您要上游到 Nixpkgs 的内容
       nixosModules = import ./modules/nixos;
-      # 您可能希望导出可重用的 home-manager 模块，这些通常是您要上游到 home-manager 的内容
-      homeManagerModules = import ./modules/home-manager;
 
       # NixOS 配置入口点
       # 通过 'nixos-rebuild --flake .#your-hostname'
@@ -44,6 +42,13 @@
           modules = [
             # > 主要 NixOS 配置文件 <
             ./nixos/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.nix = import ./home-manager/home.nix;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
           ];
         };
       };

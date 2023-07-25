@@ -148,8 +148,6 @@
     outputs.nixosModules.hardware
     outputs.nixosModules.hyprland
 
-    inputs.home-manager.nixosModules.home-manager
-
     # 或者来自其他 flake 的模块(such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
@@ -160,14 +158,6 @@
     # 导入您生成的（nixos-generate-config）硬件配置
     ./hardware-configuration.nix
   ];
-
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-      # Import your home-manager configuration
-      nix = import ../home-manager/home.nix;
-    };
-  };
 
   nixpkgs = {
     # 可以在此添加覆盖
