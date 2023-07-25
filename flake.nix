@@ -12,27 +12,13 @@
     url = "github:nixos-cn/flakes";
     inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixConfig = {
-    substituters = [
-      "https://mirrors.bfsu.edu.cn/nix-channels/store"
-      "https://cache.nixos.org/"
-      "https://nixos-cn.cachix.org"
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
-      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
-      ];
-    extra-substituters = [];
-    extra-trusted-public-keys = [
-        "nixos-cn.cachix.org-1:L0jEaL6w7kwQOPlLoCR3ADx+E3Q8SEFEcB9Jaibl0Xg="
-      ];
-    };
     hyprland.url = "github:hyprwm/Hyprland";
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager,hyprland,nixos-cn, ...
+  outputs = { self, nixpkgs, home-manager,hyprland, ...
   }@inputs:
     let
       inherit (self) outputs;
@@ -74,8 +60,6 @@
           modules = [
             # > 主要 NixOS 配置文件 <
             ./nixos/configuration.nix
-            nixos-cn.nixosModules.nixos-cn-registries
-            nixos-cn.nixosModules.nixos-cn
         ];
       };
     };
