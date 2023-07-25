@@ -128,7 +128,6 @@
   };
 
   services = {
-    printing.enable = false;
     network-manager-applet.enable = true;
     blueman-applet.enable = true;
   };
