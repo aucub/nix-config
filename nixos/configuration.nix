@@ -34,6 +34,7 @@
     hdparm
     pciutils
     dmidecode
+    brightnessctl
 
     # xdg
     xdg-utils
@@ -118,6 +119,7 @@
 
     # system
     linux-firmware
+    ly
 
     # bluetooth
     bluez

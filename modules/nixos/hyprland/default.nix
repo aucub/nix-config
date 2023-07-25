@@ -1,5 +1,5 @@
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ...
+}: {
   programs = {
     light.enable = true;
     hyprland = {
@@ -8,13 +8,16 @@
         enable = true;
         hidpi = true;
       };
+      systemdIntegration = true;
       nvidiaPatches = true;
     };
   };
 
+
   environment.systemPackages = with pkgs; [
     waybar # the status bar
     swaybg # the wallpaper
+    hyprland-protocols
     swayidle # the idle timeout
     swaylock # locking the screen
     wlogout # logout menu
@@ -33,6 +36,7 @@
     obs-studio-plugins.wlrobs
   ];
 
-  systemd.user.targets.hyprland-session.wants = [ "xdg-desktop-autostart.target" ];
-  
+  systemd.user.targets.hyprland-session.wants = [
+    "xdg-desktop-autostart.target"
+  ];
 }
