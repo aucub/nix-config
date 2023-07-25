@@ -206,11 +206,18 @@
     settings = {
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
+      substituters = [
+        "https://mirror.sjtu.edu.cn/nix-channels/store"
+        "https://mirrors.bfsu.edu.cn/nix-channels/store"
+        "https://mirrors.ustc.edu.cn/nix-channels/store"
+        "https://cache.nixos.org/"
+      ];
       # 去重和优化nix存储
       auto-optimise-store = true;
       trusted-users = [ "root" "@wheel" ];
       warn-dirty = false;
     };
+
     gc = {
       automatic = true;
       dates = "weekly";
@@ -274,8 +281,8 @@
       timeout = 4;
     };
     kernelParams = [
-      "amd_pstate=passive" 
-      "amdgpu.vm_update_mode=3" 
+      "amd_pstate=passive"
+      "amdgpu.vm_update_mode=3"
       "radeon.dpm=0"
       "nvidia-drm.modeset=1"
       "NVreg_PreserveVideoMemoryAllocations=1"
