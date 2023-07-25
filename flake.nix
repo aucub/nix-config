@@ -13,9 +13,6 @@
     inputs.nixpkgs.follows = "nixpkgs";
     };
     nixConfig = {
-    experimental-features = [
-        "nix-command" "flakes"
-      ];
     substituters = [
       "https://mirrors.bfsu.edu.cn/nix-channels/store"
       "https://cache.nixos.org/"
