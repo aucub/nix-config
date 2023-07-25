@@ -270,9 +270,10 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_lqx;
     loader = {
-      grub = {
+      systemd-boot = {
         enable = true;
-        device = "/dev/vda";
+        consoleMode = "auto";
+        editor = true;
       };
       efi = {
         canTouchEfiVariables = true;
@@ -431,7 +432,7 @@
     '';
     fstrim.enable = true;
     printing = {
-      enable = true;
+      enable = false;
       drivers = [ pkgs.epson-escpr ];
     };
     fwupd.enable = true;

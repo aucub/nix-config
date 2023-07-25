@@ -124,7 +124,7 @@
     name = "Bibata-Modern-Classic";
     gtk.enable = true;
     x11.enable = true;
-    size = 24;
+    size = 12;
   };
 
   services = {
