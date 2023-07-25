@@ -7,7 +7,6 @@
         enable = true;
         hidpi = true;
       };
-      systemdIntegration = true;
       nvidiaPatches = true;
     };
   };
