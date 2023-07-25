@@ -116,7 +116,7 @@
 
   qt = {
     enable = true;
-    platformTheme = "qtct";
+    platformTheme = "gtk";
   };
 
   home.pointerCursor = {
