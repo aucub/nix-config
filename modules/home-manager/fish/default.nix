@@ -4,7 +4,7 @@
     enable = true;
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
-      set -x EDITOR helix
+      set -x EDITOR nvim
       mcfly init fish | source
       thefuck --alias | source
       zoxide init fish | source

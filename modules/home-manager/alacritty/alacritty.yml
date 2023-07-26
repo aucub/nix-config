@@ -52,12 +52,12 @@ window:
   # macos 可以独占的配置:
   #     - transparent: 标题栏，透明背景和标题栏按钮
   #     - buttonless: 标题栏，透明背景，但没有标题栏按钮
-  decorations: full
+  decorations: none
 
   # 背景不透明度
   # 窗口不透明度为从“0.0”到“1.0”的浮点数值
   # “0.0”是完全透明的，“1.0”是不透明的。
-  opacity: 0.6
+  opacity: 0.8
 
   # Resize increments
   #

@@ -4,17 +4,13 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     git
-    kitty
     fish
-    wofi
     bluez
     bluez-alsa
     bluez-tools
     neovim
     helix
     alacritty
-    pcmanfm
-    xfce.xfce4-appfinder
     vim
     curl
     neofetch
@@ -26,6 +22,8 @@
     fd
     ripgrep
     mcfly
+    zoxide
+    thefuck
     du-dust
     duf
     jq
@@ -86,6 +84,9 @@
     graphviz
     obs-studio
     mpd
+    cava
+    mpc-cli
+    ncmpcpp
     wayland
     wayland-scanner
     wayland-utils
@@ -101,6 +102,12 @@
     linux-firmware
     greetd.greetd
     greetd.gtkgreet
+    xfce.thunar
+  ];
+
+  programs.thunar.plugins = with pkgs.xfce; [
+    thunar-archive-plugin
+    thunar-volman
   ];
 
   # 可以在这里导入其他 NixOS 模块
@@ -224,6 +231,7 @@
       grub = {
         enable = true;
         device = "nodev";
+        configurationLimit = lib.mkDefault 10;
       };
       efi = {
         canTouchEfiVariables = true;
@@ -287,6 +295,7 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
+    pam.services.greetd.enableGnomeKeyring = true;
     sudo = { enable = true; };
   };
 
@@ -354,6 +363,7 @@
     udev.packages = with pkgs; [
       gnome.gnome-settings-daemon
       platformio
+      openocd
       android-udev-rules
       ledger-udev-rules
     ];
