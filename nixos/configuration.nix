@@ -143,10 +143,7 @@
   imports = [
     # 在 flake 中使用模块（来自 modules/nixos）:
     # outputs.nixosModules.example
-    outputs.nixosModules.environment
-    outputs.nixosModules.fonts
-    outputs.nixosModules.hardware
-    outputs.nixosModules.hyprland
+    ../modules/nixos/default.nix
 
     # 或者来自其他 flake 的模块(such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
