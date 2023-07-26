@@ -5,9 +5,9 @@
   # 列出您的模块文件在此处
   # my-module = import ./my-module.nix;
   imports = [
-    ./environment/variables.nix;
-    ./fonts/default.nix;
-    ./hardware/default.nix;
-    ./hyprland/default.nix;
+    ./environment/variables.nix
+    ./fonts/default.nix
+    ./hardware/default.nix
+    ./hyprland/default.nix
   ];
 }
