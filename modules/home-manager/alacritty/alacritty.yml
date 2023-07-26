@@ -57,7 +57,7 @@ window:
   # 背景不透明度
   # 窗口不透明度为从“0.0”到“1.0”的浮点数值
   # “0.0”是完全透明的，“1.0”是不透明的。
-  opacity: 1.0
+  opacity: 0.6
 
   # Resize increments
   #
@@ -132,7 +132,7 @@ font:
     style: Bold Italic
 
   # 字体大小
-  size: 20
+  size: 10
 
   # 每个字符的间的字间距。"offset.y" 可以控制行距，"offset.x" 可以改变字符间距。
   offset:
@@ -279,13 +279,6 @@ cursor:
 
 # 是否启用配置热更新
 live_config_reload: true
-
-Default:
-  - fish
-shell:
-  program: /bin/fish
-  args:
-    - --login
 
 # Shell
 #

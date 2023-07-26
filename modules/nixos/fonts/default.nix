@@ -16,6 +16,7 @@
       fira-code
       fira-code-symbols
       iosevka
+      nerdfonts
     ];
 
     fontconfig = {

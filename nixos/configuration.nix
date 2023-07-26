@@ -3,12 +3,23 @@
 
 { inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
-    # 命令行工具
+    git
+    kitty
+    fish
+    wofi
+    bluez
+    bluez-alsa
+    bluez-tools
+    neovim
+    helix
+    alacritty
+    pcmanfm
+    xfce.xfce4-appfinder
+    vim
+    curl
     neofetch
     nnn
     ranger
-
-    # utils
     exa
     fzf
     bat
@@ -18,16 +29,12 @@
     du-dust
     duf
     jq
-
-    # 网络
     ethtool
     networkmanagerapplet
     wget
     curl
     aria
     socat
-
-    # system tools
     libnotify
     sysstat
     lm_sensors
@@ -35,26 +42,17 @@
     pciutils
     dmidecode
     brightnessctl
-
-    # xdg
     xdg-utils
     xdg-user-dirs
-
-    # productivity
     btop
     htop
     gcc
     clang
-
-    # archives
-    zip
     rar
     xz
     unzip
     p7zip
     atool
-
-    # misc
     bc
     cowsay
     file
@@ -65,11 +63,7 @@
     gawk
     zstd
     gnupg
-
-    # video
     ffmpeg_6-full
-
-    # audio control
     pavucontrol
     playerctl
     pulsemixer
@@ -77,11 +71,7 @@
     alsa-lib
     alsa-utils
     flac
-
-    # 录音 
     audacity
-
-    # video/audio tools
     libva
     libva-utils
     vaapiVdpau
@@ -91,19 +81,11 @@
     vulkan-tools
     glxinfo
     mesa
-
-    # images
     viu
     imagemagick
     graphviz
-
-    # live streaming
     obs-studio
-
-    # 用于播放系统音效
-    mpd # for playing system sounds
-
-    # wayland
+    mpd
     wayland
     wayland-scanner
     wayland-utils
@@ -115,28 +97,10 @@
     xorg.xrdb
     pkgs.qt6.qtwayland
     qt5ct
-
-    # security
     polkit_gnome
-
-    # system
     linux-firmware
     greetd.greetd
     greetd.gtkgreet
-
-    # bluetooth
-    bluez
-    bluez-alsa
-    bluez-tools
-
-    # editor
-    neovim
-    helix
-
-    # GUI
-    alacritty
-    pcmanfm
-    xfce.xfce4-appfinder
   ];
 
   # 可以在这里导入其他 NixOS 模块
