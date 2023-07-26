@@ -1,9 +1,9 @@
 name: nix-config
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
+  # push:
+    # branches:
+      # - master
 jobs:
   nix-config:
     runs-on: ubuntu-latest

@@ -89,9 +89,7 @@
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
   home.packages = with pkgs; [
     vscode
-    wezterm
     firefox
-    flameshot
     cargo
     celluloid
     clash-meta
@@ -117,7 +115,7 @@
 
   qt = {
     enable = true;
-    platformTheme = "gtk";
+    platformTheme = "qt5ct";
   };
 
   home.pointerCursor = {
