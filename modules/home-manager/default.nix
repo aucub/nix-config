@@ -12,6 +12,7 @@
     ./htop/default.nix
     ./neofetch/default.nix
     ./ranger/default.nix
+    ./zsh/default.nix
     ./hypr/default.nix
   ];
 }

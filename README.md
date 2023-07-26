@@ -1,4 +1,6 @@
-# Nix Configuration
+# Nix Configuration 
+
+![](./_img/Screenshot_Hyprland.png)
 
 ## 部署
 
