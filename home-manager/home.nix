@@ -111,6 +111,17 @@
       name = "Sarasa UI SC";
       size = 12;
     };
+    gtk3.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=0
+      '';
+    };
+
+      gtk4.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=0
+      '';
+    };
   };
 
   qt = {

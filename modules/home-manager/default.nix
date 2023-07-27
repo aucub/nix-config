@@ -18,5 +18,6 @@
     # ./vscode/default.nix
     ./tealdeer/default.nix
     ./hypr/default.nix
+    ./lazygit/default.nix
   ];
 }
