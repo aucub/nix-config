@@ -140,10 +140,6 @@
   services = {
     network-manager-applet.enable = true;
     blueman-applet.enable = true;
-    swayosd = {
-      enable = true;
-      maxVolume = 120;
-    };
   };
 
   # 在更改配置时，优雅地重新加载系统单元
