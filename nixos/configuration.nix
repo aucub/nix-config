@@ -209,8 +209,8 @@
       enable = true;
       agent = {
         enable = true;
-        pinentryFlavor = "gnome3"
-      }
+        pinentryFlavor = "gnome3";
+      };
     };
     dconf.enable = true;
     ssh.startAgent = true;
