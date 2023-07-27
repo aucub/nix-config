@@ -104,8 +104,10 @@
     glfw-wayland
     xwayland
     xorg.xrdb
+    gnome.nautilus
     qt6.qtwayland
     libsForQt5.qt5.qtwayland
+    libsForQt5.qtstyleplugins
     libsForQt5.qtstyleplugin-kvantum
     qt5ct
     polkit_gnome
@@ -114,7 +116,8 @@
     greetd.gtkgreet
     xfce.thunar
     gnome.dconf-editor
-    lxappearance
+    qgnomeplatform
+    qgnomeplatform-qt6
   ];
 
   programs.thunar.plugins = with pkgs.xfce; [
@@ -218,7 +221,7 @@
     neovim.enable = true;
   };
 
-  qt.platformTheme = "qt5ct";
+  qt.platformTheme = "gtk";
 
   networking = {
     firewall.enable = false;
@@ -319,8 +322,6 @@
         TimeoutStopSec = 10;
       };
     };
-    user.targets.hyprland-session.Unit.Wants =
-      [ "xdg-desktop-autostart.target" ];
     services.NetworkManager-wait-online.enable = false;
     oomd = {
       enableRootSlice = true;

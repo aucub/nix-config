@@ -4,25 +4,14 @@
     "layer": "top",
     "mode": "dock",
     "exclusive": true,
-    "passthrough": false,
-    "height": 18,
-    "spacing": 2,
-    "margin": 0,
-    "margin-top": 0,
-    "margin-bottom": 0,
-    "margin-left": 0,
-    "margin-right": 0,
+    "height": 12,
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "wlr/workspaces",
         "memory",
         "cpu",
         "temperature",
-        #"idle_inhibitor",
-        "custom/wall",
-        "mpd",
-        "custom/cava-internal"
+        "tray"
     ],
     "modules-center": [
         "clock"
@@ -32,8 +21,7 @@
         "backlight",
         "network",
         "battery",
-        "custom/powermenu",
-        "tray"
+        "custom/powermenu"
     ],
     "custom/cava-internal": {
         "exec": "sleep 1s && cava-internal",
@@ -47,9 +35,9 @@
         "format": "{icon}",
         "format-icons": {
             "activated": "",
-            "deactivated": "",
+            "deactivated": ""
         },
-        "tooltip": false,
+        "tooltip": false
     },
     "backlight": {
         "interval": 2,
@@ -89,7 +77,7 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["" "" ""]
+            "default": ["","",""]
         },
         "scroll-step": 2.0,
         "on-click": "amixer set Master toggle",
@@ -106,7 +94,7 @@
         "format-full": "{icon} {capacity}%",
         "format-charging": "󰂄 {capacity}%",
         "format-alt": "{icon} {time}",
-        "format-icons": ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"],
+        "format-icons": ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
         "tooltip": false
     },
     "clock": {

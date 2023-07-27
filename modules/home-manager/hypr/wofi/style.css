@@ -18,6 +18,7 @@
 	background-color: --wofi-color1;
 	border: 0px solid --wofi-color3;
 	padding: 8px 12px;
+	color: --wofi-color2;
 }
 
 #scroll {

@@ -49,7 +49,7 @@
       pamixer
       obs-studio-plugins.wlrobs
       udiskie
-    ] ++ [ nixpkgs-unstable.wl-clip-persist ];
+    ];
 
   systemd.user.targets.hyprland-session.wants =
     [ "xdg-desktop-autostart.target" ];

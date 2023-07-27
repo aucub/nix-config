@@ -10,6 +10,7 @@
   home.activation.removeExistingFcitx5Profile =
     lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
       rm -f "${config.xdg.configHome}/fcitx5/profile"
+      rm -rf "${config.xdg.dataHome}/fcitx5/themes/fcitx5-skin-material"
     '';
 
   i18n.inputMethod = {
