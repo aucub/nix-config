@@ -7,7 +7,7 @@
   };
 
   home.file.".config/btop/themes/monokai.theme" = {
-    source = ./monokai.theme;
+    source = ./themes/monokai.theme;
     recursive = true;
   };
 
