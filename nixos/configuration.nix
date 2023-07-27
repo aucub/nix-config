@@ -190,6 +190,11 @@
     zsh = {
       enable = true;
       enableCompletion = true;
+      enableAutosuggestions = true;
+      autosuggestions = {
+        enable = true;
+        strategy = [ "match_prev_cmd" ]; # one of "history", "match_prev_cmd"
+      };
       enableGlobalCompInit = false;
       promptInit = "";
     };
