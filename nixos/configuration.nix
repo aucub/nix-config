@@ -206,7 +206,6 @@
       promptInit = "";
     };
     gnupg = {
-      enable = true;
       agent = {
         enable = true;
         pinentryFlavor = "gnome3";
