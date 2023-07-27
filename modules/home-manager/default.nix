@@ -5,14 +5,19 @@
   # my-module = import ./my-module.nix;
   imports = [
     ./alacritty/default.nix
+    ./bat/default.nix
     ./btop/default.nix
     ./fcitx5/default.nix
+    ./firefox/default.nix
     ./fish/default.nix
     ./helix/default.nix
     ./htop/default.nix
     ./neofetch/default.nix
     ./ranger/default.nix
+    ./nnn/default.nix
     ./zsh/default.nix
+    ./vscode/default.nix
+    ./tealdeer/default.nix
     ./hypr/default.nix
   ];
 }

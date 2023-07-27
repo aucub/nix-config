@@ -5,8 +5,8 @@
     "mode": "dock",
     "exclusive": true,
     "passthrough": false,
-    "height": 32,
-    "spacing": 6,
+    "height": 24,
+    "spacing": 4,
     "margin": 0,
     "margin-top": 0,
     "margin-bottom": 0,
@@ -15,10 +15,10 @@
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "wlr/workspaces",
-        "cpu",
-        "memory",
-        "disk"
+        "wlr/workspaces"//,
+        //"cpu",
+        //"memory",
+        //"disk"
     ],
     "modules-center": [
         "mpd",
@@ -29,7 +29,7 @@
         "network",
         "battery",
         "clock",
-        "powermenu"
+        "custom/powermenu"
     ],
     "backlight": {
         "interval": 2,
@@ -58,13 +58,13 @@
             "1": "",
             "2": "",
             "3": "",
-            "4": "",
-            "5": "ﭮ",
-            "6": "",
+            "4": "",
+            "5": "",
+            "6": "",
             "7": "",
             "8": "",
             "9": "",
-            "10": "﮼",
+            "10": "〇",
             "focused": "",
             "default": ""
         }
@@ -111,7 +111,7 @@
         "interval": 30,
         "format": "FREE: {free}"
     },
-    "powermenu": {
+    "custom/powermenu": {
         "format": "\uf011",
         "on-click": "$HOME/.config/hypr/scripts/wlogout",
         "tooltip": false

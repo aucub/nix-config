@@ -4,10 +4,12 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     git
+    lazygit
     fish
     bluez
     bluez-alsa
     bluez-tools
+    tealdeer
     neovim
     helix
     alacritty
@@ -103,6 +105,7 @@
     greetd.greetd
     greetd.gtkgreet
     xfce.thunar
+    gnome.dconf-editor
   ];
 
   programs.thunar.plugins = with pkgs.xfce; [
@@ -250,7 +253,7 @@
     consoleLogLevel = 3;
     initrd.verbose = false;
     initrd.kernelModules = [ "btrfs" ];
-    kernelModules = [ "fuse" "v4l2loopback" "acpi_call" "bbswitch" ];
+    kernelModules = [ "fuse" "v4l2loopback" "acpi_call" "bbswitch" "amdgpu" "nvidia" "nvidia_drm" "nvidia_uvm" "nvidia_modeset" ];
     extraModulePackages = [
       pkgs.linuxKernel.packages.linux_lqx.bbswitch
       pkgs.linuxKernel.packages.linux_lqx.acpi_call
