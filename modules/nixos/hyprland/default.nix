@@ -17,7 +17,7 @@
     restart = false;
     settings = rec {
       initial_session = {
-        command = "${pkgs.greetd.gtkgreet}/bin/gtkgreet --time --cmd Hyprland";
+        command = "Hyprland";# ${pkgs.greetd.gtkgreet}/bin/gtkgreet --command 
         user = "nix";
       };
       default_session = initial_session;
