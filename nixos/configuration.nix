@@ -205,10 +205,13 @@
       enableGlobalCompInit = false;
       promptInit = "";
     };
-    gpg = {
+    gnupg = {
       enable = true;
-      package = pkgs.gnupg;
-    };
+      agent = {
+        enable = true;
+        pinentryFlavor = "gnome3"
+      }
+    }；
     dconf.enable = true;
     ssh.startAgent = true;
     fuse.userAllowOther = true;
