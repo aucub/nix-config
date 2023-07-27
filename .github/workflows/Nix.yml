@@ -33,8 +33,8 @@ jobs:
         # run: |
           # nix --experimental-features 'nix-command flakes' build -L '.#nixosConfigurations.legion.config.system.build.toplevel' --show-trace
 
-      - name: "Print nixpkgs version"
-        run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
+      # - name: "Print nixpkgs version"
+        # run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
 
       - name: "Check free space"
         run: |
