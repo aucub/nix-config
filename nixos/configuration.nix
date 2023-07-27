@@ -387,9 +387,6 @@
   };
 
   services = {
-    gpg-agent = {
-      pinentryFlavor = "gnome3";
-    };
     acpid.enable = true;
     btrfs.autoScrub.enable = true;
     getty.autologinUser = "nix";
