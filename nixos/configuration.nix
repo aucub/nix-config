@@ -388,7 +388,6 @@
 
   services = {
     gpg-agent = {
-      enable = true;
       pinentryFlavor = "gnome3";
     };
     acpid.enable = true;
