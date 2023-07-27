@@ -24,14 +24,7 @@
     };
   };
 
-  services.swayosd = {
-    enable = true;
-    maxVolume = 120;
-  };
-
-  # services.swayosd-libinput-backend = {
-  # enable = true;
-  # };
+  services.swayosd-libinput-backend = { enable = true; };
 
   environment.systemPackages = with pkgs; [
     waybar # the status bar
