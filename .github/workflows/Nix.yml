@@ -19,9 +19,9 @@ jobs:
         uses: easimon/maximize-build-space@master
         with:
           build-mount-path: /nix
-          temp-reserve-mb: "100"
-          swap-size-mb: "4096"
-          root-reserve-mb: "1024"
+          remove-dotnet: 'true'
+          swap-size-mb: "1024"
+          root-reserve-mb: "512"
 
       - name: "Install Nix"
         uses: cachix/install-nix-action@v22
