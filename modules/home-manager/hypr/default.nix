@@ -18,8 +18,4 @@
   home.file.".config/hypr/wlogout".source = ./wlogout;
   home.file.".config/hypr/wofi".source = ./wofi;
   home.file.".config/hypr/wallpapers/wallpaper.jpg".source = ./wallpaper.jpg;
-  services.swayosd = {
-    enable = true;
-    maxVolume = 120;
-  };
 }
