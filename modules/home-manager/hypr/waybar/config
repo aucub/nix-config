@@ -5,60 +5,51 @@
     "mode": "dock",
     "exclusive": true,
     "passthrough": false,
-    "height": 30,
-    "spacing": 5,
+    "height": 18,
+    "spacing": 2,
     "margin": 0,
-    "margin-top": 6,
+    "margin-top": 0,
     "margin-bottom": 0,
-    "margin-left": 10,
-    "margin-right": 10,
+    "margin-left": 0,
+    "margin-right": 0,
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "cpu",
+        "wlr/workspaces",
         "memory",
-        "wlr/workspaces"
+        "cpu",
+        "temperature",
+        #"idle_inhibitor",
+        "custom/wall",
+        "mpd",
+        "custom/cava-internal"
     ],
     "modules-center": [
-        "mpd",
-        "tray"
+        "clock"
     ],
     "modules-right": [
-        "backlight",
         "pulseaudio",
+        "backlight",
         "network",
         "battery",
-        "clock",
-        "custom/powermenu"
+        "custom/powermenu",
+        "tray"
     ],
+    "custom/cava-internal": {
+        "exec": "sleep 1s && cava-internal",
+        "tooltip": false
+    },
     "wlr/workspaces": {
         "format": "{icon}",
-        "on-click": "activate",
+        "on-click": "activate"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-            "5": "",
-            "urgent": "",
-            "active": "",
-            "default": ""
-        }
-    },
-    "hyprland/window": {
-        "format": "{}"
-    },
-    "tray": {
-        "icon-size": 16,
-        "spacing": 10
-    },
-    "clock": {
-        "interval": 60,
-        "align": 0,
-        "rotate": 0,
-        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": " {:%H:%M}",
-        "format-alt": " {:%a %b %d, %G}"
+            "activated": "",
+            "deactivated": "",
+        },
+        "tooltip": false,
     },
     "backlight": {
         "interval": 2,
@@ -84,89 +75,11 @@
         "on-scroll-down": "light -U 5%",
         "smooth-scrolling-threshold": 1
     },
-    "battery": {
-        "interval": 60,
-        "align": 0,
-        "rotate": 0,
-        "full-at": 100,
-        "design-capacity": false,
-        "states": {
-            "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon}  {capacity}%",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{icon} {time}",
-        "format-icons": [
-            "",
-            "",
-            "",
-            "",
-            ""
-        ],
-        "format-time": "{H}h {M}min",
-        "tooltip": true
-    },
-    "cpu": {
-        "interval": 10,
-        "format": " {}%",
-        "max-length": 10,
-        "on-click": ""
-    },
-    "disk": {
-        "interval": 30,
-        "format": "FREE: {free}"
-    },
-    "custom/powermenu": {
-        "format": " <span color='#6a92d7'>⏻ </span>",
-        "on-click": "$HOME/.config/hypr/scripts/wlogout",
-        "tooltip": false
-    },
-    "memory": {
-        "interval": 30,
-        "format": " {}%",
-        "format-alt": " {used:0.1f}G",
-        "max-length": 10
-    },
-    "mpd": {
-        "interval": 2,
-        "unknown-tag": "N/A",
-        "format": "{stateIcon} {artist} - {title}",
-        "format-disconnected": " Disconnected",
-        "format-paused": "{stateIcon} {artist} - {title}",
-        "format-stopped": "Stopped ",
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)",
-        "on-click": "mpc toggle",
-        "on-click-middle": "mpc prev",
-        "on-click-right": "mpc next",
-        "on-update": "",
-        "on-scroll-up": "mpc seek +00:00:01",
-        "on-scroll-down": "mpc seek -00:00:01",
-        "smooth-scrolling-threshold": 1
-    },
-    "network": {
-        "interval": 5,
-        "format-wifi": "直 {essid}",
-        "format-ethernet": " {ipaddr}/{cidr}",
-        "format-linked": " {ifname} (No IP)",
-        "format-disconnected": "󰤭 Disconnected",
-        "format-disabled": "睊 Disabled",
-        "format-alt": " {bandwidthUpBits} |  {bandwidthDownBits}",
-        "tooltip-format": " {ifname} via {gwaddr}",
-        "on-click-right": "nm-connection-editor"
-    },
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-bluetooth": "  {volume}%",
         "format-bluetooth-muted": " ",
-        "format-muted": "婢",
+        "format-muted": "󰖁",
         "format-source": " {volume}%",
         "format-source-muted": "",
         "format-icons": {
@@ -176,15 +89,85 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": [
-                "",
-                "",
-                ""
-            ]
+            "default": ["" "" ""]
         },
-        "scroll-step": 5.0,
+        "scroll-step": 2.0,
         "on-click": "amixer set Master toggle",
         "on-click-right": "pavucontrol",
         "smooth-scrolling-threshold": 1
+    },
+    "battery": {
+        "interval": 10,
+        "states": {
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "{icon} {capacity}%",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"],
+        "tooltip": false
+    },
+    "clock": {
+        "interval": 1,
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%I:%M %p  %A %b %d}",
+        "tooltip": true
+    },
+    "memory": {
+        "interval": 1,
+        "format": "󰍛 {percentage}%",
+        "format-alt": "󰍛 {used:0.1f}G",
+        "states": {
+            "warning": 85
+        }
+    },
+    "cpu": {
+        "interval": 1,
+        "format": "󰻠 {usage}%"
+    },
+    "mpd": {
+        "max-length": 25,
+        "interval": 2,
+        "unknown-tag": "N/A",
+        "format": "<span foreground='#bb9af7'></span> {title}",
+        "format-disconnected": " Disconnected",
+        "format-paused": " {title}",
+        "format-stopped": "<span foreground='#bb9af7'></span>",
+        "tooltip-format": "{title} - {artist} ({elapsedTime:%M:%S}/{totalTime:%H:%M:%S})",
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc toggle",
+        "on-click-middle": "mpc prev",
+        "on-click-right": "mpc next",
+        "on-update": "",
+        "on-scroll-up": "mpc seek +00:00:01",
+        "on-scroll-down": "mpc seek -00:00:01",
+        "smooth-scrolling-threshold": 5
+    },
+    "network": {
+        "interval": 1,
+        "format-wifi": "󰖩 {essid}",
+        "format-ethernet": "󰀂 {ifname} ({ipaddr})",
+        "format-linked": "󰖪 {essid} (No IP)",
+        "format-disconnected": "󰯡 Disconnected",
+        "format-disabled": "󰯡 Disabled",
+        "format-alt": " {bandwidthUpBits} |  {bandwidthDownBits}",
+        "tooltip-format": " {ifname} via {gwaddr}",
+        "on-click-right": "nm-connection-editor",
+        "tooltip": false
+    },
+    "temperature": {
+        "tooltip": false,
+        "format": " {temperatureC}°C"
+    },
+    "custom/powermenu": {
+        "format": " <span color='#6a92d7'>⏻ </span>",
+        "on-click": "nwg-bar",
+        "tooltip": false
+    },
+    "tray": {
+        "icon-size": 15,
+        "spacing": 5
     }
 }

@@ -6,4 +6,9 @@
     recursive = true;
   };
 
+  home.file.".config/btop/themes/monokai.theme" = {
+    source = ./monokai.theme;
+    recursive = true;
+  };
+
 }

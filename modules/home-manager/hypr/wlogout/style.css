@@ -25,14 +25,6 @@ button:focus {
     color: #1e1e2e;
 }
 
-#lock {
-    background-image: image(url("./lock.png"));
-}
-
-#lock:focus {
-    background-image: image(url("./lock-hover.png"));
-}
-
 #logout {
     background-image: image(url("./logout.png"));
 }

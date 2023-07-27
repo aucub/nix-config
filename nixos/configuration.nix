@@ -14,6 +14,7 @@
     helix
     alacritty
     vim
+    sshpass
     curl
     neofetch
     nnn
@@ -42,6 +43,7 @@
     pciutils
     dmidecode
     brightnessctl
+    glib
     xdg-utils
     xdg-user-dirs
     btop
@@ -64,6 +66,7 @@
     zstd
     gnupg
     ffmpeg_6-full
+    ffmpegthumbnailer
     pavucontrol
     playerctl
     pulsemixer
@@ -84,6 +87,8 @@
     mesa
     viu
     imagemagick
+    imv
+    feh
     graphviz
     obs-studio
     mpd
@@ -99,7 +104,8 @@
     glfw-wayland
     xwayland
     xorg.xrdb
-    pkgs.qt6.qtwayland
+    qt6.qtwayland
+    libsForQt5.qt5.qtwayland
     qt5ct
     polkit_gnome
     linux-firmware
@@ -198,6 +204,10 @@
       };
       enableGlobalCompInit = false;
       promptInit = "";
+    };
+    gpg = {
+      enable = true;
+      package = pkgs.gnupg;
     };
     dconf.enable = true;
     ssh.startAgent = true;
@@ -304,6 +314,8 @@
         TimeoutStopSec = 10;
       };
     };
+    user.targets.hyprland-session.Unit.Wants =
+      [ "xdg-desktop-autostart.target" ];
     services.NetworkManager-wait-online.enable = false;
     oomd = {
       enableRootSlice = true;
@@ -373,6 +385,10 @@
   };
 
   services = {
+    gpg-agent = {
+      enable = true;
+      pinentryFlavor = "gnome3";
+    };
     acpid.enable = true;
     btrfs.autoScrub.enable = true;
     getty.autologinUser = "nix";

@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
-  services = { tlp.enable = true; };
+  services = {
+    tlp.enable = true;
+    auto-cpufreq.enable = true;
+    xserver.videoDrivers = [ "nvidia" ];
+  };
 
   hardware = {
     nvidia = {
@@ -20,7 +24,12 @@
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [ nvidia-vaapi-driver libvdpau-va-gl ];
+      extraPackages = with pkgs; [
+        vaapiVdpau
+        nvidia-offload
+        nvidia-vaapi-driver
+        libvdpau-va-gl
+      ];
     };
     pulseaudio.support32Bit = true;
     ledger.enable = true;
