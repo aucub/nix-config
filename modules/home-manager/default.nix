@@ -8,7 +8,6 @@
     ./bat/default.nix
     ./btop/default.nix
     ./fcitx5/default.nix
-    ./firefox/default.nix
     ./fish/default.nix
     ./helix/default.nix
     ./htop/default.nix
