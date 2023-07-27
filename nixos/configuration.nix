@@ -211,7 +211,7 @@
         enable = true;
         pinentryFlavor = "gnome3"
       }
-    }；
+    };
     dconf.enable = true;
     ssh.startAgent = true;
     fuse.userAllowOther = true;
