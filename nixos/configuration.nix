@@ -106,6 +106,7 @@
     xorg.xrdb
     qt6.qtwayland
     libsForQt5.qt5.qtwayland
+    libsForQt5.qtstyleplugin-kvantum
     qt5ct
     polkit_gnome
     linux-firmware
@@ -216,6 +217,8 @@
     fuse.userAllowOther = true;
     neovim.enable = true;
   };
+
+  qt.platformTheme = "qt5ct";
 
   networking = {
     firewall.enable = false;
