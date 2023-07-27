@@ -15,10 +15,10 @@
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "wlr/workspaces"//,
-        //"cpu",
-        //"memory",
-        //"disk"
+        "wlr/workspaces",
+        "cpu",
+        "memory",
+        "disk"
     ],
     "modules-center": [
         "mpd",
