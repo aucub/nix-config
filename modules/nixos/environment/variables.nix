@@ -6,7 +6,9 @@
       TERMINAL = "alacritty";
       QT_QPA_PLATFORMTHEME = "qt5ct";
       XCURSOR_THEME = "Bibata-Modern-Classic";
-      XCURSOR_SIZE = "18";
+      XCURSOR_SIZE = "22";
+      GDK_SCALE = "1";
+      ELM_SCALE = "1";
       QT_SCALE_FACTOR = "1";
       GDK_BACKEND = "wayland,x11";
       MOZ_ENABLE_WAYLAND = "1";

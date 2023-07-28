@@ -109,7 +109,7 @@
     };
     font = {
       name = "Sarasa UI SC";
-      size = 12;
+      size = 14;
     };
     gtk3.extraConfig = {
       Settings = ''
@@ -134,7 +134,7 @@
     name = "Bibata-Modern-Classic";
     gtk.enable = true;
     x11.enable = true;
-    size = 18;
+    size = 22;
   };
 
   services = {

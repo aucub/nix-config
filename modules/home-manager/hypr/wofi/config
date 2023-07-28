@@ -6,8 +6,8 @@ layer=top
 term=alacritty
 
 ## Geometry
-width=500px
-height=305px
+width=650px
+height=400px
 location=0
 orientation=vertical
 halign=fill
@@ -17,7 +17,7 @@ dynamic_lines=false
 ## Images
 allow_markup=true
 allow_images=true
-image_size=24
+image_size=32
 
 ## Search
 exec_search=false

@@ -2,9 +2,11 @@
     "name": "main-bar",
     "id": "main-bar",
     "layer": "top",
+    "position": "top",
     "mode": "dock",
     "exclusive": true,
-    "height": 18,
+    "height": 40,
+    "spacing": 6,
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
@@ -40,7 +42,7 @@
     "hyprland/window": {
         "format": "{}",
         "rewrite": {
-            "(.*) — Mozilla Firefox": "🌎 $1",
+            "(.*) — Mozilla Firefox": "$1",
             "(.*) - fish": "> [$1]"
         },
         "separate-outputs": true
@@ -178,7 +180,7 @@
         "format": " {temperatureC}°C"
     },
     "custom/powermenu": {
-        "format": "⏻",
+        "format": "  ",
         "on-click": "nwg-bar",
         "tooltip": false
     },
