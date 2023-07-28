@@ -8,7 +8,6 @@ set -x EDITOR nvim
 mcfly init fish | source
 thefuck --alias | source
 zoxide init fish | source
-if status is-interactive
-    ...
-    eval (zellij setup --generate-auto-start fish | string collect)
-end
+# if status is-interactive
+#     eval (zellij setup --generate-auto-start fish | string collect)
+# end

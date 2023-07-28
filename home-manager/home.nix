@@ -19,9 +19,9 @@
     # 可以在这里添加overlays（覆盖）
     overlays = [
       # （您可以）为您自己的flake导出添加覆盖 (from overlays and pkgs dir):
-      # outputs.overlays.additions
-      # outputs.overlays.modifications
-      # outputs.overlays.unstable-packages
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
 
       # 也可以添加从其他flakes导出的覆盖层:
       # neovim-nightly-overlay.overlays.default
