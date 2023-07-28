@@ -3,16 +3,43 @@
 
 { inputs, outputs, lib, config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
-    git
-    lazygit
-    fish
     bluez
     bluez-alsa
     bluez-tools
+    ethtool
+    socat
+    sysstat
+    lm_sensors
+    hdparm
+    pciutils
+    dmidecode
+    brightnessctl
+    libva
+    libva-utils
+    vaapiVdpau
+    vdpauinfo
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-tools
+    glxinfo
+    mesa
+    glib
+    gcc
+    clang
+    xdg-utils
+    xdg-user-dirs
+    file
+    zstd
+    gnupg
+    networkmanagerapplet
+    alsa-lib
+    alsa-utils
+    libnotify
+    git
+    fish
     tealdeer
     neovim
     helix
-    alacritty
     vim
     sshpass
     curl
@@ -30,26 +57,11 @@
     du-dust
     duf
     jq
-    ethtool
-    networkmanagerapplet
     wget
     curl
     aria
-    socat
-    libnotify
-    sysstat
-    lm_sensors
-    hdparm
-    pciutils
-    dmidecode
-    brightnessctl
-    glib
-    xdg-utils
-    xdg-user-dirs
     btop
     htop
-    gcc
-    clang
     rar
     xz
     unzip
@@ -57,14 +69,11 @@
     atool
     bc
     cowsay
-    file
     which
     tree
     gnused
     gnutar
     gawk
-    zstd
-    gnupg
     ffmpeg_6-full
     ffmpegthumbnailer
     pavucontrol
@@ -72,33 +81,29 @@
     pulsemixer
     pipewire
     wireplumber
-    alsa-lib
-    alsa-utils
     flac
-    audacity
-    libva
-    libva-utils
-    vaapiVdpau
-    vdpauinfo
-    vulkan-loader
-    vulkan-validation-layers
-    vulkan-tools
-    glxinfo
-    mesa
     viu
     imagemagick
     imv
     feh
     graphviz
-    obs-studio
     mpd
+    lazygit
     cava
+    wev
     mpc-cli
     ncmpcpp
+    polkit_gnome
+    linux-firmware
+    greetd.greetd
+    greetd.gtkgreet
+    qgnomeplatform
+    qgnomeplatform-qt6
+    appimage-run
+    flatpak
     wayland
     wayland-scanner
     wayland-utils
-    wev
     egl-wayland
     wayland-protocols
     glfw-wayland
@@ -109,16 +114,12 @@
     libsForQt5.qtstyleplugins
     libsForQt5.qtstyleplugin-kvantum
     qt5ct
-    polkit_gnome
-    linux-firmware
-    greetd.greetd
-    greetd.gtkgreet
-    xfce.thunar
     gnome.dconf-editor
-    qgnomeplatform
-    qgnomeplatform-qt6
-    appimage-run
-    flatpak
+    alacritty
+    xfce.thunar
+    obs-studio
+    audacity
+    gthumb
   ];
 
   programs.thunar.plugins = with pkgs.xfce; [
