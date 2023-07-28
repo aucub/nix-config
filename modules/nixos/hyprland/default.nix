@@ -36,6 +36,7 @@
       nwg-bar
       wl-clipboard
       wl-clipboard-x11
+      wl-clip-persist
       wlr-randr
       wf-recorder # creen recording
       grim # taking screenshots
