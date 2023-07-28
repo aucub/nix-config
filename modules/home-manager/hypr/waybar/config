@@ -4,40 +4,72 @@
     "layer": "top",
     "mode": "dock",
     "exclusive": true,
-    "height": 12,
+    "height": 18,
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "memory",
-        "cpu",
-        "temperature",
+        "hyprland/workspaces",
+        "hyprland/window",
         "tray"
     ],
     "modules-center": [
+        "mpd",
         "clock"
     ],
     "modules-right": [
+        "memory",
+        "cpu",
+        "temperature",
         "pulseaudio",
         "backlight",
         "network",
         "battery",
         "custom/powermenu"
     ],
-    "custom/cava-internal": {
-        "exec": "sleep 1s && cava-internal",
-        "tooltip": false
+    "hyprland/workspaces": {
+	     "format": "{id}: {icon}",
+	     "format-icons": {
+		     "1": "",
+		     "2": "",
+		     "3": "",
+		     "4": "",
+		     "5": "",
+		     "active": "",
+		     "default": ""
+	     },
     },
-    "wlr/workspaces": {
-        "format": "{icon}",
-        "on-click": "activate"
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
+    "hyprland/window": {
+         "format": "{}",
+         "rewrite": {
+             "(.*) — Mozilla Firefox": "🌎 $1",
+             "(.*) - fish": "> [$1]"
+         },
+         "separate-outputs": true
+     },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "interval": 10,
+        "consume-icons": {
+            "on": " " // Icon shows only when "consume" is on
         },
-        "tooltip": false
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
     },
     "backlight": {
         "interval": 2,
@@ -115,24 +147,6 @@
         "interval": 1,
         "format": "󰻠 {usage}%"
     },
-    "mpd": {
-        "max-length": 25,
-        "interval": 2,
-        "unknown-tag": "N/A",
-        "format": "<span foreground='#bb9af7'></span> {title}",
-        "format-disconnected": " Disconnected",
-        "format-paused": " {title}",
-        "format-stopped": "<span foreground='#bb9af7'></span>",
-        "tooltip-format": "{title} - {artist} ({elapsedTime:%M:%S}/{totalTime:%H:%M:%S})",
-        "tooltip-format-disconnected": "MPD (disconnected)",
-        "on-click": "mpc toggle",
-        "on-click-middle": "mpc prev",
-        "on-click-right": "mpc next",
-        "on-update": "",
-        "on-scroll-up": "mpc seek +00:00:01",
-        "on-scroll-down": "mpc seek -00:00:01",
-        "smooth-scrolling-threshold": 5
-    },
     "network": {
         "interval": 1,
         "format-wifi": "󰖩 {essid}",
@@ -150,7 +164,7 @@
         "format": " {temperatureC}°C"
     },
     "custom/powermenu": {
-        "format": " <span color='#6a92d7'>⏻ </span>",
+        "format": "⏻",
         "on-click": "nwg-bar",
         "tooltip": false
     },
