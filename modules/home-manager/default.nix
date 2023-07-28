@@ -15,7 +15,7 @@
     ./ranger/default.nix
     ./nnn/default.nix
     ./zsh/default.nix
-    # ./vscode/default.nix
+    ./vscode/default.nix
     ./tealdeer/default.nix
     ./hypr/default.nix
     ./lazygit/default.nix
