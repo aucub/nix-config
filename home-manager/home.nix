@@ -104,7 +104,7 @@
       name = "Papirus";
     };
     theme = {
-      name = "Orchis-Purple";
+      name = "Orchis-Purple-Compact";
       package = pkgs.orchis-theme;
     };
     font = {

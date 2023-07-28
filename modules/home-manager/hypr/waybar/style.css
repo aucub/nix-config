@@ -26,6 +26,7 @@
 
 window#waybar {
     background-color: transparent;
+    color: rgb(217, 224, 238);
 }
 
 window>box {
@@ -65,16 +66,7 @@ window>box {
     border-radius: 20px;
     padding-left: 10px;
     padding-right: 10px;
-}
-
-window#waybar.kitty {
-    background-color: #111111;
-    color: #ffffff;
-}
-
-window#waybar.chromium {
-    background-color: #eeeeee;
-    color: #000000;
+    color: rgb(217, 224, 238);
 }
 
 tooltip {

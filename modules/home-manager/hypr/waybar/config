@@ -8,7 +8,9 @@
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "hyprland/workspaces",
+        "memory",
+        "cpu",
+        "temperature",
         "hyprland/window",
         "tray"
     ],
@@ -17,9 +19,6 @@
         "clock"
     ],
     "modules-right": [
-        "memory",
-        "cpu",
-        "temperature",
         "pulseaudio",
         "backlight",
         "network",
