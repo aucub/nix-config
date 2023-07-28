@@ -27,35 +27,35 @@
         "custom/powermenu"
     ],
     "hyprland/workspaces": {
-	     "format": "{id}: {icon}",
-	     "format-icons": {
-		     "1": "",
-		     "2": "",
-		     "3": "",
-		     "4": "",
-		     "5": "",
-		     "active": "",
-		     "default": ""
-	     },
+        "format": "{id}: {icon}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "active": "",
+            "default": ""
+        }
     },
     "hyprland/window": {
-         "format": "{}",
-         "rewrite": {
-             "(.*) — Mozilla Firefox": "🌎 $1",
-             "(.*) - fish": "> [$1]"
-         },
-         "separate-outputs": true
-     },
+        "format": "{}",
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "🌎 $1",
+            "(.*) - fish": "> [$1]"
+        },
+        "separate-outputs": true
+    },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
         "format-disconnected": "Disconnected ",
         "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
         "interval": 10,
         "consume-icons": {
-            "on": " " // Icon shows only when "consume" is on
+            "on": " "
         },
         "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
+            "off": "<span color=\"#f53c3c\"></span> ",
             "on": " "
         },
         "repeat-icons": {
@@ -109,7 +109,11 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["","",""]
+            "default": [
+                "",
+                "",
+                ""
+            ]
         },
         "scroll-step": 2.0,
         "on-click": "amixer set Master toggle",
@@ -126,7 +130,18 @@
         "format-full": "{icon} {capacity}%",
         "format-charging": "󰂄 {capacity}%",
         "format-alt": "{icon} {time}",
-        "format-icons": ["󰁺","󰁻","󰁼","󰁽","󰁾","󰁿","󰂀","󰂁","󰂂","󰁹"],
+        "format-icons": [
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ],
         "tooltip": false
     },
     "clock": {
