@@ -104,7 +104,6 @@
     glfw-wayland
     xwayland
     xorg.xrdb
-    gnome.nautilus
     qt6.qtwayland
     libsForQt5.qt5.qtwayland
     libsForQt5.qtstyleplugins
@@ -118,6 +117,8 @@
     gnome.dconf-editor
     qgnomeplatform
     qgnomeplatform-qt6
+    appimage-run
+    flatpak
   ];
 
   programs.thunar.plugins = with pkgs.xfce; [
@@ -235,7 +236,7 @@
   };
 
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = "zh_CN.UTF-8";# "en_US.UTF-8"
     supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
     extraLocaleSettings = {
       LC_ADDRESS = "zh_CN.UTF-8";
@@ -258,13 +259,13 @@
       grub = {
         enable = true;
         device = "nodev";
-        configurationLimit = lib.mkDefault 10;
+        configurationLimit = lib.mkDefault 5;
       };
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      timeout = 4;
+      timeout = 3;
     };
     kernelParams = [
       "amd_pstate=passive"
@@ -310,17 +311,17 @@
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart =
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
+        description = "polkit-gnome-authentication-agent-1";
+        wantedBy = [ "graphical-session.target" ];
+        wants = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        serviceConfig = {
+            Type = "simple";
+            ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+            Restart = "on-failure";
+            RestartSec = 1;
+            TimeoutStopSec = 10;
+          };
     };
     services.NetworkManager-wait-online.enable = false;
     oomd = {
@@ -333,6 +334,7 @@
     polkit.enable = true;
     rtkit.enable = true;
     pam.services.greetd.enableGnomeKeyring = true;
+    please.enable = true;
     sudo = { enable = true; };
   };
 
@@ -341,7 +343,7 @@
     wlr.enable = true;
     xdgOpenUsePortal = false;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr # for   wlroots   based compositors(hyprland/  sway)
+      xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
       xdg-desktop-portal-gtk # for gtk
       # xdg-desktop-portal-kde  # for kde
     ];
@@ -382,7 +384,6 @@
           "audio"
           "video"
           "input"
-          "lp"
           "power"
           "nix"
         ];
@@ -433,8 +434,8 @@
       drivers = [ pkgs.epson-escpr ];
     };
     fwupd.enable = true;
-    gvfs.enable = true; # Mount, trash, and   other functionalities
-    tumbler.enable = true; # Thumbnail   support for images
+    gvfs.enable = true; # Mount, trash, and other functionalities
+    tumbler.enable = true; # Thumbnail support for images
     upower.enable = true;
     blueman.enable = true;
     flatpak.enable = true;
