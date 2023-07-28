@@ -116,6 +116,7 @@
     qt5ct
     gnome.dconf-editor
     alacritty
+    zellij
     xfce.thunar
     obs-studio
     audacity
