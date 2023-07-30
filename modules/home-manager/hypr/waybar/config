@@ -17,7 +17,6 @@
         "tray"
     ],
     "modules-center": [
-        "mpd",
         "clock"
     ],
     "modules-right": [

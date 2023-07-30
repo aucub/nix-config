@@ -16,7 +16,6 @@
     brightnessctl
     libva
     libva-utils
-    vaapiVdpau
     vdpauinfo
     vulkan-loader
     vulkan-validation-layers
@@ -119,7 +118,6 @@
     zellij
     xfce.thunar
     obs-studio
-    audacity
     gthumb
   ];
 
@@ -220,11 +218,12 @@
     };
     dconf.enable = true;
     ssh.startAgent = true;
+    seahorse.enable = true;
     fuse.userAllowOther = true;
     neovim.enable = true;
   };
 
-  qt.platformTheme = "gtk";
+  qt.platformTheme = "qt5ct";
 
   networking = {
     firewall.enable = false;
@@ -238,7 +237,7 @@
   };
 
   i18n = {
-    defaultLocale = "zh_CN.UTF-8";# "en_US.UTF-8"
+    defaultLocale = "zh_CN.UTF-8"; # "en_US.UTF-8"
     supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
     extraLocaleSettings = {
       LC_ADDRESS = "zh_CN.UTF-8";
@@ -262,6 +261,7 @@
         enable = true;
         device = "nodev";
         configurationLimit = lib.mkDefault 5;
+        useOSProber = true;
       };
       efi = {
         canTouchEfiVariables = true;
@@ -313,17 +313,18 @@
 
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
-        description = "polkit-gnome-authentication-agent-1";
-        wantedBy = [ "graphical-session.target" ];
-        wants = [ "graphical-session.target" ];
-        after = [ "graphical-session.target" ];
-        serviceConfig = {
-            Type = "simple";
-            ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-            Restart = "on-failure";
-            RestartSec = 1;
-            TimeoutStopSec = 10;
-          };
+      description = "polkit-gnome-authentication-agent-1";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart =
+          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
     };
     services.NetworkManager-wait-online.enable = false;
     oomd = {
@@ -340,15 +341,27 @@
     sudo = { enable = true; };
   };
 
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    xdgOpenUsePortal = false;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
-      xdg-desktop-portal-gtk # for gtk
-      # xdg-desktop-portal-kde  # for kde
-    ];
+  xdg = {
+    mime = {
+      defaultApplications = {
+        "application/pdf" = "firefox.desktop";
+        "image/png" = [ "feh.desktop" ];
+      };
+      addedAssociations = {
+        "application/pdf" = "firefox.desktop";
+        "text/xml" = [ "nvim.desktop" ];
+      };
+    };
+    portal = {
+      enable = true;
+      wlr.enable = true;
+      xdgOpenUsePortal = false;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
+        xdg-desktop-portal-gtk # for gtk
+        # xdg-desktop-portal-kde  # for kde
+      ];
+    };
   };
 
   zramSwap = {
@@ -356,7 +369,7 @@
     algorithm = "zstd";
   };
 
-  environment.shells = with pkgs; [ bash zsh fish ];
+  environment.shells = with pkgs; [ bashInteractive zsh fish ];
 
   # 配置您的全局用户，组设置，根据需要添加更多用户
   users = {
@@ -366,8 +379,7 @@
       root.initialPassword = "root";
       # 将其替换为您的用户名
       nix = {
-        # 可以为您的用户设置一个初始密码，如果您这样做了，您可以通过在nixos-install中传递“--no-root-passwd”来跳过设置根密码
-        # 在重新启动后一定记得用passwd更改密码
+        # 可以为您的用户设置一个初始密码，可以通过在nixos-install中传递“--no-root-passwd”来跳过设置根密码
         shell = pkgs.zsh;
         initialPassword = "nix";
         isNormalUser = true;
@@ -394,6 +406,7 @@
   };
 
   services = {
+    mpd.enable = true;
     acpid.enable = true;
     btrfs.autoScrub.enable = true;
     getty.autologinUser = "nix";
@@ -405,7 +418,6 @@
       platformio
       openocd
       android-udev-rules
-      ledger-udev-rules
     ];
     udisks2.enable = true;
     # 设置SSH服务器
@@ -420,6 +432,7 @@
     };
     pipewire = {
       enable = true;
+      audio.enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       jack.enable = true;
@@ -444,34 +457,21 @@
     xserver = {
       enable = true;
       layout = "us";
+      desktopManager = { xterm.enable = false; };
       libinput = {
         enable = true;
+        mouse = { accelProfile = "adaptive"; };
         touchpad = {
           tapping = true;
           naturalScrolling = true;
+          accelProfile = "adaptive";
           disableWhileTyping = true;
         };
       };
     };
-    avahi = {
-      enable = true;
-      nssmdns = true;
-    };
   };
 
   sound.enable = true;
-
-  hardware = {
-    pulseaudio.enable = false;
-    opengl = {
-      enable = true;
-      driSupport = true;
-    };
-    # 平滑背光控制
-    brillo.enable = true;
-    bluetooth.enable = true;
-    cpu.amd.updateMicrocode = true;
-  };
 
   system.stateVersion = "23.05";
 }

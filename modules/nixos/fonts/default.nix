@@ -9,13 +9,8 @@
       noto-fonts-cjk-sans
       noto-fonts-emoji
       sarasa-gothic
-      source-sans
-      source-serif
-      source-han-sans
-      source-han-serif
       fira-code
       fira-code-symbols
-      iosevka
       nerdfonts
       symbola
     ];
