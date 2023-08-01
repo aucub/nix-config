@@ -233,7 +233,6 @@
 
   time = {
     timeZone = "Asia/Shanghai";
-    hardwareClockInLocalTime = true;
   };
 
   i18n = {
@@ -259,13 +258,13 @@
     loader = {
       grub = {
         enable = true;
-        device = "nodev";
+        device = "/dev/nvme0n1";
         configurationLimit = lib.mkDefault 5;
         useOSProber = true;
       };
       efi = {
         canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
+        efiSysMountPoint = "/boot/efi";
       };
       timeout = 3;
     };
