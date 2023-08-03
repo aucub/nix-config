@@ -458,7 +458,6 @@
       enable = true;
       layout = "us";
       desktopManager = {
-        defaultSession = "Hyprland";
         lightdm.enable = false;
         xterm.enable = false;
       };
