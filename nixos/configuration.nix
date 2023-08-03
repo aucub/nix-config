@@ -458,7 +458,6 @@
       enable = true;
       layout = "us";
       desktopManager.xterm.enable = false;
-      videoDrivers = [ "nvidia" ];
       libinput = {
         enable = true;
         mouse = { accelProfile = "adaptive"; };
