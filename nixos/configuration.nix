@@ -121,11 +121,6 @@
     gthumb
   ];
 
-  programs.thunar.plugins = with pkgs.xfce; [
-    thunar-archive-plugin
-    thunar-volman
-  ];
-
   # 可以在这里导入其他 NixOS 模块
   imports = [
     # 在 flake 中使用模块（来自 modules/nixos）:
@@ -216,6 +211,11 @@
         pinentryFlavor = "gnome3";
       };
     };
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
+    };
+    nm-applet.enable = true;
     dconf.enable = true;
     ssh.startAgent = true;
     seahorse.enable = true;
@@ -223,7 +223,10 @@
     neovim.enable = true;
   };
 
-  qt.platformTheme = "qt5ct";
+  qt = {
+    enable = true;
+    platformTheme = "qt5ct";
+  };
 
   networking = {
     firewall.enable = false;
@@ -231,9 +234,7 @@
     networkmanager.enable = true;
   };
 
-  time = {
-    timeZone = "Asia/Shanghai";
-  };
+  time = { timeZone = "Asia/Shanghai"; };
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8"; # "en_US.UTF-8"
@@ -456,7 +457,16 @@
     xserver = {
       enable = true;
       layout = "us";
-      desktopManager = { xterm.enable = false; };
+      desktopManager = {
+        defaultSession = "Hyprland";
+        lightdm.enable = false;
+        autoLogin = {
+          enable = true;
+          user = "nix";
+        };
+        xterm.enable = false;
+      };
+      videoDrivers = [ "nvidia" ];
       libinput = {
         enable = true;
         mouse = { accelProfile = "adaptive"; };

@@ -24,6 +24,8 @@
       enable = true;
       driSupport = true;
       extraPackages = with pkgs; [
+        rocm-opencl-icd
+        amdvlk
         vaapiVdpau
         nvidia-vaapi-driver
         libvdpau-va-gl

@@ -8,6 +8,11 @@
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-emoji
+      source-sans
+      source-serif
+      source-han-sans
+      source-han-serif
+      iosevka
       sarasa-gothic
       fira-code
       fira-code-symbols
