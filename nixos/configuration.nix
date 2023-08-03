@@ -200,7 +200,7 @@
       enableCompletion = true;
       autosuggestions = {
         enable = true;
-        strategy = [ "match_prev_cmd" ]; # one of "history", "match_prev_cmd"
+        strategy = [ "history" ]; # one of "history", "match_prev_cmd"
       };
       enableGlobalCompInit = false;
       promptInit = "";
@@ -460,10 +460,6 @@
       desktopManager = {
         defaultSession = "Hyprland";
         lightdm.enable = false;
-        autoLogin = {
-          enable = true;
-          user = "nix";
-        };
         xterm.enable = false;
       };
       videoDrivers = [ "nvidia" ];
