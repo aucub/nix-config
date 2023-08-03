@@ -457,10 +457,7 @@
     xserver = {
       enable = true;
       layout = "us";
-      desktopManager = {
-        lightdm.enable = false;
-        xterm.enable = false;
-      };
+      desktopManager.xterm.enable = false;
       videoDrivers = [ "nvidia" ];
       libinput = {
         enable = true;
