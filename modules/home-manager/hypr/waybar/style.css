@@ -48,6 +48,11 @@ window>box {
     padding-right: 6px;
 }
 
+#workspaces button.focused {
+    background-color: rgb(181, 232, 224);
+    color: rgb(26, 24, 38);
+}
+
 #workspaces button.active {
     background-color: rgb(181, 232, 224);
     color: rgb(26, 24, 38);

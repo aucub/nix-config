@@ -39,6 +39,11 @@
     wf-recorder # creen recording
     grim # taking screenshots
     slurp # selecting a region to screenshot
+    unstable.wl-clip-persist
+    wlr-randr
+    wf-recorder # creen recording
+    grim # taking screenshots
+    slurp # selecting a region to screenshot
     wofi
     mako # the notification daemon, the same as dunst
     swayosd

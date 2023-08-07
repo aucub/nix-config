@@ -28,6 +28,7 @@
     xdg-utils
     xdg-user-dirs
     file
+    udiskie
     zstd
     gnupg
     networkmanagerapplet
@@ -297,7 +298,7 @@
       pkgs.linuxKernel.packages.linux_lqx.v4l2loopback
     ];
     extraModprobeConfig = ''
-      options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
+      options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs" nvidia NVreg_RegistryDwords="PowerMizerEnable=0x1; PerfLevelSrc=0x2222; PowerMizerLevel=0x3; PowerMizerDefault=0x3; PowerMizerDefaultAC=0x3"
     '';
     supportedFilesystems = lib.mkForce [
       "btrfs"
@@ -358,6 +359,7 @@
       xdgOpenUsePortal = false;
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr # for wlroots based compositors(hyprland/sway)
+        xdg-desktop-portal-hyprland
         xdg-desktop-portal-gtk # for gtk
         # xdg-desktop-portal-kde  # for kde
       ];

@@ -10,6 +10,7 @@
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
+        "wlr/workspaces",
         "memory",
         "cpu",
         "temperature",
@@ -26,7 +27,8 @@
         "battery",
         "custom/powermenu"
     ],
-    "hyprland/workspaces": {
+    "wlr/workspaces": {
+        "on-click": "activate",
         "format": "{id}: {icon}",
         "format-icons": {
             "1": "",
@@ -36,7 +38,9 @@
             "5": "",
             "active": "",
             "default": ""
-        }
+        },
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1"
     },
     "hyprland/window": {
         "format": "{}",
@@ -44,7 +48,8 @@
             "(.*) — Mozilla Firefox": "$1",
             "(.*) - fish": "> [$1]"
         },
-        "separate-outputs": true
+        "separate-outputs": true,
+        "max-length": 200
     },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
