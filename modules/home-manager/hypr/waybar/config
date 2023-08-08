@@ -10,7 +10,6 @@
     "fixed-center": true,
     "ipc": true,
     "modules-left": [
-        "wlr/workspaces",
         "memory",
         "cpu",
         "temperature",
@@ -174,7 +173,7 @@
         "format-linked": "󰖪 {essid} (No IP)",
         "format-disconnected": "󰯡 Disconnected",
         "format-disabled": "󰯡 Disabled",
-        "format-alt": " {bandwidthUpBits} |  {bandwidthDownBits}",
+        "format-alt": " {bandwidthUpBytes} |  {bandwidthDownBytes}",
         "tooltip-format": " {ifname} via {gwaddr}",
         "on-click-right": "nm-connection-editor",
         "tooltip": false
