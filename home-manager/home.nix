@@ -53,6 +53,23 @@
   # home.packages = with pkgs; [ steam ];
 
   programs = {
+    vscode = {
+      enable = true;
+      extensions = with pkgs.vscode-extensions; [
+        ms-vscode.cpptools
+        MS-CEINTL.vscode-language-pack-zh-hans
+        formulahendry.code-runner
+        Guyutongxue.pause-console
+        mhutchie.git-graph
+        GitHub.github-vscode-theme
+        oderwat.indent-rainbow
+        rust-lang.rust-analyzer
+        redhat.vscode-yaml
+        redhat.vscode-xml
+        vscode-icons-team.vscode-icons
+        yzhang.markdown-all-in-one
+      ];
+    };
     # 启用 home-manager and git
     home-manager.enable = true;
     zoxide = {
