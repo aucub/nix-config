@@ -52,35 +52,42 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
 
-  # 启用 home-manager and git
-  programs.home-manager.enable = true;
-
-  # git 相关配置
-  programs.git = {
-    enable = true;
-    userName = "aucub";
-    userEmail = "78630225+aucub@users.noreply.github.com";
-    ignores = [
-      ".cache/"
-      ".DS_Store"
-      ".idea/"
-      ".fastRequest/"
-      "node_modules"
-      ".vscode/"
-      ".gradle"
-      "build/"
-      "!**/src/main/**/build/"
-      "!**/src/test/**/build/"
-      "*.iws"
-      "*.iml"
-      "*.ipr"
-      "out/"
-      "!**/src/main/**/out/"
-      "!**/src/test/**/out/"
-    ];
-    extraConfig = {
-      init.defaultBranch = "master";
-      core.editor = "nvim";
+  programs = {
+    # 启用 home-manager and git
+    home-manager.enable = true;
+    zoxide = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+    };
+    # git 相关配置
+    git = {
+      enable = true;
+      userName = "aucub";
+      userEmail = "78630225+aucub@users.noreply.github.com";
+      ignores = [
+        ".cache/"
+        ".DS_Store"
+        ".idea/"
+        ".fastRequest/"
+        "node_modules"
+        ".vscode/"
+        ".gradle"
+        "build/"
+        "!**/src/main/**/build/"
+        "!**/src/test/**/build/"
+        "*.iws"
+        "*.iml"
+        "*.ipr"
+        "out/"
+        "!**/src/main/**/out/"
+        "!**/src/test/**/out/"
+      ];
+      extraConfig = {
+        init.defaultBranch = "master";
+        core.editor = "nvim";
+      };
     };
   };
 
@@ -117,7 +124,7 @@
       '';
     };
 
-      gtk4.extraConfig = {
+    gtk4.extraConfig = {
       Settings = ''
         gtk-application-prefer-dark-theme=0
       '';

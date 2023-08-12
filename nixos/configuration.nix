@@ -119,6 +119,10 @@
     zellij
     xfce.thunar
     obs-studio
+    obs-studio-plugins.obs-pipewire-audio-capture
+    obs-studio-plugins.obs-scale-to-sound
+
+    obs-studio-plugins.obs-vaapi
     gthumb
   ];
 
@@ -215,6 +219,10 @@
     thunar = {
       enable = true;
       plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-volman ];
+    };
+    firefox = {
+      enable = true;
+      languagePacks = [ "zh-CN" ];
     };
     nm-applet.enable = true;
     dconf.enable = true;
