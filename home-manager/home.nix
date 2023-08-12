@@ -57,11 +57,10 @@
       enable = true;
       extensions = with pkgs.vscode-extensions; [
         ms-vscode.cpptools
-        MS-CEINTL.vscode-language-pack-zh-hans
+        ms-ceintl.vscode-language-pack-zh-hans
         formulahendry.code-runner
-        Guyutongxue.pause-console
         mhutchie.git-graph
-        GitHub.github-vscode-theme
+        github.github-vscode-theme
         oderwat.indent-rainbow
         rust-lang.rust-analyzer
         redhat.vscode-yaml
