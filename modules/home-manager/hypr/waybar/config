@@ -1,0 +1,194 @@
+{
+    "name": "main-bar",
+    "id": "main-bar",
+    "layer": "top",
+    "position": "top",
+    "mode": "dock",
+    "exclusive": true,
+    "height": 40,
+    "spacing": 6,
+    "fixed-center": true,
+    "ipc": true,
+    "modules-left": [
+        "memory",
+        "cpu",
+        "temperature",
+        "hyprland/window",
+        "tray"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "backlight",
+        "network",
+        "battery",
+        "custom/powermenu"
+    ],
+    "wlr/workspaces": {
+        "on-click": "activate",
+        "format": "{id}: {icon}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "active": "",
+            "default": ""
+        },
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1"
+    },
+    "hyprland/window": {
+        "format": "{}",
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "$1",
+            "(.*) - fish": "> [$1]"
+        },
+        "separate-outputs": true,
+        "max-length": 200
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "interval": 10,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "backlight": {
+        "interval": 2,
+        "align": 0,
+        "rotate": 0,
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "on-click": "",
+        "on-click-middle": "",
+        "on-click-right": "",
+        "on-update": "",
+        "on-scroll-up": "light -A 5%",
+        "on-scroll-down": "light -U 5%",
+        "smooth-scrolling-threshold": 1
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "  {volume}%",
+        "format-bluetooth-muted": " ",
+        "format-muted": "󰖁",
+        "format-source": " {volume}%",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "scroll-step": 2.0,
+        "on-click": "amixer set Master toggle",
+        "on-click-right": "pavucontrol",
+        "smooth-scrolling-threshold": 1
+    },
+    "battery": {
+        "interval": 10,
+        "states": {
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "{icon} {capacity}%",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": [
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ],
+        "tooltip": false
+    },
+    "clock": {
+        "interval": 1,
+        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%I:%M %p  %A %b %d}",
+        "tooltip": true
+    },
+    "memory": {
+        "interval": 1,
+        "format": "󰍛 {percentage}%",
+        "format-alt": "󰍛 {used:0.1f}G",
+        "states": {
+            "warning": 85
+        }
+    },
+    "cpu": {
+        "interval": 1,
+        "format": "󰻠 {usage}%"
+    },
+    "network": {
+        "interval": 1,
+        "format-wifi": "󰖩 {essid}",
+        "format-ethernet": "󰀂 {ifname} ({ipaddr})",
+        "format-linked": "󰖪 {essid} (No IP)",
+        "format-disconnected": "󰯡 Disconnected",
+        "format-disabled": "󰯡 Disabled",
+        "format-alt": " {bandwidthUpBytes} |  {bandwidthDownBytes}",
+        "tooltip-format": " {ifname} via {gwaddr}",
+        "on-click-right": "nm-connection-editor",
+        "tooltip": false
+    },
+    "temperature": {
+        "tooltip": false,
+        "format": " {temperatureC}°C"
+    },
+    "custom/powermenu": {
+        "format": "  ",
+        "on-click": "nwg-bar",
+        "tooltip": false
+    },
+    "tray": {
+        "icon-size": 15,
+        "spacing": 5
+    }
+}

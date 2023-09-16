@@ -1,0 +1,94 @@
+{
+    "extensions.ignoreRecommendations": true,
+    "window.dialogStyle": "custom",
+    // 控制是否启用平滑插入动画
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.find.addExtraSpaceOnTop": false,
+    "editor.fontFamily": "\"Sarasa Mono SC\",monospace",
+    "editor.fontLigatures": true, //这个控制是否启用字体连字，true启用，false不启用，这里选择启用
+    "editor.fontSize": 18,
+    "editor.suggestSelection": "first",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.factorypath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.vscode": true,
+        "**/**.exe": true
+    },
+    "workbench.startupEditor": "none",
+    "grunt.autoDetect": "on",
+    "security.workspace.trust.untrustedFiles": "open",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Windows PowerShell": {
+            "path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "editor.inlineSuggest.enabled": true,
+    "emmet.syntaxProfiles": {
+        "vue-html": "html",
+        "vue": "html"
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "html",
+        "vue"
+    ],
+    "eslint.options": {
+        "plugins": [
+            "html"
+        ]
+    },
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "telemetry.telemetryLevel": "off",
+    "workbench.colorTheme": "GitHub Light Colorblind (Beta)",
+    "update.showReleaseNotes": false,
+    "editor.wordWrap": "on",
+    "code-runner.runInTerminal": true,
+    "files.autoSave": "onWindowChange",
+    "workbench.iconTheme": "vscode-icons",
+    "indentRainbow.colors": [
+        "rgba(255,255,64,0.07)",
+        "rgba(127,255,127,0.07)",
+        "rgba(255,127,255,0.07)",
+        "rgba(79,236,236,0.07)"
+    ],
+    "vsicons.dontShowNewVersionMessage": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "window.titleBarStyle": "custom",
+    "workbench.preferredDarkColorTheme": "GitHub Light Colorblind (Beta)",
+    "workbench.preferredLightColorTheme": "GitHub Light Colorblind (Beta)",
+    "explorer.confirmDelete": false,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "workbench.enableExperiments": false,
+    "window.autoDetectColorScheme": true,
+    "terminal.external.linuxExec": "alacritty",
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "update.mode": "none"
+}
