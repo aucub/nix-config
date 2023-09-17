@@ -1,0 +1,44 @@
+name: nix-config
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - hypr
+jobs:
+  nix-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.0.0
+
+      - name: "Create Dir for Mounting moar Disk Space"
+        run: |
+          sudo mkdir /nix
+
+      - name: "Maximize Disk Space"
+        uses: easimon/maximize-build-space@master
+        with:
+          build-mount-path: /nix
+          remove-dotnet: 'true'
+          swap-size-mb: "1024"
+          root-reserve-mb: "512"
+
+      - name: "Install Nix"
+        uses: cachix/install-nix-action@v23
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - run: nix flake check --show-trace
+
+      - name: "Build NixOS config"
+        run: |
+          nix --experimental-features 'nix-command flakes' build -L '.#nixosConfigurations.legion.config.system.build.toplevel' --show-trace
+
+      - name: "Print nixpkgs version"
+        run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
+
+      - name: "Check free space"
+        run: |
+          sudo apt install neofetch
+          neofetch
+          echo "Free space:"
+          df -h

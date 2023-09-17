@@ -37,7 +37,7 @@ nixos-install --option substituters "https://mirrors.bfsu.edu.cn/nix-channels/st
 
 ```bash
 # 根据主机名部署其中一项配置
-sudo nixos-rebuild switch --flake .#legion
+sudo nixos-rebuild switch --install-bootloader --flake .#legion
 ```
 
 ## 从 Flatpak 安装应用程序

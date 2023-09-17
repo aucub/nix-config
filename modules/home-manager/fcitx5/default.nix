@@ -12,25 +12,4 @@
       rm -f "${config.xdg.configHome}/fcitx5/profile"
       rm -rf "${config.xdg.dataHome}/fcitx5/themes/fcitx5-skin-material"
     '';
-
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-configtool
-      fcitx5-gtk
-      libsForQt5.fcitx5-qt
-      fcitx5-chinese-addons
-      fcitx5-table-extra
-    ];
-  };
-
-  systemd.user.sessionVariables = {
-    GTK_IM_MODULE = "fcitx";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-    SDL_IM_MODULE = "fcitx";
-    GLFW_IM_MODULE = "ibus";
-    INPUT_METHOD = "fcitx";
-    IMSETTINGS_MODULE = "fcitx";
-  };
 }
