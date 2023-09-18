@@ -57,7 +57,6 @@
           modules = [
             # > NixOS 配置文件 <
             ./nixos/configuration.nix
-            nixos-hardware.nixosModules.common-gpu-nvidia-disable
             nur.nixosModules.nur
             ({ config, ... }: {
               # 使用 NUR 提供的包

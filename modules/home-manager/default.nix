@@ -3,4 +3,6 @@
 {
   # 在此列出您的模块文件
   # my-module = import ./my-module.nix;
+  fastfetch = import ./fastfetch/default.nix;
+  fcitx5 = import ./fcitx5/default.nix;
 }

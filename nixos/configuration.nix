@@ -6,6 +6,7 @@
     # Or modules from other flakes (such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
 
     # 将配置分解并在此导入其各个部分:
     # ./users.nix
@@ -275,11 +276,11 @@
     zsh = {
       enable = true;
       enableCompletion = true;
+      syntaxHighlighting.enable = true;
       autosuggestions = {
         enable = true;
         strategy = [ "history" ];
       };
-      promptInit = "";
     };
     firefox = { languagePacks = [ "zh-CN" ]; };
   };

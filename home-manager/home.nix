@@ -6,6 +6,8 @@
   imports = [
     # 如果您想使用您自己的 flakes 导出的模块(来自modules/home-manager)
     # outputs.homeManagerModules.example
+    # outputs.homeManagerModules.fcitx5
+    # outputs.homeManagerModules.fastfetch
 
     # 或者从其他 flakes 导出的模块(例如 nix-colors)
     # inputs.nix-colors.homeManagerModules.default
@@ -102,6 +104,7 @@
         "terminal.integrated.defaultProfile.linux" = "fish";
         "vsicons.dontShowNewVersionMessage" = true;
         "workbench.colorTheme" = "Default Light Modern";
+        "github.gitProtocol" = "ssh";
       };
     };
     # 启用 home-manager and git
