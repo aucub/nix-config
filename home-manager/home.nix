@@ -103,8 +103,9 @@
         "code-runner.runInTerminal" = true;
         "terminal.integrated.defaultProfile.linux" = "fish";
         "vsicons.dontShowNewVersionMessage" = true;
-        "workbench.colorTheme" = "Default Light Modern";
+        "workbench.colorTheme" = "Quiet Light";
         "github.gitProtocol" = "ssh";
+        "explorer.confirmDelete" = false;
       };
     };
     # 启用 home-manager and git
@@ -252,7 +253,7 @@
         };
         scrolling.multiplier = 3;
         selection.save_to_clipboard = false;
-        window.opacity = 0.4;
+        window.opacity = 1;
         window.dynamic_title = true;
       };
     };

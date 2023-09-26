@@ -3,4 +3,5 @@
 { pkgs ? (import ../nixpkgs.nix) { } }:
 {
   # example = pkgs.callPackage ./example { };
+  vimix-cursor-theme = pkgs.callPackage ./vimix-cursor-theme { };
 }

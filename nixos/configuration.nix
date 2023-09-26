@@ -6,7 +6,8 @@
     # Or modules from other flakes (such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+
+    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
 
     # 将配置分解并在此导入其各个部分:
     # ./users.nix
@@ -75,7 +76,7 @@
 
   # 使用 systemd-boot EFI 引导加载程序
   boot = {
-    kernelPackages = pkgs.linuxPackages_lqx;
+    kernelPackages = pkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
@@ -107,8 +108,8 @@
       "nvidia_modeset"
     ];
     extraModulePackages = [
-      pkgs.linuxKernel.packages.linux_lqx.bbswitch
-      pkgs.linuxKernel.packages.linux_lqx.v4l2loopback
+      pkgs.linuxKernel.packages.linux_zen.bbswitch
+      pkgs.linuxKernel.packages.linux_zen.v4l2loopback
     ];
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
@@ -208,6 +209,8 @@
       clash-verge
       clash-geoip
       clash-meta
+      localsend
+      telegram-desktop
     ];
   };
 
@@ -252,16 +255,18 @@
     alacritty
     libsForQt5.kate
     libsForQt5.lightly
-    papirus-icon-theme
+    # papirus-icon-theme
     orchis-theme
-    nordzy-cursor-theme
     colloid-kde
+    tela-icon-theme
+    vimix-cursor-theme
   ];
 
   environment.plasma5.excludePackages = with pkgs; [
     libsForQt5.kwrited
     libsForQt5.okular
     libsForQt5.elisa
+    libsForQt5.konsole
   ];
 
   # 有些程序需要 SUID 包装器,可以进一步配置或在用户会话中启动
