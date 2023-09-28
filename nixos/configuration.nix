@@ -205,7 +205,8 @@
       vscode
       haruna
       firefox
-      clash
+      bitwarden
+      google-chrome
       clash-verge
       clash-geoip
       clash-meta
@@ -266,6 +267,7 @@
     libsForQt5.kwrited
     libsForQt5.okular
     libsForQt5.elisa
+    libsForQt5.kate
     libsForQt5.konsole
   ];
 
@@ -286,6 +288,9 @@
         enable = true;
         strategy = [ "history" ];
       };
+    };
+    fish = {
+      enable = true;
     };
     firefox = { languagePacks = [ "zh-CN" ]; };
   };

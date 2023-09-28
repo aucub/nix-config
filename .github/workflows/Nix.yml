@@ -1,9 +1,7 @@
 name: nix-config
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - kde
+
 jobs:
   nix-config:
     runs-on: ubuntu-latest
@@ -19,7 +17,7 @@ jobs:
         uses: easimon/maximize-build-space@master
         with:
           build-mount-path: /nix
-          remove-dotnet: 'true'
+          remove-dotnet: "true"
           swap-size-mb: "1024"
           root-reserve-mb: "512"
 

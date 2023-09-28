@@ -255,6 +255,7 @@
         selection.save_to_clipboard = false;
         window.opacity = 1;
         window.dynamic_title = true;
+        shell.program = "fish";
       };
     };
   };
