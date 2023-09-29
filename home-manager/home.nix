@@ -137,6 +137,7 @@
       extraConfig = {
         init.defaultBranch = "main";
         core.editor = "nvim";
+        core.autocrlf = "input";
         push.autoSetupRemote = true;
       };
     };
@@ -172,6 +173,10 @@
       settings = {
         hide_kernel_threads = 1;
         hide_userland_threads = 1;
+        show_program_path = 0;
+        highlight_base_name = 1;
+        show_cpu_frequency = 1;
+        show_cpu_temperature = 1;
         color_scheme = 6;
       };
     };
@@ -262,8 +267,8 @@
         selection.save_to_clipboard = false;
         window.opacity = 1;
         window.dynamic_title = true;
-        window.dimensions.columns = 100;
-        window.dimensions.lines = 100;
+        window.dimensions.columns = 130;
+        window.dimensions.lines = 30;
         shell.program = "fish";
       };
     };
@@ -283,6 +288,14 @@
         "prompt" = "#cba6f7";
         "hl+" = "#f38ba8";
       };
+    };
+    obs-studio = {
+      enable = true;
+      plugins = with pkgs.obs-studio-plugins; [
+        obs-pipewire-audio-capture
+        obs-scale-to-sound
+        obs-vaapi
+      ];
     };
   };
 

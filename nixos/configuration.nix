@@ -149,13 +149,14 @@
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
       noto-fonts-emoji
       sarasa-gothic
     ];
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Noto Serif" "Noto Color Emoji" ];
+        serif = [ "Noto Serif CJK SC" "Noto Color Emoji" ];
         sansSerif = [ "Sarasa UI SC" "Noto Color Emoji" ];
         monospace = [ "Sarasa Mono SC" "Noto Color Emoji" ];
         emoji = [ "Noto Color Emoji" ];
@@ -215,6 +216,7 @@
       [ "wheel" "networkmanager" "users" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       vscode
+      lapce
       haruna
       firefox
       bitwarden
@@ -222,9 +224,14 @@
       unstable.clash-verge
       unstable.clash-geoip
       unstable.clash-meta
+      obs-studio
       localsend
       telegram-desktop
       (python311.withPackages (ps: with ps; [ selenium ]))
+      # postman
+      # jetbrains.idea-ultimate
+      # bun
+      # qq
     ];
   };
 
@@ -266,6 +273,9 @@
     gdu
     duf
     htop
+    nvtop-msm
+    mission-center
+    linux-wifi-hotspot
     python311
     alacritty
     qt6Packages.qtstyleplugin-kvantum
@@ -303,7 +313,10 @@
         strategy = [ "history" ];
       };
     };
-    fish = { enable = true; };
+    fish = {
+      enable = true;
+      shellInit = ''set -U fish_greeting " "'';
+    };
     fzf.fuzzyCompletion = true;
     firefox = { languagePacks = [ "zh-CN" ]; };
   };
