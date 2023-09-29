@@ -253,8 +253,8 @@
     gdu
     duf
     htop
+    python311
     alacritty
-    libsForQt5.kate
     libsForQt5.lightly
     # papirus-icon-theme
     orchis-theme
@@ -289,9 +289,7 @@
         strategy = [ "history" ];
       };
     };
-    fish = {
-      enable = true;
-    };
+    fish = { enable = true; };
     firefox = { languagePacks = [ "zh-CN" ]; };
   };
 
@@ -340,6 +338,8 @@
         libsForQt5.kwrited
         libsForQt5.okular
         libsForQt5.elisa
+        libsForQt5.kate
+        libsForQt5.konsole
       ];
       # 在 X11 中配置键盘映射
       # layout = "us";

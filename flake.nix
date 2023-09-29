@@ -20,9 +20,12 @@
     # 添加其他flake
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
+    nix-alien.url = "github:thiagokokada/nix-alien";
+
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nixos-hardware, ... }@inputs:
+  outputs =
+    { self, nixpkgs, home-manager, nur, nixos-hardware, nix-alien, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -58,7 +61,7 @@
             # > NixOS 配置文件 <
             ./nixos/configuration.nix
             nur.nixosModules.nur
-            ({ config, ... }: {
+            ({ config, nixpkgs, ... }: {
               # 使用 NUR 提供的包
               environment.systemPackages = with config.nur.repos; [
                 # xddxdd.dingtalk
@@ -72,6 +75,13 @@
               home-manager.users.yrumily = import ./home-manager/home.nix;
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
             }
+            ({ self, system, ... }: {
+              environment.systemPackages =
+                with self.inputs.nix-alien.packages.${system};
+                [ nix-alien ];
+              # Optional, needed for `nix-alien-ld`
+              # programs.nix-ld.enable = true;
+            })
           ];
         };
       };

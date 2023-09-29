@@ -66,13 +66,13 @@
       extensions = with pkgs.vscode-extensions; [
         # ms-vscode.cpptools
         ms-ceintl.vscode-language-pack-zh-hans
-        # formulahendry.code-runner
+        formulahendry.code-runner
         mhutchie.git-graph
         # github.github-vscode-theme
         oderwat.indent-rainbow
         # rust-lang.rust-analyzer
         redhat.vscode-yaml
-        redhat.vscode-xml
+        # redhat.vscode-xml
         # vscode-icons-team.vscode-icons
         yzhang.markdown-all-in-one
       ];
