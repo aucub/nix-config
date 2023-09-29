@@ -6,4 +6,5 @@
   # Gopeed = pkgs.callPackage ./Gopeed { };
   clash-verge = pkgs.callPackage ./clash-verge.nix { };
   clash-meta = pkgs.callPackage ./clash-meta.nix { };
+  nvtop = pkgs.callPackage ./nvtop.nix { };
 }
