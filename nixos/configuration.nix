@@ -60,10 +60,12 @@
         "https://cache.nixos.org/"
       ];
       extra-substituters = [
+        "https://qihaiumi.cachix.org"
         "https://nix-community.cachix.org"
         "https://nixpkgs-wayland.cachix.org"
       ];
       trusted-public-keys = [
+        "qihaiumi.cachix.org-1:0Bt2C1k4MRhqyeUVCOIQJ4O87Wvn5mR0QN7GaNa5AnU="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       ];
