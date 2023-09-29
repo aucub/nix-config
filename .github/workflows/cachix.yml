@@ -26,6 +26,7 @@ jobs:
 
       - name: Build and Cache
         run: |
+          export NIXPKGS_ALLOW_UNFREE=1
           # nix build  --experimental-features 'nix-command flakes'  -o clash-verge .#clash-verge
           # cachix push qihaiumi clash-verge
           # nix build  --experimental-features 'nix-command flakes'  -o clash-meta .#clash-meta
