@@ -5,7 +5,7 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # 可以同时访问不同 nixpkgs 版本的软件包和模块
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
     # 此外,请查看'overlays/default.nix'中的'unstable-packages'覆盖
 
     # 添加 NUR 仓库
