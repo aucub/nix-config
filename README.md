@@ -12,22 +12,16 @@
 ```bash
 nixos-generate-config --root /mnt
 ```
-4. 克隆仓库
+4. 启用实验性特性
 ```bash
 export NIX_CONFIG="experimental-features = nix-command flakes" 
-
-nix-shell -p git 
-
-cd  /mnt/etc/nixos 
-
-nix develop --extra-experimental-features nix-command --extra-experimental-features flakes
 ```
 5. 拷贝 /mnt/etc/nixos 中的 `hardware-configuration.nix` 
 6. 安装
 ```bash
 nixos-install --no-root-passwd --flake .#legion
 
-#或者指定源：
+# 或者指定源：
 nixos-install --option substituters "https://mirrors.bfsu.edu.cn/nix-channels/store" --no-root-passwd --flake .#legion
 ```
 

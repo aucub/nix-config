@@ -4,14 +4,12 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # 可以同时访问不同nixpkgs版本的软件包和模块
-    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # 可以同时访问不同 nixpkgs 版本的软件包和模块
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # 此外,请查看'overlays/default.nix'中的'unstable-packages'覆盖
 
     # 添加 NUR 仓库
     nur.url = "github:nix-community/NUR";
-    # 强制 NUR 和 flake 使用相同版本的 nixpkgs
-    nur.inputs.nixpkgs.follows = "nixpkgs";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
@@ -24,32 +22,30 @@
 
   };
 
-  outputs =
-    { self, nixpkgs, home-manager, nur, nixos-hardware, nix-alien, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nur, nixos-hardware
+    , nix-alien, ... }@inputs:
     let
       inherit (self) outputs;
-      forAllSystems = nixpkgs.lib.genAttrs [
+      systems = [
         "aarch64-linux"
         "i686-linux"
         "x86_64-linux"
         "aarch64-darwin"
         "x86_64-darwin"
       ];
-    in rec {
-      # 自定义包,可通过'nix build'、'nix shell'等访问
-      packages = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./pkgs { inherit pkgs; });
-      # 用于引导的 Devshell,可通过'nix develop'或'nix-shell'访问
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./shell.nix { inherit pkgs; });
-
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in {
+      # 自定义包,可通过 'nix build'、'nix shell' 等访问
+      packages =
+        forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      # nix 文件的格式化程序，可通过 'nix fmt' 等访问
+      formatter =
+        forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
       # 将定制的软件包和修改以叠加包的形式输出
       overlays = import ./overlays { inherit inputs; };
       # 导出可重用的 NixOS 模块,通常是上游到 Nixpkgs 的内容
       nixosModules = import ./modules/nixos;
-      # 导出的可重复使用的home-manager模块,通常是上游到 home-manager 的东西
+      # 导出的可重复使用的 home-manager 模块,通常是上游到 home-manager 的东西
       homeManagerModules = import ./modules/home-manager;
 
       # NixOS 配置入口点,通过 'nixos-rebuild --flake .#legion'
@@ -58,10 +54,10 @@
         legion = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            # > NixOS 配置文件 <
+            # NixOS 配置文件
             ./nixos/configuration.nix
             nur.nixosModules.nur
-            ({ config, nixpkgs, ... }: {
+            ({ config, ... }: {
               # 使用 NUR 提供的包
               environment.systemPackages = with config.nur.repos; [
                 # xddxdd.dingtalk
@@ -69,12 +65,14 @@
                 ruixi-rebirth.fcitx5-pinyin-zhwiki
               ];
             })
+            # home-manager 配置
             home-manager.nixosModules.home-manager
             {
               home-manager.useUserPackages = true;
               home-manager.users.yrumily = import ./home-manager/home.nix;
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
             }
+            # 使用 nix-alien
             ({ self, system, ... }: {
               environment.systemPackages =
                 with self.inputs.nix-alien.packages.${system};
@@ -94,7 +92,7 @@
             nixpkgs.legacyPackages.x86_64-linux; # Home-manager 需要 'pkgs' 实例
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            # > home-manager配置文件<
+            # home-manager配置文件
             ./home-manager/home.nix
           ];
         };

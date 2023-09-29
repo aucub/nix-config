@@ -1,12 +1,13 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   imports = [
-    # 在 flake 中使用modules/nixos模块
+    # 在 flake 中使用 modules/nixos 模块
     # outputs.nixosModules.example
 
     # Or modules from other flakes (such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
 
+    # 禁用 nvidia
     # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
 
     # 将配置分解并在此导入其各个部分:
@@ -42,7 +43,7 @@
   };
 
   nix = {
-    # 将每个 flake 输入作为注册表添加到 nix3 命令中,以使它们与您的 flake 保持一致
+    # 将每个 flake 输入作为注册表添加到 nix 命令中,以使它们与您的 flake 保持一致
     registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
 
     # 使您的输入进一步添加到系统通道中,同时使传统的nix命令保持一致
@@ -200,7 +201,8 @@
     initialPassword = "yru";
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups =
+      [ "wheel" "networkmanager" "users" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       vscode
       haruna
@@ -212,6 +214,7 @@
       clash-meta
       localsend
       telegram-desktop
+      (python311.withPackages (ps: with ps; [ selenium ]))
     ];
   };
 
@@ -255,6 +258,7 @@
     htop
     python311
     alacritty
+    qt6Packages.qtstyleplugin-kvantum
     libsForQt5.lightly
     # papirus-icon-theme
     orchis-theme
@@ -290,6 +294,7 @@
       };
     };
     fish = { enable = true; };
+    fzf.fuzzyCompletion = true;
     firefox = { languagePacks = [ "zh-CN" ]; };
   };
 
@@ -362,7 +367,7 @@
 
   # 启用 OpenSSH 守护进程
   # services.openssh.enable = true;
-  # 设置一个 SSH 服务器,如果要设置无头系统,这一点非常重要,如果不需要,请随意删除
+  # 设置一个 SSH 服务器
   services.openssh.enable = false;
 
   # 在防火墙中打开端口

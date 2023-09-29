@@ -20,9 +20,9 @@
     # 可以在这里添加overlays
     overlays = [
       # 添加您自己的flake导出的overlays(来自overlays和 pkgs 目录)
-      # outputs.overlays.additions
-      # outputs.overlays.modifications
-      # outputs.overlays.unstable-packages
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
 
       # 添加从其他flake导出的overlays
       # neovim-nightly-overlay.overlays.default
@@ -39,7 +39,7 @@
       # 如果您不需要 Unfree 的软件包,请禁用
       allowUnfree = true;
       # 解决方法 https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = (_: true);
+      allowUnfreePredicate = _: true;
     };
   };
 
@@ -75,6 +75,7 @@
         # redhat.vscode-xml
         # vscode-icons-team.vscode-icons
         yzhang.markdown-all-in-one
+        ms-python.python
       ];
       userSettings = {
         "extensions.ignoreRecommendations" = true;
@@ -136,7 +137,13 @@
       extraConfig = {
         init.defaultBranch = "main";
         core.editor = "nvim";
+        push.autoSetupRemote = true;
       };
+    };
+    eza = {
+      enable = true;
+      git = true;
+      extraOptions = [ "--group-directories-first" "--all" ];
     };
     mcfly = {
       enable = true;
@@ -255,7 +262,26 @@
         selection.save_to_clipboard = false;
         window.opacity = 1;
         window.dynamic_title = true;
+        window.dimensions.columns = 100;
+        window.dimensions.lines = 100;
         shell.program = "fish";
+      };
+    };
+    fzf = {
+      enable = true;
+      colors = {
+        "bg+" = "#313244";
+        "bg" = "#1e1e2e";
+        "spinner" = "#f5e0dc";
+        "hl" = "#f38ba8";
+        "fg" = "#cdd6f4";
+        "header" = "#f38ba8";
+        "info" = "#cba6f7";
+        "pointer" = "#f5e0dc";
+        "marker" = "#f5e0dc";
+        "fg+" = "#cdd6f4";
+        "prompt" = "#cba6f7";
+        "hl+" = "#f38ba8";
       };
     };
   };

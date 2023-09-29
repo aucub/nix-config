@@ -1,6 +1,9 @@
 name: nix-config
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - kde
 
 jobs:
   nix-config:
