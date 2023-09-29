@@ -31,5 +31,5 @@ jobs:
           # cachix push qihaiumi clash-verge
           # nix build  --experimental-features 'nix-command flakes'  -o clash-meta .#clash-meta
           # cachix push qihaiumi clash-meta
-          nix build  --experimental-features 'nix-command flakes'  -o nvtop .#nvtop
+          nix build --impure --experimental-features 'nix-command flakes'  -o nvtop .#nvtop
           cachix push qihaiumi nvtop
