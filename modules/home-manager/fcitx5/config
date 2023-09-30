@@ -33,9 +33,11 @@ EnumerateSkipFirst=False
 
 [Hotkey/PrevPage]
 0=Up
+1=Page_Up
 
 [Hotkey/NextPage]
 0=Down
+1=Next
 
 [Hotkey/PrevCandidate]
 0=Shift+Tab
@@ -48,7 +50,7 @@ EnumerateSkipFirst=False
 
 [Behavior]
 # 默认状态为激活
-ActiveByDefault=True
+ActiveByDefault=False
 # 共享输入状态
 ShareInputState=All
 # 在程序中显示预编辑文本

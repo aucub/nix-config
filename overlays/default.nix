@@ -13,16 +13,6 @@
         hash = "sha256-+RYfGLa4d5JkLWnlYfhjCOSREVJ4ad/R36eSiNj3GIA=";
       };
     });
-    unstable = prev.unstable.overrideScope' (ufinal: uprev: {
-      clash-verge = uprev.clash-verge.overrideAttrs (oldAttrs: rec {
-        version = "1.3.7";
-        src = prev.fetchurl {
-          url =
-            "https://github.com/zzzgydi/clash-verge/releases/download/v${version}/clash-verge_${version}_amd64.deb";
-          hash = "sha256-+RYfGLa4d5JkLWnlYfhjCOSREVJ4ad/R36eSiNj3GIA=";
-        };
-      });
-    });
     vscode = prev.vscode.override {
       commandLineArgs = "--disable-gpu-shader-disk-cache";
     };

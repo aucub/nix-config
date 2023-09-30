@@ -222,9 +222,9 @@
       firefox
       bitwarden
       google-chrome
-      unstable.clash-verge
-      unstable.clash-geoip
-      unstable.clash-meta
+      clash-verge
+      clash-geoip
+      clash-meta
       obs-studio
       localsend
       telegram-desktop

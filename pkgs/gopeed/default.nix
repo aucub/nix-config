@@ -3,7 +3,7 @@
 , udev, autoPatchelfHook, libayatana-indicator, ayatana-ido }:
 
 stdenv.mkDerivation rec {
-  pname = "Gopeed";
+  pname = "gopeed";
   version = "1.3.12";
 
   src = fetchurl {
@@ -12,22 +12,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-XwB3+NtjeCqg3vHit4FRRpfNA65afH1Yc0QjIananqw=";
   };
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [ dpkg ];
 
-  buildInputs = [ stdenv.cc.cc ];
+  buildInputs = [ wrapGAppsHook ];
 
-  runtimeDependencies = [ (lib.getLib udev) libayatana-appindicator ];
+  unpackCmd = "dpkg-deb -x $curSrc source";
 
   installPhase = ''
     runHook preInstall
 
-      mkdir -p $out/bin
-      cp -r usr/local/lib/gopeed $out/opt
-      cp -r usr/share $out/share
+      mv usr $out
       substituteInPlace $out/share/applications/gopeed.desktop \
-        --replace "/opt/gopeed" "$out/bin/gopeed" \
-        --replace "/usr/share" "$out/share"
-      ln -s $out/opt/gopeed/gopeed $out/bin/gopeed
+        --replace "/usr" $out
 
       runHook postInstall
   '';
@@ -37,7 +33,8 @@ stdenv.mkDerivation rec {
       "Gopeed (full name Go Speed), a high-speed downloader developed by Golang + Flutter, supports (HTTP, BitTorrent, Magnet) protocol, and supports all platforms.";
     homepage = "https://github.com/GopeedLab/gopeed";
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with maintainers; [ aucub ];
   };
 }

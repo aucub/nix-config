@@ -130,6 +130,7 @@
         "*.iws"
         "*.iml"
         "*.ipr"
+        "*.log"
         "out"
         "!**/src/main/**/out"
         "!**/src/test/**/out"
