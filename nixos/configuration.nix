@@ -284,6 +284,9 @@
     libsForQt5.lightly
     # papirus-icon-theme
     colloid-kde
+    orchis-theme
+    tela-icon-theme
+    vimix-cursor-theme
   ];
 
   environment.plasma5.excludePackages = with pkgs.plasma5Packages; [
