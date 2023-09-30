@@ -48,6 +48,13 @@
     username = "yrumily";
     homeDirectory = "/home/yrumily";
     language.base = "zh_CN.UTF-8";
+    pointerCursor = {
+      size = 30;
+      gtk.enable = true;
+      x11.enable = true;
+      package = pkgs.vimix-cursor-theme;
+      name = "Vimix Cursors";
+    };
   };
 
   # 根据您的需要为您的用户添加内容

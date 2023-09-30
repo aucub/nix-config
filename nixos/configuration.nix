@@ -192,6 +192,7 @@
       enable = true;
       driSupport = true;
       extraPackages = with pkgs; [
+        amdvlk
         vaapiVdpau
         nvidia-vaapi-driver
         libvdpau-va-gl
@@ -251,6 +252,8 @@
     GLFW_IM_MODULE = "ibus";
   };
 
+  environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
+
   # 列出系统配置文件中安装的软件包,要搜索,请运行：
   # $ nix search wget
   # 不要忘记添加一个编辑器来编辑configuration.nix,Nano 编辑器是默认安装的
@@ -273,7 +276,6 @@
     gdu
     duf
     htop
-    nvtop-msm
     mission-center
     linux-wifi-hotspot
     python311
@@ -281,19 +283,18 @@
     qt6Packages.qtstyleplugin-kvantum
     libsForQt5.lightly
     # papirus-icon-theme
-    orchis-theme
     colloid-kde
-    tela-icon-theme
-    vimix-cursor-theme
   ];
 
-  environment.plasma5.excludePackages = with pkgs; [
-    libsForQt5.kwrited
-    libsForQt5.okular
-    libsForQt5.elisa
-    libsForQt5.kate
-    libsForQt5.konsole
+  environment.plasma5.excludePackages = with pkgs.plasma5Packages; [
+    kwrited
+    okular
+    elisa
+    kate
+    konsole
   ];
+
+  documentation.enable = true;
 
   # 有些程序需要 SUID 包装器,可以进一步配置或在用户会话中启动
   # programs.mtr.enable = true;
@@ -303,6 +304,7 @@
   # };
 
   programs = {
+    command-not-found.enable = false;
     xwayland.enable = true;
     zsh = {
       enable = true;
@@ -315,6 +317,7 @@
     };
     fish = {
       enable = true;
+      useBabelfish = true;
       shellInit = ''set -U fish_greeting " "'';
     };
     fzf.fuzzyCompletion = true;
@@ -346,9 +349,14 @@
     xserver = {
       # 启用 X11 窗口系统
       enable = true;
+      videoDrivers = [ "amdgpu" ];
       displayManager = {
+        defaultSession = "plasmawayland";
         # 启用 Plasma 5 桌面环境
-        sddm.enable = true;
+        sddm = {
+          enable = true;
+          settings = { General = { DisplayServer = "wayland"; }; };
+        };
         autoLogin = {
           enable = true;
           user = "yrumily";

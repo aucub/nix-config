@@ -60,7 +60,11 @@
             ({ config, ... }: {
               # 使用 NUR 提供的包
               environment.systemPackages = with config.nur.repos; [
+                # linyinfeng.wemeet
                 # xddxdd.dingtalk
+                # xddxdd.wechat-uos
+                # rewine.ttf-wps-fonts
+                # rewine.ttf-ms-win10
                 ruixi-rebirth.fcitx5-pinyin-moegirl
                 ruixi-rebirth.fcitx5-pinyin-zhwiki
               ];
