@@ -1,4 +1,11 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     # 在 flake 中使用 modules/nixos 模块
     # outputs.nixosModules.example
@@ -44,10 +51,11 @@
 
   nix = {
     # 将每个 flake 输入作为注册表添加到 nix 命令中,以使它们与您的 flake 保持一致
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
 
     # 使您的输入进一步添加到系统通道中,同时使传统的nix命令保持一致
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
+    nixPath =
+      lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
       config.nix.registry;
 
     settings = {
@@ -69,7 +77,7 @@
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       ];
-      trusted-users = [ "root" "@wheel" ];
+      trusted-users = ["root" "@wheel"];
       # 去重和优化nix存储
       auto-optimise-store = true;
       warn-dirty = false;
@@ -108,7 +116,7 @@
       "amd_pstate=passive"
     ];
     consoleLogLevel = 3;
-    initrd.kernelModules = [ "btrfs" ];
+    initrd.kernelModules = ["btrfs"];
     kernelModules = [
       "v4l2loopback"
       "bbswitch"
@@ -136,7 +144,7 @@
 
   # 选择国际化属性
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+  i18n.supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
@@ -156,10 +164,10 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Noto Serif CJK SC" "Noto Color Emoji" ];
-        sansSerif = [ "Sarasa UI SC" "Noto Color Emoji" ];
-        monospace = [ "Sarasa Mono SC" "Noto Color Emoji" ];
-        emoji = [ "Noto Color Emoji" ];
+        serif = ["Noto Serif CJK SC" "Noto Color Emoji"];
+        sansSerif = ["Sarasa UI SC" "Noto Color Emoji"];
+        monospace = ["Sarasa Mono SC" "Noto Color Emoji"];
+        emoji = ["Noto Color Emoji"];
       };
     };
   };
@@ -167,7 +175,7 @@
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-kde ];
+    extraPortals = with pkgs; [xdg-desktop-portal-kde];
   };
 
   # 启用声音
@@ -213,8 +221,7 @@
     initialPassword = "yru";
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups =
-      [ "wheel" "networkmanager" "users" ]; # Enable ‘sudo’ for the user.
+    extraGroups = ["wheel" "networkmanager" "users"]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       vscode
       lapce
@@ -228,7 +235,7 @@
       obs-studio
       localsend
       telegram-desktop
-      (python311.withPackages (ps: with ps; [ selenium ]))
+      (python311.withPackages (ps: with ps; [selenium]))
       # postman
       # jetbrains.idea-ultimate
       # bun
@@ -238,10 +245,10 @@
 
   i18n.inputMethod = {
     enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-with-addons fcitx5-chinese-addons ];
+    fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
   };
 
-  environment.shells = with pkgs; [ bashInteractive zsh fish ];
+  environment.shells = with pkgs; [bashInteractive zsh fish];
 
   environment.variables = {
     EDITOR = "helix";
@@ -252,7 +259,7 @@
     GLFW_IM_MODULE = "ibus";
   };
 
-  environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
+  environment.sessionVariables = {MOZ_ENABLE_WAYLAND = "1";};
 
   # 列出系统配置文件中安装的软件包,要搜索,请运行：
   # $ nix search wget
@@ -297,7 +304,10 @@
     konsole
   ];
 
-  documentation.enable = true;
+  documentation = {
+    enable = false;
+    doc.enable = false;
+  };
 
   # 有些程序需要 SUID 包装器,可以进一步配置或在用户会话中启动
   # programs.mtr.enable = true;
@@ -315,7 +325,7 @@
       syntaxHighlighting.enable = true;
       autosuggestions = {
         enable = true;
-        strategy = [ "history" ];
+        strategy = ["history"];
       };
     };
     fish = {
@@ -324,7 +334,7 @@
       shellInit = ''set -U fish_greeting " "'';
     };
     fzf.fuzzyCompletion = true;
-    firefox = { languagePacks = [ "zh-CN" ]; };
+    firefox = {languagePacks = ["zh-CN"];};
   };
 
   qt = {
@@ -338,7 +348,7 @@
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" ];
+      fileSystems = ["/"];
     };
     pipewire = {
       enable = true;
@@ -352,13 +362,11 @@
     xserver = {
       # 启用 X11 窗口系统
       enable = true;
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = ["amdgpu"];
       displayManager = {
-        defaultSession = "plasmawayland";
         # 启用 Plasma 5 桌面环境
         sddm = {
           enable = true;
-          settings = { General = { DisplayServer = "wayland"; }; };
         };
         autoLogin = {
           enable = true;
@@ -386,7 +394,7 @@
       # 启用触摸板支持(在大多数桌面管理器中默认启用)
       libinput = {
         enable = true;
-        mouse = { accelProfile = "adaptive"; };
+        mouse = {accelProfile = "adaptive";};
         touchpad = {
           tapping = true;
           naturalScrolling = true;

@@ -1,7 +1,13 @@
 # home-manager配置文件
 # 使用此文件来配置您的主目录环境(~/.config/nixpkgs/home.nix)
-
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   # 在此处导入其他 home-manager 模块
   imports = [
     # 如果您想使用您自己的 flakes 导出的模块(来自modules/home-manager)
@@ -145,7 +151,7 @@
     eza = {
       enable = true;
       git = true;
-      extraOptions = [ "--group-directories-first" "--all" ];
+      extraOptions = ["--group-directories-first" "--all"];
     };
     mcfly = {
       enable = true;
@@ -159,7 +165,7 @@
           compact = true;
           use_pager = true;
         };
-        updates = { auto_update = false; };
+        updates = {auto_update = false;};
       };
     };
     lazygit = {
@@ -186,7 +192,7 @@
       defaultEditor = true;
       settings = {
         theme = "github_dark_colorblind";
-        editor = { file-picker.hidden = false; };
+        editor = {file-picker.hidden = false;};
       };
     };
     bat = {

@@ -1,8 +1,8 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "vimix-cursor-theme";
   version = "2020-02-24";

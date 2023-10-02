@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   programs.firefox = {
     enable = true;
     extensions = with pkgs.firefox-addons; [
@@ -16,10 +21,12 @@
         "browser.startup.homepage" = "https://limestart.cn/";
         "browser.search.region" = "CN";
         "browser.bookmarks.showMobileBookmarks" = true;
-        "browser.newtabpage.pinned" = [{
-          title = "limestart";
-          url = "https://limestart.cn/";
-        }];
+        "browser.newtabpage.pinned" = [
+          {
+            title = "limestart";
+            url = "https://limestart.cn/";
+          }
+        ];
         ## Enable hardware video acceleration
         # https://bugzilla.mozilla.org/show_bug.cgi?id=1619585
         "media.ffmpeg.vaapi.enabled" = true;
