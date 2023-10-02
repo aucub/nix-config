@@ -113,7 +113,6 @@
       "radeon.dpm=0"
       "nvidia-drm.modeset=1"
       "NVreg_PreserveVideoMemoryAllocations=1"
-      "amd_pstate=passive"
     ];
     consoleLogLevel = 3;
     initrd.kernelModules = ["btrfs"];
@@ -208,7 +207,6 @@
     };
     # 平滑背光控制
     brillo.enable = true;
-    cpu.amd.updateMicrocode = true;
     bluetooth.enable = true;
     # 禁用nvidia
     nvidiaOptimus.disable = false;
@@ -221,7 +219,7 @@
     initialPassword = "yru";
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = ["wheel" "networkmanager" "users"]; # Enable ‘sudo’ for the user.
+    extraGroups = ["wheel" "networkmanager"]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       vscode
       lapce
@@ -259,7 +257,9 @@
     GLFW_IM_MODULE = "ibus";
   };
 
-  environment.sessionVariables = {MOZ_ENABLE_WAYLAND = "1";};
+  environment.sessionVariables = {
+    # MOZ_ENABLE_WAYLAND = "1";
+  };
 
   # 列出系统配置文件中安装的软件包,要搜索,请运行：
   # $ nix search wget

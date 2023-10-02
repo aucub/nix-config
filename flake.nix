@@ -6,7 +6,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # 可以同时访问不同 nixpkgs 版本的软件包和模块
     nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
-    # 此外,请查看'overlays/default.nix'中的'unstable-packages'覆盖
+    # 此外,请查看'overlays/default.nix'中的'unstable-packages'
 
     # 添加 NUR 仓库
     nur.url = "github:nix-community/NUR";
@@ -15,7 +15,7 @@
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # 添加其他flake
+    # 添加其他 flake
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
     nix-alien.url = "github:thiagokokada/nix-alien";

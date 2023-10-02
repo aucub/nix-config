@@ -14,6 +14,8 @@
     # outputs.homeManagerModules.example
     # outputs.homeManagerModules.fcitx5
     # outputs.homeManagerModules.fastfetch
+    # outputs.homeManagerModules.firefox
+    # outputs.homeManagerModules.chromium
 
     # 或者从其他 flakes 导出的模块(例如 nix-colors)
     # inputs.nix-colors.homeManagerModules.default
