@@ -331,7 +331,7 @@
         enable = true;
         strategy = ["history"];
       };
-      completionInit = "autoload -Uz compinit";
+      shellInit = "autoload -Uz compinit";
     };
     fish = {
       enable = true;
