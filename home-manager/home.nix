@@ -84,6 +84,7 @@
         # vscode-icons-team.vscode-icons
         yzhang.markdown-all-in-one
         ms-python.python
+        ms-python.black-formatter
       ];
       userSettings = {
         "extensions.ignoreRecommendations" = true;

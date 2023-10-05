@@ -132,6 +132,7 @@
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="obs"
     '';
+    tmp.useTmpfs = true;
   };
 
   # 设置时区
@@ -233,7 +234,7 @@
       obs-studio
       localsend
       telegram-desktop
-      (python311.withPackages (ps: with ps; [selenium]))
+      (python311.withPackages (ps: with ps; [selenium black]))
       # postman
       # jetbrains.idea-ultimate
       # bun
@@ -323,10 +324,14 @@
       enable = true;
       enableCompletion = true;
       syntaxHighlighting.enable = true;
+      shellAliases = {
+        ls = "ls --color=auto";
+      };
       autosuggestions = {
         enable = true;
         strategy = ["history"];
       };
+      completionInit = "autoload -Uz compinit";
     };
     fish = {
       enable = true;
