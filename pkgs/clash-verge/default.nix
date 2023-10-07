@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, wrapGAppsHook
-, autoPatchelfHook
-, clash
-, clash-meta
-, openssl
-, webkitgtk
-, udev
-, libayatana-appindicator
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  wrapGAppsHook,
+  autoPatchelfHook,
+  clash,
+  clash-meta,
+  openssl,
+  webkitgtk,
+  udev,
+  libayatana-appindicator,
 }:
-
 stdenv.mkDerivation rec {
   pname = "clash-verge";
   version = "1.3.7";
@@ -56,10 +56,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Clash GUI based on tauri";
     homepage = "https://github.com/zzzgydi/clash-verge";
-    platforms = [ "x86_64-linux" ];
+    platforms = ["x86_64-linux"];
     license = licenses.gpl3Plus;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ zendo ];
+    sourceProvenance = with sourceTypes; [binaryNativeCode];
+    maintainers = with maintainers; [zendo];
     mainProgram = "clash-verge";
   };
 }

@@ -1,10 +1,6 @@
-# 自定义包,可以使用 'nix build .#example' 构建
-
-{ pkgs, ... }: {
+# 使用 'nix build .#example' 构建
+{pkgs, ...}: {
   # example = pkgs.callPackage ./example { };
-  vimix-cursor-theme = pkgs.callPackage ./vimix-cursor-theme { };
-  # Gopeed = pkgs.callPackage ./Gopeed { };
-  clash-verge = pkgs.callPackage ./clash-verge.nix { };
-  clash-meta = pkgs.callPackage ./clash-meta.nix { };
-  nvtop = pkgs.callPackage ./nvtop.nix { };
+  gopeed = pkgs.callPackage ./gopeed {};
+  clash-verge = pkgs.callPackage ./clash-verge {};
 }
