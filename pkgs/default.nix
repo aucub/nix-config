@@ -2,5 +2,5 @@
 {pkgs, ...}: {
   # example = pkgs.callPackage ./example { };
   vimix-cursor-theme = pkgs.callPackage ./vimix-cursor-theme {};
-  gopeed = pkgs.callPackage ./gopeed {};
+  # gopeed = pkgs.callPackage ./gopeed {};
 }
