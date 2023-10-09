@@ -14,22 +14,13 @@
   pango,
   libepoxy,
   libdbusmenu,
-  libdbusmenu-gtk3,
-  libdbusmenu-gtk2,
   wrapGAppsHook,
   udev,
   autoPatchelfHook,
   libayatana-indicator,
-  indicator-application-gtk3,
-  indicator-application-gtk2,
   ayatana-ido,
   libappindicator,
   libindicator,
-  libindicator-gtk3,
-  libindicator-gtk2,
-  libayatana-common,
-  xxkb,
-  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
@@ -40,18 +31,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-5gy8a7QCcpGlLWqb8rd+A3PXSlN5f0CXacWOwf4lEfc=";
   };
 
-  nativeBuildInputs = [dpkg pkg-config autoPatchelfHook];
+  nativeBuildInputs = [dpkg autoPatchelfHook];
 
-  buildInputs = [wrapGAppsHook];
-
-  autoPatchelfIgnoreMissingDeps = [
-    "libayatana-appindicator3.so.1"
-    "libayatana-indicator3.so.7"
-    "libayatana-ido3-0.4.so.0"
-    "libdbusmenu-glib.so.4"
+  buildInputs = [
+    wrapGAppsHook
+    libappindicator
+    libayatana-indicator
+    libayatana-appindicator
+    libdbusmenu
+    ayatana-ido
   ];
 
   unpackCmd = "dpkg-deb -x $curSrc source";
+
+  postPatch = ''
+    substituteInPlace --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
 
   installPhase = ''
     runHook preInstall

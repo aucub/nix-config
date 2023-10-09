@@ -233,6 +233,7 @@
       clash-meta
       obs-studio
       localsend
+      gopeed
       telegram-desktop
       (python311.withPackages (ps: with ps; [selenium black]))
       # postman
