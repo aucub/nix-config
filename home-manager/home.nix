@@ -171,13 +171,6 @@
         updates = {auto_update = false;};
       };
     };
-    lazygit = {
-      enable = true;
-      settings = {
-        os.disableStartupPopups = true;
-        os.edit = "nvim";
-      };
-    };
     htop = {
       enable = true;
       settings = {

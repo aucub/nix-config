@@ -274,14 +274,12 @@
     neovim
     eza
     fastfetch
-    ranger
-    lazygit
+    yazi
     fzf
     bat
     fd
     ripgrep
     mcfly
-    thefuck
     gdu
     duf
     htop
@@ -341,6 +339,9 @@
     };
     fzf.fuzzyCompletion = true;
     firefox = {languagePacks = ["zh-CN"];};
+    yazi.settings.yazi = {
+      manager.show_hidden = true;
+    };
   };
 
   qt = {
