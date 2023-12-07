@@ -1,23 +1,4 @@
-# Nix Starter Config
-
-This repo contains a few a simple nix flake templates for getting started with
-NixOS + home-manager.
-
-# What this provides
-
-- [Minimal version](./minimal):
-    - NixOS configuration on `nixos/configuration.nix`, accessible via
-      `nixos-rebuild --flake .`
-    - Home-manager configuration on `home-manager/home.nix`, accessible via
-      `home-manager --flake .`
-- [Standard version](./standard):
-    - Basic boilerplate for adding custom packages (under `pkgs`) and overlays
-      (under `overlay`). Accessible on your system, home config, as well as `nix
-      build .#package-name`.
-    - Boilerplate for custom NixOS (`modules/nixos`) and home-manager
-      (`modules/home-manager`) modules
-    - NixOS and home-manager configurations from minimal, and they should
-      also use your overlays and custom packages right out of the box.
+# Nix Config
 
 # Getting started
 
@@ -66,33 +47,10 @@ cd nix-config
 nix --version
 export NIX_CONFIG="experimental-features = nix-command flakes"
 ```
-- Get the template:
-```bash
-# For minimal version
-nix flake init -t github:misterio77/nix-starter-config#minimal
-
-# For standard version
-nix flake init -t github:misterio77/nix-starter-config#standard
-```
-- If you want to use NixOS: add stuff you currently have on `/etc/nixos/` to
-  `nixos` (usually `configuration.nix` and `hardware-configuration.nix`, when
-  you're starting out).
-    - The included file has some options you might want, specially if you don't
-      have a configuration ready. Make sure you have generated your own
-      `hardware-configuration.nix`; if not, just mount your partitions to
-      `/mnt` and run: `nixos-generate-config --root /mnt`.
-- If you want to use home-manager: add your stuff from `~/.config/nixpkgs`
-  to `home-manager` (probably `home.nix`).
-  - The included file is also a good starting point if you don't have a config
-    yet.
-- Take a look at `flake.nix`, making sure to fill out anything marked with
-  FIXME (required) or TODO (usually tips or optional stuff you might want)
-- `git add` and `git push` your changes! Or at least copy them somewhere if
-  you're on a live medium.
 
 ## Usage
 
-- Run `sudo nixos-rebuild switch --flake .#hostname` to apply your system
+- Run `sudo nixos-rebuild switch --install-bootloader --flake .#hostname` to apply your system
   configuration.
     - If you're still on a live installation medium, run `nixos-install --flake
       .#hostname` instead, and reboot.
@@ -270,21 +228,3 @@ sure to also add them to the listing at `modules/nixos/default.nix` or
 
 See [the wiki article](https://nixos.wiki/wiki/Module) to learn more about
 them.
-
-# Troubleshooting / FAQ
-
-Please [let me know](https://github.com/Misterio77/nix-starter-config/issues)
-any questions or issues you face with these templates, so I can add more info
-here!
-
-## Nix says my repo files don't exist, even though they do!
-
-Nix flakes only see files that git is currently tracked, so just `git add .`
-and you should be good to go. Files on `.gitignore`, of course, are invisible
-to nix - this is to guarantee your build won't depend on anything that is not
-on your repo.
-
-<!--
-# Learning resources
-TODO
--->
