@@ -9,7 +9,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
-nur.url = "github:nix-community/NUR";
+    nur.url = "github:nix-community/NUR";
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -72,7 +72,7 @@ nur.url = "github:nix-community/NUR";
         modules = [
           # > Our main nixos configuration file <
           ./nixos/configuration.nix
-                    nur.nixosModules.nur
+          nur.nixosModules.nur
           ({config, ...}: {
             # 使用 NUR 提供的包
             environment.systemPackages = with config.nur.repos; [

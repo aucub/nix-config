@@ -1,6 +1,13 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   # You can import other home-manager modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
@@ -135,7 +142,7 @@
         "update.mode" = "none";
         "editor.codeLensFontFamily" = ''"Sarasa Mono SC",monospace'';
         "github.gitProtocol" = "ssh";
-        "[python]" = { "editor.defaultFormatter" = "mikoz.black-py"; };
+        "[python]" = {"editor.defaultFormatter" = "mikoz.black-py";};
         "editor.accessibilitySupport" = "off";
         "window.commandCenter" = false;
         "code-runner.showExecutionMessage" = false;
@@ -146,7 +153,6 @@
         "workbench.colorTheme" = "Quiet Light";
         "code-runner.enableAppInsights" = false;
         "editor.inlineSuggest.suppressSuggestions" = true;
-
       };
     };
     # 启用 home-manager and git
@@ -191,7 +197,7 @@
     eza = {
       enable = true;
       git = true;
-      extraOptions = [ "--group-directories-first" "--all" ];
+      extraOptions = ["--group-directories-first" "--all"];
     };
     mcfly = {
       enable = true;

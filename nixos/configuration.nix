@@ -1,6 +1,13 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
@@ -46,16 +53,19 @@
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+  nix.registry =
+    (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = [ "/etc/nix/path" ];
-  environment.etc = lib.mapAttrs' (name: value: {
-    name = "nix/path/${name}";
-    value.source = value.flake;
-  }) config.nix.registry;
+  nix.nixPath = ["/etc/nix/path"];
+  environment.etc =
+    lib.mapAttrs' (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    })
+    config.nix.registry;
 
   nix.settings = {
     # Enable flakes and new 'nix' command
@@ -83,7 +93,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
-    trusted-users = [ "root" "@wheel" ];
+    trusted-users = ["root" "@wheel"];
   };
 
   # FIXME: Add the rest of your current configuration
@@ -114,7 +124,7 @@
       "NVreg_PreserveVideoMemoryAllocations=1"
     ];
     consoleLogLevel = 3;
-    initrd.kernelModules = [ "btrfs" ];
+    initrd.kernelModules = ["btrfs"];
     kernelModules = [
       "v4l2loopback"
       "bbswitch"
@@ -138,7 +148,7 @@
   time.timeZone = "Asia/Shanghai";
 
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+  i18n.supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
@@ -158,10 +168,10 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Noto Serif CJK SC" "Noto Color Emoji" ];
-        sansSerif = [ "Sarasa UI SC" "Noto Color Emoji" ];
-        monospace = [ "Sarasa Mono SC" "Noto Color Emoji" ];
-        emoji = [ "Noto Color Emoji" ];
+        serif = ["Noto Serif CJK SC" "Noto Color Emoji"];
+        sansSerif = ["Sarasa UI SC" "Noto Color Emoji"];
+        monospace = ["Sarasa Mono SC" "Noto Color Emoji"];
+        emoji = ["Noto Color Emoji"];
       };
     };
   };
@@ -169,7 +179,7 @@
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-kde ];
+    extraPortals = with pkgs; [xdg-desktop-portal-kde];
   };
 
   sound.enable = true;
@@ -222,16 +232,16 @@
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" ];
+      extraGroups = ["wheel"];
       shell = pkgs.zsh;
-      extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+      extraGroups = ["wheel" "networkmanager"]; # Enable ‘sudo’ for the user.
       packages = with pkgs; [
         vscode
         firefox
         google-chrome
         obs-studio
         localsend
-        (python311.withPackages (ps: with ps; [ selenium black ]))
+        (python311.withPackages (ps: with ps; [selenium black]))
         # postman
         # jetbrains.idea-ultimate
         # bun
@@ -242,10 +252,10 @@
 
   i18n.inputMethod = {
     enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-with-addons fcitx5-chinese-addons ];
+    fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
   };
 
-  environment.shells = with pkgs; [ bashInteractive fish ];
+  environment.shells = with pkgs; [bashInteractive fish];
 
   environment.variables = {
     EDITOR = "helix";
@@ -289,8 +299,8 @@
       shellInit = ''set -U fish_greeting " "'';
     };
     fzf.fuzzyCompletion = true;
-    firefox = { languagePacks = [ "zh-CN" ]; };
-    yazi.settings.yazi = { manager.show_hidden = true; };
+    firefox = {languagePacks = ["zh-CN"];};
+    yazi.settings.yazi = {manager.show_hidden = true;};
   };
 
   qt = {
@@ -302,7 +312,7 @@
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" ];
+      fileSystems = ["/"];
     };
     pipewire = {
       enable = true;
@@ -315,9 +325,9 @@
     };
     xserver = {
       enable = true;
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = ["amdgpu"];
       displayManager = {
-        gdm = { enable = true; };
+        gdm = {enable = true;};
         autoLogin = {
           enable = true;
           user = "${username}";
@@ -333,7 +343,7 @@
       ];
       libinput = {
         enable = true;
-        mouse = { accelProfile = "adaptive"; };
+        mouse = {accelProfile = "adaptive";};
         touchpad = {
           tapping = true;
           naturalScrolling = true;
