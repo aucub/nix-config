@@ -1,0 +1,42 @@
+name: check
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.1
+
+      - name: "Create Dir for Mounting moar Disk Space"
+        run: |
+          sudo mkdir /nix
+
+      - name: "Maximize Disk Space"
+        uses: easimon/maximize-build-space@master
+        with:
+          build-mount-path: /nix
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: "true"
+
+      - name: "Install Nix"
+        uses: cachix/install-nix-action@v24
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable-small
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v2
+      - uses: astro/deadnix-action@main
+
+      - run: nix develop --command -- check-devos --show-trace
+      - run: nix develop --command -- check-groupByConfig --show-trace
+      - run: nix develop --command -- check-hmOnly --show-trace
+
+      - uses: DeterminateSystems/flake-checker-action@v5
+        with:
+          flake-lock-path: ./flake.lock
+          check-owner: false
+          ignore-missing-flake-lock: true
+          fail-mode: true
+          send-statistics: false
