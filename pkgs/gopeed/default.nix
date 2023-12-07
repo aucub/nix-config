@@ -1,5 +1,27 @@
-{ stdenv, fetchurl, dpkg, wrapGAppsHook, libappindicator, libayatana-indicator, libayatana-appindicator, libdbusmenu, ayatana-ido, libindicator, glibc, gtk3, lib, glib, libepoxy, at-spi2-core, cairo, gdk-pixbuf, harfbuzz, pango, udev, autoPatchelfHook, }:
-
+{
+  stdenv,
+  fetchurl,
+  dpkg,
+  wrapGAppsHook,
+  libappindicator,
+  libayatana-indicator,
+  libayatana-appindicator,
+  libdbusmenu,
+  ayatana-ido,
+  libindicator,
+  glibc,
+  gtk3,
+  lib,
+  glib,
+  libepoxy,
+  at-spi2-core,
+  cairo,
+  gdk-pixbuf,
+  harfbuzz,
+  pango,
+  udev,
+  autoPatchelfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "gopeed";
   version = "1.5.1";
@@ -9,7 +31,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-5gy8a7QCcpGlLWqb8rd+A3PXSlN5f0CXacWOwf4lEfc=";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook ];
+  nativeBuildInputs = [dpkg autoPatchelfHook];
 
   buildInputs = [
     wrapGAppsHook
