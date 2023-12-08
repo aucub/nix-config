@@ -1,8 +1,5 @@
-{ lib, ... }:
-
-with lib.hm.gvariant;
-
-{
+{lib, ...}:
+with lib.hm.gvariant; {
   dconf.settings = {
     "app/drey/Damask" = {
       active-source = "wallhaven";
@@ -26,9 +23,9 @@ with lib.hm.gvariant;
     "org/gnome/Console" = {
       audible-bell = true;
       font-scale = 1.4000000000000004;
-      last-window-size = mkTuple [ 1578 905 ];
+      last-window-size = mkTuple [1578 905];
       restore-window-size = true;
-      shell = [ "fish" ];
+      shell = ["fish"];
       theme = "night";
       use-system-font = true;
       visual-bell = true;
@@ -55,21 +52,21 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/app-folders" = {
-      folder-children = [ "Utilities" ];
+      folder-children = ["Utilities"];
     };
 
     "org/gnome/desktop/app-folders/folders/Utilities" = {
-      apps = [ "org.gnome.tweaks.desktop" "org.gnome.DiskUtility.desktop" "org.gnome.Logs.desktop" "auto-cpufreq-gtk.desktop" "org.gnome.font-viewer.desktop" "htop.desktop" "org.gnome.Extensions.desktop" "ca.desrt.dconf-editor.desktop" "app.drey.Damask.desktop" "org.gnome.Loupe.desktop" "mpv.desktop" "org.gnome.Evince.desktop" "fcitx5-configtool.desktop" "kbd-layout-viewer5.desktop" "bssh.desktop" "bvnc.desktop" "avahi-discover.desktop" "fish.desktop" "lstopo.desktop" "helix.desktop" "qv4l2.desktop" "qvidcap.desktop" "org.fcitx.Fcitx5.desktop" "org.fcitx.fcitx5-migrator.desktop" "electron25.desktop" "jshell-java17-openjdk.desktop" "jconsole-java17-openjdk.desktop" ];
-      categories = [ "X-GNOME-Utilities" ];
-      excluded-apps = [ "org.gnome.Console.desktop" ];
+      apps = ["org.gnome.tweaks.desktop" "org.gnome.DiskUtility.desktop" "org.gnome.Logs.desktop" "auto-cpufreq-gtk.desktop" "org.gnome.font-viewer.desktop" "htop.desktop" "org.gnome.Extensions.desktop" "ca.desrt.dconf-editor.desktop" "app.drey.Damask.desktop" "org.gnome.Loupe.desktop" "mpv.desktop" "org.gnome.Evince.desktop" "fcitx5-configtool.desktop" "kbd-layout-viewer5.desktop" "bssh.desktop" "bvnc.desktop" "avahi-discover.desktop" "fish.desktop" "lstopo.desktop" "helix.desktop" "qv4l2.desktop" "qvidcap.desktop" "org.fcitx.Fcitx5.desktop" "org.fcitx.fcitx5-migrator.desktop" "electron25.desktop" "jshell-java17-openjdk.desktop" "jconsole-java17-openjdk.desktop"];
+      categories = ["X-GNOME-Utilities"];
+      excluded-apps = ["org.gnome.Console.desktop"];
       name = "Utilities";
       translate = false;
     };
 
     "org/gnome/desktop/input-sources" = {
-      mru-sources = [ (mkTuple [ "xkb" "us" ]) ];
-      sources = [ (mkTuple [ "xkb" "us" ]) ];
-      xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:ralt_switch" ];
+      mru-sources = [(mkTuple ["xkb" "us"])];
+      sources = [(mkTuple ["xkb" "us"])];
+      xkb-options = ["terminate:ctrl_alt_bksp" "lv3:ralt_switch"];
     };
 
     "org/gnome/desktop/interface" = {
@@ -141,7 +138,7 @@ with lib.hm.gvariant;
       resources-memory-in-iec = true;
       show-dependencies = false;
       show-whose-processes = "user";
-      window-state = mkTuple [ 1920 1040 0 0 ];
+      window-state = mkTuple [1920 1040 0 0];
     };
 
     "org/gnome/gnome-system-monitor/disktreenew" = {
@@ -155,7 +152,7 @@ with lib.hm.gvariant;
       col-5-width = 133;
       col-6-visible = true;
       col-6-width = 0;
-      columns-order = [ 0 1 2 3 4 5 6 ];
+      columns-order = [0 1 2 3 4 5 6];
       sort-col = 0;
       sort-order = 1;
     };
@@ -170,7 +167,7 @@ with lib.hm.gvariant;
       col-12-width = 290;
       col-8-visible = true;
       col-8-width = 117;
-      columns-order = [ 0 1 2 3 4 6 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 ];
+      columns-order = [0 1 2 3 4 6 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26];
       sort-col = 12;
       sort-order = 0;
     };
@@ -187,8 +184,8 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/nautilus/list-view" = {
-      default-column-order = [ "name" "size" "type" "owner" "group" "permissions" "where" "date_modified" "date_modified_with_time" "date_accessed" "date_created" "recency" "detailed_type" ];
-      default-visible-columns = [ "name" "size" "date_modified" ];
+      default-column-order = ["name" "size" "type" "owner" "group" "permissions" "where" "date_modified" "date_modified_with_time" "date_accessed" "date_created" "recency" "detailed_type"];
+      default-visible-columns = ["name" "size" "date_modified"];
       use-tree-view = false;
     };
 
@@ -223,7 +220,7 @@ with lib.hm.gvariant;
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = [];
     };
-        "org/gnome/mutter/keybindings" = {
+    "org/gnome/mutter/keybindings" = {
       toggle-tiled-left = ["<super>left"];
       toggle-tiled-right = ["<super>right"];
     };
@@ -236,11 +233,11 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/shell" = {
-      command-history = [ "/*+" ];
+      command-history = ["/*+"];
       disable-user-extensions = false;
-      disabled-extensions = [ "window-list@gnome-shell-extensions.gcampax.github.com" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" "light-style@gnome-shell-extensions.gcampax.github.com" "apps-menu@gnome-shell-extensions.gcampax.github.com" ];
-      enabled-extensions = [ "appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "kimpanel@kde.org" ];
-      favorite-apps = [ "org.gnome.Nautilus.desktop" "hiddify.desktop" "firefox.desktop" "org.gnome.Console.desktop" ];
+      disabled-extensions = ["window-list@gnome-shell-extensions.gcampax.github.com" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" "light-style@gnome-shell-extensions.gcampax.github.com" "apps-menu@gnome-shell-extensions.gcampax.github.com"];
+      enabled-extensions = ["appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "kimpanel@kde.org"];
+      favorite-apps = ["org.gnome.Nautilus.desktop" "hiddify.desktop" "firefox.desktop" "org.gnome.Console.desktop"];
       welcome-dialog-last-shown-version = "45.0";
     };
 
@@ -284,6 +281,5 @@ with lib.hm.gvariant;
     "org/gnome/shell/extensions/kimpanel" = {
       font = "更纱黑体 UI SC 14";
     };
-
   };
 }
