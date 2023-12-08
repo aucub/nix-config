@@ -24,12 +24,12 @@
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-# Import home-manager's NixOS module
+    # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
   ];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
     useUserPackages = true;
     users = {
       # Import your home-manager configuration
@@ -310,23 +310,23 @@
       useBabelfish = true;
       shellInit = ''set -U fish_greeting " "'';
       interactiveShellInit = ''
-      function rga-fzf
-          set RG_PREFIX 'rga --files-with-matches'
-          if test (count $argv) -gt 1
-              set RG_PREFIX "$RG_PREFIX $argv[1..-2]"
-          end
-          set -l file $file
-          set file (
-          FZF_DEFAULT_COMMAND="$RG_PREFIX '$argv[-1]'" \
-          fzf --sort \
-              --preview='test ! -z {} && \
-                  rga --pretty --context 5 {q} {}' \
-              --phony -q "$argv[-1]" \
-              --bind "change:reload:$RG_PREFIX {q}" \
-              --preview-window='50%:wrap'
-      ) && echo "opening $file" && open "$file"
-      end
-    '';
+        function rga-fzf
+            set RG_PREFIX 'rga --files-with-matches'
+            if test (count $argv) -gt 1
+                set RG_PREFIX "$RG_PREFIX $argv[1..-2]"
+            end
+            set -l file $file
+            set file (
+            FZF_DEFAULT_COMMAND="$RG_PREFIX '$argv[-1]'" \
+            fzf --sort \
+                --preview='test ! -z {} && \
+                    rga --pretty --context 5 {q} {}' \
+                --phony -q "$argv[-1]" \
+                --bind "change:reload:$RG_PREFIX {q}" \
+                --preview-window='50%:wrap'
+        ) && echo "opening $file" && open "$file"
+        end
+      '';
     };
     fzf.fuzzyCompletion = true;
     firefox = {languagePacks = ["zh-CN"];};

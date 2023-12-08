@@ -24,86 +24,94 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, nix-alien, ... }@inputs:
-    let
-      inherit (self) outputs;
-      # Supported systems for your flake packages, shell, etc.
-      systems = [
-        "aarch64-linux"
-        "i686-linux"
-        "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
-      ];
-      # This is a function that generates an attribute by calling a function you
-      # pass to it, with each system as an argument
-      forAllSystems = nixpkgs.lib.genAttrs systems;
-    in {
-      # Your custom packages
-      # Accessible through 'nix build', 'nix shell', etc
-      packages =
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    nur,
+    nix-alien,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    # Supported systems for your flake packages, shell, etc.
+    systems = [
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    # This is a function that generates an attribute by calling a function you
+    # pass to it, with each system as an argument
+    forAllSystems = nixpkgs.lib.genAttrs systems;
+  in {
+    # Your custom packages
+    # Accessible through 'nix build', 'nix shell', etc
+    packages =
       forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
-      # Formatter for your nix files, available through 'nix fmt'
-      # Other options beside 'alejandra' include 'nixpkgs-fmt'
-      formatter =
-        forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    # Formatter for your nix files, available through 'nix fmt'
+    # Other options beside 'alejandra' include 'nixpkgs-fmt'
+    formatter =
+      forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
-      # Reusable nixos modules you might want to export
-      # These are usually stuff you would upstream into nixpkgs
-      nixosModules = import ./modules/nixos;
-      # Reusable home-manager modules you might want to export
-      # These are usually stuff you would upstream into home-manager
-      homeManagerModules = import ./modules/home-manager;
+    # Your custom packages and modifications, exported as overlays
+    overlays = import ./overlays {inherit inputs;};
+    # Reusable nixos modules you might want to export
+    # These are usually stuff you would upstream into nixpkgs
+    nixosModules = import ./modules/nixos;
+    # Reusable home-manager modules you might want to export
+    # These are usually stuff you would upstream into home-manager
+    homeManagerModules = import ./modules/home-manager;
 
-      # NixOS configuration entrypoint
-      # Available through 'nixos-rebuild --flake .#your-hostname'
-      nixosConfigurations = {
-        # FIXME replace with your hostname
-        "your-hostname" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            # > Our main nixos configuration file <
-            ./nixos/configuration.nix
-            nur.nixosModules.nur
-            ({ config, ... }: {
-              # NUR
-              environment.systemPackages = with config.nur.repos; [
-                # linyinfeng.wemeet
-                # xddxdd.dingtalk
-                # rewine.ttf-wps-fonts
-                # rewine.ttf-ms-win10
-                ruixi-rebirth.fcitx5-pinyin-moegirl
-                ruixi-rebirth.fcitx5-pinyin-zhwiki
-              ];
-            })
-            # nix-alien
-            ({ self, system, ... }: {
-              environment.systemPackages =
-                with self.inputs.nix-alien.packages.${system};
-                [ nix-alien ];
-              # Optional, needed for `nix-alien-ld`
-              # programs.nix-ld.enable = true;
-            })
-          ];
-        };
-      };
-
-      # Standalone home-manager configuration entrypoint
-      # Available through 'home-manager --flake .#your-username@your-hostname'
-      homeConfigurations = {
-        # FIXME replace with your username@hostname
-        "your-username@your-hostname" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            # > Our main home-manager configuration file <
-            ./home-manager/home.nix
-          ];
-        };
+    # NixOS configuration entrypoint
+    # Available through 'nixos-rebuild --flake .#your-hostname'
+    nixosConfigurations = {
+      # FIXME replace with your hostname
+      "your-hostname" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          # > Our main nixos configuration file <
+          ./nixos/configuration.nix
+          nur.nixosModules.nur
+          ({config, ...}: {
+            # NUR
+            environment.systemPackages = with config.nur.repos; [
+              # linyinfeng.wemeet
+              # xddxdd.dingtalk
+              # rewine.ttf-wps-fonts
+              # rewine.ttf-ms-win10
+              ruixi-rebirth.fcitx5-pinyin-moegirl
+              ruixi-rebirth.fcitx5-pinyin-zhwiki
+            ];
+          })
+          # nix-alien
+          ({
+            self,
+            system,
+            ...
+          }: {
+            environment.systemPackages = with self.inputs.nix-alien.packages.${system}; [nix-alien];
+            # Optional, needed for `nix-alien-ld`
+            # programs.nix-ld.enable = true;
+          })
+        ];
       };
     };
+
+    # Standalone home-manager configuration entrypoint
+    # Available through 'home-manager --flake .#your-username@your-hostname'
+    homeConfigurations = {
+      # FIXME replace with your username@hostname
+      "your-username@your-hostname" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        # Home-manager requires 'pkgs' instance
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          # > Our main home-manager configuration file <
+          ./home-manager/home.nix
+        ];
+      };
+    };
+  };
 }
