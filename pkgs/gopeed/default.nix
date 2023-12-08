@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libayatana-indicator
     ayatana-ido
   ];
-    postPatch = ''
+  postPatch = ''
     substituteInPlace --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 

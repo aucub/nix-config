@@ -301,24 +301,24 @@
         "kimpanel@kde.org"
       ];
     };
-      "org/gnome/nautilus/preferences" = {
-        default-folder-viewer = "icon-view";
-        install-mime-activation = false;
-        migrated-gtk-settings = true;
-        recursive-search = "never";
-        search-filter-time-type = "last_modified";
-      };
-      "org/gnome/TextEditor" = {
-        highlight-current-line = false;
-        discover-settings = true;
-        restore-session = false;
-        show-grid = false;
-        show-line-numbers = true;
-        show-map = true;
-        spellcheck = false;
-        style-scheme = "Adwaita";
-        use-system-font = true;
-      };
+    "org/gnome/nautilus/preferences" = {
+      default-folder-viewer = "icon-view";
+      install-mime-activation = false;
+      migrated-gtk-settings = true;
+      recursive-search = "never";
+      search-filter-time-type = "last_modified";
+    };
+    "org/gnome/TextEditor" = {
+      highlight-current-line = false;
+      discover-settings = true;
+      restore-session = false;
+      show-grid = false;
+      show-line-numbers = true;
+      show-map = true;
+      spellcheck = false;
+      style-scheme = "Adwaita";
+      use-system-font = true;
+    };
     "org/gnome/desktop/interface" = {
       color-scheme = "default";
       clock-show-weekday = true;
