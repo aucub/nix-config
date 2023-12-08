@@ -1,6 +1,14 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{ inputs, outputs, lib, config, pkgs, vars, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  vars,
+  ...
+}: {
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
@@ -48,16 +56,19 @@
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+  nix.registry =
+    (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = [ "/etc/nix/path" ];
-  environment.etc = lib.mapAttrs' (name: value: {
-    name = "nix/path/${name}";
-    value.source = value.flake;
-  }) config.nix.registry;
+  nix.nixPath = ["/etc/nix/path"];
+  environment.etc =
+    lib.mapAttrs' (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    })
+    config.nix.registry;
 
   nix.settings = {
     # Deduplicate and optimize nix store
@@ -75,7 +86,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
-    trusted-users = [ "root" "@wheel" ];
+    trusted-users = ["root" "@wheel"];
   };
 
   nix.gc = {
@@ -112,7 +123,7 @@
       "NVreg_PreserveVideoMemoryAllocations=1"
     ];
     consoleLogLevel = 3;
-    initrd.kernelModules = [ "btrfs" ];
+    initrd.kernelModules = ["btrfs"];
     kernelModules = [
       "v4l2loopback"
       "bbswitch"
@@ -137,7 +148,7 @@
   time.timeZone = "Asia/Shanghai";
 
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+  i18n.supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
 
   fonts = {
     enableDefaultPackages = true;
@@ -158,10 +169,10 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Noto Serif CJK SC" ];
-        sansSerif = [ "Sarasa UI SC" ];
-        monospace = [ "Sarasa Mono SC" ];
-        emoji = [ "Twemoji" "Noto Color Emoji" ];
+        serif = ["Noto Serif CJK SC"];
+        sansSerif = ["Sarasa UI SC"];
+        monospace = ["Sarasa Mono SC"];
+        emoji = ["Twemoji" "Noto Color Emoji"];
       };
     };
   };
@@ -169,7 +180,7 @@
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [ ];
+    extraPortals = with pkgs; [];
   };
 
   sound.enable = true;
@@ -221,35 +232,38 @@
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" "networkmanager" "docker" ];
+      extraGroups = ["wheel" "networkmanager" "docker"];
       shell = pkgs.bash;
-      packages = (with pkgs; [
-        inputs.home-manager.packages.${pkgs.system}.default
-        vscode
-        firefox
-        google-chrome
-        obs-studio
-        localsend
-        # postman
-        # jetbrains.idea-ultimate
-        # bun
-        # qq
-      ]) ++ (with pkgs.gnomeExtensions; [
-        caffeine
-        just-perfection
-]) ++ (with pkgs.python311Packages; [
-        selenium
-        black
-]);
+      packages =
+        (with pkgs; [
+          inputs.home-manager.packages.${pkgs.system}.default
+          vscode
+          firefox
+          google-chrome
+          obs-studio
+          localsend
+          # postman
+          # jetbrains.idea-ultimate
+          # bun
+          # qq
+        ])
+        ++ (with pkgs.gnomeExtensions; [
+          caffeine
+          just-perfection
+        ])
+        ++ (with pkgs.python311Packages; [
+          selenium
+          black
+        ]);
     };
   };
 
   i18n.inputMethod = {
     enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-with-addons fcitx5-chinese-addons ];
+    fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
   };
 
-  environment.shells = with pkgs; [ bashInteractive fish ];
+  environment.shells = with pkgs; [bashInteractive fish];
 
   environment.variables = {
     EDITOR = "helix";
@@ -259,7 +273,7 @@
     GLFW_IM_MODULE = "ibus";
   };
 
-  environment.sessionVariables = { };
+  environment.sessionVariables = {};
 
   environment.systemPackages = with pkgs; [
     inputs.home-manager.packages.${pkgs.system}.default
@@ -281,7 +295,8 @@
     orchis-theme
   ];
   # Ignored Packages
-  environment.gnome.excludePackages = (with pkgs; [ gnome-tour ])
+  environment.gnome.excludePackages =
+    (with pkgs; [gnome-tour])
     ++ (with pkgs.gnome; [
       atomix
       epiphany
@@ -329,18 +344,18 @@
       '';
     };
     fzf.fuzzyCompletion = true;
-    firefox = { languagePacks = [ "zh-CN" ]; };
-    yazi.settings.yazi = { manager.show_hidden = true; };
+    firefox = {languagePacks = ["zh-CN"];};
+    yazi.settings.yazi = {manager.show_hidden = true;};
   };
 
-  qt = { enable = true; };
+  qt = {enable = true;};
 
   services = {
     auto-cpufreq.enable = true;
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" ];
+      fileSystems = ["/"];
     };
     pipewire = {
       enable = true;
@@ -353,9 +368,9 @@
     };
     xserver = {
       enable = true;
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = ["amdgpu"];
       displayManager = {
-        gdm = { enable = true; };
+        gdm = {enable = true;};
         autoLogin = {
           enable = true;
           user = "${vars.username}";
@@ -363,12 +378,12 @@
       };
       desktopManager = {
         xterm.enable = false;
-        gnome = { enable = true; };
+        gnome = {enable = true;};
       };
-      excludePackages = with pkgs; [ ];
+      excludePackages = with pkgs; [];
       libinput = {
         enable = true;
-        mouse = { accelProfile = "adaptive"; };
+        mouse = {accelProfile = "adaptive";};
         touchpad = {
           tapping = true;
           naturalScrolling = true;
@@ -377,7 +392,7 @@
         };
       };
     };
-    udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+    udev.packages = with pkgs; [gnome.gnome-settings-daemon];
     # CUPS
     # printing.enable = true;
     avahi = {

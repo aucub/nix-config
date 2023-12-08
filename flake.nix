@@ -22,10 +22,11 @@
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
 
-          nixgl = {                                                             # Fixes OpenGL With Other Distros.
-        url = "github:guibou/nixGL";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
+    nixgl = {
+      # Fixes OpenGL With Other Distros.
+      url = "github:guibou/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-alien.url = "github:thiagokokada/nix-alien";
   };
@@ -49,9 +50,9 @@
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    vars={
-    username="your-username";
-    hostname="your-hostname";
+    vars = {
+      username = "your-username";
+      hostname = "your-hostname";
     };
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
