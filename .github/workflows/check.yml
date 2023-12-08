@@ -28,4 +28,6 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v2
       - uses: astro/deadnix-action@main
 
-      - run: nix flake check --show-trace
+      - run: |
+          export NIXPKGS_ALLOW_UNFREE=1
+          nix flake check --show-trace --impure
