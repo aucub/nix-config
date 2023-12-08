@@ -31,7 +31,7 @@
   ];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs vars outputs; };
+    extraSpecialArgs = {inherit inputs vars outputs;};
     users = {
       # Import your home-manager configuration
       ${vars.username} = import ../home-manager/home.nix;
@@ -256,8 +256,7 @@
         (with pkgs; [
           inputs.home-manager.packages.${pkgs.system}.default
         ])
-        ++ 
-        (with pkgs; [
+        ++ (with pkgs; [
           vscode
           firefox
           google-chrome
@@ -283,8 +282,7 @@
           selenium
           black
         ])
-        ++ 
-        (with pkgs; [
+        ++ (with pkgs; [
           npm-check-updates
         ]);
     };
@@ -306,57 +304,54 @@
   };
 
   environment.systemPackages =
-  (with pkgs; [
-          inputs.home-manager.packages.${pkgs.system}.default
-        ])
-        ++
-         (with pkgs.gnome; [
-    adwaita-icon-theme
-    dconf-editor
-    gnome-tweaks
-        ])
-        ++
-   (with pkgs; [
-
-    difftastic
-    helix
-    git
-    eza
-    yazi
-    fzf
-    bat
-    fd
-    ripgrep-all
-    mcfly
-    tlrc
-    htop
-    linux-wifi-hotspot
-    python311
-    orchis-theme
-  ]);
+    (with pkgs; [
+      inputs.home-manager.packages.${pkgs.system}.default
+    ])
+    ++ (with pkgs.gnome; [
+      adwaita-icon-theme
+      dconf-editor
+      gnome-tweaks
+    ])
+    ++ (with pkgs; [
+      difftastic
+      helix
+      git
+      eza
+      yazi
+      fzf
+      bat
+      fd
+      ripgrep-all
+      mcfly
+      tlrc
+      htop
+      linux-wifi-hotspot
+      python311
+      orchis-theme
+    ]);
   # GNOME Ignored Packages
   environment.gnome.excludePackages =
     (with pkgs; [
       gnome-tour
       gnome-photos
-      ])
+    ])
     ++ (with pkgs.gnome; [
       gnome-contacts
       gnome-initial-setup
       yelp
-        cheese # webcam tool
-  gnome-music
-  gnome-terminal
-  gedit # text editor
-  epiphany # web browser
-  geary # email reader
-  evince # document viewer
-  gnome-characters
-  totem # video player
-  tali # poker game
-  iagno # go game
-  hitori # sudoku game
-  atomix # puzzle game
+      cheese # webcam tool
+      gnome-music
+      gnome-terminal
+      gedit # text editor
+      epiphany # web browser
+      geary # email reader
+      evince # document viewer
+      gnome-characters
+      totem # video player
+      tali # poker game
+      iagno # go game
+      hitori # sudoku game
+      atomix # puzzle game
     ]);
 
   documentation = {
@@ -440,7 +435,7 @@
         xterm.enable = false;
         gnome = {enable = true;};
       };
-      excludePackages = with pkgs; [ xterm ];
+      excludePackages = with pkgs; [xterm];
       libinput = {
         enable = true;
         mouse = {accelProfile = "adaptive";};

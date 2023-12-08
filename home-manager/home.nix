@@ -290,9 +290,9 @@
   dconf.settings = {
     "org/gnome/shell" = {
       favorite-apps = [
-"org.gnome.Nautilus.desktop"
-"firefox.desktop"
-"org.gnome.Console.desktop"
+        "org.gnome.Nautilus.desktop"
+        "firefox.desktop"
+        "org.gnome.Console.desktop"
       ];
       "org/gnome/desktop/interface" = {
         color-scheme = "default";
@@ -311,15 +311,15 @@
         show-grid = false;
         show-line-numbers = true;
         show-map = true;
- spellcheck = false;
- style-scheme="Adwaita";
+        spellcheck = false;
+        style-scheme = "Adwaita";
         use-system-font = true;
       };
-      enabled-extensions =[
+      enabled-extensions = [
         "appindicatorsupport@rgcjonas.gmail.com"
-       "caffeine@patapon.info"
-       "kimpanel@kde.org"
-       ];
+        "caffeine@patapon.info"
+        "kimpanel@kde.org"
+      ];
     };
     "org/gnome/desktop/interface" = {
       color-scheme = "default";

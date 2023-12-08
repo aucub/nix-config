@@ -1,5 +1,24 @@
-{ dpkg, fetchurl, glibc, gtk3, lib, libayatana-appindicator, stdenv, at-spi2-core, cairo, harfbuzz, pango, libepoxy, libdbusmenu, wrapGAppsHook, makeWrapper, udev, autoPatchelfHook, libayatana-indicator, ayatana-ido }:
-
+{
+  dpkg,
+  fetchurl,
+  glibc,
+  gtk3,
+  lib,
+  libayatana-appindicator,
+  stdenv,
+  at-spi2-core,
+  cairo,
+  harfbuzz,
+  pango,
+  libepoxy,
+  libdbusmenu,
+  wrapGAppsHook,
+  makeWrapper,
+  udev,
+  autoPatchelfHook,
+  libayatana-indicator,
+  ayatana-ido,
+}:
 stdenv.mkDerivation rec {
   pname = "gopeed";
   version = "1.5.1";
@@ -9,13 +28,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-XwB3+NtjeCqg3vHit4FRRpfNA65afH1Yc0QjIananqw=";
   };
 
-  nativeBuildInputs = [    
+  nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook.override {inherit makeWrapper;})
     dpkg
-];
+  ];
 
-  runtimeDependencies = [     
+  runtimeDependencies = [
     at-spi2-core
     gtk3
     cairo
@@ -25,29 +44,29 @@ stdenv.mkDerivation rec {
     libayatana-appindicator
     libdbusmenu
     libayatana-indicator
-    ayatana-ido 
-    ];
+    ayatana-ido
+  ];
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-mkdir -p $out/bin
-cp -r opt $out/opt
-cp -r usr/share $out/share
-    substituteInPlace $out/share/applications/gopeed.desktop \
-      --replace "/opt/gopeed/gopeed" "$out/bin/gopeed" \
-      --replace "/usr/share" "$out/share"
-    ln -s $out/opt/gopeed/gopeed $out/gopeed/gopeed
+    mkdir -p $out/bin
+    cp -r opt $out/opt
+    cp -r usr/share $out/share
+        substituteInPlace $out/share/applications/gopeed.desktop \
+          --replace "/opt/gopeed/gopeed" "$out/bin/gopeed" \
+          --replace "/usr/share" "$out/share"
+        ln -s $out/opt/gopeed/gopeed $out/gopeed/gopeed
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://gopeed.com";
     description = "A modern download manager that supports all platforms. Built with Golang and Flutter.";
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ aucub ];
+    platforms = ["x86_64-linux"];
+    sourceProvenance = with sourceTypes; [binaryNativeCode];
+    maintainers = with lib.maintainers; [aucub];
   };
 }
