@@ -76,7 +76,7 @@
       "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://mirrors.bfsu.edu.cn/nix-channels/store"
       "https://cache.nixos.org/"
-            "https://qihaiumi.cachix.org"
+      "https://qihaiumi.cachix.org"
       "https://nix-community.cachix.org"
       "https://nixpkgs-wayland.cachix.org"
     ];
@@ -88,10 +88,10 @@
     trusted-users = ["root" "@wheel"];
   };
 
-nix.gc = {
-      automatic = true;
-      dates = "weekly";
-    };
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+  };
   # FIXME: Add the rest of your current configuration
 
   # TODO: Set your hostname
