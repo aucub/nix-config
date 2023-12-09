@@ -8,7 +8,9 @@
   pkgs,
   vars,
   ...
-}: {
+}: let
+  ifExists = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
+in {
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
@@ -27,6 +29,10 @@
     ./hardware-configuration.nix
     # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
+
+    inputs.nix-index-database.nixosModules.nix-index
+
+    # inputs.stylix.nixosModules.stylix
   ];
 
   home-manager = {
@@ -44,6 +50,8 @@
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
+      inputs.nur.overlay
+      inputs.nix-alien.overlays.default
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -247,11 +255,25 @@
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = ["wheel"];
+      extraGroups =
+        ["wheel"]
+        ++ ifExists [
+          "docker"
+          "podman"
+          "git"
+          "libvirtd"
+          "systemd-journal"
+          "wireshark"
+          "input"
+          "networkmanager"
+        ];
       shell = pkgs.bashInteractive;
       packages =
         (with pkgs; [
           inputs.home-manager.packages.${pkgs.system}.default
+        ])
+        ++ (with inputs.nix-gaming.packages.${pkgs.system}; [
+          wine-ge
         ])
         ++ (with pkgs; [
           vscode
@@ -281,6 +303,14 @@
         ])
         ++ (with pkgs; [
           npm-check-updates
+        ])
+        ++ (with pkgs.nur.repos; [
+          # linyinfeng.wemeet
+          # xddxdd.dingtalk
+          # rewine.ttf-wps-fonts
+          # rewine.ttf-ms-win10
+          ruixi-rebirth.fcitx5-pinyin-moegirl
+          ruixi-rebirth.fcitx5-pinyin-zhwiki
         ]);
     };
   };
@@ -304,6 +334,7 @@
     (with pkgs; [
       inputs.home-manager.packages.${pkgs.system}.default
       nix-output-monitor
+      nix-alien
     ])
     ++ (with pkgs.gnome; [
       adwaita-icon-theme
@@ -375,6 +406,7 @@
 
   programs = {
     command-not-found.enable = false;
+    nix-ld.enable = true;
     xwayland.enable = true;
     fish = {
       enable = true;

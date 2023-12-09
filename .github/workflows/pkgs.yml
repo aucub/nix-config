@@ -4,7 +4,6 @@ on:
 
 jobs:
   pkgs:
-    name: Build and Cache
     runs-on: ubuntu-latest
 
     steps:
