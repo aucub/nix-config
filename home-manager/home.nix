@@ -22,6 +22,8 @@
 
     # Or modules exported from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
+    # inputs.stylix.homeManagerModules.stylix
+    inputs.nix-index-database.hmModules.nix-index
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
@@ -66,6 +68,11 @@
   # Enable home-manager and git
   # programs.home-manager.enable = true;
   # programs.git.enable = true;
+
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+  };
 
   programs = {
     bash = {
