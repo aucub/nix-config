@@ -7,4 +7,5 @@
   firefox = import ./firefox/default.nix;
   chromium = import ./chromium/default.nix;
   dconf = import ./dconf.nix;
+  vscode = import ./vscode/default.nix;
 }

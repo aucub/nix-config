@@ -14,7 +14,6 @@
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
     outputs.nixosModules.yazi
-
     # Or modules from other flakes (such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
@@ -108,6 +107,8 @@
 
   # TODO: Set your hostname
   networking.hostName = "${vars.hostname}";
+  networking.firewall.enable = false;
+  networking.networkmanager.enable = true;
 
   # TODO: This is just an example, be sure to use whatever bootloader you prefer
   # boot.loader.systemd-boot.enable = true;
@@ -152,8 +153,6 @@
     '';
     tmp.useTmpfs = true;
   };
-
-  networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Shanghai";
 
@@ -304,6 +303,7 @@
   environment.systemPackages =
     (with pkgs; [
       inputs.home-manager.packages.${pkgs.system}.default
+      nix-output-monitor
     ])
     ++ (with pkgs.gnome; [
       adwaita-icon-theme

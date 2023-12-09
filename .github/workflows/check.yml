@@ -24,10 +24,14 @@ jobs:
         uses: cachix/install-nix-action@v24
         with:
           nix_path: nixpkgs=channel:nixos-unstable-small
+          extra_nix_config: |
+            auto-optimise-store = true
+            experimental-features = nix-command flakes
 
       - uses: DeterminateSystems/magic-nix-cache-action@v2
       - uses: astro/deadnix-action@main
 
       - run: |
           export NIXPKGS_ALLOW_UNFREE=1
-          nix flake check --show-trace --impure
+          nix-env -f '<nixpkgs>' -iA nix-output-monitor
+          nix flake check --show-trace --impure --log-format internal-json -v |& nom --json

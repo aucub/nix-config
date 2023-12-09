@@ -1,0 +1,98 @@
+{ inputs, outputs, lib, config, pkgs, vars, ... }: {
+  programs = {
+    vscode = {
+      enable = true;
+      enableExtensionUpdateCheck = false;
+      enableUpdateCheck = false;
+      extensions = 
+       (with pkgs.vscode-extensions; [
+           # ms-vscode.cpptools
+                ms-ceintl.vscode-language-pack-zh-hans
+                formulahendry.code-runner
+                mhutchie.git-graph
+                oderwat.indent-rainbow
+                # rust-lang.rust-analyzer
+                redhat.vscode-yaml
+                redhat.vscode-xml
+                yzhang.markdown-all-in-one
+                ms-python.python
+                ms-python.vscode-pylance
+                # ms-python.black-formatter
+                foxundermoon.shell-format
+                tamasfe.even-better-toml
+                bmalehorn.vscode-fish
+        ])
+        ++ (with inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
+          bito.bito
+          rangav.vscode-thunder-client
+        ]);
+      userSettings = {
+        "extensions.ignoreRecommendations" = true;
+        "window.dialogStyle" = "custom";
+        "window.titleBarStyle" = "custom";
+        "editor.cursorSmoothCaretAnimation" = "on";
+        "editor.fontFamily" = ''"Sarasa Mono SC",monospace'';
+        "editor.fontLigatures" = true;
+        "editor.fontSize" = 18;
+        "editor.suggestSelection" = "first";
+        "files.exclude" = {
+          "**/.classpath" = true;
+          "**/.factorypath" = true;
+          "**/.project" = true;
+          "**/.settings" = true;
+          "**/.vscode" = true;
+          "**/**.exe" = true;
+        };
+        "workbench.startupEditor" = "none";
+        "grunt.autoDetect" = "on";
+        "security.workspace.trust.untrustedFiles" = "open";
+        "editor.inlineSuggest.enabled" = true;
+        "emmet.syntaxProfiles" = {
+          "vue-html" = "html";
+          "vue" = "html";
+        };
+        "editor.acceptSuggestionOnCommitCharacter" = false;
+        "telemetry.telemetryLevel" = "off";
+        "update.showReleaseNotes" = false;
+        "editor.wordWrap" = "on";
+        "code-runner.runInTerminal" = true;
+        "files.autoSave" = "onWindowChange";
+        "indentRainbow.colors" = [
+          "rgba(255,255,64,0.07)"
+          "rgba(127,255,127,0.07)"
+          "rgba(255,127,255,0.07)"
+          "rgba(79,236,236,0.07)"
+        ];
+        "git.autofetch" = true;
+        "git.confirmSync" = false;
+        "explorer.confirmDelete" = false;
+        "[json]" = {
+          "editor.defaultFormatter" = "vscode.json-language-features";
+        };
+        "[markdown]" = {
+          "editor.defaultFormatter" = "yzhang.markdown-all-in-one";
+        };
+        "[typescript]" = {
+          "editor.defaultFormatter" = "vscode.typescript-language-features";
+        };
+        "workbench.enableExperiments" = false;
+        "window.autoDetectColorScheme" = true;
+        "terminal.integrated.defaultProfile.linux" = "fish";
+        "update.mode" = "none";
+        "editor.codeLensFontFamily" = ''"Sarasa Mono SC",monospace'';
+        "github.gitProtocol" = "ssh";
+        "[python]" = { "editor.defaultFormatter" = "mikoz.black-py"; };
+        "editor.accessibilitySupport" = "off";
+        "window.commandCenter" = false;
+        "code-runner.showExecutionMessage" = false;
+        "diffEditor.ignoreTrimWhitespace" = true;
+        "redhat.telemetry.enabled" = false;
+        "bitoAI.codeCompletion.enableAutoCompletion" = true;
+        "bitoAI.codeCompletion.enableCommentToCode" = true;
+        "workbench.colorTheme" = "Quiet Light";
+        "code-runner.enableAppInsights" = false;
+        "editor.inlineSuggest.suppressSuggestions" = true;
+      };
+    };
+  };
+}
