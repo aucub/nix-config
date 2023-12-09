@@ -27,6 +27,7 @@
       url = "github:guibou/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
 
     nix-alien.url = "github:thiagokokada/nix-alien";
   };

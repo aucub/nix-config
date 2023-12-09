@@ -18,11 +18,15 @@ jobs:
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - run: nix fmt -L
+      - uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - run: |
+          nix run github:nix-community/nixpkgs-lint
+          nix fmt -L
 
       - uses: DeterminateSystems/update-flake-lock@main
         with:
-          pr-title: "chore: update flake.lock"
+          pr-title: "chore: format"
           pr-labels: |
             dependencies
             automated
