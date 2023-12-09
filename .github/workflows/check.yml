@@ -30,4 +30,4 @@ jobs:
 
       - run: |
           export NIXPKGS_ALLOW_UNFREE=1
-          nix flake check --show-trace --impure
+          nix flake check --show-trace --impure --debug -L

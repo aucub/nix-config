@@ -48,7 +48,6 @@
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
-      allowUnfreePredicate = _: true;
     };
   };
 
@@ -68,26 +67,56 @@
   # programs.git.enable = true;
 
   programs = {
+    bash = {
+      enable = true;
+      enableCompletion = true;
+      bashrcExtra = ''
+        PS1='[\u@\h \W]\$ '
+      '';
+      shellAliases = {
+        ls = "ls --color=auto";
+        grep = "grep --color=auto";
+      };
+    };
     vscode = {
       enable = true;
       enableExtensionUpdateCheck = false;
       enableUpdateCheck = false;
-      extensions = with pkgs.vscode-extensions; [
-        # ms-vscode.cpptools
-        ms-ceintl.vscode-language-pack-zh-hans
-        formulahendry.code-runner
-        mhutchie.git-graph
-        oderwat.indent-rainbow
-        # rust-lang.rust-analyzer
-        redhat.vscode-yaml
-        redhat.vscode-xml
-        yzhang.markdown-all-in-one
-        ms-python.python
-        ms-python.vscode-pylance
-        # ms-python.black-formatter
-        foxundermoon.shell-format
-        tamasfe.even-better-toml
-        bmalehorn.vscode-fish
+      extensions = with pkgs; [
+        (vscode-with-extensions.override {
+          vscodeExtensions = with vscode-extensions;
+            [
+              # ms-vscode.cpptools
+              ms-ceintl.vscode-language-pack-zh-hans
+              formulahendry.code-runner
+              mhutchie.git-graph
+              oderwat.indent-rainbow
+              # rust-lang.rust-analyzer
+              redhat.vscode-yaml
+              redhat.vscode-xml
+              yzhang.markdown-all-in-one
+              ms-python.python
+              ms-python.vscode-pylance
+              # ms-python.black-formatter
+              foxundermoon.shell-format
+              tamasfe.even-better-toml
+              bmalehorn.vscode-fish
+            ]
+            ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+              {
+                name = "Bito";
+                publisher = "Bito";
+                version = "1.2.6";
+                sha256 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+              }
+              {
+                name = "vscode-thunder-client";
+                publisher = "rangav";
+                version = "2.16.2";
+                sha256 = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+              }
+            ];
+        })
       ];
       userSettings = {
         "extensions.ignoreRecommendations" = true;

@@ -108,6 +108,8 @@
 
   # TODO: Set your hostname
   networking.hostName = "${vars.hostname}";
+  networking.firewall.enable = false;
+  networking.networkmanager.enable = true;
 
   # TODO: This is just an example, be sure to use whatever bootloader you prefer
   # boot.loader.systemd-boot.enable = true;
@@ -152,8 +154,6 @@
     '';
     tmp.useTmpfs = true;
   };
-
-  networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Shanghai";
 
