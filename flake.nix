@@ -22,12 +22,12 @@
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
 
-    nixgl = {
-      # Fixes OpenGL With Other Distros.
-      url = "github:guibou/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+
+    flake-utils.url = "github:numtide/flake-utils";
+
+    flake-utils.follows = "nix-vscode-extensions/flake-utils";
 
     nix-alien.url = "github:thiagokokada/nix-alien";
   };
@@ -36,9 +36,9 @@
     self,
     nixpkgs,
     nixpkgs-unstable,
+    flake-utils,
     home-manager,
     nur,
-    nixgl,
     nix-alien,
     ...
   } @ inputs: let
@@ -88,28 +88,6 @@
         modules = [
           # > Our main nixos configuration file <
           ./nixos/configuration.nix
-          nur.nixosModules.nur
-          ({config, ...}: {
-            # NUR
-            environment.systemPackages = with config.nur.repos; [
-              # linyinfeng.wemeet
-              # xddxdd.dingtalk
-              # rewine.ttf-wps-fonts
-              # rewine.ttf-ms-win10
-              ruixi-rebirth.fcitx5-pinyin-moegirl
-              ruixi-rebirth.fcitx5-pinyin-zhwiki
-            ];
-          })
-          # nix-alien
-          ({
-            self,
-            system,
-            ...
-          }: {
-            environment.systemPackages = with self.inputs.nix-alien.packages.${system}; [nix-alien];
-            # Optional, needed for `nix-alien-ld`
-            # programs.nix-ld.enable = true;
-          })
         ];
       };
     };

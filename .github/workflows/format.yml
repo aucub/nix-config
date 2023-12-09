@@ -21,8 +21,8 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v2
 
       - run: |
-          nix run github:nix-community/nixpkgs-lint
-          nix fmt -L
+          nix run github:nix-community/nixpkgs-lint .
+          nix fmt
 
       - uses: DeterminateSystems/update-flake-lock@main
         with:
