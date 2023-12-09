@@ -1,7 +1,6 @@
 {
   dpkg,
   fetchurl,
-  glibc,
   gtk3,
   lib,
   glib,
@@ -16,12 +15,9 @@
   libdbusmenu,
   wrapGAppsHook,
   makeWrapper,
-  udev,
   autoPatchelfHook,
   libayatana-indicator,
   ayatana-ido,
-  libappindicator,
-  libindicator,
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";

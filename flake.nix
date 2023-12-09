@@ -34,10 +34,8 @@
   outputs = {
     self,
     nixpkgs,
-    nixpkgs-unstable,
     home-manager,
     nur,
-    nixgl,
     nix-alien,
     ...
   } @ inputs: let
