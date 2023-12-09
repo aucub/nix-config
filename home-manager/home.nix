@@ -1,6 +1,14 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{ inputs, outputs, lib, config, pkgs, vars, ... }: {
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  vars,
+  ...
+}: {
   # You can import other home-manager modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
@@ -113,7 +121,7 @@
     eza = {
       enable = true;
       git = true;
-      extraOptions = [ "--group-directories-first" "--all" ];
+      extraOptions = ["--group-directories-first" "--all"];
     };
     mcfly = {
       enable = true;
