@@ -272,8 +272,7 @@ in {
         (with pkgs; [
           inputs.home-manager.packages.${pkgs.system}.default
         ])
-        ++ 
-        (with inputs.nix-gaming.packages.${pkgs.system}; [
+        ++ (with inputs.nix-gaming.packages.${pkgs.system}; [
           wine-ge
         ])
         ++ (with pkgs; [

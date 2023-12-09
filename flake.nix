@@ -22,11 +22,10 @@
     # everything match nicely? Try nix-colors!
     # nix-colors.url = "github:misterio77/nix-colors";
 
-    nix-vscode-extensions =
-      {
-        url = "github:nix-community/nix-vscode-extensions";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.follows = "nix-vscode-extensions/flake-utils";
