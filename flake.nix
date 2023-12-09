@@ -45,12 +45,7 @@
   outputs = {
     self,
     nixpkgs,
-    nixpkgs-unstable,
-    flake-utils,
     home-manager,
-    nix-index-database,
-    nur,
-    nix-alien,
     ...
   } @ inputs: let
     inherit (self) outputs;
