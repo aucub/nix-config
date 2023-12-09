@@ -34,7 +34,7 @@
           bito.bito
           rangav.vscode-thunder-client
         ]);
-        userSettings = builtins.fromJSON (builtins.readFile ./settings.json);
+      userSettings = builtins.fromJSON (builtins.readFile ./settings.json);
     };
   };
 }
