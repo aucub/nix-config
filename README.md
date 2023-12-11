@@ -27,13 +27,13 @@ nixos-generate-config --root /mnt
 To apply your system configuration:
 
 ```bash
-sudo nixos-rebuild switch --install-bootloader --flake .#hostname
+nixos-rebuild switch --install-bootloader --flake .#hostname
 ```
 
 If you are still on a live installation medium, you can use the following command:
 
 ```bash
-sudo nixos-install --flake .#hostname
+nixos-install --flake .#hostname
 ```
 
 If you need to specify a source for package downloads, you can use the following command:

@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     libayatana-indicator
     ayatana-ido
   ];
+
   postPatch = ''
     substituteInPlace --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gopeed.com";
-    description = "A modern download manager that supports all platforms. Built with Golang and Flutter.";
+    description = "A modern download manager that supports all platforms. Built with Golang and Flutter";
     license = licenses.gpl3;
     platforms = ["x86_64-linux"];
     sourceProvenance = with sourceTypes; [binaryNativeCode];

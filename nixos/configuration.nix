@@ -9,24 +9,26 @@
   vars,
   ...
 }: let
-  ifExists = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
+  ifExists = groups:
+    builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in {
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
     outputs.nixosModules.yazi
+
     # Or modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
+    # inputs.nixos-hardware.nixosModules.common-cpu-amd
+    # inputs.nixos-hardware.nixosModules.common-ssd
 
     # You can also split up your configuration and import pieces of it here:
     # disable nvidia
     # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
-    # ./users.nix
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
+
     # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
 
@@ -113,13 +115,13 @@ in {
   };
   # FIXME: Add the rest of your current configuration
 
-  # TODO: Set your hostname
-  networking.hostName = "${vars.hostname}";
-  networking.firewall.enable = false;
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "${vars.hostname}";
+    networkmanager.enable = true;
+    firewall.enable = false;
+  };
 
   # TODO: This is just an example, be sure to use whatever bootloader you prefer
-  # boot.loader.systemd-boot.enable = true;
   boot = {
     kernelPackages = pkgs.linuxPackages_lqx;
     loader = {
@@ -142,7 +144,6 @@ in {
       "NVreg_PreserveVideoMemoryAllocations=1"
     ];
     consoleLogLevel = 3;
-    initrd.kernelModules = ["btrfs"];
     kernelModules = [
       "v4l2loopback"
       "bbswitch"
@@ -160,12 +161,24 @@ in {
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
     '';
     tmp.useTmpfs = true;
+    supportedFilesystems = ["btrfs"]; # "bcachefs"
+    initrd = {
+      supportedFilesystems = ["btrfs"]; # "bcachefs"
+      kernelModules = ["btrfs"];
+      # services.bcache.enable = true;
+    };
   };
 
   time.timeZone = "Asia/Shanghai";
 
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
+    inputMethod = {
+      enabled = "fcitx5";
+      fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
+    };
+  };
 
   fonts = {
     enableDefaultPackages = true;
@@ -230,7 +243,6 @@ in {
     };
     brillo.enable = true;
     bluetooth.enable = true;
-    # disable nvidia
     nvidiaOptimus.disable = false;
   };
 
@@ -239,16 +251,13 @@ in {
     memoryPercent = 25;
   };
 
-  users.users.root.initialPassword = "root";
-  users.users.root.shell = pkgs.bashInteractive;
-
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
-    # FIXME: Replace with your username
+    root = {
+      initialPassword = "root";
+      shell = pkgs.bashInteractive;
+    };
     "${vars.username}" = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
       initialPassword = "${vars.password}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
@@ -269,11 +278,9 @@ in {
         ];
       shell = pkgs.bashInteractive;
       packages =
-        (with pkgs; [
-          inputs.home-manager.packages.${pkgs.system}.default
-        ])
+        (with pkgs; [inputs.home-manager.packages.${pkgs.system}.default])
         ++ (with inputs.nix-gaming.packages.${pkgs.system}; [
-          wine-ge
+          # wine-ge
         ])
         ++ (with pkgs; [
           vscode
@@ -292,18 +299,9 @@ in {
           # bun
           # qq
         ])
-        ++ (with pkgs.gnomeExtensions; [
-          appindicator
-          kimpanel
-          caffeine
-        ])
-        ++ (with pkgs.python311Packages; [
-          selenium
-          black
-        ])
-        ++ (with pkgs; [
-          npm-check-updates
-        ])
+        ++ (with pkgs.gnomeExtensions; [appindicator kimpanel caffeine])
+        ++ (with pkgs.python311Packages; [black])
+        ++ (with pkgs; [npm-check-updates])
         ++ (with pkgs.nur.repos; [
           # linyinfeng.wemeet
           # xddxdd.dingtalk
@@ -313,11 +311,6 @@ in {
           ruixi-rebirth.fcitx5-pinyin-zhwiki
         ]);
     };
-  };
-
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
   };
 
   environment.shells = with pkgs; [bashInteractive fish];
@@ -330,17 +323,15 @@ in {
     GLFW_IM_MODULE = "ibus";
   };
 
+  environment.sessionVariables = {MOZ_USE_XINPUT2 = "1";};
+
   environment.systemPackages =
     (with pkgs; [
       inputs.home-manager.packages.${pkgs.system}.default
       nix-output-monitor
       nix-alien
     ])
-    ++ (with pkgs.gnome; [
-      adwaita-icon-theme
-      dconf-editor
-      gnome-tweaks
-    ])
+    ++ (with pkgs.gnome; [adwaita-icon-theme dconf-editor gnome-tweaks])
     ++ (with pkgs; [
       difftastic
       helix
@@ -367,6 +358,8 @@ in {
       baobab
       epiphany
       gnome-connections
+      libsForQt5.qt5ct
+      qt6Packages.qt6ct
     ])
     ++ (with pkgs.gnome; [
       gnome-contacts
@@ -378,7 +371,6 @@ in {
       gedit # text editor
       epiphany # web browser
       geary # email reader
-      evince # document viewer
       gnome-calendar
       gnome-clocks
       gnome-characters
@@ -396,12 +388,14 @@ in {
   documentation = {
     enable = false;
     nixos.enable = false;
-    man.enable = false;
-    man.mandoc.enable = false;
-    man.man-db.enable = false;
     doc.enable = false;
     info.enable = false;
     dev.enable = false;
+    man = {
+      enable = false;
+      man-db.enable = false;
+      mandoc.enable = false;
+    };
   };
 
   programs = {
@@ -413,29 +407,69 @@ in {
       useBabelfish = true;
       interactiveShellInit = ''
         set -g fish_greeting ""
-        ${pkgs.thefuck}/bin/thefuck --alias | source
 
-        # Run function to set colors that are dependant on `$term_background` and to register them so
-        # they are triggerd when the relevent event happens or variable changes.
-        set-shell-colors
+        set -g fish_key_bindings fish_default_key_bindings
 
-        # Set Fish colors that aren't dependant the `$term_background`.
-        set -g fish_color_quote        cyan      # color of commands
-        set -g fish_color_redirection  brmagenta # color of IO redirections
-        set -g fish_color_end          blue      # color of process separators like ';' and '&'
-        set -g fish_color_error        red       # color of potential errors
-        set -g fish_color_match        --reverse # color of highlighted matching parenthesis
-        set -g fish_color_search_match --background=yellow
-        set -g fish_color_selection    --reverse # color of selected text (vi mode)
-        set -g fish_color_operator     green     # color of parameter expansion operators like '*' and '~'
-        set -g fish_color_escape       red       # color of character escapes like '\n' and and '\x70'
-        set -g fish_color_cancel       red       # color of the '^C' indicator on a canceled command
+        set -g fish_color_autosuggestion 555\x1ebrblack
+        set -g fish_color_cancel \x2dr
+        set -g fish_color_command blue
+        set -g fish_color_comment red
+        set -g fish_color_cwd green
+        set -g fish_color_cwd_root red
+        set -g fish_color_end green
+        set -g fish_color_error brred
+        set -g fish_color_escape brcyan
+        set -g fish_color_history_current \x2d\x2dbold
+        set -g fish_color_host normal
+        set -g fish_color_host_remote yellow
+        set -g fish_color_normal normal
+        set -g fish_color_operator brcyan
+        set -g fish_color_param cyan
+        set -g fish_color_quote yellow
+        set -g fish_color_redirection cyan\x1e\x2d\x2dbold
+        set -g fish_color_search_match bryellow\x1e\x2d\x2dbackground\x3dbrblack
+        set -g fish_color_selection white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
+        set -g fish_color_status red
+        set -g fish_color_user brgreen
+        set -g fish_color_valid_path \x2d\x2dunderline
+        set -g fish_pager_color_completion normal
+        set -g fish_pager_color_description B3A06D\x1eyellow\x1e\x2di
+        set -g fish_pager_color_prefix normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
+        set -g fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
+        set -g fish_pager_color_selected_background \x2dr
       '';
     };
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
       languagePacks = ["zh-CN"];
+      policies = {
+        "DisablePocket" = true;
+        "DisableTelemetry" = true;
+        "DontCheckDefaultBrowser" = true;
+        "HardwareAcceleration" = true;
+        "OfferToSaveLoginsDefault" = false;
+        "NoDefaultBookmarks" = true;
+      };
+      preferencesStatus = "default";
+      preferences = {
+        "media.ffmpeg.vaapi.enabled" = true;
+        "gfx.webrender.all" = true;
+        "dom.battery.enabled" = false;
+        "privacy.trackingprotection.enabled" = true;
+        "browser.safebrowsing.malware.enabled" = false;
+        "browser.safebrowsing.phishing.enabled" = false;
+        "browser.safebrowsing.downloads.enabled" = false;
+        "font.name.serif.zh-CN" = "Noto Serif CJK SC";
+        "font.name.sans-serif.zh-CN" = "更纱黑体 UI SC";
+        "font.name.monospace.zh-CN" = "等距更纱黑体 SC";
+        "browser.startup.homepage" = "https://limestart.cn/";
+        "browser.preferences.moreFromMozilla" = false;
+        "extensions.pocket.enabled" = false;
+        "network.IDN_show_punycode" = true;
+        "browser.newtabpage.pinned" = "";
+        "devtools.accessibility.enabled" = false;
+      };
     };
   };
 
@@ -446,12 +480,12 @@ in {
   };
 
   services = {
-    auto-cpufreq.enable = true;
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
       fileSystems = ["/"];
     };
+    auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -488,9 +522,9 @@ in {
       };
     };
     udev.packages = with pkgs; [gnome.gnome-settings-daemon];
+    flatpak.enable = true;
     # CUPS
     # printing.enable = true;
-    flatpak.enable = true;
   };
 
   # This setups a SSH server. Very important if you're setting up a headless system.
