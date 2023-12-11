@@ -17,6 +17,8 @@ in {
     # If you want to use modules your own flake exports (from modules/nixos):
     # outputs.nixosModules.example
     outputs.nixosModules.yazi
+    outputs.nixosModules.fcitx5
+    outputs.nixosModules.chromium
 
     # Or modules from other flakes (such as nixos-hardware):
     # inputs.nixos-hardware.nixosModules.common-cpu-amd

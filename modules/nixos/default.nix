@@ -4,4 +4,6 @@
   # List your module files here
   # my-module = import ./my-module.nix;
   yazi = import ./yazi.nix;
+  chromium = import ./chromium.nix;
+  fcitx5 = import ./fcitx5.nix;
 }
