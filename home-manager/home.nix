@@ -15,7 +15,7 @@
     # outputs.homeManagerModules.example
     # outputs.homeManagerModules.fcitx5
     outputs.homeManagerModules.firefox
-    # outputs.homeManagerModules.chromium
+    outputs.homeManagerModules.chromium
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.vscode
 
