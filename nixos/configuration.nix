@@ -1,7 +1,14 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
-{ inputs, outputs, lib, config, pkgs, vars, ... }:
-let
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  vars,
+  ...
+}: let
   ifExists = groups:
     builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in {
@@ -31,7 +38,7 @@ in {
   ];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs vars outputs; };
+    extraSpecialArgs = {inherit inputs vars outputs;};
     users = {
       # Import your home-manager configuration
       ${vars.username} = import ../home-manager/home.nix;
@@ -67,16 +74,19 @@ in {
 
   # This will add each flake input as a registry
   # To make nix3 commands consistent with your flake
-  nix.registry = (lib.mapAttrs (_: flake: { inherit flake; }))
+  nix.registry =
+    (lib.mapAttrs (_: flake: {inherit flake;}))
     ((lib.filterAttrs (_: lib.isType "flake")) inputs);
 
   # This will additionally add your inputs to the system's legacy channels
   # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = [ "/etc/nix/path" ];
-  environment.etc = lib.mapAttrs' (name: value: {
-    name = "nix/path/${name}";
-    value.source = value.flake;
-  }) config.nix.registry;
+  nix.nixPath = ["/etc/nix/path"];
+  environment.etc =
+    lib.mapAttrs' (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    })
+    config.nix.registry;
 
   nix.settings = {
     # Deduplicate and optimize nix store
@@ -95,7 +105,7 @@ in {
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
-    trusted-users = [ "root" "@wheel" ];
+    trusted-users = ["root" "@wheel"];
   };
 
   nix.gc = {
@@ -151,10 +161,10 @@ in {
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
     '';
     tmp.useTmpfs = true;
-    supportedFilesystems = [ "btrfs" ]; # "bcachefs"
+    supportedFilesystems = ["btrfs"]; # "bcachefs"
     initrd = {
-      supportedFilesystems = [ "btrfs" ]; # "bcachefs"
-      kernelModules = [ "btrfs" ];
+      supportedFilesystems = ["btrfs"]; # "bcachefs"
+      kernelModules = ["btrfs"];
       # services.bcache.enable = true;
     };
   };
@@ -163,10 +173,10 @@ in {
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+    supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
     inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = with pkgs; [ fcitx5-with-addons fcitx5-chinese-addons ];
+      fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
     };
   };
 
@@ -189,10 +199,10 @@ in {
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Noto Serif CJK SC" ];
-        sansSerif = [ "Sarasa UI SC" ];
-        monospace = [ "Sarasa Mono SC" ];
-        emoji = [ "Twemoji" "Noto Color Emoji" ];
+        serif = ["Noto Serif CJK SC"];
+        sansSerif = ["Sarasa UI SC"];
+        monospace = ["Sarasa Mono SC"];
+        emoji = ["Twemoji" "Noto Color Emoji"];
       };
     };
   };
@@ -200,7 +210,7 @@ in {
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [ ];
+    extraPortals = with pkgs; [];
   };
 
   sound.enable = true;
@@ -254,41 +264,45 @@ in {
         # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
-      extraGroups = [ "wheel" ] ++ ifExists [
-        "docker"
-        "podman"
-        "git"
-        "libvirtd"
-        "systemd-journal"
-        "wireshark"
-        "input"
-        "networkmanager"
-      ];
+      extraGroups =
+        ["wheel"]
+        ++ ifExists [
+          "docker"
+          "podman"
+          "git"
+          "libvirtd"
+          "systemd-journal"
+          "wireshark"
+          "input"
+          "networkmanager"
+        ];
       shell = pkgs.bashInteractive;
       packages =
-        (with pkgs; [ inputs.home-manager.packages.${pkgs.system}.default ])
-        ++ (with inputs.nix-gaming.packages.${pkgs.system};
-          [
-            # wine-ge
-          ]) ++ (with pkgs; [
-            vscode
-            firefox
-            google-chrome
-            chromedriver
-            impression
-            obs-studio
-            celluloid
-            localsend
-            gopeed
-            orchis-theme
-            typst
-            # jetbrains.idea-ultimate
-            # jdk21
-            # bun
-            # qq
-          ]) ++ (with pkgs.gnomeExtensions; [ appindicator kimpanel caffeine ])
-        ++ (with pkgs.python311Packages; [ black ])
-        ++ (with pkgs; [ npm-check-updates ]) ++ (with pkgs.nur.repos; [
+        (with pkgs; [inputs.home-manager.packages.${pkgs.system}.default])
+        ++ (with inputs.nix-gaming.packages.${pkgs.system}; [
+          # wine-ge
+        ])
+        ++ (with pkgs; [
+          vscode
+          firefox
+          google-chrome
+          chromedriver
+          impression
+          obs-studio
+          celluloid
+          localsend
+          gopeed
+          orchis-theme
+          typst
+          # jetbrains.idea-ultimate
+          # jdk21
+          # bun
+          # qq
+        ])
+        ++ (with pkgs.gnomeExtensions; [appindicator kimpanel caffeine])
+        ++ (with pkgs.python311Packages; [black])
+        ++ (with pkgs; [npm-check-updates])
+        ++ (with pkgs.nur.repos; [
           # linyinfeng.wemeet
           # xddxdd.dingtalk
           # rewine.ttf-wps-fonts
@@ -299,7 +313,7 @@ in {
     };
   };
 
-  environment.shells = with pkgs; [ bashInteractive fish ];
+  environment.shells = with pkgs; [bashInteractive fish];
 
   environment.variables = {
     EDITOR = "helix";
@@ -309,13 +323,15 @@ in {
     GLFW_IM_MODULE = "ibus";
   };
 
-  environment.sessionVariables = { MOZ_USE_XINPUT2 = "1"; };
+  environment.sessionVariables = {MOZ_USE_XINPUT2 = "1";};
 
-  environment.systemPackages = (with pkgs; [
-    inputs.home-manager.packages.${pkgs.system}.default
-    nix-output-monitor
-    nix-alien
-  ]) ++ (with pkgs.gnome; [ adwaita-icon-theme dconf-editor gnome-tweaks ])
+  environment.systemPackages =
+    (with pkgs; [
+      inputs.home-manager.packages.${pkgs.system}.default
+      nix-output-monitor
+      nix-alien
+    ])
+    ++ (with pkgs.gnome; [adwaita-icon-theme dconf-editor gnome-tweaks])
     ++ (with pkgs; [
       difftastic
       helix
@@ -334,38 +350,40 @@ in {
       orchis-theme
     ]);
   # GNOME Ignored Packages
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-tour
-    gnome-photos
-    gnome-menus
-    baobab
-    epiphany
-    gnome-connections
-    libsForQt5.qt5ct
-    qt6Packages.qt6ct
-  ]) ++ (with pkgs.gnome; [
-    gnome-contacts
-    gnome-initial-setup
-    yelp
-    cheese # webcam tool
-    gnome-music
-    gnome-terminal
-    gedit # text editor
-    epiphany # web browser
-    geary # email reader
-    gnome-calendar
-    gnome-clocks
-    gnome-characters
-    gnome-maps
-    gnome-weather
-    gnome-software
-    simple-scan
-    totem # video player
-    tali # poker game
-    iagno # go game
-    hitori # sudoku game
-    atomix # puzzle game
-  ]);
+  environment.gnome.excludePackages =
+    (with pkgs; [
+      gnome-tour
+      gnome-photos
+      gnome-menus
+      baobab
+      epiphany
+      gnome-connections
+      libsForQt5.qt5ct
+      qt6Packages.qt6ct
+    ])
+    ++ (with pkgs.gnome; [
+      gnome-contacts
+      gnome-initial-setup
+      yelp
+      cheese # webcam tool
+      gnome-music
+      gnome-terminal
+      gedit # text editor
+      epiphany # web browser
+      geary # email reader
+      gnome-calendar
+      gnome-clocks
+      gnome-characters
+      gnome-maps
+      gnome-weather
+      gnome-software
+      simple-scan
+      totem # video player
+      tali # poker game
+      iagno # go game
+      hitori # sudoku game
+      atomix # puzzle game
+    ]);
 
   documentation = {
     enable = false;
@@ -424,7 +442,7 @@ in {
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
-      languagePacks = [ "zh-CN" ];
+      languagePacks = ["zh-CN"];
       policies = {
         "DisablePocket" = true;
         "DisableTelemetry" = true;
@@ -465,7 +483,7 @@ in {
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = [ "/" ];
+      fileSystems = ["/"];
     };
     auto-cpufreq.enable = true;
     pipewire = {
@@ -479,9 +497,9 @@ in {
     };
     xserver = {
       enable = true;
-      videoDrivers = [ "amdgpu" ];
+      videoDrivers = ["amdgpu"];
       displayManager = {
-        gdm = { enable = true; };
+        gdm = {enable = true;};
         autoLogin = {
           enable = true;
           user = "${vars.username}";
@@ -489,12 +507,12 @@ in {
       };
       desktopManager = {
         xterm.enable = false;
-        gnome = { enable = true; };
+        gnome = {enable = true;};
       };
-      excludePackages = with pkgs; [ xterm ];
+      excludePackages = with pkgs; [xterm];
       libinput = {
         enable = true;
-        mouse = { accelProfile = "adaptive"; };
+        mouse = {accelProfile = "adaptive";};
         touchpad = {
           tapping = true;
           naturalScrolling = true;
@@ -503,7 +521,7 @@ in {
         };
       };
     };
-    udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+    udev.packages = with pkgs; [gnome.gnome-settings-daemon];
     flatpak.enable = true;
     # CUPS
     # printing.enable = true;

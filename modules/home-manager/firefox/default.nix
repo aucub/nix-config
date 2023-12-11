@@ -9,15 +9,15 @@
     enable = true;
     profiles.default = {
       id = 0;
-    extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
-      ublock-origin
-      floccus
-      bitwarden
-      violentmonkey
-      videospeed
-      single-file
-      user-agent-string-switcher
-    ];
+      extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
+        ublock-origin
+        floccus
+        bitwarden
+        violentmonkey
+        videospeed
+        single-file
+        user-agent-string-switcher
+      ];
       settings = {
         "browser.startup.homepage" = "https://limestart.cn/";
         "browser.search.region" = "CN";
