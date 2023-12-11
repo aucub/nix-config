@@ -3,9 +3,7 @@
 {
   # List your module files here
   # my-module = import ./my-module.nix;
-  fcitx5 = import ./fcitx5/default.nix;
-  firefox = import ./firefox/default.nix;
-  chromium = import ./chromium/default.nix;
+  firefox = import ./firefox.nix;
   dconf = import ./dconf.nix;
   vscode = import ./vscode/default.nix;
 }
