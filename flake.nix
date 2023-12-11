@@ -6,9 +6,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # You can access packages and modules from different nixpkgs revs
     # at the same time. Here's an working example:
+    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
-    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
     nur.url = "github:nix-community/NUR";
     # Home manager
@@ -16,11 +16,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # TODO: Add any other flake you might need
-    # hardware.url = "github:nixos/nixos-hardware";
-
-    # Shameless plug: looking for a way to nixify your themes and make
-    # everything match nicely? Try nix-colors!
-    # nix-colors.url = "github:misterio77/nix-colors";
+    # nixos-hardware.url = "github:nixos/nixos-hardware";
 
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -37,6 +33,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     stylix.url = "github:danth/stylix";
@@ -50,6 +51,7 @@
     home-manager,
     nix-index-database,
     nur,
+    firefox-addons,
     nix-alien,
     ...
   } @ inputs: let
@@ -63,8 +65,13 @@
       "x86_64-darwin"
     ];
     vars = {
+      # FIXME: Replace with your username
       username = "your-username";
+      # TODO: Set your hostname
       hostname = "your-hostname";
+      # TODO: You can set an initial password for your user.
+      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
+      # Be sure to change it (using passwd) after rebooting!
       password = "correcthorsebatterystaple";
     };
     # This is a function that generates an attribute by calling a function you

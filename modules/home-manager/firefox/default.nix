@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   config,
   lib,
@@ -6,7 +7,9 @@
 }: {
   programs.firefox = {
     enable = true;
-    extensions = with pkgs.firefox-addons; [
+    profiles.default = {
+      id = 0;
+    extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
       ublock-origin
       floccus
       bitwarden
@@ -15,8 +18,6 @@
       single-file
       user-agent-string-switcher
     ];
-    profiles.default = {
-      id = 0;
       settings = {
         "browser.startup.homepage" = "https://limestart.cn/";
         "browser.search.region" = "CN";

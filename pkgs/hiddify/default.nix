@@ -8,7 +8,7 @@
   version = "0.11.1";
 
   hiddify-src = stdenv.mkDerivation {
-    name = "hiddify-linux-x64.AppImage";
+    name = "hiddify-src";
 
     src = fetchzip {
       stripRoot = false;
@@ -30,12 +30,8 @@ in
     inherit pname version;
     src = hiddify-src;
 
-    multiArch = false;
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
-
     extraInstallCommands = ''
       mv $out/bin/${pname}-${version} $out/bin/${pname}
-
       install -m 444 -D ${appimageContents}/hiddify.desktop $out/share/applications/hiddify.desktop
       install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/128x128/apps/hiddify.png $out/share/icons/hicolor/128x128/apps/hiddify.png
       install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/hiddify.png $out/share/icons/hicolor/256x256/apps/hiddify.png
@@ -44,7 +40,7 @@ in
     '';
 
     meta = with lib; {
-      description = "A multi-platform client based on Sing-box that serves as a universal proxy tool-chain.";
+      description = "A multi-platform client based on Sing-box that serves as a universal proxy tool-chain";
       homepage = "https://github.com/hiddify/hiddify-next";
       sourceProvenance = with sourceTypes; [binaryNativeCode];
       license = licenses.cc-by-nc-sa-40;

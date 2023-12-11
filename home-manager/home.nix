@@ -14,14 +14,12 @@
     # If you want to use modules your own flake exports (from modules/home-manager):
     # outputs.homeManagerModules.example
     # outputs.homeManagerModules.fcitx5
-    # outputs.homeManagerModules.fastfetch
-    # outputs.homeManagerModules.firefox
+    outputs.homeManagerModules.firefox
     # outputs.homeManagerModules.chromium
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.vscode
 
-    # Or modules exported from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModules.default
+    # Or modules exported from other flakes:
     # inputs.stylix.homeManagerModules.stylix
     inputs.nix-index-database.hmModules.nix-index
 
@@ -65,15 +63,12 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [steam];
 
-  # Enable home-manager and git
-  # programs.home-manager.enable = true;
-  # programs.git.enable = true;
-
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
   };
 
+  # Enable home-manager and git
   programs = {
     bash = {
       enable = true;
@@ -86,9 +81,7 @@
         grep = "grep --color=auto";
       };
     };
-    # 启用 home-manager and git
     home-manager.enable = true;
-    # git 相关配置
     git = {
       enable = true;
       userName = "aucub";
