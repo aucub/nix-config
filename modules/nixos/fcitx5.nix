@@ -1,14 +1,19 @@
-{ pkgs, config, lib, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   i18n.inputMethod.fcitx5.settings = {
     inputMethod = {
-      "GroupOrder" = { "0" = "Default"; };
+      "GroupOrder" = {"0" = "Default";};
       "Groups/0" = {
         "Default Layout" = "us";
         "DefaultIM" = "pinyin";
         "Name" = "Default";
       };
-      "Groups/0/Items/0" = { "Name" = "keyboard-us"; };
-      "Groups/0/Items/1" = { "Name" = "pinyin"; };
+      "Groups/0/Items/0" = {"Name" = "keyboard-us";};
+      "Groups/0/Items/1" = {"Name" = "pinyin";};
     };
     globalOptions = {
       "Hotkey"."EnumerateWithTriggerKeys" = "True";
@@ -64,7 +69,7 @@
       clipboard = {
         NumberOfEntries = 18;
 
-        TriggerKey = { "0" = "Super+V"; };
+        TriggerKey = {"0" = "Super+V";};
       };
       keyboard = {
         PageSize = 9;
@@ -75,15 +80,15 @@
         UseNewComposeBehavior = true;
         EnableLongPress = false;
 
-        PrevCandidate = { "0" = "Shift+Tab"; };
+        PrevCandidate = {"0" = "Shift+Tab";};
 
-        NextCandidate = { "0" = "Tab"; };
+        NextCandidate = {"0" = "Tab";};
 
-        HintTrigger = { "0" = "Control+Alt+H"; };
+        HintTrigger = {"0" = "Control+Alt+H";};
 
-        OneTimeHintTrigger = { "0" = "Control+Alt+J"; };
+        OneTimeHintTrigger = {"0" = "Control+Alt+J";};
 
-        LongPressBlocklist = { "0" = "konsole"; };
+        LongPressBlocklist = {"0" = "konsole";};
       };
       pinyin = {
         ShuangpinProfile = "Ziranma";
@@ -113,7 +118,7 @@
         VAsQuickphrase = false;
         FirstRun = false;
 
-        ForgetWord = { "0" = "Control+7"; };
+        ForgetWord = {"0" = "Control+7";};
 
         PrevPage = {
           "0" = "minus";
@@ -129,16 +134,16 @@
           "3" = "Next";
         };
 
-        PrevCandidate = { "0" = "Shift+Tab"; };
+        PrevCandidate = {"0" = "Shift+Tab";};
 
-        NextCandidate = { "0" = "Tab"; };
+        NextCandidate = {"0" = "Tab";};
 
         ChooseCharFromPhrase = {
           "0" = "bracketleft";
           "1" = "bracketright";
         };
 
-        FilterByStroke = { "0" = "grave"; };
+        FilterByStroke = {"0" = "grave";};
 
         QuickPhraseTrigger = {
           "0" = "www.";
@@ -179,7 +184,7 @@
         TypePairedPunctuationsTogether = false;
         Enabled = true;
 
-        Hotkey = { "0" = "Control+period"; };
+        Hotkey = {"0" = "Control+period";};
       };
       quickphrase = {
         ChooseModifier = "None";
