@@ -1,7 +1,4 @@
 {
-  pkgs,
-  config,
-  lib,
   ...
 }: {
   i18n.inputMethod.fcitx5.settings = {
