@@ -8,11 +8,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.1.1
 
-      - name: "Create Dir for Mounting moar Disk Space"
+      - name: Create Dir for Mount Disk Space
         run: |
           sudo mkdir /nix
 
-      - name: "Maximize Disk Space"
+      - name: Maximize Disk Space
         uses: easimon/maximize-build-space@master
         with:
           build-mount-path: /nix
@@ -20,7 +20,7 @@ jobs:
           swap-size-mb: 1024
           remove-dotnet: "true"
 
-      - name: "Install Nix"
+      - name: Install Nix
         uses: cachix/install-nix-action@v24
         with:
           nix_path: nixpkgs=channel:nixos-unstable-small
@@ -29,7 +29,6 @@ jobs:
             experimental-features = nix-command flakes
 
       - uses: DeterminateSystems/magic-nix-cache-action@v2
-      - uses: astro/deadnix-action@main
 
       - run: |
           export NIXPKGS_ALLOW_UNFREE=1
