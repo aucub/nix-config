@@ -30,4 +30,6 @@ jobs:
           export NIXPKGS_ALLOW_UNFREE=1
           nix-env -f '<nixpkgs>' -iA nix-output-monitor
           nix build --impure --show-trace .#hiddify --log-format internal-json -v |& nom --json
-          cachix push qihaiumi hiddify
+          cd result
+          ls
+          cachix push qihaiumi ./result

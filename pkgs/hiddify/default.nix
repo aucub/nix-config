@@ -5,7 +5,7 @@
   fetchzip,
 }: let
   pname = "hiddify";
-  version = "0.11.1";
+  version = "0.13.6";
 
   hiddify-src = stdenv.mkDerivation {
     name = "hiddify-src";
@@ -13,7 +13,7 @@
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/hiddify/hiddify-next/releases/download/v${version}/hiddify-linux-x64.zip";
-      hash = "sha256-Qq9HsgIKJysmPQB5T97gj3gIcZ1/XN7GC8uq0A2Z6cA=";
+      hash = "sha256-fYYq1edn91cuuz5N1QPmBzQKR05lOQHconB1XCSoq0w=";
     };
 
     installPhase = ''

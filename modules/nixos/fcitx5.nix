@@ -125,7 +125,6 @@
           BackSpaceToUnselect = true;
           NumberOfSentence = 2;
           LongWordLengthLimit = 4;
-          QuickPhraseKey = "semicolon";
           VAsQuickphrase = false;
           FirstRun = false;
         };
