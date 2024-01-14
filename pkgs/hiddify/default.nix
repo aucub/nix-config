@@ -5,7 +5,7 @@
   fetchzip,
 }: let
   pname = "hiddify";
-  version = "0.11.1";
+  version = "0.13.6";
 
   hiddify-src = stdenv.mkDerivation {
     name = "hiddify-src";

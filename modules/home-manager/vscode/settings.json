@@ -61,8 +61,6 @@
     "code-runner.showExecutionMessage": false,
     "diffEditor.ignoreTrimWhitespace": true,
     "redhat.telemetry.enabled": false,
-    "bitoAI.codeCompletion.enableAutoCompletion": true,
-    "bitoAI.codeCompletion.enableCommentToCode": true,
     "workbench.colorTheme": "Quiet Light",
     "code-runner.enableAppInsights": false,
     "editor.inlineSuggest.suppressSuggestions": true,

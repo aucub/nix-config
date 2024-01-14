@@ -2,8 +2,8 @@
 {
   fileSystems."/" = {
     device = "/dev/sda1";
-    fsType = "ext4"; # "bcachefs"
-    # options = [ "compression=zstd" ];
+    fsType = "bcachefs";
+    options = [ "compression=zstd" ];
   };
 
   # Set your system kind (needed for flakes)

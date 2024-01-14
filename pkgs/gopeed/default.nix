@@ -25,7 +25,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/GopeedLab/gopeed/releases/download/v${version}/Gopeed-v${version}-linux-amd64.deb";
