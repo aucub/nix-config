@@ -25,11 +25,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/GopeedLab/gopeed/releases/download/v${version}/Gopeed-v${version}-linux-amd64.deb";
-    hash = "sha256-4/c4KiGKNBSphlX89uYU6SuK7g6OiCI4Gor825ggkrw=";
+    hash = "sha256-PdSR/9K9x+I6COobFaYYKmfX6GzjZq4KuOwqSsS1R3Y=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     libdbusmenu
     libayatana-indicator
     ayatana-ido
+    libappindicator
   ];
 
   runtimeDependencies = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     libdbusmenu
     libayatana-indicator
     ayatana-ido
+    libappindicator
   ];
 
   postPatch = ''

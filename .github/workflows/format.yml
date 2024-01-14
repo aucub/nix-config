@@ -28,11 +28,3 @@ jobs:
           pr-title: "chore: format"
           pr-labels: |
             automated
-
-      - uses: DeterminateSystems/flake-checker-action@v5
-        with:
-          flake-lock-path: ./flake.lock
-          check-owner: false
-          ignore-missing-flake-lock: true
-          fail-mode: true
-          send-statistics: false

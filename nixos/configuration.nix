@@ -370,7 +370,6 @@ in {
       cheese # webcam tool
       gnome-music
       gnome-terminal
-      gedit # text editor
       epiphany # web browser
       geary # email reader
       gnome-calendar
