@@ -7,7 +7,6 @@
 }: {
   programs.chromium = {
     enable = true;
-    homepageLocation = "https://limestart.cn/";
     extensions = [
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
       "fnaicdffflnofjppbagibeoednhnbjhg" # floccus-bookmarks-sync

@@ -17,8 +17,8 @@
     outputs.homeManagerModules.vscode
     outputs.homeManagerModules.dconf
 
-    # Or modules exported from other flakes:
-    # inputs.stylix.homeManagerModules.stylix
+    # Or modules exported from other flakes (such as nix-colors):
+    # inputs.nix-colors.homeManagerModules.default
     inputs.nix-index-database.hmModules.nix-index
 
     # You can also split up your configuration and import pieces of it here:
@@ -59,8 +59,7 @@
 
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
-  # home.packages = with pkgs; [steam];
-
+  # home.packages = with pkgs; [ steam ];
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
@@ -85,64 +84,138 @@
       userName = "aucub";
       userEmail = "78630225+aucub@users.noreply.github.com";
       ignores = [
-        ".cache"
-        ".DS_Store"
-        ".idea"
-        ".fastRequest"
-        "node_modules"
-        ".vscode"
-        ".gradle"
-        "build"
-        "!**/src/main/**/build"
-        "!**/src/test/**/build"
-        "*.iws"
-        "*.iml"
-        "*.ipr"
-        "*.log"
-        "out"
-        "!**/src/main/**/out"
-        "!**/src/test/**/out"
-        ".venv"
+# Compiled binary, object files, and libraries
+"*.o"
+"*.lo"
+"*.obj"
+"*.elf"
+"*.ilk"
+"*.map"
+"*.exp"
+"*.pdb"
+"*.so"
+"*.dylib"
+"*.dll"
+"*.exe"
+"*.out"
+"*.app"
+"*.i*86"
+"*.x86_64"
+"*.hex"
+"*.apk"
+"*.msi"
+"*.a"
+"*.lib"
+"*.la"
+"*.lai"
+"*.mod"
+"*.smod"
+"*.gch"
+"*.pch"
+"*.d"
+# Dependency directories
+"node_modules/"
+"bower_components/"
+"jspm_packages/"
+# Virtual Environments
+".env"
+".env.local"
+".env.*.local"
+".Python"
+"[Ii]nclude"
+"[Ll]ib"
+"[Ll]ib64"
+"[Ll]ocal"
+"pyvenv.cfg"
+".venv"
+"pip-selfcheck.json"
+# IDEs and Editors
+## JetBrains IDEs
+".idea/"
+"*.iml"
+## Eclipse
+".apt_generated"
+".classpath"
+".factorypath"
+".project"
+".settings"
+".springBeans"
+## NetBeans
+"/nbproject/private/"
+## Visual Studio Code
+".vscode/"
+## SublimeText
+"*.sublime-workspace"
+## Visual Studio
+".vs/"
+# Logs and runtime files
+"*.log"
+"*.seed"
+"*.temp"
+# Caches
+".ipynb_checkpoints/"
+".cache/"
+".parcel-cache/"
+".next/"
+# Operating System
+".DS_Store"
+# Node
+".npm"
+".eslintcache"
+".stylelintcache"
+"package-lock.json"
+# Python caches and bytecode
+"*.py[cod]"
+"__pycache__/"
+# CMake
+"CMakeFiles/"
+"CMakeScripts/"
+"CMakeCache.txt"
+"cmake_install.cmake"
+"CTestTestfile.cmake"
+"*.cmake"
+# Maven
+"pom.xml.tag"
+"pom.xml.releaseBackup"
+"pom.xml.versionsBackup"
+# Databases
+"*.db"
+"*.sqlite3-journal"
+"*.ldf"
+"*.mdf"
+"*.ndf"
+"*.dbmdl"
+# Mobile application development
+"*.ap_"
+"*.dex"
+".res/"
+".symbols/"
+"
       ];
       extraConfig = {
         init.defaultBranch = "main";
-        core.editor = "helix";
-        core.autocrlf = "input";
+        core = {
+          editor = "helix";
+          autocrlf = "input";
+          pager = "delta";
+        };
         push.autoSetupRemote = true;
-        core.pager = "bat";
-        diff.tool = "difftastic";
+        diff={
+          tool = "difftastic";
+          colorMoved = "default";
+        };
         difftool.prompt = false;
         difftool.difftastic.cmd = ''difft "$LOCAL" "$REMOTE"'';
         pager.difftool = true;
+        interactive.diffFilter = "delta --color-only";
+delta.navigate = true;
+merge.conflictstyle = "diff3";
       };
     };
     eza = {
       enable = true;
       git = true;
       extraOptions = ["--group-directories-first" "--all"];
-    };
-    mcfly = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-    fish.functions = {
-      rga-fzf = ''
-            set RG_PREFIX 'rga --files-with-matches'
-            if test (count $argv) -gt 1
-                set RG_PREFIX "$RG_PREFIX $argv[1..-2]"
-            end
-            set -l file $file
-            set file (
-            FZF_DEFAULT_COMMAND="$RG_PREFIX '$argv[-1]'" \
-            fzf --sort \
-                --preview='test ! -z {} && \
-                    rga --pretty --context 5 {q} {}' \
-                --phony -q "$argv[-1]" \
-                --bind "change:reload:$RG_PREFIX {q}" \
-                --preview-window='50%:wrap'
-        ) && echo "opening $file" && open "$file"
-        end
-      '';
     };
     htop = {
       enable = true;

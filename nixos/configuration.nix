@@ -21,8 +21,8 @@ in {
     outputs.nixosModules.chromium
 
     # Or modules from other flakes (such as nixos-hardware):
-    # inputs.nixos-hardware.nixosModules.common-cpu-amd
-    # inputs.nixos-hardware.nixosModules.common-ssd
+    # inputs.hardware.nixosModules.common-cpu-amd
+    # inputs.hardware.nixosModules.common-ssd
 
     # You can also split up your configuration and import pieces of it here:
     # disable nvidia
@@ -30,13 +30,11 @@ in {
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-
-    # Import home-manager's NixOS module
+        # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
 
     inputs.nix-index-database.nixosModules.nix-index
 
-    # inputs.stylix.nixosModules.stylix
   ];
 
   home-manager = {
@@ -46,7 +44,6 @@ in {
       ${vars.username} = import ../home-manager/home.nix;
     };
   };
-
   nixpkgs = {
     # You can add overlays here
     overlays = [
@@ -55,7 +52,6 @@ in {
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
       inputs.nur.overlay
-      inputs.nix-alien.overlays.default
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -74,21 +70,25 @@ in {
     };
   };
 
-  # This will add each flake input as a registry
-  # To make nix3 commands consistent with your flake
-  nix.registry =
-    (lib.mapAttrs (_: flake: {inherit flake;}))
-    ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+  nix = let
+    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  in {
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Opinionated: disable global registry
+      flake-registry = "";
+      # Workaround for https://github.com/NixOS/nix/issues/9574
+      nix-path = config.nix.nixPath;
+    };
+    # Opinionated: disable channels
+    channel.enable = false;
 
-  # This will additionally add your inputs to the system's legacy channels
-  # Making legacy nix commands consistent as well, awesome!
-  nix.nixPath = ["/etc/nix/path"];
-  environment.etc =
-    lib.mapAttrs' (name: value: {
-      name = "nix/path/${name}";
-      value.source = value.flake;
-    })
-    config.nix.registry;
+    # Opinionated: make flake registry and nix path match flake inputs
+    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+  };
+
 
   nix.settings = {
     # Deduplicate and optimize nix store
@@ -115,8 +115,10 @@ in {
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
   # FIXME: Add the rest of your current configuration
 
+  # TODO: Set your hostname
   networking = {
     hostName = "${vars.hostname}";
     networkmanager.enable = true;
@@ -252,14 +254,17 @@ in {
     enable = true;
     memoryPercent = 25;
   };
-
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
-    root = {
+        root = {
       initialPassword = "root";
       shell = pkgs.bashInteractive;
     };
-    "${vars.username}" = {
+    # FIXME: Replace with your username
+     "${vars.username}" = {
+      # TODO: You can set an initial password for your user.
+      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
+      # Be sure to change it (using passwd) after rebooting!
       initialPassword = "${vars.password}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
@@ -313,9 +318,10 @@ in {
           ruixi-rebirth.fcitx5-pinyin-zhwiki
         ]);
     };
+    };
   };
 
-  environment.shells = with pkgs; [bashInteractive fish];
+   environment.shells = with pkgs; [bashInteractive fish];
 
   environment.variables = {
     EDITOR = "helix";
@@ -528,14 +534,16 @@ in {
     # printing.enable = true;
   };
 
+
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.
   services.openssh = {
     enable = false;
     settings = {
-      # Forbid root login through SSH.
+      # Opinionated: forbid root login through SSH.
       PermitRootLogin = "no";
-      # Use keys only. Remove if you want to SSH using password (not recommended)
+      # Opinionated: use keys only.
+      # Remove if you want to SSH using passwords
       PasswordAuthentication = false;
     };
   };

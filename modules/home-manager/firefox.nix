@@ -19,7 +19,6 @@
         user-agent-string-switcher
       ];
       settings = {
-        "browser.startup.homepage" = "https://limestart.cn/";
         "browser.search.region" = "CN";
         "media.ffmpeg.vaapi.enabled" = true;
         "media.ffvpx.enabled" = false;
