@@ -19,9 +19,7 @@
           formulahendry.code-runner
           mhutchie.git-graph
           oderwat.indent-rainbow
-          # rust-lang.rust-analyzer
           redhat.vscode-yaml
-          # redhat.vscode-xml
           yzhang.markdown-all-in-one
           ms-python.python
           ms-python.vscode-pylance
@@ -30,10 +28,12 @@
           foxundermoon.shell-format
           tamasfe.even-better-toml
           bmalehorn.vscode-fish
-          # GitHub.codespaces
-          # YoavBls.pretty-ts-errors
           nvarner.typst-lsp
           tomoki1207.pdf
+          # GitHub.codespaces
+          # YoavBls.pretty-ts-errors
+          # redhat.vscode-xml
+          # rust-lang.rust-analyzer
         ])
         ++ (with inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
           rangav.vscode-thunder-client

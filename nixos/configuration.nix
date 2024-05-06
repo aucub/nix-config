@@ -33,6 +33,8 @@ in {
     inputs.home-manager.nixosModules.home-manager
     inputs.nix-index-database.nixosModules.nix-index
     inputs.chaotic.nixosModules.default
+
+    inputs.nixos-cosmic.nixosModules.default
   ];
 
   home-manager = {
@@ -435,7 +437,6 @@ in {
         "font.name.serif.zh-CN" = "Noto Serif CJK SC";
         "font.name.sans-serif.zh-CN" = "更纱黑体 UI SC";
         "font.name.monospace.zh-CN" = "等距更纱黑体 SC";
-        "browser.startup.homepage" = "https://limestart.cn/";
         "browser.preferences.moreFromMozilla" = false;
         "extensions.pocket.enabled" = false;
         "network.IDN_show_punycode" = true;
@@ -467,11 +468,12 @@ in {
       pulse.enable = true;
       wireplumber.enable = true;
     };
+    desktopManager.cosmic.enable = true;
+    displayManager.cosmic-greeter.enable = true;
     xserver = {
       enable = true;
       videoDrivers = ["amdgpu"];
       displayManager = {
-        cosmic-greeter.enable = true;
         autoLogin = {
           enable = true;
           user = "${vars.username}";
@@ -479,7 +481,6 @@ in {
       };
       desktopManager = {
         xterm.enable = false;
-        cosmic.enable = true;
       };
       excludePackages = with pkgs; [xterm];
       libinput = {

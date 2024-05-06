@@ -6,7 +6,6 @@
 }: {
   programs.yazi = {
     enable = true;
-    enableFishIntegration = true;
     settings.yazi = {
       manager = {
         sort_sensitive = true;

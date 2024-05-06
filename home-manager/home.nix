@@ -279,6 +279,7 @@
         "hl+" = "#f38ba8";
       };
     };
+    yazi.enableFishIntegration = true;
     obs-studio = {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [
