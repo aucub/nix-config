@@ -1,3 +1,85 @@
+
+let
+/*
+ * What you're seeing here is our nix formatter. It's quite opinionated:
+ */
+  sample-01 = { lib }:
+{
+  list = [
+    elem1
+    elem2
+    elem3
+  ] ++ lib.optionals stdenv.isDarwin [
+    elem4
+    elem5
+  ]; # and not quite finished
+}; # it will preserve your newlines
+
+  sample-02 = { stdenv, lib }:
+{
+  list =
+    [
+      elem1
+      elem2
+      elem3
+    ]
+    ++ lib.optionals stdenv.isDarwin [ elem4 elem5 ]
+    ++ lib.optionals stdenv.isLinux [ elem6 ]
+    ;
+};
+# but it can handle all nix syntax,
+# and, in fact, all of nixpkgs in <20s.
+# The javascript build is quite a bit slower.
+ sample-03 = { stdenv, system }:
+assert system == "i686-linux";
+stdenv.mkDerivation { };
+# these samples are all from https://github.com/nix-community/nix-fmt/tree/master/samples
+sample-simple = # Some basic formatting
+{
+  empty_list = [ ];
+  inline_list = [ 1 2 3 ];
+  multiline_list = [
+    1
+    2
+    3
+    4
+  ];
+  inline_attrset = { x = "y"; };
+  multiline_attrset = {
+    a = 3;
+    b = 5;
+  };
+  # some comment over here
+  fn = x: x + x;
+  relpath = ./hello;
+  abspath = /hello;
+  # URLs get converted from strings
+  url = "https://foobar.com";
+  atoms = [ true false null ];
+  # Combined
+  listOfAttrs = [
+    {
+      attr1 = 3;
+      attr2 = "fff";
+    }
+    {
+      attr1 = 5;
+      attr2 = "ggg";
+    }
+  ];
+
+  # long expression
+  attrs = {
+    attr1 = short_expr;
+    attr2 =
+      if true then big_expr else big_expr;
+  };
+}
+;
+in
+[ sample-01 sample-02 sample-03 ]
+  
+
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
@@ -8,10 +90,11 @@
   pkgs,
   vars,
   ...
-}: let
-  ifExists = groups:
-    builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
-in {
+}:
+let
+  ifExists = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
+in
+{
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
@@ -30,15 +113,16 @@ in {
 
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-        # Import home-manager's NixOS module
+    # Import home-manager's NixOS module
     inputs.home-manager.nixosModules.home-manager
 
     inputs.nix-index-database.nixosModules.nix-index
-
   ];
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs vars outputs;};
+    extraSpecialArgs = {
+      inherit inputs vars outputs;
+    };
     users = {
       # Import your home-manager configuration
       ${vars.username} = import ../home-manager/home.nix;
@@ -70,25 +154,26 @@ in {
     };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
-      flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
-      nix-path = config.nix.nixPath;
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        # Enable flakes and new 'nix' command
+        experimental-features = "nix-command flakes";
+        # Opinionated: disable global registry
+        flake-registry = "";
+        # Workaround for https://github.com/NixOS/nix/issues/9574
+        nix-path = config.nix.nixPath;
+      };
+      # Opinionated: disable channels
+      channel.enable = false;
+
+      # Opinionated: make flake registry and nix path match flake inputs
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     };
-    # Opinionated: disable channels
-    channel.enable = false;
-
-    # Opinionated: make flake registry and nix path match flake inputs
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-  };
-
 
   nix.settings = {
     # Deduplicate and optimize nix store
@@ -107,7 +192,10 @@ in {
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
-    trusted-users = ["root" "@wheel"];
+    trusted-users = [
+      "root"
+      "@wheel"
+    ];
   };
 
   nix.gc = {
@@ -165,10 +253,10 @@ in {
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
     '';
     tmp.useTmpfs = true;
-    supportedFilesystems = ["btrfs"]; # "bcachefs"
+    supportedFilesystems = [ "btrfs" ]; # "bcachefs"
     initrd = {
-      supportedFilesystems = ["btrfs"]; # "bcachefs"
-      kernelModules = ["btrfs"];
+      supportedFilesystems = [ "btrfs" ]; # "bcachefs"
+      kernelModules = [ "btrfs" ];
       # services.bcache.enable = true;
     };
   };
@@ -177,10 +265,16 @@ in {
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = ["zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
+    supportedLocales = [
+      "zh_CN.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
+    ];
     inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = with pkgs; [fcitx5-with-addons fcitx5-chinese-addons];
+      fcitx5.addons = with pkgs; [
+        fcitx5-with-addons
+        fcitx5-chinese-addons
+      ];
     };
   };
 
@@ -203,10 +297,13 @@ in {
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = ["Noto Serif CJK SC"];
-        sansSerif = ["Sarasa UI SC"];
-        monospace = ["Sarasa Mono SC"];
-        emoji = ["Twemoji" "Noto Color Emoji"];
+        serif = [ "Noto Serif CJK SC" ];
+        sansSerif = [ "Sarasa UI SC" ];
+        monospace = [ "Sarasa Mono SC" ];
+        emoji = [
+          "Twemoji"
+          "Noto Color Emoji"
+        ];
       };
     };
   };
@@ -214,7 +311,7 @@ in {
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [];
+    extraPortals = with pkgs; [ ];
   };
 
   sound.enable = true;
@@ -256,12 +353,12 @@ in {
   };
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
-        root = {
+    root = {
       initialPassword = "root";
       shell = pkgs.bashInteractive;
     };
     # FIXME: Replace with your username
-     "${vars.username}" = {
+    "${vars.username}" = {
       # TODO: You can set an initial password for your user.
       # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
       # Be sure to change it (using passwd) after rebooting!
@@ -272,7 +369,7 @@ in {
       ];
       # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
       extraGroups =
-        ["wheel"]
+        [ "wheel" ]
         ++ ifExists [
           "docker"
           "podman"
@@ -285,7 +382,7 @@ in {
         ];
       shell = pkgs.bashInteractive;
       packages =
-        (with pkgs; [inputs.home-manager.packages.${pkgs.system}.default])
+        (with pkgs; [ inputs.home-manager.packages.${pkgs.system}.default ])
         ++ (with inputs.nix-gaming.packages.${pkgs.system}; [
           # wine-ge
         ])
@@ -306,9 +403,13 @@ in {
           # bun
           # qq
         ])
-        ++ (with pkgs.gnomeExtensions; [appindicator kimpanel caffeine])
-        ++ (with pkgs.python311Packages; [black])
-        ++ (with pkgs; [npm-check-updates])
+        ++ (with pkgs.gnomeExtensions; [
+          appindicator
+          kimpanel
+          caffeine
+        ])
+        ++ (with pkgs.python311Packages; [ black ])
+        ++ (with pkgs; [ npm-check-updates ])
         ++ (with pkgs.nur.repos; [
           # linyinfeng.wemeet
           # xddxdd.dingtalk
@@ -318,10 +419,12 @@ in {
           ruixi-rebirth.fcitx5-pinyin-zhwiki
         ]);
     };
-    };
   };
 
-   environment.shells = with pkgs; [bashInteractive fish];
+  environment.shells = with pkgs; [
+    bashInteractive
+    fish
+  ];
 
   environment.variables = {
     EDITOR = "helix";
@@ -331,7 +434,9 @@ in {
     GLFW_IM_MODULE = "ibus";
   };
 
-  environment.sessionVariables = {MOZ_USE_XINPUT2 = "1";};
+  environment.sessionVariables = {
+    MOZ_USE_XINPUT2 = "1";
+  };
 
   environment.systemPackages =
     (with pkgs; [
@@ -339,7 +444,11 @@ in {
       nix-output-monitor
       nix-alien
     ])
-    ++ (with pkgs.gnome; [adwaita-icon-theme dconf-editor gnome-tweaks])
+    ++ (with pkgs.gnome; [
+      adwaita-icon-theme
+      dconf-editor
+      gnome-tweaks
+    ])
     ++ (with pkgs; [
       difftastic
       helix
@@ -449,7 +558,7 @@ in {
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
-      languagePacks = ["zh-CN"];
+      languagePacks = [ "zh-CN" ];
       policies = {
         "DisablePocket" = true;
         "DisableTelemetry" = true;
@@ -490,7 +599,7 @@ in {
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
-      fileSystems = ["/"];
+      fileSystems = [ "/" ];
     };
     auto-cpufreq.enable = true;
     pipewire = {
@@ -504,9 +613,11 @@ in {
     };
     xserver = {
       enable = true;
-      videoDrivers = ["amdgpu"];
+      videoDrivers = [ "amdgpu" ];
       displayManager = {
-        gdm = {enable = true;};
+        gdm = {
+          enable = true;
+        };
         autoLogin = {
           enable = true;
           user = "${vars.username}";
@@ -514,12 +625,16 @@ in {
       };
       desktopManager = {
         xterm.enable = false;
-        gnome = {enable = true;};
+        gnome = {
+          enable = true;
+        };
       };
-      excludePackages = with pkgs; [xterm];
+      excludePackages = with pkgs; [ xterm ];
       libinput = {
         enable = true;
-        mouse = {accelProfile = "adaptive";};
+        mouse = {
+          accelProfile = "adaptive";
+        };
         touchpad = {
           tapping = true;
           naturalScrolling = true;
@@ -528,12 +643,11 @@ in {
         };
       };
     };
-    udev.packages = with pkgs; [gnome.gnome-settings-daemon];
+    udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
     flatpak.enable = true;
     # CUPS
     # printing.enable = true;
   };
-
 
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.
@@ -551,3 +665,4 @@ in {
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.05";
 }
+

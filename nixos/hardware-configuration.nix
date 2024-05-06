@@ -4,7 +4,7 @@
 
   fileSystems."/" = {
     device = "/dev/sda1";
-        fsType = "bcachefs"
+        fsType = "bcachefs";
     options = ["compression=zstd"];
   };
 

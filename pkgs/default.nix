@@ -3,5 +3,4 @@
 pkgs: {
   # example = pkgs.callPackage ./example { };
   gopeed = pkgs.callPackage ./gopeed {};
-  hiddify = pkgs.callPackage ./hiddify {};
 }

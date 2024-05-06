@@ -1,3 +1,85 @@
+
+let
+/*
+ * What you're seeing here is our nix formatter. It's quite opinionated:
+ */
+  sample-01 = { lib }:
+{
+  list = [
+    elem1
+    elem2
+    elem3
+  ] ++ lib.optionals stdenv.isDarwin [
+    elem4
+    elem5
+  ]; # and not quite finished
+}; # it will preserve your newlines
+
+  sample-02 = { stdenv, lib }:
+{
+  list =
+    [
+      elem1
+      elem2
+      elem3
+    ]
+    ++ lib.optionals stdenv.isDarwin [ elem4 elem5 ]
+    ++ lib.optionals stdenv.isLinux [ elem6 ]
+    ;
+};
+# but it can handle all nix syntax,
+# and, in fact, all of nixpkgs in <20s.
+# The javascript build is quite a bit slower.
+ sample-03 = { stdenv, system }:
+assert system == "i686-linux";
+stdenv.mkDerivation { };
+# these samples are all from https://github.com/nix-community/nix-fmt/tree/master/samples
+sample-simple = # Some basic formatting
+{
+  empty_list = [ ];
+  inline_list = [ 1 2 3 ];
+  multiline_list = [
+    1
+    2
+    3
+    4
+  ];
+  inline_attrset = { x = "y"; };
+  multiline_attrset = {
+    a = 3;
+    b = 5;
+  };
+  # some comment over here
+  fn = x: x + x;
+  relpath = ./hello;
+  abspath = /hello;
+  # URLs get converted from strings
+  url = "https://foobar.com";
+  atoms = [ true false null ];
+  # Combined
+  listOfAttrs = [
+    {
+      attr1 = 3;
+      attr2 = "fff";
+    }
+    {
+      attr1 = 5;
+      attr2 = "ggg";
+    }
+  ];
+
+  # long expression
+  attrs = {
+    attr1 = short_expr;
+    attr2 =
+      if true then big_expr else big_expr;
+  };
+}
+;
+in
+[ sample-01 sample-02 sample-03 ]
+  
+
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 {
@@ -8,7 +90,8 @@
   pkgs,
   vars,
   ...
-}: {
+}:
+{
   # You can import other home-manager modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
@@ -84,113 +167,112 @@
       userName = "aucub";
       userEmail = "78630225+aucub@users.noreply.github.com";
       ignores = [
-# Compiled binary, object files, and libraries
-"*.o"
-"*.lo"
-"*.obj"
-"*.elf"
-"*.ilk"
-"*.map"
-"*.exp"
-"*.pdb"
-"*.so"
-"*.dylib"
-"*.dll"
-"*.exe"
-"*.out"
-"*.app"
-"*.i*86"
-"*.x86_64"
-"*.hex"
-"*.apk"
-"*.msi"
-"*.a"
-"*.lib"
-"*.la"
-"*.lai"
-"*.mod"
-"*.smod"
-"*.gch"
-"*.pch"
-"*.d"
-# Dependency directories
-"node_modules/"
-"bower_components/"
-"jspm_packages/"
-# Virtual Environments
-".env"
-".env.local"
-".env.*.local"
-".Python"
-"[Ii]nclude"
-"[Ll]ib"
-"[Ll]ib64"
-"[Ll]ocal"
-"pyvenv.cfg"
-".venv"
-"pip-selfcheck.json"
-# IDEs and Editors
-## JetBrains IDEs
-".idea/"
-"*.iml"
-## Eclipse
-".apt_generated"
-".classpath"
-".factorypath"
-".project"
-".settings"
-".springBeans"
-## NetBeans
-"/nbproject/private/"
-## Visual Studio Code
-".vscode/"
-## SublimeText
-"*.sublime-workspace"
-## Visual Studio
-".vs/"
-# Logs and runtime files
-"*.log"
-"*.seed"
-"*.temp"
-# Caches
-".ipynb_checkpoints/"
-".cache/"
-".parcel-cache/"
-".next/"
-# Operating System
-".DS_Store"
-# Node
-".npm"
-".eslintcache"
-".stylelintcache"
-"package-lock.json"
-# Python caches and bytecode
-"*.py[cod]"
-"__pycache__/"
-# CMake
-"CMakeFiles/"
-"CMakeScripts/"
-"CMakeCache.txt"
-"cmake_install.cmake"
-"CTestTestfile.cmake"
-"*.cmake"
-# Maven
-"pom.xml.tag"
-"pom.xml.releaseBackup"
-"pom.xml.versionsBackup"
-# Databases
-"*.db"
-"*.sqlite3-journal"
-"*.ldf"
-"*.mdf"
-"*.ndf"
-"*.dbmdl"
-# Mobile application development
-"*.ap_"
-"*.dex"
-".res/"
-".symbols/"
-"
+        # Compiled binary, object files, and libraries
+        "*.o"
+        "*.lo"
+        "*.obj"
+        "*.elf"
+        "*.ilk"
+        "*.map"
+        "*.exp"
+        "*.pdb"
+        "*.so"
+        "*.dylib"
+        "*.dll"
+        "*.exe"
+        "*.out"
+        "*.app"
+        "*.i*86"
+        "*.x86_64"
+        "*.hex"
+        "*.apk"
+        "*.msi"
+        "*.a"
+        "*.lib"
+        "*.la"
+        "*.lai"
+        "*.mod"
+        "*.smod"
+        "*.gch"
+        "*.pch"
+        "*.d"
+        # Dependency directories
+        "node_modules/"
+        "bower_components/"
+        "jspm_packages/"
+        # Virtual Environments
+        ".env"
+        ".env.local"
+        ".env.*.local"
+        ".Python"
+        "[Ii]nclude"
+        "[Ll]ib"
+        "[Ll]ib64"
+        "[Ll]ocal"
+        "pyvenv.cfg"
+        ".venv"
+        "pip-selfcheck.json"
+        # IDEs and Editors
+        ## JetBrains IDEs
+        ".idea/"
+        "*.iml"
+        ## Eclipse
+        ".apt_generated"
+        ".classpath"
+        ".factorypath"
+        ".project"
+        ".settings"
+        ".springBeans"
+        ## NetBeans
+        "/nbproject/private/"
+        ## Visual Studio Code
+        ".vscode/"
+        ## SublimeText
+        "*.sublime-workspace"
+        ## Visual Studio
+        ".vs/"
+        # Logs and runtime files
+        "*.log"
+        "*.seed"
+        "*.temp"
+        # Caches
+        ".ipynb_checkpoints/"
+        ".cache/"
+        ".parcel-cache/"
+        ".next/"
+        # Operating System
+        ".DS_Store"
+        # Node
+        ".npm"
+        ".eslintcache"
+        ".stylelintcache"
+        "package-lock.json"
+        # Python caches and bytecode
+        "*.py[cod]"
+        "__pycache__/"
+        # CMake
+        "CMakeFiles/"
+        "CMakeScripts/"
+        "CMakeCache.txt"
+        "cmake_install.cmake"
+        "CTestTestfile.cmake"
+        "*.cmake"
+        # Maven
+        "pom.xml.tag"
+        "pom.xml.releaseBackup"
+        "pom.xml.versionsBackup"
+        # Databases
+        "*.db"
+        "*.sqlite3-journal"
+        "*.ldf"
+        "*.mdf"
+        "*.ndf"
+        "*.dbmdl"
+        # Mobile application development
+        "*.ap_"
+        "*.dex"
+        ".res/"
+        ".symbols/"
       ];
       extraConfig = {
         init.defaultBranch = "main";
@@ -200,22 +282,24 @@
           pager = "delta";
         };
         push.autoSetupRemote = true;
-        diff={
+        diff = {
           tool = "difftastic";
           colorMoved = "default";
         };
         difftool.prompt = false;
-        difftool.difftastic.cmd = ''difft "$LOCAL" "$REMOTE"'';
         pager.difftool = true;
         interactive.diffFilter = "delta --color-only";
-delta.navigate = true;
-merge.conflictstyle = "diff3";
+        delta.navigate = true;
+        merge.conflictstyle = "diff3";
       };
     };
     eza = {
       enable = true;
       git = true;
-      extraOptions = ["--group-directories-first" "--all"];
+      extraOptions = [
+        "--group-directories-first"
+        "--all"
+      ];
     };
     htop = {
       enable = true;
@@ -300,3 +384,4 @@ merge.conflictstyle = "diff3";
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.05";
 }
+
