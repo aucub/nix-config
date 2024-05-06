@@ -1,5 +1,3 @@
-# This is your system's configuration file.
-# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
   inputs,
   outputs,
@@ -8,31 +6,21 @@
   pkgs,
   vars,
   ...
-}: let
-  ifExists = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
-in {
-  # You can import other NixOS modules here
+}:
+{
   imports = [
-    # If you want to use modules your own flake exports (from modules/nixos):
-    # outputs.nixosModules.example
-    outputs.nixosModules.yazi
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
+    outputs.nixosModules.gnome
+    outputs.nixosModules.nvidia-disable
+    # outputs.nixosModules.nvidia
+    # outputs.nixosModules.containers
 
-    # Or modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
-
-    # You can also split up your configuration and import pieces of it here:
-    # disable nvidia
-    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
-
-    # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-    # Import home-manager's NixOS module
+
     inputs.home-manager.nixosModules.home-manager
+    inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nix-index-database.nixosModules.nix-index
-    inputs.chaotic.nixosModules.default
   ];
 
   home-manager = {
@@ -40,150 +28,136 @@ in {
       inherit inputs vars outputs;
     };
     users = {
-      # Import your home-manager configuration
-      "${vars.username}" = import ../home-manager/home.nix;
+      "${vars.users.users.username}" = import ../home-manager/home.nix;
     };
+    backupFileExtension = "bak";
   };
+
   nixpkgs = {
-    # You can add overlays here
     overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.modifications
-      outputs.overlays.unstable-packages
+      # outputs.overlays.unstable-small-packages
       inputs.nur.overlay
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
+      # inputs.nixpkgs-wayland.overlay
+      # inputs.chaotic.nixosModules.default
     ];
-    # Configure your nixpkgs instance
     config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
+      allowUnfree = lib.mkForce true;
     };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
-      flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
-      nix-path = config.nix.nixPath;
-      auto-optimise-store = true;
-      substituters = [
-        "https://mirrors.ustc.edu.cn/nix-channels/store"
-        "https://mirrors.bfsu.edu.cn/nix-channels/store"
-        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        "https://cache.nixos.org/"
-        "https://cosmic.cachix.org/"
-        "https://nix-community.cachix.org"
-        "https://nixpkgs-wayland.cachix.org"
-      ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
-      ];
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-    };
-    # Opinionated: disable channels
-    channel.enable = false;
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        experimental-features = "nix-command flakes";
+        flake-registry = "";
+        nix-path = config.nix.nixPath;
+        auto-optimise-store = true;
+        builders-use-substitutes = true;
+        show-trace = true;
+        warn-dirty = false;
+        substituters = [
+          "https://mirrors.ustc.edu.cn/nix-channels/store"
+          # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+          "https://cache.nixos.org"
+          "https://nix-community.cachix.org"
+          # "https://nixpkgs-wayland.cachix.org"
+          # "https://qihaiumi.cachix.org"
+          # "https://cosmic.cachix.org"
+        ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+          # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
+          # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+        ];
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
+      };
+      # nix-channel 命令和状态文件
+      channel.enable = false;
 
-    # Opinionated: make flake registry and nix path match flake inputs
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 1w";
+      };
     };
-  };
 
-  # FIXME: Add the rest of your current configuration
-  # TODO: Set your hostname
   networking = {
-    hostName = "${vars.hostname}";
-    networkmanager.enable = true;
+    hostName = vars.hostname;
     firewall.enable = false;
+    nameservers = [
+      "223.5.5.5#dns.alidns.com"
+      "8.8.8.8#dns.google"
+    ];
+    networkmanager = {
+      enable = true;
+      dns = "systemd-resolved";
+      wifi = {
+        backend = "iwd";
+        powersave = true;
+        macAddress = "stable-ssid";
+      };
+    };
   };
 
-  # TODO: This is just an example, be sure to use whatever bootloader you prefer
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
         graceful = true;
-        configurationLimit = 5;
+        configurationLimit = 10;
+        consoleMode = "auto";
       };
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
+      timeout = 4;
     };
-    kernelParams = [
-      "amd_pstate=passive"
-      "amdgpu.vm_update_mode=3"
-      "radeon.dpm=0"
-      "nvidia-drm.modeset=1"
-      "acpi_backlight=native"
-      "NVreg_PreserveVideoMemoryAllocations=1"
-      "nvidia_drm.fbdev=1"
-    ];
+    kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
-    kernelModules = [
-      "v4l2loopback"
-      "bbswitch"
-      "amdgpu"
-      "nvidia"
-      "nvidia_drm"
-      "nvidia_uvm"
-      "nvidia_modeset"
-    ];
-    extraModulePackages = [
-      pkgs.linuxKernel.packages.linux_zen.bbswitch
-      pkgs.linuxKernel.packages.linux_zen.v4l2loopback
-    ];
-    extraModprobeConfig = ''
-      options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
-    '';
+    kernelModules = vars.boot.kernelModules;
+    blacklistedKernelModules = [ "nouveau" ];
+    extraModulePackages = vars.boot.extraModulePackages pkgs;
+    extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
-    supportedFilesystems = ["btrfs" "bcachefs"];
+    supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
-      supportedFilesystems = ["btrfs" "bcachefs"];
-      kernelModules = ["btrfs"];
-      services.bcache.enable = true;
+      supportedFilesystems = [ config.fileSystems."/".fsType ];
+      kernelModules = [ config.fileSystems."/".fsType ];
     };
   };
 
   time.timeZone = "Asia/Shanghai";
 
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = "zh_CN.UTF-8";
     supportedLocales = [
       "zh_CN.UTF-8/UTF-8"
       "en_US.UTF-8/UTF-8"
     ];
     inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = with pkgs; [
-        fcitx5-with-addons
-        fcitx5-chinese-addons
-      ];
+      fcitx5 = {
+        plasma6Support = true;
+        addons = with pkgs; [
+          fcitx5-gtk
+          fcitx5-with-addons
+          fcitx5-chinese-addons
+        ];
+        waylandFrontend = true;
+      };
     };
   };
 
@@ -194,21 +168,34 @@ in {
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       sarasa-gothic
-      source-han-serif
-      source-han-sans
       source-han-mono
       source-han-serif-vf-otf
       source-han-sans-vf-otf
+      (nerdfonts.override {
+        fonts = [
+          "NerdFontsSymbolsOnly"
+          "Iosevka"
+        ];
+      })
       twitter-color-emoji
     ];
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = ["Noto Serif CJK SC"];
-        sansSerif = ["Sarasa UI SC"];
-        monospace = ["Sarasa Mono SC"];
+        serif = [
+          "Noto Serif CJK SC"
+          "Noto Color Emoji"
+        ];
+        sansSerif = [
+          "Sarasa UI SC"
+          "Noto Color Emoji"
+        ];
+        monospace = [
+          "Sarasa Mono SC"
+          "Noto Color Emoji"
+        ];
         emoji = [
           "Twemoji"
           "Noto Color Emoji"
@@ -217,302 +204,624 @@ in {
     };
   };
 
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [];
+  xdg = {
+    terminal-exec.enable = true;
+    portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+    };
+    mime = {
+      defaultApplications = {
+        "text/html" = "firefox.desktop";
+        "x-scheme-handler/http" = "firefox.desktop";
+        "x-scheme-handler/https" = "firefox.desktop";
+        "application/pdf" = "firefox.desktop";
+        "image/jpeg" = "org.gnome.Loupe.desktop";
+        "image/png" = "org.gnome.Loupe.desktop";
+        "image/gif" = "org.gnome.Loupe.desktop";
+        "image/webp" = "org.gnome.Loupe.desktop";
+        "image/tiff" = "org.gnome.Loupe.desktop";
+        "image/x-tga" = "org.gnome.Loupe.desktop";
+        "image/vnd-ms.dds" = "org.gnome.Loupe.desktop";
+        "image/x-dds" = "org.gnome.Loupe.desktop";
+        "image/bmp" = "org.gnome.Loupe.desktop";
+        "image/vnd.microsoft.icon" = "org.gnome.Loupe.desktop";
+        "image/vnd.radiance" = "org.gnome.Loupe.desktop";
+        "image/x-exr" = "org.gnome.Loupe.desktop";
+        "image/x-portable-bitmap" = "org.gnome.Loupe.desktop";
+        "image/x-portable-graymap" = "org.gnome.Loupe.desktop";
+        "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
+        "image/x-portable-anymap" = "org.gnome.Loupe.desktop";
+        "image/x-qoi" = "org.gnome.Loupe.desktop";
+        "image/svg+xml" = "org.gnome.Loupe.desktop";
+        "image/svg+xml-compressed" = "org.gnome.Loupe.desktop";
+        "image/avif" = "org.gnome.Loupe.desktop";
+        "image/heic" = "org.gnome.Loupe.desktop";
+        "image/jxl" = "org.gnome.Loupe.desktop";
+        # "text/plain"="Helix.desktop";
+      };
+      # addedAssociations = {
+      #   "text/plain" = "dev.zed.Zed.desktop";
+      # };
+    };
   };
 
   sound.enable = true;
 
+  security = {
+    rtkit.enable = true;
+    polkit.enable = true;
+    sudo-rs.enable = true;
+  };
+
   hardware = {
+    enableAllFirmware = true;
+    wirelessRegulatoryDatabase = lib.mkForce false;
+    firmware = with pkgs; [ linux-firmware ];
     pulseaudio.enable = false;
-    nvidia = {
-      package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
-      powerManagement.enable = true;
-      powerManagement.finegrained = true;
-      open = true;
-      nvidiaSettings = true;
-      modesetting.enable = true;
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-      };
-    };
     opengl = {
       enable = true;
       driSupport = true;
-      extraPackages = with pkgs; [
-        amdvlk
-        vaapiVdpau
-        nvidia-vaapi-driver
-        libvdpau-va-gl
+      extraPackages = vars.hardware.opengl.extraPackages pkgs;
+    };
+    brillo.enable = true; # 允许video组中的用户进行亮度控制
+    bluetooth = {
+      enable = true;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+          Experimental = true;
+        };
+      };
+      disabledPlugins = [
+        "bap"
+        "bass"
+        "mcp"
+        "vcp"
+        "micp"
+        "ccp"
+        "csip"
       ];
     };
-    brillo.enable = true;
-    bluetooth.enable = true;
-    nvidiaOptimus.disable = false;
   };
 
   zramSwap = {
     enable = true;
     memoryPercent = 25;
   };
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
+
   users.users = {
     root = {
-      initialPassword = "root";
+      initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
-    # FIXME: Replace with your username
-    "${vars.username}" = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "${vars.password}";
+    "${vars.users.users.username}" = {
+      uid = 1000;
+      initialHashedPassword = "${vars.users.users.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-        # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
       ];
-      # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
       extraGroups =
-        ["wheel"]
-        ++ ifExists [
-          "docker"
-          "podman"
+        [
+          "wheel"
+          "users"
+          "plugdev"
+          "video"
+          "audio"
           "git"
-          "libvirtd"
           "systemd-journal"
-          "wireshark"
           "input"
           "networkmanager"
-        ];
+          "colord"
+        ]
+        ++ (builtins.filter (g: config.users.groups ? ${g}) [
+          "adbusers"
+          "docker"
+          "podman"
+          "libvirtd"
+          "wireshark"
+        ]);
       shell = pkgs.bashInteractive;
       packages =
-        (with pkgs; [inputs.home-manager.packages.${pkgs.system}.default])
+        [ inputs.home-manager.packages.${pkgs.system}.default ]
+        ++
+        # shell
+        (with pkgs; [
+          # ouch
+          chezmoi
+          typst
+          uv
+          ruff
+          git-credential-manager
+          nodePackages.nodejs
+        ])
         ++ (with pkgs; [
-          vscode
-          firefox
-          google-chrome
-          impression
-          obs-studio
+          # zed-editor
           celluloid
           localsend
-          gopeed
-          orchis-theme
-          typst
-          comma
+          popsicle
+          # nomacs
           # jetbrains.idea-ultimate
-          # jdk21
-          # bun
         ])
-        ++ (with pkgs.nur.repos; [
-          # linyinfeng.wemeet
-          # xddxdd.dingtalk
-          # rewine.ttf-wps-fonts
-          # rewine.ttf-ms-win10
-          ruixi-rebirth.fcitx5-pinyin-moegirl
-          ruixi-rebirth.fcitx5-pinyin-zhwiki
+        # theme
+        ++ (with pkgs; [
+          (papirus-icon-theme.override { color = "adwaita"; })
+          orchis-theme
+        ])
+        # custom
+        ++ (with pkgs; [
+          hiddify-next
+          gopeed
+          navicat
+          damask
         ]);
     };
   };
 
-  environment.shells = with pkgs; [
-    bashInteractive
-    fish
-  ];
-
-  environment.variables = {
-    EDITOR = "helix";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-    SDL_IM_MODULE = "fcitx";
-    GLFW_IM_MODULE = "ibus";
+  environment = {
+    shells = with pkgs; [
+      bashInteractive
+      fish
+    ];
+    variables = {
+      EDITOR = "hx";
+      QT_IM_MODULE = "fcitx";
+      XMODIFIERS = "@im=fcitx";
+      SDL_IM_MODULE = "fcitx";
+      GLFW_IM_MODULE = "ibus";
+      MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+      MANROFFOPT = "-c";
+    };
+    sessionVariables = {
+      MOZ_USE_XINPUT2 = "1";
+      LESS = "-SR";
+    };
+    systemPackages =
+      (with pkgs; [
+        inputs.home-manager.packages.${pkgs.system}.default
+        nil
+        comma
+        nix-tree
+        just
+      ])
+      # ++ (with pkgs; [
+      #   lenovo-legion
+      # ])
+      ++ (with pkgs; [
+        difftastic
+        helix
+        gitleaks
+        eza
+        fzf
+        bat
+        fd
+        ripgrep-all
+        typos
+        python3Full
+        lnav
+        uutils-coreutils-noprefix
+      ])
+      # FHS
+      ++ (with pkgs; [
+        (
+          let
+            base = pkgs.appimageTools.defaultFhsEnvArgs;
+          in
+          pkgs.buildFHSEnv (
+            base
+            // {
+              name = "fhs";
+              targetPkgs = pkgs: (base.targetPkgs pkgs) ++ (with pkgs; [ pkg-config ]);
+              profile = "export FHS=1";
+              runScript = "fish";
+              extraOutputsToInstall = [ "dev" ];
+            }
+          )
+        )
+        (
+          let
+            base = pkgs.appimageTools.defaultFhsEnvArgs;
+          in
+          pkgs.buildFHSEnv (
+            base
+            // {
+              name = "pipzone";
+              targetPkgs =
+                pkgs:
+                (base.targetPkgs pkgs)
+                ++ (with pkgs; [
+                  pkg-config
+                  libGL
+                  glib
+                  libgcc
+                  gccStdenv
+                  python3Full
+                  uv
+                ])
+                ++ [
+                  (pkgs.python3.withPackages (
+                    subpkgs: with subpkgs; [
+                      pip
+                      virtualenv
+                    ]
+                  ))
+                ];
+              profile = "export FHS=1";
+              runScript = "fish";
+              extraOutputsToInstall = [ "dev" ];
+              extraBwrapArgs = [ "--symlink /.host-etc/gitconfig /etc/gitconfig" ];
+            }
+          )
+        )
+      ])
+      ++ (
+        if config.services.xserver.desktopManager.gnome.enable then
+          # gnomeExtensions
+          (with pkgs.gnomeExtensions; [
+            appindicator
+            caffeine
+            kimpanel
+          ])
+          # gnome
+          ++ (with pkgs.gnome; [
+            dconf-editor
+            gnome-tweaks
+          ])
+          ++ (with pkgs; [ gtop ])
+        else
+          [ ]
+      );
   };
-
-  environment.sessionVariables = {
-    MOZ_USE_XINPUT2 = "1";
-  };
-
-  environment.systemPackages =
-    (with pkgs; [
-      inputs.home-manager.packages.${pkgs.system}.default
-      nix-output-monitor
-    ])
-    ++ (with pkgs; [
-      difftastic
-      helix
-      git
-      eza
-      yazi
-      fzf
-      bat
-      fd
-      ripgrep-all
-      tlrc
-      htop
-      python311
-      orchis-theme
-    ]);
 
   documentation = {
-    enable = false;
     nixos.enable = false;
-    doc.enable = false;
-    info.enable = false;
-    dev.enable = false;
     man = {
-      enable = false;
+      mandoc.enable = true;
       man-db.enable = false;
-      mandoc.enable = false;
+      generateCaches = false;
     };
   };
 
   programs = {
+    # adb.enable = true;
+    ssh = {
+      askPassword = "";
+      enableAskPassword = false;
+    };
     command-not-found.enable = false;
-    nix-ld.enable = true;
+    nix-ld = {
+      enable = true;
+      package = pkgs.nix-ld-rs;
+    };
+    nix-index.enable = true;
+    nix-index-database.comma.enable = true;
+    npm.enable = false;
+    evolution.enable = false;
+    htop = {
+      enable = true;
+      settings = {
+        fields = [
+          0
+          48
+          20
+          49
+          39
+          40
+          111
+          46
+          47
+          1
+        ];
+        hide_userland_threads = 1;
+        show_thread_names = 1;
+        show_program_path = 0;
+        highlight_base_name = 1;
+        strip_exe_from_cmdline = 1;
+        show_merged_command = 0;
+        screen_tabs = 1;
+        cpu_count_from_one = 1;
+        show_cpu_frequency = 1;
+        show_cpu_temperature = 1;
+        color_scheme = 6;
+        column_meters_0 = [
+          "CPU"
+          "Memory"
+          "Swap"
+        ];
+        column_meter_modes_0 = [
+          1
+          1
+          1
+        ];
+        column_meters_1 = [
+          "Tasks"
+          "DiskIO"
+          "NetworkIO"
+        ];
+        column_meter_modes_1 = [
+          2
+          2
+          2
+        ];
+        tree_view = 0;
+        sort_key = 47;
+        sort_direction = -1;
+        "screen:Main" = [
+          "PID"
+          "USER"
+          "STARTTIME"
+          "TIME"
+          "M_RESIDENT"
+          "M_SHARE"
+          "IO_RATE"
+          "PERCENT_CPU"
+          "PERCENT_MEM"
+          "Command"
+        ];
+        ".sort_key" = "PERCENT_MEM";
+        ".sort_direction" = -1;
+      };
+    };
+    git = {
+      enable = true;
+      lfs.enable = true;
+      config = {
+        user = {
+          email = "dr56ekgbb@mozmail.com";
+          name = "dr56ekgbb";
+        };
+        core = {
+          editor = "hx";
+          autocrlf = "input";
+          askpass = "";
+        };
+        init.defaultBranch = "main";
+        push.autoSetupRemote = true;
+        difftool.prompt = false;
+        pager.difftool = true;
+        merge.conflictstyle = "diff3";
+        credential = {
+          credentialStore = "secretservice";
+          helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
+        };
+      };
+    };
+    # java = {
+    #   enable = true;
+    #   package = pkgs.jetbrains.jdk;
+    # };
+    nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "alacritty";
+    };
     xwayland.enable = true;
+    bash.promptInit = ''
+      PS1='[\u@\h \W]\$ '
+    '';
     fish = {
       enable = true;
-      useBabelfish = true;
       interactiveShellInit = ''
-        set -g fish_greeting ""
-
-        set -g fish_key_bindings fish_default_key_bindings
-
-        set -g fish_color_autosuggestion 555\x1ebrblack
-        set -g fish_color_cancel \x2dr
-        set -g fish_color_command blue
-        set -g fish_color_comment red
-        set -g fish_color_cwd green
-        set -g fish_color_cwd_root red
-        set -g fish_color_end green
-        set -g fish_color_error brred
-        set -g fish_color_escape brcyan
-        set -g fish_color_history_current \x2d\x2dbold
-        set -g fish_color_host normal
-        set -g fish_color_host_remote yellow
-        set -g fish_color_normal normal
-        set -g fish_color_operator brcyan
-        set -g fish_color_param cyan
-        set -g fish_color_quote yellow
-        set -g fish_color_redirection cyan\x1e\x2d\x2dbold
-        set -g fish_color_search_match bryellow\x1e\x2d\x2dbackground\x3dbrblack
-        set -g fish_color_selection white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
-        set -g fish_color_status red
-        set -g fish_color_user brgreen
-        set -g fish_color_valid_path \x2d\x2dunderline
-        set -g fish_pager_color_completion normal
-        set -g fish_pager_color_description B3A06D\x1eyellow\x1e\x2di
-        set -g fish_pager_color_prefix normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
-        set -g fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
-        set -g fish_pager_color_selected_background \x2dr
+        set -U fish_greeting
       '';
+      shellAbbrs = {
+        nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
+        ezl = "eza -lba --group-directories-first";
+        # List all generations of the system profile
+        nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
+        # remove all generations older than 7 days
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        # Garbage collect all unused nix store entries
+        nix-gc = "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
+      };
+    };
+    yazi = {
+      enable = true;
+      settings.yazi.manager = {
+        sort_dir_first = true;
+        show_hidden = true;
+      };
     };
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
-      languagePacks = ["zh-CN"];
-      policies = {
-        "DisablePocket" = true;
-        "DisableTelemetry" = true;
-        "DontCheckDefaultBrowser" = true;
-        "HardwareAcceleration" = true;
-        "OfferToSaveLoginsDefault" = false;
-        "NoDefaultBookmarks" = true;
-      };
+      languagePacks = [ "zh-CN" ];
       preferencesStatus = "default";
-      preferences = {
-        "media.ffmpeg.vaapi.enabled" = true;
-        "gfx.webrender.all" = true;
-        "dom.battery.enabled" = false;
-        "privacy.trackingprotection.enabled" = true;
-        "browser.safebrowsing.malware.enabled" = false;
-        "browser.safebrowsing.phishing.enabled" = false;
-        "browser.safebrowsing.downloads.enabled" = false;
-        "font.name.serif.zh-CN" = "Noto Serif CJK SC";
-        "font.name.sans-serif.zh-CN" = "更纱黑体 UI SC";
-        "font.name.monospace.zh-CN" = "等距更纱黑体 SC";
-        "browser.startup.homepage" = "https://limestart.cn/";
-        "browser.preferences.moreFromMozilla" = false;
-        "extensions.pocket.enabled" = false;
-        "network.IDN_show_punycode" = true;
-        "browser.newtabpage.pinned" = "";
-        "devtools.accessibility.enabled" = false;
-      };
     };
   };
 
-  qt = {
-    enable = true;
-    style = "adwaita";
-    platformTheme = "qt5ct";
-  };
+  qt.enable = true;
 
   services = {
-    btrfs.autoScrub = {
+    # locate = {
+    #   enable = true;
+    #   interval = "weekly";
+    #   package = pkgs.plocate;
+    # };
+    timesyncd = {
       enable = true;
-      interval = "monthly";
-      fileSystems = ["/"];
+      extraConfig = ''
+        PollIntervalMinSec=4d
+        PollIntervalMaxSec=7w
+        SaveIntervalSec=infinity
+      '';
+    };
+    avahi.enable = false;
+    journald.extraConfig = ''
+      SystemMaxUse=100M
+    '';
+    colord.enable = true;
+    accounts-daemon.enable = true;
+    devmon.enable = true; # 自动设备挂载
+    hardware.bolt.enable = false;
+    geoclue2.enable = false;
+    gvfs.enable = true;
+    udisks2.enable = true;
+    tumbler.enable = true; # 缩略图服务
+    dbus = {
+      implementation = "broker";
+      packages = with pkgs; [
+        dconf
+        gcr_4
+        udisks
+      ];
+    };
+    psd.enable = true;
+    fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
+    # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
+    kmscon = {
+      # Instead of vt
+      enable = true;
+      fonts = [
+        {
+          name = "Sarasa Mono SC";
+          package = pkgs.sarasa-gothic;
+        }
+      ];
+      extraOptions = "--term xterm-256color";
+      extraConfig = "font-size=20";
+      hwRender = true;
+    };
+    resolved = {
+      enable = true;
+      dnsovertls = "true";
+      domains = [ "~." ];
+      fallbackDns = [
+        "1.1.1.1#one.one.one.one"
+        "1.0.0.1#one.one.one.one"
+        "2400:3200::1"
+        "2606:4700:4700::1001"
+      ];
+    };
+    acpid.enable = true;
+    btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
+    power-profiles-daemon.enable = false;
+    thermald.enable = false;
+    tlp = {
+      enable = true;
+      settings = {
+        TLP_DEFAULT_MODE = "BAT";
+        START_CHARGE_THRESH_BAT0 = 75;
+        STOP_CHARGE_TRESH_BAT0 = 80;
+        STOP_CHARGE_THRESH_BAT0 = 1;
+        DISK_DEVICES = "nvme0n1";
+        RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+        RUNTIME_PM_ON_AC = "auto";
+        USB_EXCLUDE_AUDIO = 0;
+      };
+    };
+    upower = {
+      enable = true;
+      # package = pkgs.upower-with-conf;
+      noPollBatteries = true;
     };
     auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
       audio.enable = true;
       alsa.enable = true;
-      alsa.support32Bit = true;
       jack.enable = true;
       pulse.enable = true;
       wireplumber.enable = true;
     };
+    libinput = {
+      enable = true;
+      mouse.accelProfile = "adaptive";
+      touchpad = {
+        tapping = true;
+        naturalScrolling = true;
+        accelProfile = "adaptive";
+        disableWhileTyping = true;
+      };
+    };
+    displayManager.autoLogin = {
+      enable = true;
+      user = "${vars.users.users.username}";
+    };
     xserver = {
       enable = true;
-      videoDrivers = ["amdgpu"];
-      displayManager = {
-        cosmic-greeter.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "${vars.username}";
-        };
-      };
-      desktopManager = {
-        xterm.enable = false;
-        cosmic.enable = true;
-      };
-      excludePackages = with pkgs; [xterm];
-      libinput = {
-        enable = true;
-        mouse = {
-          accelProfile = "adaptive";
-        };
-        touchpad = {
-          tapping = true;
-          naturalScrolling = true;
-          accelProfile = "adaptive";
-          disableWhileTyping = true;
-        };
-      };
+      videoDrivers = vars.services.xserver.videoDrivers;
+      desktopManager.xterm.enable = false;
+      excludePackages = with pkgs; [ xterm ];
+      xkb.model = "pc105";
+      wacom.enable = false;
     };
-    flatpak.enable = true;
-    # CUPS
+    # flatpak.enable = true;
     # printing.enable = true;
+    openssh.enable = false;
   };
 
-  # This setups a SSH server. Very important if you're setting up a headless system.
-  # Feel free to remove if you don't need it.
-  services.openssh = {
-    enable = false;
-    settings = {
-      # Opinionated: forbid root login through SSH.
-      PermitRootLogin = "no";
-      # Opinionated: use keys only.
-      # Remove if you want to SSH using passwords
-      PasswordAuthentication = false;
+  systemd = {
+    network.wait-online.enable = false;
+    coredump.extraConfig = ''
+      Storage=none
+      ProcessSizeMax=0
+    '';
+    services = {
+      NetworkManager-wait-online.enable = lib.mkForce false;
+      "systemd-gpt-auto-generator".enable = false;
+      "getty@tty1".enable = false;
+      "autovt@tty1".enable = false;
+      "keyboard-brightness" = {
+        description = "Set keyboard brightness after resume";
+        wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
+          ExecStart = "${pkgs.bash}/bin/sh -c \"cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness\"";
+          ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
+        };
+      };
+      "numlock-brightness" = {
+        description = "Close numlock Brightness";
+        after = [
+          "graphical.target"
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        wantedBy = [
+          "graphical.target"
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          WorkingDirectory = "/sys/class/leds/";
+          ExecStart = "${pkgs.bash}/bin/sh -c 'sleep 3s && for dir in ./*::numlock*/; do [ -d \"$dir\" ] && echo 0 > \"$dir/brightness\"; done'";
+          User = "root";
+        };
+      };
+      "premiumsoft-reset" = {
+        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+      };
+    };
+    timers."premiumsoft-reset" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "weekly";
+        Persistent = true;
+        Unit = "premiumsoft-reset.service";
+      };
+    };
+    user.services = {
+      "org.gnome.SettingsDaemon.A11ySettings".enable = false;
+      "org.gnome.SettingsDaemon.Sharing".enable = false;
+      "org.gnome.SettingsDaemon.Smartcard".enable = false;
+      "org.gnome.SettingsDaemon.Wacom".enable = false;
     };
   };
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
 }

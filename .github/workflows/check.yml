@@ -1,24 +1,28 @@
 name: check
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Nix
-        uses: cachix/install-nix-action@v26
+      - uses: cachix/install-nix-action@V27
         with:
-          nix_path: nixpkgs=channel:nixos-unstable-small
+          nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v4
+      - uses: DeterminateSystems/magic-nix-cache-action@v7
+        with:
+          diagnostic-endpoint: ""
+          use-flakehub: false
 
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4
 
-      - run: |
-          export NIXPKGS_ALLOW_UNFREE=1
-          nix-env -f '<nixpkgs>' -iA nix-output-monitor
-          nix flake check --show-trace --impure --log-format internal-json -v |& nom --json
+      - run: nix flake check --show-trace --impure -L -v
+        env:
+          NIXPKGS_ALLOW_UNFREE: 1

@@ -1,40 +1,40 @@
 name: format
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Nix
-        uses: cachix/install-nix-action@v26
+      - uses: cachix/install-nix-action@V27
         with:
-          nix_path: nixpkgs=channel:nixos-unstable-small
+          nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v4
-
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.4
-
-      - run: nix fmt --no-write-lock-file
-
-      - run: |
-          if [[ -z $(git status --porcelain) ]]; then
-            exit 0
-          fi
-
-      - name: Commit files
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a --amend --no-edit
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - uses: DeterminateSystems/magic-nix-cache-action@v7
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          force_with_lease: true
+          diagnostic-endpoint: ""
+          use-flakehub: false
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - run: nix fmt --no-write-lock-file --show-trace -L -v
+
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: fmt
+          branch: fmt
+          delete-branch: true
+          title: "fmt"
+          body: fmt
+          labels: |
+            fmt
+            automated pr

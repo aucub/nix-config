@@ -1,88 +1,231 @@
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 {
   inputs,
   outputs,
-  lib,
-  config,
   pkgs,
   vars,
   ...
-}: {
-  # You can import other home-manager modules here
+}:
+{
   imports = [
-    # If you want to use modules your own flake exports (from modules/home-manager):
-    # outputs.homeManagerModules.example
+    outputs.homeManagerModules.dotfiles
     outputs.homeManagerModules.firefox
     outputs.homeManagerModules.vscode
     outputs.homeManagerModules.dconf
+    outputs.homeManagerModules.chromium
+    outputs.homeManagerModules.wofi
+    outputs.homeManagerModules.colord
 
-    # Or modules exported from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModules.default
     inputs.nix-index-database.hmModules.nix-index
-
-    # You can also split up your configuration and import pieces of it here:
-    # ./nvim.nix
   ];
 
   nixpkgs = {
-    # You can add overlays here
     overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.modifications
-      outputs.overlays.unstable-packages
+      # outputs.overlays.unstable-small-packages
 
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
+      inputs.nur.overlay
+      # inputs.chaotic.homeManagerModules.default
     ];
-    # Configure your nixpkgs instance
     config = {
-      # Disable if you don't want unfree packages
       allowUnfree = true;
     };
   };
 
-  # TODO: Set your username
   home = {
-    username = "${vars.username}";
-    homeDirectory = "/home/${vars.username}";
+    username = "${vars.users.users.username}";
+    homeDirectory = "/home/${vars.users.users.username}";
     language.base = "zh_CN.UTF-8";
-  };
-
-  # Add stuff for your user as you see fit:
-  # programs.neovim.enable = true;
-  # home.packages = with pkgs; [ steam ];
-  xdg.userDirs = {
-    enable = true;
-    createDirectories = true;
-  };
-
-  # Enable home-manager and git
-  programs = {
-    bash = {
-      enable = true;
-      enableCompletion = true;
-      bashrcExtra = ''
-        PS1='[\u@\h \W]\$ '
-      '';
-      shellAliases = {
-        ls = "ls --color=auto";
-        grep = "grep --color=auto";
+    pointerCursor = {
+      name = vars.home.pointerCursor.name;
+      package = vars.home.pointerCursor.package pkgs;
+      size = vars.home.pointerCursor.size;
+      gtk.enable = true;
+      x11 = {
+        enable = true;
+        defaultCursor = vars.home.pointerCursor.name;
       };
     };
+    sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+    file.".cargo/config.toml".text = ''
+      [source.crates-io]
+      replace-with = 'ustc'
+      [source.ustc]
+      registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+    '';
+  };
+
+  gtk.cursorTheme = {
+    name = vars.home.pointerCursor.name;
+    size = vars.home.pointerCursor.size;
+  };
+
+  xdg = {
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+      templates = null;
+      publicShare = null;
+      desktop = null;
+    };
+    configFile."pip/pip.conf".text = ''
+      [global]
+      index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
+    '';
+    configFile."electron-flags.conf".text = ''
+      --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer
+      --ozone-platform-hint=auto
+      --force-device-scale-factor=1.25
+      --ozone-platform=wayland
+      --enable-wayland-ime
+    '';
+  };
+
+  programs = {
+    dircolors.enable = true;
+    tealdeer = {
+      enable = true;
+      settings = {
+        display.compact = true;
+        updates.auto_update = false;
+      };
+    };
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        # set -x GOPATH $HOME/go
+        # set -x PATH $PATH $GOPATH/bin /usr/local/go/bin
+        set -x BUN_INSTALL $HOME/.bun
+        set -x PATH $PATH $BUN_INSTALL/bin
+        set_proxy
+      '';
+    };
     home-manager.enable = true;
+    atuin = {
+      enable = true;
+      flags = [ "--disable-up-arrow" ];
+      settings = {
+        auto_sync = false;
+        update_check = false;
+        show_help = false;
+        enter_accept = true;
+      };
+    };
+    bun = {
+      enable = true;
+      settings = {
+        smol = true;
+        telemetry = false;
+        install = {
+          lockfile.save = false;
+          registry = "https://npmreg.proxy.ustclug.org/";
+        };
+      };
+    };
+    alacritty = {
+      enable = true;
+      settings = {
+        live_config_reload = false;
+        shell.program = "fish";
+        window = {
+          padding = {
+            x = 6;
+            y = 6;
+          };
+          dimensions = {
+            columns = 120;
+            lines = 26;
+          };
+          startup_mode = "Windowed";
+          decorations_theme_variant = "dark";
+        };
+        font = {
+          normal = {
+            family = "Sarasa Mono SC";
+            style = "Regular";
+          };
+          italic = {
+            family = "Sarasa Mono Slab SC";
+            style = "Italic";
+          };
+          bold_italic = {
+            family = "Sarasa Mono Slab SC";
+            style = "Bold Italic";
+          };
+          size = 20;
+        };
+        selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
+        debug.log_level = "Off";
+        keyboard.bindings = [
+          {
+            key = "Return";
+            mods = "Control|Shift";
+            action = "SpawnNewInstance";
+          }
+        ];
+        colors = {
+          primary = {
+            background = "0x212121";
+            foreground = "0xF8F8F2";
+          };
+          cursor = {
+            text = "0x0E1415";
+            cursor = "0xECEFF4";
+          };
+          normal = {
+            black = "0x21222C";
+            red = "0xFF5555";
+            green = "0x50FA7B";
+            yellow = "0xFFCB6B";
+            blue = "0x82AAFF";
+            magenta = "0xC792EA";
+            cyan = "0x8BE9FD";
+            white = "0xF8F9F2";
+          };
+          bright = {
+            black = "0x545454";
+            red = "0xFF6E6E";
+            green = "0x69FF94";
+            yellow = "0xFFCB6B";
+            blue = "0xD6ACFF";
+            magenta = "0xFF92DF";
+            cyan = "0xA4FFFF";
+            white = "0xF8F8F2";
+          };
+        };
+      };
+    };
+    eza = {
+      enable = true;
+      git = true;
+      extraOptions = [
+        "--group-directories-first"
+        "--all"
+      ];
+    };
+    helix = {
+      enable = true;
+      defaultEditor = true;
+      settings = {
+        theme = "fleet_dark";
+        editor = {
+          middle-click-paste = false;
+          file-picker.hidden = false;
+          soft-wrap.enable = true;
+          indent-guides.render = true;
+        };
+      };
+    };
+    bat = {
+      enable = true;
+      config = {
+        style = "header-filename,header-filesize,grid";
+        paging = "never";
+        theme = "Dracula";
+      };
+    };
     git = {
       enable = true;
-      userName = "aucub";
-      userEmail = "78630225+aucub@users.noreply.github.com";
       ignores = [
         # Compiled binary, object files, and libraries
         "*.o"
@@ -191,118 +334,37 @@
         ".res/"
         ".symbols/"
       ];
-      extraConfig = {
-        init.defaultBranch = "main";
-        core = {
-          editor = "helix";
-          autocrlf = "input";
-          pager = "delta";
-        };
-        push.autoSetupRemote = true;
-        diff = {
-          tool = "difftastic";
-          colorMoved = "default";
-        };
-        difftastic.enable = true;
-        "difftool \"difftastic\"" = {
-          cmd = "difft \"$LOCAL\" \"$REMOTE\"";
-        };
-        difftool.prompt = false;
-        pager.difftool = true;
-        interactive.diffFilter = "delta --color-only";
-        delta.navigate = true;
-        merge.conflictstyle = "diff3";
+      difftastic = {
+        enable = true;
+        background = "dark";
       };
     };
-    gh.gitCredentialHelper.enable = true;
-    eza = {
+    yazi = {
       enable = true;
-      git = true;
-      extraOptions = [
-        "--group-directories-first"
-        "--all"
-      ];
-    };
-    htop = {
-      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
       settings = {
-        hide_kernel_threads = 1;
-        hide_userland_threads = 1;
-        show_program_path = 0;
-        highlight_base_name = 1;
-        show_cpu_frequency = 1;
-        show_cpu_temperature = 1;
-        color_scheme = 6;
-      };
-    };
-    helix = {
-      enable = true;
-      defaultEditor = true;
-      settings = {
-        theme = "fleet_dark";
-        editor = {
-          middle-click-paste = false;
-          file-picker.hidden = false;
+        manager = {
+          show_hidden = true;
+          sort_dir_first = true;
         };
       };
     };
-    bat = {
-      enable = true;
-      config = {
-        style = "header-filename,header-filesize,grid";
-        paging = "never";
-        theme = "Dracula";
-      };
-    };
-    fzf = {
-      enable = true;
-      defaultCommand = "rga --files || fd || find .";
-      defaultOptions = [
-        "--preview='bat {} -n --color=always'"
-        "--preview-window='right,50%,wrap,border-none'"
-        "--border=none"
-        "--layout=reverse"
-        "--bind 'enter:become(helix {})'"
-      ];
-      colors = {
-        "bg+" = "#313244";
-        "bg" = "#1e1e2e";
-        "spinner" = "#f5e0dc";
-        "hl" = "#f38ba8";
-        "fg" = "#cdd6f4";
-        "header" = "#f38ba8";
-        "info" = "#cba6f7";
-        "pointer" = "#f5e0dc";
-        "marker" = "#f5e0dc";
-        "fg+" = "#cdd6f4";
-        "prompt" = "#cba6f7";
-        "hl+" = "#f38ba8";
-      };
-    };
-    obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        obs-pipewire-audio-capture
-        obs-scale-to-sound
-        obs-vaapi
-      ];
-    };
+    # obs-studio = {
+    #   enable = true;
+    #   plugins = with pkgs.obs-studio-plugins; [
+    #     obs-pipewire-audio-capture
+    #     obs-scale-to-sound
+    #     obs-vaapi
+    #   ];
+    # };
   };
 
-  services = {
-    udiskie = {
-      enable = true;
-      automount = true;
-      tray = "auto";
-    };
-  };
+  services.udiskie.enable = true;
 
-  # notifications about home-manager news
   news.display = "silent";
 
-  # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "24.05";
+  home.stateVersion = "24.11";
 }

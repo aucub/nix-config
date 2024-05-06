@@ -1,25 +1,18 @@
 {
-  description = "nix config";
-
   inputs = {
-    # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's an working example:
-    # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
-    # Home manager
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    # nixpkgs-wayland = {
+    #   url = "github:nix-community/nixpkgs-wayland";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,84 +21,102 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    firefox-addons = {
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "aarch64-linux"
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    vars = {
-      # FIXME: Replace with your username
-      username = "your-username";
-      # TODO: Set your hostname
-      hostname = "your-hostname";
-      # TODO: You can set an initial password for your user.
-      password = "correcthorsebatterystaple";
-    };
-    # This is a function that generates an attribute by calling a function you
-    # pass to it, with each system as an argument
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager;
-
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      # FIXME replace with your hostname
-      "${vars.hostname}" = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs vars outputs;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+      systems = [
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      vars = {
+        hostname = "neko";
+        users.users = {
+          username = "uymi";
+          initialHashedPassword = "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
+          root.initialHashedPassword = "$y$j9T$/qg2DYP0TOSZzSwlgs9mV/$uVAqBwhXEnwkMd0D4zKH9SSBQ4WzlGcnimnLrbyNwP4";
         };
-        modules = [
-          # > Our main nixos configuration file <
-          ./nixos/configuration.nix
+        boot = {
+          kernelParams = [
+            "amd_pstate=passive"
+            "amdgpu.vm_update_mode=3"
+            "radeon.dpm=0"
+            "acpi_backlight=native"
+            "mitigations=off" # 关闭漏洞缓解措施提高性能
+          ];
+          kernelModules = [
+            # "v4l2loopback"
+            "amdgpu"
+          ];
+          extraModulePackages =
+            pkgs: with pkgs; [
+              # linuxKernel.packages.linux_zen.v4l2loopback
+              linuxKernel.packages.linux_zen.lenovo-legion-module
+            ];
+          extraModprobeConfig = ''
+            blacklist nouveau
+            options nouveau modeset=0
+            options usbhid skip_device=ATTRS{idVendor}==048D,ATTRS{idProduct}==C100
+          ''
+          # ++ ''
+          #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
+          # ''
+          ;
+        };
+        hardware.opengl.extraPackages =
+          pkgs: with pkgs; [
+            vaapiVdpau
+            libGL
+            libvdpau-va-gl
+            mesa.drivers
+            xorg.xf86videoamdgpu
+          ];
+        home.pointerCursor = {
+          name = "Bibata-Modern-Classic";
+          package = pkgs: pkgs.bibata-cursors;
+          size = 24;
+        };
+        services.xserver.videoDrivers = [
+          "modesetting"
+          "fbdev"
+          "amdgpu"
         ];
       };
-    };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      # FIXME replace with your username@hostname
-      "${vars.username}@${vars.hostname}" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = {
-          inherit inputs vars outputs;
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+      overlays = import ./overlays { inherit inputs; };
+      nixosModules = import ./modules/nixos;
+      homeManagerModules = import ./modules/home-manager;
+      nixosConfigurations = {
+        "${vars.hostname}" = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs vars outputs;
+          };
+          modules = [ ./nixos/configuration.nix ];
         };
-        modules = [
-          # > Our main home-manager configuration file <
-          ./home-manager/home.nix
-        ];
+      };
+
+      homeConfigurations = {
+        "${vars.users.users.username}@${vars.hostname}" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          extraSpecialArgs = {
+            inherit inputs vars outputs;
+          };
+          modules = [ ./home-manager/home.nix ];
+        };
       };
     };
-  };
 }
