@@ -1,0 +1,31 @@
+name: pkgs
+on:
+  workflow_dispatch:
+
+jobs:
+  pkgs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Nix
+        uses: cachix/install-nix-action@v26
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable-small
+          extra_nix_config: |
+            auto-optimise-store = true
+            experimental-features = nix-command flakes
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v4
+
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.4
+
+      # - uses: cachix/cachix-action@v14
+      #   with:
+      #     name:
+      #     authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Build
+        run: |
+          export NIXPKGS_ALLOW_UNFREE=1
+          nix-env -f '<nixpkgs>' -iA nix-output-monitor
+          nix build --impure --show-trace .#gopeed --log-format internal-json -v |& nom --json
