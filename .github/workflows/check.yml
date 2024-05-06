@@ -1,5 +1,9 @@
 name: check
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   check:
@@ -13,10 +17,10 @@ jobs:
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v4
+      - uses: DeterminateSystems/magic-nix-cache-action@v6
 
       - name: Checkout repository
-        uses: actions/checkout@v4.1.4
+        uses: actions/checkout@v4
 
       - run: |
           export NIXPKGS_ALLOW_UNFREE=1

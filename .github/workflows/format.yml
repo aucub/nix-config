@@ -1,6 +1,10 @@
 name: format
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   format:
@@ -14,17 +18,18 @@ jobs:
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v4
+      - uses: DeterminateSystems/magic-nix-cache-action@v6
 
       - name: Checkout repository
-        uses: actions/checkout@v4.1.4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - run: nix fmt --no-write-lock-file
 
-      - run: |
-          if [[ -z $(git status --porcelain) ]]; then
+      - name: Check for changes
+        run: |
+          if git diff --exit-code; then
             exit 0
           fi
 
