@@ -1,5 +1,3 @@
-# This is your system's configuration file.
-# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
   inputs,
   outputs,
@@ -8,33 +6,24 @@
   pkgs,
   vars,
   ...
-}: let
-  ifExists = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
-in {
-  # You can import other NixOS modules here
+}: {
   imports = [
-    # If you want to use modules your own flake exports (from modules/nixos):
-    # outputs.nixosModules.example
     outputs.nixosModules.yazi
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
 
-    # Or modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
+    # inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
 
-    # You can also split up your configuration and import pieces of it here:
-    # disable nvidia
-    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
-
-    # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
-    # Import home-manager's NixOS module
+
     inputs.home-manager.nixosModules.home-manager
+
     inputs.nix-index-database.nixosModules.nix-index
     inputs.chaotic.nixosModules.default
-
     inputs.nixos-cosmic.nixosModules.default
+
+    # inputs.stylix.nixosModules.stylix
   ];
 
   home-manager = {
@@ -42,32 +31,17 @@ in {
       inherit inputs vars outputs;
     };
     users = {
-      # Import your home-manager configuration
-      "${vars.username}" = import ../home-manager/home.nix;
+      "${vars.users.users.username}" = import ../home-manager/home.nix;
     };
   };
   nixpkgs = {
-    # You can add overlays here
     overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
       inputs.nur.overlay
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
     ];
-    # Configure your nixpkgs instance
     config = {
-      # Disable if you don't want unfree packages
       allowUnfree = true;
     };
   };
@@ -76,11 +50,8 @@ in {
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
-      # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
       flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
       auto-optimise-store = true;
       substituters = [
@@ -88,13 +59,15 @@ in {
         "https://mirrors.bfsu.edu.cn/nix-channels/store"
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
         "https://cache.nixos.org/"
-        "https://cosmic.cachix.org/"
         "https://nix-community.cachix.org"
         "https://nixpkgs-wayland.cachix.org"
+        "https://qihaiumi.cachix.org"
+        "https://cosmic.cachix.org/"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+        "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
       trusted-users = [
@@ -102,10 +75,9 @@ in {
         "@wheel"
       ];
     };
-    # Opinionated: disable channels
+    # nix-channel 命令和状态文件
     channel.enable = false;
 
-    # Opinionated: make flake registry and nix path match flake inputs
     registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     gc = {
@@ -115,22 +87,19 @@ in {
     };
   };
 
-  # FIXME: Add the rest of your current configuration
-  # TODO: Set your hostname
   networking = {
     hostName = "${vars.hostname}";
     networkmanager.enable = true;
     firewall.enable = false;
   };
 
-  # TODO: This is just an example, be sure to use whatever bootloader you prefer
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
     loader = {
       systemd-boot = {
         enable = true;
         graceful = true;
-        configurationLimit = 5;
+        configurationLimit = 10;
       };
       efi = {
         canTouchEfiVariables = true;
@@ -164,10 +133,20 @@ in {
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
     '';
     tmp.useTmpfs = true;
-    supportedFilesystems = ["btrfs" "bcachefs"];
+    bcache.enable = true;
+    supportedFilesystems = [
+      "btrfs"
+      "bcachefs"
+    ];
     initrd = {
-      supportedFilesystems = ["btrfs" "bcachefs"];
-      kernelModules = ["btrfs"];
+      supportedFilesystems = [
+        "btrfs"
+        "bcachefs"
+      ];
+      kernelModules = [
+        "btrfs"
+        "bcachefs"
+      ];
       services.bcache.enable = true;
     };
   };
@@ -182,24 +161,26 @@ in {
     ];
     inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = with pkgs; [
-        fcitx5-with-addons
-        fcitx5-chinese-addons
-      ];
+      fcitx5 = {
+        plasma6Support = true;
+        addons = with pkgs; [
+          fcitx5-gtk
+          libsForQt5.fcitx5-with-addons
+          libsForQt5.fcitx5-chinese-addons
+        ];
+        waylandFrontend = true;
+      };
     };
   };
 
   fonts = {
     enableDefaultPackages = true;
-    fontDir.enable = true;
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       sarasa-gothic
-      source-han-serif
-      source-han-sans
       source-han-mono
       source-han-serif-vf-otf
       source-han-sans-vf-otf
@@ -222,7 +203,6 @@ in {
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [];
   };
 
   sound.enable = true;
@@ -230,12 +210,15 @@ in {
   hardware = {
     pulseaudio.enable = false;
     nvidia = {
-      package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
-      powerManagement.enable = true;
-      powerManagement.finegrained = true;
       open = true;
-      nvidiaSettings = true;
       modesetting.enable = true;
+      dynamicBoost.enable = true;
+      prime.sync.enable = true;
+      package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
+      powerManagement = {
+        enable = true;
+        finegrained = true;
+      };
       prime = {
         offload = {
           enable = true;
@@ -255,33 +238,25 @@ in {
     };
     brillo.enable = true;
     bluetooth.enable = true;
-    nvidiaOptimus.disable = false;
   };
 
   zramSwap = {
     enable = true;
     memoryPercent = 25;
   };
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
+
   users.users = {
     root = {
-      initialPassword = "root";
+      # initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
-    # FIXME: Replace with your username
-    "${vars.username}" = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "${vars.password}";
+    "${vars.users.users.username}" = {
+      # initialHashedPassword = "${vars.users.users.initialHashedPassword}";
       isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
-      ];
-      # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
+      openssh.authorizedKeys.keys = [];
       extraGroups =
         ["wheel"]
-        ++ ifExists [
+        ++ (builtins.filter (g: config.users.groups ? ${g}) [
           "docker"
           "podman"
           "git"
@@ -290,180 +265,273 @@ in {
           "wireshark"
           "input"
           "networkmanager"
-        ];
+        ]);
       shell = pkgs.bashInteractive;
       packages =
         (with pkgs; [inputs.home-manager.packages.${pkgs.system}.default])
+        ++
+        # shell
+        (with pkgs; [
+          atuin
+          typst
+          uv
+          ruff
+          git-credential-manager
+          git-lfs
+          bun
+          # nodejs_20
+        ])
         ++ (with pkgs; [
           vscode
           firefox
-          google-chrome
           impression
           obs-studio
           celluloid
           localsend
+          chromium
+          localsend
+          wofi
+          gnome.dconf-editor
+          # nomacs
+          # jetbrains.idea-ultimate
+        ])
+        # theme
+        ++ (with pkgs; [
+          papirus-folders
+          papirus-icon-theme
+          bibata-cursors
+        ])
+        # custom
+        ++ (with pkgs; [
           gopeed
           orchis-theme
-          typst
-          comma
-          # jetbrains.idea-ultimate
-          # jdk21
-          # bun
         ])
-        ++ (with pkgs.nur.repos; [
-          # linyinfeng.wemeet
-          # xddxdd.dingtalk
-          # rewine.ttf-wps-fonts
-          # rewine.ttf-ms-win10
-          ruixi-rebirth.fcitx5-pinyin-moegirl
-          ruixi-rebirth.fcitx5-pinyin-zhwiki
-        ]);
+        ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki]);
     };
   };
 
-  environment.shells = with pkgs; [
-    bashInteractive
-    fish
-  ];
-
-  environment.variables = {
-    EDITOR = "helix";
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-    SDL_IM_MODULE = "fcitx";
-    GLFW_IM_MODULE = "ibus";
+  environment = {
+    shells = with pkgs; [
+      bashInteractive
+      fish
+    ];
+    variables = {
+      EDITOR = "helix";
+      QT_IM_MODULE = "fcitx";
+      XMODIFIERS = "@im=fcitx";
+      SDL_IM_MODULE = "fcitx";
+      GLFW_IM_MODULE = "ibus";
+    };
+    systemPackages =
+      (with pkgs; [
+        inputs.home-manager.packages.${pkgs.system}.default
+        nix-output-monitor
+      ])
+      ++ (with pkgs; [
+        comma
+        alacritty
+        difftastic
+        helix
+        delta
+        git
+        eza
+        yazi
+        fzf
+        bat
+        fd
+        ripgrep-all
+        tlrc
+        typos
+        htop
+        python3
+        lnav
+        uutils-coreutils-noprefix
+        android-tools
+      ]);
   };
-
-  environment.sessionVariables = {
-    MOZ_USE_XINPUT2 = "1";
-  };
-
-  environment.systemPackages =
-    (with pkgs; [
-      inputs.home-manager.packages.${pkgs.system}.default
-      nix-output-monitor
-    ])
-    ++ (with pkgs; [
-      difftastic
-      helix
-      git
-      eza
-      yazi
-      fzf
-      bat
-      fd
-      ripgrep-all
-      tlrc
-      htop
-      python311
-      orchis-theme
-    ]);
 
   documentation = {
-    enable = false;
     nixos.enable = false;
-    doc.enable = false;
-    info.enable = false;
-    dev.enable = false;
-    man = {
-      enable = false;
-      man-db.enable = false;
-      mandoc.enable = false;
-    };
   };
 
   programs = {
     command-not-found.enable = false;
+    htop = {
+      enable = true;
+      settings = {
+        fields = [
+          0
+          48
+          17
+          18
+          38
+          39
+          40
+          2
+          46
+          47
+          49
+          1
+        ];
+        hide_kernel_threads = true;
+        hide_userland_threads = true;
+        hide_running_in_container = false;
+        shadow_other_users = false;
+        show_thread_names = false;
+        show_program_path = true;
+        highlight_base_name = true;
+        highlight_deleted_exe = true;
+        shadow_distribution_path_prefix = false;
+        highlight_megabytes = true;
+        highlight_threads = true;
+        highlight_changes = false;
+        highlight_changes_delay_secs = 5;
+        find_comm_in_cmdline = true;
+        strip_exe_from_cmdline = true;
+        show_merged_command = false;
+        header_margin = 1;
+        screen_tabs = true;
+        detailed_cpu_time = false;
+        cpu_count_from_one = false;
+        show_cpu_usage = true;
+        show_cpu_frequency = true;
+        show_cpu_temperature = true;
+        degree_fahrenheit = false;
+        update_process_names = false;
+        account_guest_in_cpu_meter = false;
+        color_scheme = 6;
+        enable_mouse = true;
+        delay = 15;
+        hide_function_bar = false;
+        header_layout = "two_50_50";
+        column_meters_0 = "LeftCPUs2 Memory Swap";
+        column_meter_modes_0 = [
+          1
+          1
+          1
+        ];
+        column_meters_1 = "RightCPUs2 Tasks LoadAverage Uptime";
+        column_meter_modes_1 = [
+          1
+          2
+          2
+          2
+        ];
+        screen_Main = "PID USER PRIORITY NICE M_VIRT M_RESIDENT M_SHARE STATE PERCENT_CPU PERCENT_MEM TIME Command";
+        screen_Main_sort_key = "PERCENT_MEM";
+        screen_Main_tree_sort_key = "PID";
+        screen_Main_tree_view_always_by_pid = false;
+        screen_Main_tree_view = false;
+        screen_Main_sort_direction = -1;
+        screen_Main_tree_sort_direction = 1;
+        screen_Main_all_branches_collapsed = false;
+        screen_IO = "PID USER IO_PRIORITY IO_RATE IO_READ_RATE IO_WRITE_RATE PERCENT_SWAP_DELAY PERCENT_IO_DELAY Command";
+        screen_IO_sort_key = "IO_RATE";
+        screen_IO_tree_sort_key = "PID";
+        screen_IO_tree_view_always_by_pid = false;
+        screen_IO_tree_view = false;
+        screen_IO_sort_direction = -1;
+        screen_IO_tree_sort_direction = 1;
+        screen_IO_all_branches_collapsed = false;
+      };
+    };
+    git = {
+      enable = true;
+      lfs.enable = true;
+      config = {
+        user = {
+          email = "dr56ekgbb@mozmail.com";
+          name = "dr56ekgbb";
+        };
+        core = {
+          editor = "helix";
+          autocrlf = "input";
+          pager = "delta";
+        };
+        init = {
+          defaultBranch = "main";
+        };
+        push = {
+          autoSetupRemote = true;
+        };
+        diff = {
+          tool = "difftastic";
+          colorMoved = "default";
+        };
+        difftool = {
+          prompt = false;
+          difftastic = {
+            cmd = "difft \"$LOCAL\" \"$REMOTE\"";
+          };
+        };
+        pager = {
+          difftool = true;
+        };
+        interactive = {
+          diffFilter = "delta --color-only";
+        };
+        delta = {
+          navigate = true;
+        };
+        merge = {
+          conflictstyle = "diff3";
+        };
+        credential = {
+          credentialStore = "secretservice";
+        };
+        filter_lfs = {
+          clean = "git-lfs clean -- %f";
+          smudge = "git-lfs smudge -- %f";
+          process = "git-lfs filter-process";
+          required = true;
+        };
+      };
+    };
+    java = {
+      enable = true;
+      package = pkgs.jetbrains.jdk;
+    };
+    nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "alacritty";
+    };
     nix-ld.enable = true;
     xwayland.enable = true;
     fish = {
       enable = true;
-      useBabelfish = true;
       interactiveShellInit = ''
-        set -g fish_greeting ""
-
-        set -g fish_key_bindings fish_default_key_bindings
-
-        set -g fish_color_autosuggestion 555\x1ebrblack
-        set -g fish_color_cancel \x2dr
-        set -g fish_color_command blue
-        set -g fish_color_comment red
-        set -g fish_color_cwd green
-        set -g fish_color_cwd_root red
-        set -g fish_color_end green
-        set -g fish_color_error brred
-        set -g fish_color_escape brcyan
-        set -g fish_color_history_current \x2d\x2dbold
-        set -g fish_color_host normal
-        set -g fish_color_host_remote yellow
-        set -g fish_color_normal normal
-        set -g fish_color_operator brcyan
-        set -g fish_color_param cyan
-        set -g fish_color_quote yellow
-        set -g fish_color_redirection cyan\x1e\x2d\x2dbold
-        set -g fish_color_search_match bryellow\x1e\x2d\x2dbackground\x3dbrblack
-        set -g fish_color_selection white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
-        set -g fish_color_status red
-        set -g fish_color_user brgreen
-        set -g fish_color_valid_path \x2d\x2dunderline
-        set -g fish_pager_color_completion normal
-        set -g fish_pager_color_description B3A06D\x1eyellow\x1e\x2di
-        set -g fish_pager_color_prefix normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
-        set -g fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
-        set -g fish_pager_color_selected_background \x2dr
+        set -U fish_greeting
       '';
+      shellAbbrs = {
+        ezl = "eza -lba --group-directories-first";
+      };
     };
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
       languagePacks = ["zh-CN"];
-      policies = {
-        "DisablePocket" = true;
-        "DisableTelemetry" = true;
-        "DontCheckDefaultBrowser" = true;
-        "HardwareAcceleration" = true;
-        "OfferToSaveLoginsDefault" = false;
-        "NoDefaultBookmarks" = true;
-      };
       preferencesStatus = "default";
-      preferences = {
-        "media.ffmpeg.vaapi.enabled" = true;
-        "gfx.webrender.all" = true;
-        "dom.battery.enabled" = false;
-        "privacy.trackingprotection.enabled" = true;
-        "browser.safebrowsing.malware.enabled" = false;
-        "browser.safebrowsing.phishing.enabled" = false;
-        "browser.safebrowsing.downloads.enabled" = false;
-        "font.name.serif.zh-CN" = "Noto Serif CJK SC";
-        "font.name.sans-serif.zh-CN" = "更纱黑体 UI SC";
-        "font.name.monospace.zh-CN" = "等距更纱黑体 SC";
-        "browser.preferences.moreFromMozilla" = false;
-        "extensions.pocket.enabled" = false;
-        "network.IDN_show_punycode" = true;
-        "browser.newtabpage.pinned" = "";
-        "devtools.accessibility.enabled" = false;
-      };
     };
   };
 
   qt = {
     enable = true;
-    style = "adwaita";
+    style = "kvantum";
     platformTheme = "qt5ct";
   };
 
   services = {
-    btrfs.autoScrub = {
-      enable = true;
-      interval = "monthly";
-      fileSystems = ["/"];
-    };
+    thermald.enable = lib.mkDefault true;
+    blueman.enable = true;
+    acpid.enable = true;
+    # btrfs.autoScrub = {
+    # enable = true;
+    # };
     auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
       audio.enable = true;
       alsa.enable = true;
-      alsa.support32Bit = true;
       jack.enable = true;
       pulse.enable = true;
       wireplumber.enable = true;
@@ -471,12 +539,13 @@ in {
     desktopManager.cosmic.enable = true;
     displayManager.cosmic-greeter.enable = true;
     xserver = {
-      enable = true;
-      videoDrivers = ["amdgpu"];
+      videoDrivers = [
+        "amdgpu"
+      ];
       displayManager = {
         autoLogin = {
           enable = true;
-          user = "${vars.username}";
+          user = "${vars.users.users.username}";
         };
       };
       desktopManager = {
@@ -496,24 +565,17 @@ in {
         };
       };
     };
-    flatpak.enable = true;
-    # CUPS
+    # flatpak.enable = true;
     # printing.enable = true;
   };
 
-  # This setups a SSH server. Very important if you're setting up a headless system.
-  # Feel free to remove if you don't need it.
   services.openssh = {
     enable = false;
     settings = {
-      # Opinionated: forbid root login through SSH.
       PermitRootLogin = "no";
-      # Opinionated: use keys only.
-      # Remove if you want to SSH using passwords
       PasswordAuthentication = false;
     };
   };
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.05";
 }

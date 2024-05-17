@@ -5,9 +5,6 @@
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
     "[markdown]": {
         "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     },
@@ -50,6 +47,20 @@
         "**/.settings": true
     },
     "git.confirmSync": false,
+    "github-enterprise.uri": "https://cocopilot.org",
+    "github.copilot.advanced": {
+        "authProvider": "github-enterprise",
+        "debug.chatOverrideProxyUrl": "https://override-yfhh.onrender.com/v1/chat/completions",
+        "debug.overrideProxyUrl": "https://override-yfhh.onrender.com"
+    },
+    "github.copilot.chat.useProjectTemplates": false,
+    "github.copilot.chat.welcomeMessage": "never",
+    "github.copilot.enable": {
+        "*": false,
+        "markdown": false,
+        "plaintext": false,
+        "scminput": false
+    },
     "github.gitProtocol": "ssh",
     "go.editorContextMenuCommands": {
         "addImport": false,
@@ -73,9 +84,6 @@
     "search.followSymlinks": false,
     "security.workspace.trust.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
-    "tabnine.experimentalAutoImports": true,
-    "tabnine.ignoreCertificateErrors": true,
-    "tabnine.logLevel": "error",
     "telemetry.telemetryLevel": "off",
     "terminal.external.linuxExec": "alacritty",
     "terminal.integrated.defaultProfile.linux": "fish",
@@ -88,6 +96,7 @@
     "window.commandCenter": false,
     "window.dialogStyle": "custom",
     "window.titleBarStyle": "custom",
+    "workbench.editor.empty.hint": "hidden",
     "workbench.enableExperiments": false,
     "workbench.preferredLightColorTheme": "Quiet Light",
     "workbench.startupEditor": "none",

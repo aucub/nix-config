@@ -1,27 +1,15 @@
-# This file defines overlays
 {inputs, ...}: {
-  # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs final.pkgs;
-
-  # This one contains whatever you want to overlay
-  # You can change versions, add patches, set compilation flags, anything really.
-  # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
     orchis-theme = prev.orchis-theme.overrideAttrs (oldAttrs: rec {
       installPhase = ''
         runHook preInstall
-        bash install.sh -d $out/share/themes -t default purple green \
-          --tweaks solid macos compact black primary submenu nord
+        bash install.sh -d $out/share/themes -t default purple green --tweaks solid macos compact black primary submenu nord
         runHook postInstall
       '';
     });
-    # example = prev.example.overrideAttrs (oldAttrs: rec {
-    # ...
-    # });
   };
 
-  # When applied, the unstable nixpkgs set (declared in the flake inputs) will
-  # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
       system = final.system;
