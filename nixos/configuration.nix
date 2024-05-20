@@ -159,6 +159,15 @@
       "zh_CN.UTF-8/UTF-8"
       "en_US.UTF-8/UTF-8"
     ];
+    extraLocaleSettings = {
+      LANGUAGE = "zh_CN.UTF-8";
+      LC_ALL = "zh_CN.UTF-8";
+      LC_NUMERIC = "zh_CN.UTF-8";
+      LC_TIME = "zh_CN.UTF-8";
+      LC_MONETARY = "zh_CN.UTF-8";
+      LC_PAPER = "zh_CN.UTF-8";
+      LC_MEASUREMENT = "zh_CN.UTF-8";
+    };
     inputMethod = {
       enabled = "fcitx5";
       fcitx5 = {
@@ -247,11 +256,11 @@
 
   users.users = {
     root = {
-      # initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
+      hashedPassword = "${vars.users.users.root.hashedPassword}";
       shell = pkgs.bashInteractive;
     };
     "${vars.users.users.username}" = {
-      # initialHashedPassword = "${vars.users.users.initialHashedPassword}";
+      hashedPassword = "${vars.users.users.hashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [];
       extraGroups =
@@ -321,6 +330,8 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
+      LANGUAGE = "zh_CN.UTF-8";
+      LC_ALL = "zh_CN.UTF-8";
     };
     systemPackages =
       (with pkgs; [

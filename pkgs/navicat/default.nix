@@ -1,10 +1,10 @@
 {
   stdenv,
   fetchurl,
-  autoPatchelfHook,
+  makeDesktopItem,
   makeWrapper,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "navicat";
   version = "17.0.2";
 
@@ -13,41 +13,41 @@ stdenv.mkDerivation rec {
     sha256 = "53580b0099c7209a914c4ca89becb16f1812c67849992ec83ce28863f988db84";
   };
 
-  nativeBuildInputs = [autoPatchelfHook makeWrapper];
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    mkdir -p $sourceRoot
-    cp ${src} $sourceRoot/
-    chmod +x $sourceRoot/${pname}-${version}.AppImage
-    $sourceRoot/${pname}-${version}.AppImage --appimage-extract
-    mv squashfs-root $sourceRoot/extracted
-
-    runHook postUnpack
-  '';
+  unpackPhase = "true";
 
   installPhase = ''
-    runHook preInstall
+     mkdir -p $out/bin
+     mkdir -p $out/share/applications
+     mkdir -p $out/share/icons
 
-    install -D -m755 $sourceRoot/extracted/AppRun $out/bin/${pname}
-    mkdir -p $out/opt/${pname}
-    cp -r $sourceRoot/extracted/usr $out/opt/${pname}/
+     # Extract AppImage contents
+     chmod +x AppRun
+    ./AppRun --appimage-extract
 
-    mkdir -p $out/share/applications
-    install -Dm644 ${desktopFile} $out/share/applications/${pname}.desktop
+     # Install navicat executable
+     install -D usr/bin/navicat $out/bin/navicat
 
-    mkdir -p $out/share/icons/hicolor/256x256/apps
-    ln -s $out/opt/${pname}/usr/share/icons/hicolor/256x256/apps/navicat-icon.png $out/share/icons/hicolor/256x256/apps/navicat17.png
+     # Install desktop file
+     install -D navicat.desktop $out/share/applications/navicat.desktop
 
-    wrapProgram $out/bin/${pname} --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [stdenv.cc.cc.lib]}
+     # Install icon
+     install -D navicat-icon.png $out/share/icons/navicat-icon.png
 
-    runHook postInstall
+     # Create wrapper script
+     wrapProgram $out/bin/navicat --set LD_LIBRARY_PATH ${lib.makeLibraryPath [stdenv.cc.cc.lib]}:$out/lib:$out/usr/lib
   '';
 
-  meta = with stdenv.lib; {
+  desktopItem = makeDesktopItem {
+    name = "navicat";
+    exec = "navicat";
+    icon = "navicat-icon";
+    type = "Application";
+    categories = "Development";
+  };
+
+  meta = {
     homepage = "https://navicat.com";
-    description = "Navicat Premium is a multi-connection database development tool.";
+    description = "Navicat Premium is a multi-connection database development tool";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; ["aucub"];
