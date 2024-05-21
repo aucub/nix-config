@@ -75,11 +75,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin
     dpkg -x ${src} $out
-    ln -s $out/opt/gopeed/gopeed $out/bin/gopeed
-
+    mkdir -p $out/bin
+    ln -s $out/opt/${pname}/${pname} $out/bin/${pname}
+    mkdir $out/share/
+    mv $out/usr/share/ $out/share/
+    rm -r $out/usr
     runHook postInstall
   '';
 
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gopeed.com";
     description = "A modern download manager that supports all platforms. Built with Golang and Flutter";
     license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux"];
+    platforms = ["x86_64-linux"];
     maintainers = with lib.maintainers; [aucub];
     sourceProvenance = with sourceTypes; [binaryNativeCode];
   };

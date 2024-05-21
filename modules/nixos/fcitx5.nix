@@ -47,7 +47,7 @@
         PreeditEnabledByDefault = "True";
         ShowInputMethodInformation = "True";
         showInputMethodInformationWhenFocusIn = "False";
-        CompactInputMethodInformation ="True";
+        CompactInputMethodInformation = "True";
         ShowFirstInputMethodInformation = "True";
         DefaultPageSize = "9";
         OverrideXkbOption = "False";
@@ -107,8 +107,8 @@
           ShowShuangpinMode = "True";
           PageSize = 9;
           SpellEnabled = "False";
-          SymbolsEnabled ="True";
-          ChaiziEnabled ="True";
+          SymbolsEnabled = "True";
+          ChaiziEnabled = "True";
           ExtBEnabled = "True";
           CloudPinyinEnabled = "False";
           CloudPinyinIndex = 2;

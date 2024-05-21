@@ -34,6 +34,7 @@
   home = {
     username = "${vars.users.users.username}";
     homeDirectory = "/home/${vars.users.users.username}";
+    language.base = "zh_CN.UTF-8";
   };
 
   xdg.userDirs = {
