@@ -34,7 +34,6 @@
   home = {
     username = "${vars.users.users.username}";
     homeDirectory = "/home/${vars.users.users.username}";
-    language.base = "zh_CN.UTF-8";
   };
 
   xdg.userDirs = {
@@ -131,7 +130,7 @@
         };
 
         selection = {
-          semantic_escape_chars = '',│`|:\"' ()[]{}<>\\t@='';
+          semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
         };
 
         debug = {

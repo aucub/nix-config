@@ -29,7 +29,6 @@
           bmalehorn.vscode-fish
           nvarner.typst-lsp
           tomoki1207.pdf
-          # bbenoist.Nix
           # GitHub.codespaces
           # ms-vscode.cpptools
           # YoavBls.pretty-ts-errors
@@ -38,6 +37,7 @@
         ])
         ++ (with inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
           rangav.vscode-thunder-client
+          # bbenoist.Nix
         ]);
       userSettings = builtins.fromJSON (builtins.readFile ./settings.json);
     };
