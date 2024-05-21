@@ -29,6 +29,7 @@
     users = {
       "${vars.users.users.username}" = import ../home-manager/home.nix;
     };
+    backupFileExtension = "bak";
   };
   nixpkgs = {
     overlays = [
@@ -52,13 +53,12 @@
       auto-optimise-store = true;
       substituters = [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
-        "https://mirrors.bfsu.edu.cn/nix-channels/store"
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        "https://cache.nixos.org/"
+        "https://cache.nixos.org"
         "https://nix-community.cachix.org"
         "https://nixpkgs-wayland.cachix.org"
         "https://qihaiumi.cachix.org"
-        "https://cosmic.cachix.org/"
+        "https://cosmic.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -87,6 +87,7 @@
     hostName = "${vars.hostname}";
     networkmanager.enable = true;
     firewall.enable = false;
+    networkmanager.dns = "systemd-resolved";
   };
 
   boot = {
@@ -129,7 +130,6 @@
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
     '';
     tmp.useTmpfs = true;
-    bcache.enable = true;
     supportedFilesystems = [
       "btrfs"
       "bcachefs"
@@ -143,7 +143,6 @@
         "btrfs"
         "bcachefs"
       ];
-      services.bcache.enable = true;
     };
   };
 
@@ -156,8 +155,6 @@
       "en_US.UTF-8/UTF-8"
     ];
     extraLocaleSettings = {
-      LANGUAGE = "zh_CN.UTF-8";
-      LC_ALL = "zh_CN.UTF-8";
       LC_NUMERIC = "zh_CN.UTF-8";
       LC_TIME = "zh_CN.UTF-8";
       LC_MONETARY = "zh_CN.UTF-8";
@@ -241,6 +238,7 @@
         libvdpau-va-gl
       ];
     };
+    # 允许视频组中的用户进行亮度控制
     brillo.enable = true;
     bluetooth.enable = true;
   };
@@ -258,7 +256,9 @@
     "${vars.users.users.username}" = {
       hashedPassword = "${vars.users.users.hashedPassword}";
       isNormalUser = true;
-      openssh.authorizedKeys.keys = [];
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
+      ];
       extraGroups =
         ["wheel"]
         ++ (builtins.filter (g: config.users.groups ? ${g}) [
@@ -282,20 +282,19 @@
           uv
           ruff
           git-credential-manager
-          git-lfs
           bun
           # nodejs_20
         ])
         ++ (with pkgs; [
           vscode
           firefox
-          impression
-          obs-studio
           celluloid
           localsend
           chromium
           localsend
           wofi
+          impression
+          # obs-studio
           # nomacs
           # jetbrains.idea-ultimate
         ])
@@ -304,6 +303,12 @@
           papirus-folders
           papirus-icon-theme
           bibata-cursors
+        ])
+        # gnomeExtensions
+        ++ (with pkgs.gnomeExtensions; [
+          appindicator
+          caffeine
+          kimpanel
         ])
         # custom
         ++ (with pkgs; [
@@ -326,16 +331,14 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
-      LANGUAGE = "zh_CN.UTF-8";
-      LC_ALL = "zh_CN.UTF-8";
     };
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
         nix-output-monitor
+        comma
       ])
       ++ (with pkgs; [
-        comma
         alacritty
         difftastic
         helix
@@ -357,6 +360,7 @@
       ]);
     gnome.excludePackages =
       (with pkgs; [
+        gnome-tecla
         gnome-tour
         gnome-photos
         gnome-menus
@@ -365,6 +369,7 @@
         gnome-connections
         libsForQt5.qt5ct
         qt6Packages.qt6ct
+        gnome-console
       ])
       ++ (with pkgs.gnome; [
         gnome-contacts
@@ -387,6 +392,8 @@
         iagno # go game
         hitori # sudoku game
         atomix # puzzle game
+        file-roller
+        seahorse
       ]);
   };
 
@@ -521,10 +528,10 @@
         };
       };
     };
-    java = {
-      enable = true;
-      package = pkgs.jetbrains.jdk;
-    };
+    # java = {
+    #   enable = true;
+    #   package = pkgs.jetbrains.jdk;
+    # };
     nautilus-open-any-terminal = {
       enable = true;
       terminal = "alacritty";
@@ -546,17 +553,41 @@
       languagePacks = ["zh-CN"];
       preferencesStatus = "default";
     };
+    seahorse.enable = false;
+    gnome-terminal.enable = false;
+    file-roller.enable = false;
   };
 
   qt = {
     enable = true;
-    style = "kvantum";
-    platformTheme = "qt5ct";
+    style = "adwaita";
+    platformTheme = "gnome";
   };
 
   services = {
+    gnome = {
+      gnome-user-share.enable = false;
+      gnome-online-accounts.enable = false;
+      gnome-browser-connector.enable = false;
+      games.enable = false;
+      tracker.enable = false;
+      tracker-miners.enable = false;
+      rygel.enable = false;
+      gnome-remote-desktop.enable = false;
+      evolution-data-server.enable = lib.mkForce false;
+    };
+    resolved = {
+      enable = true;
+      dnsovertls = "true";
+      extraConfig = ''
+        [Resolve]
+        DNS=223.5.5.5#dns.alidns.com 8.8.8.8#dns.google 1.0.0.1 2400:3200::1 2606:4700:4700::1001
+        DNSOverTLS=yes
+        Domains=~.
+      '';
+    };
+    # 温控
     thermald.enable = lib.mkDefault true;
-    blueman.enable = true;
     acpid.enable = true;
     # btrfs.autoScrub = {
     # enable = true;
@@ -590,13 +621,21 @@
     };
     xserver = {
       enable = true;
-      displayManager.gdm = {enable = true;};
+      displayManager.gdm = {
+        enable = true;
+        settings.daemon = {
+          AutomaticLoginEnable = true;
+          AutomaticLogin = "${vars.users.users.username}";
+        };
+      };
       videoDrivers = [
         "amdgpu"
       ];
       desktopManager = {
         xterm.enable = false;
-        gnome = {enable = true;};
+        gnome = {
+          enable = true;
+        };
       };
       excludePackages = with pkgs; [xterm];
     };

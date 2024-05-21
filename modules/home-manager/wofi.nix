@@ -8,7 +8,7 @@
   programs.wofi = {
     enable = true;
     settings = {
-      style = "${HOME}/.config/wofi/style.css";
+      style = "\${HOME}/.config/wofi/style.css";
       xoffset = 660;
       yoffset = 275;
       show = "drun";

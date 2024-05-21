@@ -8,9 +8,12 @@
   ...
 }: {
   imports = [
+    outputs.homeManagerModules.dotfiles
     outputs.homeManagerModules.firefox
     outputs.homeManagerModules.vscode
     outputs.homeManagerModules.dconf
+    outputs.homeManagerModules.chromium
+    outputs.homeManagerModules.wofi
 
     inputs.nix-index-database.hmModules.nix-index
   ];
@@ -54,7 +57,6 @@
     fish = {
       enable = true;
       interactiveShellInit = ''
-        atuin init fish --disable-up-arrow | source
         # set -x GOPATH $HOME/go
         # set -x PATH $PATH $GOPATH/bin /usr/local/go/bin
         # set -x PNPM_HOME $HOME/.local/share/pnpm
@@ -70,6 +72,9 @@
       enable = true;
       enableFishIntegration = true;
       enableBashIntegration = true;
+      flags = [
+        "--disable-up-arrow"
+      ];
       settings = {
         auto_sync = false;
         update_check = false;

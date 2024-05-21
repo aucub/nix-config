@@ -8,14 +8,14 @@
   programs.chromium = {
     enable = true;
     extensions = [
-      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
-      "fnaicdffflnofjppbagibeoednhnbjhg" # floccus-bookmarks-sync
-      "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
-      "jinjaccalgkegednnccohejagnlnfdag" # violentmonkey
-      "bpoadfkcbjbfhfodiogcnhhhpibjhbnh" # 沉浸式翻译
-      "djflhoibgkdhkhhcedjiklpkjnoahfmg" # user-agent-switcher
-      "mpiodijhokgodhhofbcjdecpffjipkle" # singlefile
-      "jpbjcnkcffbooppibceonlgknpkniiff" # global-speed
+      # "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+      # "fnaicdffflnofjppbagibeoednhnbjhg" # floccus-bookmarks-sync
+      # "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+      # "jinjaccalgkegednnccohejagnlnfdag" # violentmonkey
+      # "bpoadfkcbjbfhfodiogcnhhhpibjhbnh" # 沉浸式翻译
+      # "djflhoibgkdhkhhcedjiklpkjnoahfmg" # user-agent-switcher
+      # "mpiodijhokgodhhofbcjdecpffjipkle" # singlefile
+      # "jpbjcnkcffbooppibceonlgknpkniiff" # global-speed
     ];
     extraOpts = {
       AdvancedProtectionAllowed = true;
