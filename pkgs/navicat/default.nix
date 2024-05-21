@@ -18,8 +18,12 @@ in
     inherit pname version src;
 
     extraInstallCommands = ''
-      rm -r $out/bin
-        cp -r ${appimageContents}/usr/* $out/
+        rm -r $out/bin
+          cp -r ${appimageContents}/* $out/
+      mkdir -p $out/bin
+      ln -s $out/AppRun $out/bin/${pname}
+      install -Dm644 $out/navicat.desktop $out/share/applications/navicat.desktop
+      cp -a $out/usr/share/icons $out/share/
     '';
 
     meta = with lib; {

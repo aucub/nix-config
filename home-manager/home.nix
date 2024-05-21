@@ -67,7 +67,6 @@
       '';
     };
     home-manager.enable = true;
-    gh.gitCredentialHelper.enable = true;
     atuin = {
       enable = true;
       enableFishIntegration = true;

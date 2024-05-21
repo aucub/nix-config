@@ -47,20 +47,6 @@
         "**/.settings": true
     },
     "git.confirmSync": false,
-    "github-enterprise.uri": "https://cocopilot.org",
-    "github.copilot.advanced": {
-        "authProvider": "github-enterprise",
-        "debug.chatOverrideProxyUrl": "https://override-yfhh.onrender.com/v1/chat/completions",
-        "debug.overrideProxyUrl": "https://override-yfhh.onrender.com"
-    },
-    "github.copilot.chat.useProjectTemplates": false,
-    "github.copilot.chat.welcomeMessage": "never",
-    "github.copilot.enable": {
-        "*": false,
-        "markdown": false,
-        "plaintext": false,
-        "scminput": false
-    },
     "github.gitProtocol": "ssh",
     "go.editorContextMenuCommands": {
         "addImport": false,

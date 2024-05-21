@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/opt/${pname}/${pname} $out/bin/${pname}
     mkdir $out/share/
-    mv $out/usr/share/ $out/share/
+    mv $out/usr/share $out/
     rm -r $out/usr
     runHook postInstall
   '';

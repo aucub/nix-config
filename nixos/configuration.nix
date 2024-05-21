@@ -149,7 +149,7 @@
   time.timeZone = "Asia/Shanghai";
 
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = "zh_CN.UTF-8";
     supportedLocales = [
       "zh_CN.UTF-8/UTF-8"
       "en_US.UTF-8/UTF-8"
@@ -160,6 +160,11 @@
       LC_MONETARY = "zh_CN.UTF-8";
       LC_PAPER = "zh_CN.UTF-8";
       LC_MEASUREMENT = "zh_CN.UTF-8";
+      LC_CTYPE="zh_CN.UTF-8";
+      LC_COLLATE="zh_CN.UTF-8";
+      LC_MESSAGES="zh_CN.UTF-8";
+      LC_NAME="zh_CN.UTF-8";
+      LC_IDENTIFICATION="zh_CN.UTF-8";
     };
     inputMethod = {
       enabled = "fcitx5";
@@ -234,7 +239,7 @@
       extraPackages = with pkgs; [
         amdvlk
         vaapiVdpau
-        nvidia-vaapi-driver
+        # nvidia-vaapi-driver
         libvdpau-va-gl
       ];
     };
@@ -250,11 +255,11 @@
 
   users.users = {
     root = {
-      hashedPassword = "${vars.users.users.root.hashedPassword}";
+      initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
     "${vars.users.users.username}" = {
-      hashedPassword = "${vars.users.users.hashedPassword}";
+      initialHashedPassword = "${vars.users.users.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
@@ -315,6 +320,7 @@
           hiddify-next
           gopeed
           orchis-theme
+          # navicat
         ])
         ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki]);
     };
@@ -326,7 +332,7 @@
       fish
     ];
     variables = {
-      EDITOR = "helix";
+      EDITOR = "hx";
       QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
@@ -353,7 +359,7 @@
         tlrc
         typos
         htop
-        python3
+        python3Full
         lnav
         uutils-coreutils-noprefix
         android-tools
@@ -613,12 +619,12 @@
         disableWhileTyping = true;
       };
     };
-    displayManager = {
-      autoLogin = {
-        enable = true;
-        user = "${vars.users.users.username}";
-      };
-    };
+    # displayManager = {
+    #   autoLogin = {
+    #     enable = true;
+    #     user = "${vars.users.users.username}";
+    #   };
+    # };
     xserver = {
       enable = true;
       displayManager.gdm = {

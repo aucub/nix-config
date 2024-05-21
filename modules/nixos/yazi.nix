@@ -15,7 +15,7 @@
       opener = {
         edit = [
           {
-            run = "'${EDITOR:=helix} \"$@\"'";
+            run = "'${EDITOR:=hx} \"$@\"'";
             desc = "$EDITOR";
             block = true;
             for = "unix";
