@@ -24,9 +24,9 @@
     "--enable-webrtc-pipewire-capturer"
     "--disable-features=UseChromeOSDirectVideoDecoder,UseSkiaRenderer"
     "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,VaapiIgnoreDriverChecks,TouchpadOverscrollHistoryNavigation,CanvasOopRasterization,OverlayScrollbar,ParallelDownloading,SystemNotifications,Vulkan,WebContentsCaptureHiDPI,FluentScrollbar,FluentOverlayScrollbar,WebRtcHideLocalIpsWithMdns,ChromeRefresh2023,ChromeRefresh2023NTB:Variation/GM3NewIconNoBackground,ChromeRefresh2023TopChromeFont,ChromeWebuiRefresh2023,GlobalMediaControlsUpdatedUI,NtpRealboxCr23All,NtpRealboxCr23ConsistentRowHeight,NtpRealboxCr23ExpandedStateIcons,NtpRealboxCr23ExpandedStateLayout,NtpRealboxCr23HoverFillShape,NtpRealboxCr23Theming"
+    "--top-chrome-touch-ui=enabled"
     # "--ozone-platform=wayland"
     # "--gtk-version=4"
     # "--ozone-platform-hint=auto"
-    "--top-chrome-touch-ui=enabled"
   ];
 }

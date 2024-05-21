@@ -106,7 +106,7 @@
           ShowShuangpinMode = true;
           PageSize = 9;
           SpellEnabled = false;
-          EmojiEnabled = true;
+          EmojiEnabled = false;
           ChaiziEnabled = true;
           ExtBEnabled = true;
           CloudPinyinEnabled = false;

@@ -7,19 +7,19 @@
 }: {
   programs.firefox = {
     enable = true;
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      ublock-origin
-      floccus
-      bitwarden
-      violentmonkey
-      videospeed
-      user-agent-string-switcher
-      immersive-translate
-      # single-file
-    ];
     profiles.default = {
       id = 0;
       isDefault = true;
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        ublock-origin
+        floccus
+        bitwarden
+        violentmonkey
+        videospeed
+        user-agent-string-switcher
+        immersive-translate
+        # single-file
+      ];
       settings = {
         # 启用 VAAPI 硬件加速
         "media.ffmpeg.vaapi.enabled" = true;
