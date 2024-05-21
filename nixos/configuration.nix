@@ -12,7 +12,6 @@
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
 
-    # inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
 
     ./hardware-configuration.nix
@@ -21,9 +20,6 @@
 
     inputs.nix-index-database.nixosModules.nix-index
     inputs.chaotic.nixosModules.default
-    inputs.nixos-cosmic.nixosModules.default
-
-    # inputs.stylix.nixosModules.stylix
   ];
 
   home-manager = {
@@ -218,23 +214,23 @@
 
   hardware = {
     pulseaudio.enable = false;
-    nvidia = {
-      open = true;
-      modesetting.enable = true;
-      dynamicBoost.enable = true;
-      prime.sync.enable = true;
-      package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
-      powerManagement = {
-        enable = true;
-        finegrained = true;
-      };
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-      };
-    };
+    # nvidia = {
+    #   open = true;
+    #   modesetting.enable = true;
+    #   dynamicBoost.enable = true;
+    #   prime.sync.enable = true;
+    #   package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
+    #   powerManagement = {
+    #     enable = true;
+    #     finegrained = true;
+    #   };
+    #   prime = {
+    #     offload = {
+    #       enable = true;
+    #       enableOffloadCmd = true;
+    #     };
+    #   };
+    # };
     opengl = {
       enable = true;
       driSupport = true;
@@ -300,7 +296,6 @@
           chromium
           localsend
           wofi
-          gnome.dconf-editor
           # nomacs
           # jetbrains.idea-ultimate
         ])
@@ -312,6 +307,7 @@
         ])
         # custom
         ++ (with pkgs; [
+          hiddify-next
           gopeed
           orchis-theme
         ])
@@ -358,6 +354,39 @@
         lnav
         uutils-coreutils-noprefix
         android-tools
+      ]);
+    gnome.excludePackages =
+      (with pkgs; [
+        gnome-tour
+        gnome-photos
+        gnome-menus
+        baobab
+        epiphany
+        gnome-connections
+        libsForQt5.qt5ct
+        qt6Packages.qt6ct
+      ])
+      ++ (with pkgs.gnome; [
+        gnome-contacts
+        gnome-initial-setup
+        yelp
+        cheese # webcam tool
+        gnome-music
+        gnome-terminal
+        epiphany # web browser
+        geary # email reader
+        gnome-calendar
+        gnome-clocks
+        gnome-characters
+        gnome-maps
+        gnome-weather
+        gnome-software
+        simple-scan
+        totem # video player
+        tali # poker game
+        iagno # go game
+        hitori # sudoku game
+        atomix # puzzle game
       ]);
   };
 
@@ -490,12 +519,6 @@
         credential = {
           credentialStore = "secretservice";
         };
-        filter_lfs = {
-          clean = "git-lfs clean -- %f";
-          smudge = "git-lfs smudge -- %f";
-          process = "git-lfs filter-process";
-          required = true;
-        };
       };
     };
     java = {
@@ -547,34 +570,35 @@
       pulse.enable = true;
       wireplumber.enable = true;
     };
-    desktopManager.cosmic.enable = true;
-    displayManager.cosmic-greeter.enable = true;
+    libinput = {
+      enable = true;
+      mouse = {
+        accelProfile = "adaptive";
+      };
+      touchpad = {
+        tapping = true;
+        naturalScrolling = true;
+        accelProfile = "adaptive";
+        disableWhileTyping = true;
+      };
+    };
+    displayManager = {
+      autoLogin = {
+        enable = true;
+        user = "${vars.users.users.username}";
+      };
+    };
     xserver = {
+      enable = true;
+      displayManager.gdm = {enable = true;};
       videoDrivers = [
         "amdgpu"
       ];
-      displayManager = {
-        autoLogin = {
-          enable = true;
-          user = "${vars.users.users.username}";
-        };
-      };
       desktopManager = {
         xterm.enable = false;
+        gnome = {enable = true;};
       };
       excludePackages = with pkgs; [xterm];
-      libinput = {
-        enable = true;
-        mouse = {
-          accelProfile = "adaptive";
-        };
-        touchpad = {
-          tapping = true;
-          naturalScrolling = true;
-          accelProfile = "adaptive";
-          disableWhileTyping = true;
-        };
-      };
     };
     # flatpak.enable = true;
     # printing.enable = true;

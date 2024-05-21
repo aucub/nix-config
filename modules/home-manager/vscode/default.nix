@@ -14,7 +14,6 @@
       enableUpdateCheck = false;
       extensions =
         (with pkgs.vscode-extensions; [
-          ms-vscode.cpptools
           ms-ceintl.vscode-language-pack-zh-hans
           formulahendry.code-runner
           mhutchie.git-graph
@@ -30,7 +29,9 @@
           bmalehorn.vscode-fish
           nvarner.typst-lsp
           tomoki1207.pdf
+          # bbenoist.Nix
           # GitHub.codespaces
+          # ms-vscode.cpptools
           # YoavBls.pretty-ts-errors
           # redhat.vscode-xml
           # rust-lang.rust-analyzer

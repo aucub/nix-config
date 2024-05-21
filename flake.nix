@@ -8,10 +8,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -25,7 +21,6 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix";
   };
 
   outputs = {
@@ -43,11 +38,11 @@
       "x86_64-darwin"
     ];
     vars = {
-      hostname = "conch";
+      hostname = "neko";
       users.users = {
-        username = "scorer";
-        hashedPassword = "$6$w4Qx5bk.wW.e93g7$GXnGNy0FSy0dDa0gPg7.RlZakPMX4r4o5AG2pmXzvkmHQH4ZLdHScW9x7AtyW/jrqKwrSmMO9WTcjIs6PFWA7/";
-        root.hashedPassword = "$6$McedUqId3V5qwCsh$u9av6luwVJMrw0ihdYzf2poD5K14qmUO5UdNdwq.XVuX2342B1Zv8VnrRpetz3n6QpT.WDIqoObNCvMf9.3fN.";
+        username = "uymi";
+        hashedPassword = "$y$j9T$m2sLL/VYgtqoF.ASqw0FJ/$VJ8gBbTboxLHOmdzx4ahj4NqcIpo7MsZHXTEYfI6.72";
+        root.hashedPassword = "$y$j9T$nxjLhSybHq8TIak3sFKWY0$ohestFlgQopiMLQhdHyROqsvQkRVf7BBtpvO1iMIX53";
       };
     };
     forAllSystems = nixpkgs.lib.genAttrs systems;

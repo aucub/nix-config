@@ -3,8 +3,9 @@
   fetchurl,
   makeDesktopItem,
   makeWrapper,
+  lib,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "navicat";
   version = "17.0.2";
 
@@ -38,18 +39,20 @@ stdenv.mkDerivation {
   '';
 
   desktopItem = makeDesktopItem {
-    name = "navicat";
-    exec = "navicat";
+    desktopName = pname;
+    name = pname;
+    exec = pname;
     icon = "navicat-icon";
     type = "Application";
-    categories = "Development";
+    categories = ["Development"];
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://navicat.com";
     description = "Navicat Premium is a multi-connection database development tool";
+    platforms = ["x86_64-linux"];
     license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; ["aucub"];
+    sourceProvenance = with sourceTypes; [binaryNativeCode];
+    maintainers = with lib.maintainers; [fee1-dead];
   };
 }

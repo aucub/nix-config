@@ -13,8 +13,6 @@
     outputs.homeManagerModules.dconf
 
     inputs.nix-index-database.hmModules.nix-index
-
-    # inputs.stylix.homeManagerModules.stylix
   ];
 
   nixpkgs = {
@@ -86,14 +84,14 @@
       enableBashIntegration = true;
       enableFishIntegration = true;
     };
-    obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        obs-pipewire-audio-capture
-        obs-scale-to-sound
-        obs-vaapi
-      ];
-    };
+    # obs-studio = {
+    #   enable = true;
+    #   plugins = with pkgs.obs-studio-plugins; [
+    #     obs-pipewire-audio-capture
+    #     obs-scale-to-sound
+    #     obs-vaapi
+    #   ];
+    # };
   };
 
   services = {
