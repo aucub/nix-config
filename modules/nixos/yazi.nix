@@ -5,32 +5,21 @@
   ...
 }: {
   programs.yazi = {
-    enable = true;
-    settings.yazi = {
-      manager = {
-        sort_sensitive = true;
-        sort_reverse = true;
-        show_hidden = true;
-      };
-      opener = {
-        edit = [
-          {
-            run = "'${EDITOR:=hx} \"$@\"'";
-            desc = "$EDITOR";
-            block = true;
-            for = "unix";
-          }
-        ];
-      };
-      extract = {
-        edit = [
-          {
-            run = "'bsdtar -xf \"$1\"'";
-            desc = "Extract here";
-            for = "unix";
-          }
-        ];
+      enable = true;
+      settings.yazi = {
+        manager = {
+          ratio = [ 0 2 3 ];
+          sort_by = "natural";
+          sort_dir_first = true;
+          sort_sensitive = false;
+          sort_reverse = false;
+          show_hidden = true;
+        };
+
+        preview = {
+          max_width = 2000;
+          max_height = 2000;
+        };
       };
     };
-  };
 }

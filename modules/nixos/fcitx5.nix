@@ -4,6 +4,7 @@
   lib,
   ...
 }: {
+  # i18n.inputMethod.fcitx5.ignoreUserConfig = true;
   i18n.inputMethod.fcitx5.settings = {
     inputMethod = {
       GroupOrder = {"0" = "Default";};
@@ -12,8 +13,8 @@
         DefaultIM = "pinyin";
         Name = "Default";
       };
-      "Groups/0/Items/0" = {Name = "keyboard-us";};
-      "Groups/0/Items/1" = {Name = "pinyin";};
+      "Groups/0/Items/0" = {Name = "keyboard-us";"Layout" = "";};
+      "Groups/0/Items/1" = {Name = "pinyin";"Layout" = "";};
     };
     globalOptions = {
       Hotkey = {
@@ -62,9 +63,9 @@
         globalSection = {
           VerticalCandidateList = "False";
           WheelForPaging = "True";
-          Font = "更纱黑体 UI SC 14";
-          MenuFont = "更纱黑体 UI SC 14";
-          TrayFont = "更纱黑体 UI SC 14";
+          Font = "\"更纱黑体 UI SC 14\"";
+          MenuFont = "\"更纱黑体 UI SC 14\"";
+          TrayFont = "\"更纱黑体 UI SC 14\"";
           TrayOutlineColor = "#000000";
           TrayTextColor = "#ffffff";
           PreferTextIcon = "False";
@@ -114,12 +115,12 @@
           CloudPinyinIndex = 2;
           CloudPinyinAnimation = "True";
           KeepCloudPinyinPlaceHolder = "False";
-          PreeditMode = "Composing pinyin";
+          PreeditMode = "\"Composing pinyin\"";
           PreeditCursorPositionAtBeginning = "True";
           PinyinInPreedit = "False";
           Prediction = "False";
           PredictionSize = 10;
-          SwitchInputMethodBehavior = "Commit current preedit";
+          SwitchInputMethodBehavior = "\"Commit current preedit\"";
           SecondCandidate = "";
           ThirdCandidate = "";
           UseKeypadAsSelection = "False";
@@ -128,6 +129,7 @@
           LongWordLengthLimit = 4;
           VAsQuickphrase = "False";
           FirstRun = "False";
+          QuickPhraseKey="";
         };
         sections = {
           ForgetWord = {"0" = "Control+7";};
