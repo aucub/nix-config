@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitLab, meson, ninja, vala, blueprint-compiler, json-glib, libadwaita, libgee, libportal-gtk4, libsoup3, appstream-glib }:
-
+{
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  vala,
+  blueprint-compiler,
+  json-glib,
+  libadwaita,
+  libgee,
+  libportal-gtk4,
+  libsoup3,
+  appstream-glib,
+}:
 stdenv.mkDerivation {
   pname = "damask-wallpaper";
   version = "0.2.2";
@@ -11,10 +23,10 @@ stdenv.mkDerivation {
     sha256 = "1e1939af48c89665a7d28f146e0105a4bc8262bc0a152c1f697d4c87609ea255";
   };
 
-  nativeBuildInputs = [ meson ninja vala blueprint-compiler ];
-  buildInputs = [ json-glib libadwaita libgee libportal-gtk4 libsoup3 ];
+  nativeBuildInputs = [meson ninja vala blueprint-compiler];
+  buildInputs = [json-glib libadwaita libgee libportal-gtk4 libsoup3];
 
-  checkInputs = [ appstream-glib ];
+  checkInputs = [appstream-glib];
 
   buildPhase = ''
     meson build
