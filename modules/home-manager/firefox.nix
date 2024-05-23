@@ -11,7 +11,7 @@
       id = 0;
       isDefault = true;
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        #ublock-origin
+        # ublock-origin
         floccus
         bitwarden
         violentmonkey

@@ -71,6 +71,9 @@
         "@wheel"
       ];
     };
+    extraOptions = ''
+      warn-dirty = false
+    '';
     # nix-channel 命令和状态文件
     channel.enable = false;
 
@@ -247,7 +250,6 @@
       extraPackages = with pkgs; [
         amdvlk
         vaapiVdpau
-        libGL
         # nvidia-vaapi-driver
         libvdpau-va-gl
         mesa.drivers
@@ -315,8 +317,6 @@
         ])
         # theme
         ++ (with pkgs; [
-          # papirus-folders -C adwaita --theme Papirus
-          papirus-folders
           papirus-icon-theme
           bibata-cursors
         ])
@@ -353,6 +353,7 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
+      YAZI_CONFIG_HOME = "/etc/yazi";
     };
     systemPackages =
       (with pkgs; [
@@ -379,7 +380,6 @@
         lnav
         uutils-coreutils-noprefix
         android-tools
-        xorg.xbacklight
       ]);
     gnome.excludePackages =
       (with pkgs; [
@@ -515,7 +515,7 @@
           name = "dr56ekgbb";
         };
         core = {
-          editor = "helix";
+          editor = "hx";
           autocrlf = "input";
           pager = "delta";
         };
@@ -581,27 +581,12 @@
     gnome-terminal.enable = false;
     file-roller.enable = false;
   };
-
   qt = {
     enable = true;
     style = "adwaita";
     platformTheme = "gnome";
   };
-  location.longitude = 116.44;
-  location.latitude = 39.92;
   services = {
-    clight = {
-      enable = true;
-      temperature = {
-        day = 5500;
-        night = 3000;
-      };
-    };
-
-    # clight.temperature.night = 3053;
-    # redshift.temperature.night = 3053;
-    tlp.enable = true;
-    power-profiles-daemon.enable = false;
     udev.extraRules = ''
       # Remove NVIDIA USB xHCI Host Controller devices, if present
       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
@@ -660,20 +645,20 @@
         disableWhileTyping = true;
       };
     };
-    # displayManager = {
-    #   autoLogin = {
-    #     enable = true;
-    #     user = "${vars.users.users.username}";
-    #   };
-    # };
+    displayManager = {
+      autoLogin = {
+        enable = true;
+        user = "${vars.users.users.username}";
+      };
+    };
     xserver = {
       enable = true;
       displayManager.gdm = {
         enable = true;
-        settings.daemon = {
-          AutomaticLoginEnable = true;
-          AutomaticLogin = "${vars.users.users.username}";
-        };
+        # settings.daemon = {
+        #   AutomaticLoginEnable = true;
+        #   AutomaticLogin = "${vars.users.users.username}";
+        # };
       };
       videoDrivers = [
         "amdgpu"
@@ -688,13 +673,19 @@
     };
     # flatpak.enable = true;
     # printing.enable = true;
+    openssh = {
+      enable = false;
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+      };
+    };
   };
 
-  services.openssh = {
-    enable = false;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
+  systemd = {
+    services = {
+      "getty@tty1".enable = false;
+      "autovt@tty1".enable = false;
     };
   };
 

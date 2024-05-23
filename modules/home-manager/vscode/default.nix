@@ -10,8 +10,6 @@
   programs = {
     vscode = {
       enable = true;
-      enableExtensionUpdateCheck = false;
-      enableUpdateCheck = false;
       extensions =
         (with pkgs.vscode-extensions; [
           ms-ceintl.vscode-language-pack-zh-hans
@@ -39,7 +37,6 @@
           rangav.vscode-thunder-client
           # bbenoist.Nix
         ]);
-      userSettings = builtins.fromJSON (builtins.readFile ./settings.json);
     };
   };
 }

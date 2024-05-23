@@ -8,6 +8,9 @@
         runHook postInstall
       '';
     });
+    papirus-icon-theme = prev.papirus-icon-theme.overrideAttrs (oldAttrs: rec {
+      color = "adwaita";
+    });
   };
 
   unstable-packages = final: _prev: {

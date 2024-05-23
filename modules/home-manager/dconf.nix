@@ -59,10 +59,6 @@ with lib.hm.gvariant; {
       region = "zh_CN.UTF-8";
     };
 
-    "org/gnome/desktop/applications/terminal" = {
-      exec = "alacritty";
-    };
-
     "org/gnome/desktop/privacy" = {
       old-files-age = "uint32 3";
       recent-files-max-age = 1;
@@ -218,6 +214,10 @@ with lib.hm.gvariant; {
     };
 
     "org/gtk/settings/file-chooser" = {
+      show-hidden = true;
+    };
+
+    "org/gtk/gtk4/settings/file-chooser" = {
       show-hidden = true;
     };
   };
