@@ -1,43 +1,67 @@
 {
+  lib,
   stdenv,
   fetchFromGitLab,
-  meson,
-  ninja,
-  vala,
+  nix-update-script,
   blueprint-compiler,
+  desktop-file-utils,
+  gettext,
+  gtk4,
   json-glib,
   libadwaita,
   libgee,
+  libportal,
   libportal-gtk4,
-  libsoup3,
-  appstream-glib,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook,
 }:
-stdenv.mkDerivation {
-  pname = "damask-wallpaper";
+stdenv.mkDerivation rec {
+  pname = "damask";
   version = "0.2.2";
 
   src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     owner = "subpop";
     repo = "damask";
     rev = "v${version}";
-    sha256 = "1e1939af48c89665a7d28f146e0105a4bc8262bc0a152c1f697d4c87609ea255";
+    sha256 = "sha256-X1snGqI6KJpXjFyPT//VEuHEI6nssIwiWbW0773NJTw=";
   };
 
-  nativeBuildInputs = [meson ninja vala blueprint-compiler];
-  buildInputs = [json-glib libadwaita libgee libportal-gtk4 libsoup3];
+  nativeBuildInputs = [
+    blueprint-compiler
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    vala
+    wrapGAppsHook
+  ];
 
-  checkInputs = [appstream-glib];
+  buildInputs = [
+    gettext
+    gtk4
+    json-glib
+    libadwaita
+    libgee
+    libportal
+    libportal-gtk4
+    libsoup_3
+  ];
 
-  buildPhase = ''
-    meson build
-    ninja -C build
-  '';
+  passthru = {
+    updateScript = nix-update-script {};
+  };
 
-  checkPhase = ''
-    meson test -C build --print-errorlogs
-  '';
-
-  installPhase = ''
-    meson install -C build --destdir $out
-  '';
+  meta = with lib; {
+    description = "Automatically set wallpaper images from Internet sources";
+    homepage = "https://gitlab.gnome.org/subpop/damask";
+    maintainers = with maintainers; [samdroid-apps];
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+    mainProgram = "damask";
+  };
 }

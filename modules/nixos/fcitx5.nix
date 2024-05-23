@@ -13,8 +13,14 @@
         DefaultIM = "pinyin";
         Name = "Default";
       };
-      "Groups/0/Items/0" = {Name = "keyboard-us";"Layout" = "";};
-      "Groups/0/Items/1" = {Name = "pinyin";"Layout" = "";};
+      "Groups/0/Items/0" = {
+        Name = "keyboard-us";
+        "Layout" = "";
+      };
+      "Groups/0/Items/1" = {
+        Name = "pinyin";
+        "Layout" = "";
+      };
     };
     globalOptions = {
       Hotkey = {
@@ -129,7 +135,7 @@
           LongWordLengthLimit = 4;
           VAsQuickphrase = "False";
           FirstRun = "False";
-          QuickPhraseKey="";
+          QuickPhraseKey = "";
         };
         sections = {
           ForgetWord = {"0" = "Control+7";};

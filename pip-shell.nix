@@ -9,6 +9,9 @@
     python311Packages.virtualenv
     uv
   ]);
-  runScript = "fish";
+  runScript = ''
+    source $HOME/.local/share/python/.venv/bin/activate.fish
+    fish
+  '';
 })
 .env

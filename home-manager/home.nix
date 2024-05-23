@@ -35,11 +35,28 @@
     username = "${vars.users.users.username}";
     homeDirectory = "/home/${vars.users.users.username}";
     language.base = "zh_CN.UTF-8";
+    pointerCursor = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+      size = 24;
+    };
   };
 
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+  };
+
+  gtk = {
+    cursorTheme = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+      size = 24;
+    };
+    iconTheme = {
+      name = "Papirus";
+      package = pkgs.papirus-icon-theme;
+    };
   };
 
   programs = {

@@ -127,6 +127,8 @@
       pkgs.linuxKernel.packages.linux_zen.v4l2loopback
     ];
     extraModprobeConfig = ''
+      blacklist nouveau
+      options nouveau modeset=0
       options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
     '';
     tmp.useTmpfs = true;
@@ -134,6 +136,7 @@
       "btrfs"
       "bcachefs"
     ];
+    blacklistedKernelModules = ["nouveau" "nvidia" "nvidia_drm" "nvidia_modeset"];
     initrd = {
       supportedFilesystems = [
         "btrfs"
@@ -219,6 +222,7 @@
 
   hardware = {
     pulseaudio.enable = false;
+    acpilight.enable = false;
     # nvidia = {
     #   open = true;
     #   modesetting.enable = true;
@@ -239,11 +243,14 @@
     opengl = {
       enable = true;
       driSupport = true;
+      driSupport32Bit = true;
       extraPackages = with pkgs; [
         amdvlk
         vaapiVdpau
+        libGL
         # nvidia-vaapi-driver
         libvdpau-va-gl
+        mesa.drivers
       ];
     };
     # 允许视频组中的用户进行亮度控制
@@ -305,10 +312,10 @@
           # obs-studio
           # nomacs
           # jetbrains.idea-ultimate
-          gnome.dconf-editor
         ])
         # theme
         ++ (with pkgs; [
+          # papirus-folders -C adwaita --theme Papirus
           papirus-folders
           papirus-icon-theme
           bibata-cursors
@@ -324,9 +331,14 @@
           hiddify-next
           gopeed
           orchis-theme
-          # navicat
+          navicat
+          damask
         ])
-        ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki]);
+        ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki])
+        ++ (with pkgs.gnome; [
+          dconf-editor
+          gnome-tweaks
+        ]);
     };
   };
 
@@ -355,7 +367,7 @@
         delta
         git
         eza
-        yazi
+        yazi-unwrapped
         fzf
         bat
         fd
@@ -367,9 +379,11 @@
         lnav
         uutils-coreutils-noprefix
         android-tools
+        xorg.xbacklight
       ]);
     gnome.excludePackages =
       (with pkgs; [
+        tecla
         gnome-tecla
         gnome-tour
         gnome-photos
@@ -573,8 +587,31 @@
     style = "adwaita";
     platformTheme = "gnome";
   };
-
+  location.longitude = 116.44;
+  location.latitude = 39.92;
   services = {
+    clight = {
+      enable = true;
+      temperature = {
+        day = 5500;
+        night = 3000;
+      };
+    };
+
+    # clight.temperature.night = 3053;
+    # redshift.temperature.night = 3053;
+    tlp.enable = true;
+    power-profiles-daemon.enable = false;
+    udev.extraRules = ''
+      # Remove NVIDIA USB xHCI Host Controller devices, if present
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+      # Remove NVIDIA USB Type-C UCSI devices, if present
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+      # Remove NVIDIA Audio devices, if present
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+      # Remove NVIDIA VGA/3D controller devices
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+    '';
     gnome = {
       gnome-user-share.enable = false;
       gnome-online-accounts.enable = false;

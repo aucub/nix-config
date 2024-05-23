@@ -5,21 +5,21 @@
   ...
 }: {
   programs.yazi = {
-      enable = true;
-      settings.yazi = {
-        manager = {
-          ratio = [ 0 2 3 ];
-          sort_by = "natural";
-          sort_dir_first = true;
-          sort_sensitive = false;
-          sort_reverse = false;
-          show_hidden = true;
-        };
+    enable = true;
+    settings.yazi = {
+      manager = {
+        ratio = [0 2 3];
+        sort_by = "natural";
+        sort_dir_first = true;
+        sort_sensitive = false;
+        sort_reverse = false;
+        show_hidden = true;
+      };
 
-        preview = {
-          max_width = 2000;
-          max_height = 2000;
-        };
+      preview = {
+        max_width = 2000;
+        max_height = 2000;
       };
     };
+  };
 }
