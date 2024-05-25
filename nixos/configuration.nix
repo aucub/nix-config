@@ -371,6 +371,7 @@
         inputs.home-manager.packages.${pkgs.system}.default
         nix-output-monitor
         comma
+        nix-tree
         just
       ])
       ++ (with pkgs; [

@@ -73,7 +73,7 @@ path:
   $env.PATH | split row ":"
 
 wd:
-  nix-store --gc --print-roots | rg -v '/proc/' | rg -Po '(?<= -> ).*' | xargs -o nix-tree
+  nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree
 
 lg input:
   nix-locate {{input}}  | grep -v '('
