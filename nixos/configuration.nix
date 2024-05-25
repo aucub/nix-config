@@ -39,7 +39,7 @@
       inputs.nur.overlay
     ];
     config = {
-      allowUnfree = true;
+      allowUnfree = lib.mkForce true;
     };
   };
 
@@ -51,20 +51,23 @@
       flake-registry = "";
       nix-path = config.nix.nixPath;
       auto-optimise-store = true;
+      builders-use-substitutes = true;
       substituters = [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
-        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+        # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
-        "https://nixpkgs-wayland.cachix.org"
+        # "https://nixpkgs-wayland.cachix.org"
         # "https://qihaiumi.cachix.org"
         # "https://cosmic.cachix.org"
+        "https://anyrun.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+        # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
         # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+        "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
       ];
       trusted-users = [
         "root"
@@ -82,14 +85,14 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 1w";
     };
   };
 
   networking = {
     hostName = "${vars.hostname}";
     networkmanager.enable = true;
-    firewall.enable = false;
+    firewall.enable = lib.mkDefault false;
     networkmanager.dns = "systemd-resolved";
   };
 
@@ -126,7 +129,7 @@
       "nvidia_modeset"
     ];
     extraModulePackages = [
-      pkgs.linuxKernel.packages.linux_zen.bbswitch
+      # pkgs.linuxKernel.packages.linux_zen.bbswitch
       pkgs.linuxKernel.packages.linux_zen.v4l2loopback
     ];
     extraModprobeConfig = ''
@@ -187,7 +190,8 @@
   };
 
   fonts = {
-    enableDefaultPackages = true;
+    enableDefaultPackages = false;
+    fontDir.enable = true;
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
@@ -197,6 +201,12 @@
       source-han-mono
       source-han-serif-vf-otf
       source-han-sans-vf-otf
+      (nerdfonts.override {
+        fonts = [
+          "NerdFontsSymbolsOnly"
+          "Iosevka"
+        ];
+      })
       twitter-color-emoji
     ];
     fontconfig = {
@@ -221,7 +231,9 @@
     };
   };
 
-  sound.enable = true;
+  sound.enable = false;
+
+  security.rtkit.enable = true;
 
   hardware = {
     pulseaudio.enable = false;
@@ -250,6 +262,7 @@
       extraPackages = with pkgs; [
         amdvlk
         vaapiVdpau
+        libGL
         # nvidia-vaapi-driver
         libvdpau-va-gl
         mesa.drivers
@@ -317,7 +330,9 @@
         ])
         # theme
         ++ (with pkgs; [
-          papirus-icon-theme
+          papirus-icon-theme.override
+          {color = "adwaita";}
+          orchis-theme
           bibata-cursors
         ])
         # gnomeExtensions
@@ -330,11 +345,12 @@
         ++ (with pkgs; [
           hiddify-next
           gopeed
-          orchis-theme
           navicat
           damask
         ])
+        # nur
         ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki])
+        # gnome
         ++ (with pkgs.gnome; [
           dconf-editor
           gnome-tweaks
@@ -368,7 +384,7 @@
         delta
         git
         eza
-        yazi-unwrapped
+        yazi
         fzf
         bat
         fd
@@ -379,10 +395,52 @@
         python3Full
         lnav
         uutils-coreutils-noprefix
-        android-tools
+        # android-tools
+      ])
+      # FHS
+      ++ (with pkgs; [
+        (
+          let
+            base = pkgs.appimageTools.defaultFhsEnvArgs;
+          in
+            pkgs.buildFHSUserEnv (base
+              // {
+                name = "fhs";
+                targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [pkgs.pkg-config];
+                profile = "export FHS=1";
+                runScript = "fish";
+                extraOutputsToInstall = ["dev"];
+              })
+        )
+        (
+          let
+            base = pkgs.appimageTools.defaultFhsEnvArgs;
+          in
+            pkgs.buildFHSUserEnv (base
+              // {
+                name = "pipzone";
+                targetPkgs = pkgs:
+                  (base.targetPkgs pkgs)
+                  ++ [pkgs.pkg-config]
+                  ++ [
+                    pkgs.libGL
+                    pkgs.glib
+                    pkgs.libgcc
+                    pkgs.gccStdenv
+                    pkgs.python311Full
+                    pkgs.python311Packages.pip
+                    pkgs.python311Packages.virtualenv
+                    pkgs.uv
+                  ];
+                profile = "export FHS=1";
+                runScript = "fish";
+                extraOutputsToInstall = ["dev"];
+              })
+        )
       ]);
     gnome.excludePackages =
       (with pkgs; [
+        orca
         tecla
         gnome-tecla
         gnome-tour
@@ -581,26 +639,50 @@
     gnome-terminal.enable = false;
     file-roller.enable = false;
   };
+
   qt = {
     enable = true;
     style = "adwaita";
     platformTheme = "gnome";
   };
+
   services = {
-    udev.extraRules = ''
-      # Remove NVIDIA USB xHCI Host Controller devices, if present
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-      # Remove NVIDIA USB Type-C UCSI devices, if present
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-      # Remove NVIDIA Audio devices, if present
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-      # Remove NVIDIA VGA/3D controller devices
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-    '';
+    # geoclue2.enable = true;
+    udev = {
+      extraRules = ''
+        # Remove NVIDIA USB xHCI Host Controller devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+        # Remove NVIDIA USB Type-C UCSI devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+        # Remove NVIDIA Audio devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+        # Remove NVIDIA VGA/3D controller devices
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+      '';
+      packages = with pkgs; [
+        gnome.gnome-settings-daemon
+        android-udev-rules
+      ];
+    };
+    kmscon = {
+      # Instead of gettys.
+      enable = true;
+      fonts = [
+        {
+          name = "Source Code Pro";
+          package = pkgs.source-code-pro;
+        }
+      ];
+      extraOptions = "--term xterm-256color";
+      extraConfig = "font-size=12";
+      hwRender = true;
+    };
     gnome = {
       gnome-user-share.enable = false;
       gnome-online-accounts.enable = false;
       gnome-browser-connector.enable = false;
+      gnome-initial-setup.enable = false;
+      gnome-online-miners.enable = false;
       games.enable = false;
       tracker.enable = false;
       tracker-miners.enable = false;
@@ -624,6 +706,10 @@
     # btrfs.autoScrub = {
     # enable = true;
     # };
+    power-profiles-daemon = {
+      enable = true;
+    };
+    upower.enable = true;
     auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
@@ -653,13 +739,7 @@
     };
     xserver = {
       enable = true;
-      displayManager.gdm = {
-        enable = true;
-        # settings.daemon = {
-        #   AutomaticLoginEnable = true;
-        #   AutomaticLogin = "${vars.users.users.username}";
-        # };
-      };
+      displayManager.gdm.enable = true;
       videoDrivers = [
         "amdgpu"
       ];
@@ -673,13 +753,7 @@
     };
     # flatpak.enable = true;
     # printing.enable = true;
-    openssh = {
-      enable = false;
-      settings = {
-        PermitRootLogin = "no";
-        PasswordAuthentication = false;
-      };
-    };
+    openssh.enable = false;
   };
 
   systemd = {

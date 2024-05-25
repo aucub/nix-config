@@ -42,6 +42,11 @@
     };
   };
 
+  xdg.configFile."pip/pip.conf".text = ''
+    [global]
+    index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
+    format = columns
+  '';
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
@@ -223,6 +228,14 @@
         style = "header-filename,header-filesize,grid";
         paging = "never";
         theme = "Dracula";
+      };
+    };
+    delta = {
+      enable = true;
+      options = {
+        diff-so-fancy = true;
+        line-numbers = true;
+        true-color = "always";
       };
     };
     yazi = {

@@ -4,13 +4,14 @@
   targetPkgs = pkgs: (with pkgs; [
     libGL
     glib
+    libgcc
+    gccStdenv
     python311Full
     python311Packages.pip
     python311Packages.virtualenv
     uv
   ]);
   runScript = ''
-    source $HOME/.local/share/python/.venv/bin/activate.fish
     fish
   '';
 })
