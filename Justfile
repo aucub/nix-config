@@ -10,18 +10,9 @@ set shell := ["fish", "-c"]
 up:
   nix flake update
 
-# Update specific input
-# Usage: just upp nixpkgs
-upp input:
-  nix flake update {{input}}
-
 # List all generations of the system profile
 history:
   nix profile history --profile /nix/var/nix/profiles/system
-
-# Open a nix shell with the flake
-repl:
-  nix repl -f flake:nixpkgs
 
 # remove all generations older than 7 days
 clean:
@@ -29,35 +20,29 @@ clean:
 
 # Garbage collect all unused nix store entries
 gc:
-  # garbage collect all unused nix store entries
   sudo nix store gc --debug
   sudo nix-collect-garbage --delete-old
 
-# Remove all reflog entries and prune unreachable objects
-gitgc:
-  git reflog expire --expire-unreachable=now --all
-  git gc --prune=now
-
 ############################################################################
 #
-#  NixOS Desktop related commands
+#  NixOS related commands
 #
 ############################################################################
 
 rs:
-  sudo nixos-rebuild switch --flake .#neko
+  sudo nixos-rebuild switch --flake --show-trace --log-format internal-json -v .#neko |& nom --json
 
 rsu:
-  sudo nixos-rebuild switch --flake --upgrade .#neko
+  sudo nixos-rebuild switch --flake --upgrade --show-trace --log-format internal-json -v .#neko |& nom --json
 
 rsb:
-  sudo nixos-rebuild switch --install-bootloader --flake .#neko
+  sudo nixos-rebuild switch --install-bootloader --flake --show-trace --log-format internal-json -v .#neko |& nom --json
 
 hs:
-  home-manager switch --flake .#uymi@neko
+  home-manager switch --flake --show-trace --log-format internal-json -v .#uymi@neko |& nom --json
 
 bp input:
-  nix build .#{{input}}
+  nix build --impure --show-trace --log-format internal-json -v .#{{input}} |& nom --json
 
 ############################################################################
 #
@@ -66,14 +51,7 @@ bp input:
 ############################################################################
 
 fmt:
-  # format the nix files in this repo
   nix fmt  --no-write-lock-file
-
-path:
-  $env.PATH | split row ":"
-
-wd:
-  nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree
 
 lg input:
   nix-locate {{input}}  | grep -v '('

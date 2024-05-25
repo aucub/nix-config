@@ -628,6 +628,7 @@
         set -U fish_greeting
       '';
       shellAbbrs = {
+        nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
       };
     };
@@ -676,7 +677,7 @@
       ];
     };
     kmscon = {
-      # Instead of gettys.
+      # Instead of vt
       enable = true;
       fonts = [
         {
@@ -685,7 +686,7 @@
         }
       ];
       extraOptions = "--term xterm-256color";
-      extraConfig = "font-size=12";
+      extraConfig = "font-size=14";
       hwRender = true;
     };
     gnome = {
