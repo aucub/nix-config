@@ -578,6 +578,7 @@
           editor = "hx";
           autocrlf = "input";
           pager = "delta";
+          askpass = "";
         };
         init = {
           defaultBranch = "main";
@@ -609,6 +610,7 @@
         };
         credential = {
           credentialStore = "secretservice";
+          helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
         };
       };
     };

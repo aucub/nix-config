@@ -30,19 +30,19 @@ gc:
 ############################################################################
 
 rs:
-  sudo nixos-rebuild switch --flake --show-trace --log-format internal-json -v .#neko |& nom --json
+  sudo nixos-rebuild switch --flake .#neko --show-trace
 
 rsu:
-  sudo nixos-rebuild switch --flake --upgrade --show-trace --log-format internal-json -v .#neko |& nom --json
+  sudo nixos-rebuild switch --flake .#neko --upgrade --show-trace
 
 rsb:
-  sudo nixos-rebuild switch --install-bootloader --flake --show-trace --log-format internal-json -v .#neko |& nom --json
+  sudo nixos-rebuild switch  --flake .#neko --install-bootloader --show-trace
 
 hs:
-  home-manager switch --flake --show-trace --log-format internal-json -v .#uymi@neko |& nom --json
+  home-manager switch --flake .#uymi@neko --show-trace
 
 bp input:
-  nix build --impure --show-trace --log-format internal-json -v .#{{input}} |& nom --json
+  nix build --impure .#{{input}} --show-trace
 
 ############################################################################
 #
