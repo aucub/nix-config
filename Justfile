@@ -47,6 +47,9 @@ gitgc:
 rs:
   sudo nixos-rebuild switch --flake .#neko
 
+rsu:
+  sudo nixos-rebuild switch --flake --upgrade .#neko
+
 rsb:
   sudo nixos-rebuild switch --install-bootloader --flake .#neko
 

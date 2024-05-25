@@ -66,11 +66,11 @@
   };
 
   programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      enableBashIntegration = true;
-    };
+    # direnv = {
+    #   enable = true;
+    #   nix-direnv.enable = true;
+    #   enableBashIntegration = true;
+    # };
     bash = {
       enable = true;
       enableCompletion = true;
@@ -245,8 +245,15 @@
       };
     };
     yazi = {
+      enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
+      settings = {
+        manager = {
+          show_hidden = true;
+          sort_dir_first = true;
+        };
+      };
     };
     # obs-studio = {
     #   enable = true;

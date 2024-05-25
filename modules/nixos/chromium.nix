@@ -44,7 +44,6 @@
         "credit_card_enabled" = false;
         "profile_enabled" = false;
       };
-
       "bookmark_bar" = {
         "show_on_all_tabs" = false;
       };
@@ -59,7 +58,6 @@
         "has_seen_welcome_page" = false;
         "last_clear_browsing_data_tab" = 1;
         "show_home_button" = true;
-
         "theme" = {
           "color_variant" = 1;
           "user_color" = -16711936;
@@ -91,11 +89,9 @@
       "search" = {
         "suggest_enabled" = false;
       };
-
       "tracking_protection" = {
         "tracking_protection_3pcd_enabled" = false;
       };
-
       "translate" = {
         "enabled" = false;
       };

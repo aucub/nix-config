@@ -56,7 +56,7 @@ in
       cp -a ${appimageContents}/* $out/
       mkdir -p $out/bin
       sed -i '1s|.*|#!/usr/bin/env bash|' $out/AppRun
-      sed -i '/^LD_LIBRARY_PATH=/ s|$|:${libGL}/lib:${glib}/lib:${glibc}/lib:${pango}/lib:${harfbuzz}/lib:${fontconfig}/lib:${libX11}/lib:${freetype}/lib:${e2fsprogs}/lib:${expat}/lib:${p11-kit}/lib:${libxcb}/lib:${libgpg-error}/lib|' $out/AppRun
+      sed -i '/^LD_LIBRARY_PATH=/ s|$|:${libGL}/lib:${glib}/lib:${glib.out}/lib:${glibc}/lib:${pango}/lib:${pango.out}/lib:${harfbuzz}/lib:${fontconfig}/lib:${harfbuzz.out}/lib:${fontconfig.lib}/lib:${libX11}/lib:${freetype}/lib:${e2fsprogs}/lib:${expat}/lib:${p11-kit}/lib:${libxcb}/lib:${libgpg-error}/lib:${e2fsprogs.out}/lib:${expat.out}/lib:${p11-kit.out}/lib:${libxcb.out}/lib:${libgpg-error.out}/lib|' $out/AppRun
       ln -s $out/AppRun $out/bin/${pname}
       install -Dm644 $out/navicat.desktop $out/share/applications/navicat.desktop
       cp -a $out/usr/share/icons $out/share/

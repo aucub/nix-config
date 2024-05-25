@@ -8,7 +8,6 @@
   ...
 }: {
   imports = [
-    outputs.nixosModules.yazi
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
 
@@ -19,7 +18,7 @@
     inputs.home-manager.nixosModules.home-manager
 
     inputs.nix-index-database.nixosModules.nix-index
-    inputs.chaotic.nixosModules.default
+    # inputs.chaotic.nixosModules.default
   ];
 
   home-manager = {
@@ -60,14 +59,12 @@
         # "https://nixpkgs-wayland.cachix.org"
         # "https://qihaiumi.cachix.org"
         # "https://cosmic.cachix.org"
-        "https://anyrun.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
         # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
-        "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
       ];
       trusted-users = [
         "root"
@@ -85,7 +82,7 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 1w";
+      options = "--delete-older-than 7d";
     };
   };
 
@@ -368,7 +365,6 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
-      YAZI_CONFIG_HOME = "/etc/yazi";
     };
     systemPackages =
       (with pkgs; [
@@ -485,11 +481,11 @@
 
   programs = {
     command-not-found.enable = false;
-    direnv = {
-      enable = true;
-      silent = true;
-      nix-direnv.enable = true;
-    };
+    # direnv = {
+    #   enable = true;
+    #   silent = true;
+    #   nix-direnv.enable = true;
+    # };
     htop = {
       enable = true;
       settings = {
@@ -632,6 +628,15 @@
       '';
       shellAbbrs = {
         ezl = "eza -lba --group-directories-first";
+      };
+    };
+    yazi = {
+      enable = true;
+      settings.yazi = {
+        manager = {
+          sort_dir_first = true;
+          show_hidden = true;
+        };
       };
     };
     fzf.fuzzyCompletion = true;
