@@ -6,4 +6,5 @@
   wofi = import ./wofi.nix;
   fish = import ./fish.nix;
   dotfiles = import ./dotfiles/default.nix;
+  anyrun = import ./anyrun.nix;
 }

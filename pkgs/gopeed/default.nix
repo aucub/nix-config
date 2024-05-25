@@ -78,9 +78,8 @@ stdenv.mkDerivation rec {
     dpkg -x ${src} $out
     mkdir -p $out/bin
     ln -s $out/opt/${pname}/${pname} $out/bin/${pname}
-    mkdir $out/share/
-    mv $out/usr/share $out/
-    rm -r $out/usr
+    mv $out/usr/share $out/share
+    rm -rf $out/usr
     runHook postInstall
   '';
 

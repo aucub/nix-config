@@ -321,8 +321,8 @@
           celluloid
           localsend
           chromium
-          localsend
           wofi
+          anyrun
           impression
           # obs-studio
           # nomacs
@@ -330,8 +330,8 @@
         ])
         # theme
         ++ (with pkgs; [
-          papirus-icon-theme.override
-          {color = "adwaita";}
+          (papirus-icon-theme.override
+          {color = "adwaita";})
           orchis-theme
           bibata-cursors
         ])
@@ -376,6 +376,7 @@
         inputs.home-manager.packages.${pkgs.system}.default
         nix-output-monitor
         comma
+        just
       ])
       ++ (with pkgs; [
         alacritty
@@ -485,6 +486,11 @@
 
   programs = {
     command-not-found.enable = false;
+    direnv = {
+      enable = true;
+      silent = true;
+      nix-direnv.enable = true;
+    };
     htop = {
       enable = true;
       settings = {
@@ -682,7 +688,7 @@
       gnome-online-accounts.enable = false;
       gnome-browser-connector.enable = false;
       gnome-initial-setup.enable = false;
-      gnome-online-miners.enable = false;
+      gnome-online-miners.enable = lib.mkForce false;
       games.enable = false;
       tracker.enable = false;
       tracker-miners.enable = false;

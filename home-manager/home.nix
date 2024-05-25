@@ -14,8 +14,10 @@
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.chromium
     outputs.homeManagerModules.wofi
+    outputs.homeManagerModules.anyrun
 
     inputs.nix-index-database.hmModules.nix-index
+    inputs.anyrun.homeManagerModules.default
   ];
 
   nixpkgs = {
@@ -42,14 +44,16 @@
     };
   };
 
-  xdg.configFile."pip/pip.conf".text = ''
-    [global]
-    index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
-    format = columns
-  '';
-  xdg.userDirs = {
-    enable = true;
-    createDirectories = true;
+  xdg = {
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+    configFile."pip/pip.conf".text = ''
+      [global]
+      index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
+      format = columns
+    '';
   };
 
   gtk = {
@@ -60,11 +64,15 @@
     };
     iconTheme = {
       name = "Papirus";
-      package = pkgs.papirus-icon-theme;
     };
   };
 
   programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      enableBashIntegration = true;
+    };
     bash = {
       enable = true;
       enableCompletion = true;
@@ -230,7 +238,7 @@
         theme = "Dracula";
       };
     };
-    delta = {
+    git.delta = {
       enable = true;
       options = {
         diff-so-fancy = true;
