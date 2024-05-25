@@ -14,10 +14,8 @@
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.chromium
     outputs.homeManagerModules.wofi
-    outputs.homeManagerModules.anyrun
 
     inputs.nix-index-database.hmModules.nix-index
-    inputs.anyrun.homeManagerModules.default
   ];
 
   nixpkgs = {

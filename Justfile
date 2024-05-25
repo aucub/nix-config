@@ -53,7 +53,7 @@ rsb:
 hs:
   home-manager switch --flake .#uymi@neko
 
-bp:
+bp input:
   nix build .#{{input}}
 
 ############################################################################
@@ -64,7 +64,7 @@ bp:
 
 fmt:
   # format the nix files in this repo
-  nix fmt
+  nix fmt  --no-write-lock-file
 
 path:
   $env.PATH | split row ":"
@@ -72,5 +72,5 @@ path:
 wd:
   nix-store --gc --print-roots | rg -v '/proc/' | rg -Po '(?<= -> ).*' | xargs -o nix-tree
 
-lg:
+lg input:
   nix-locate {{input}}  | grep -v '('

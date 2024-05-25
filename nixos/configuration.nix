@@ -322,7 +322,6 @@
           localsend
           chromium
           wofi
-          anyrun
           impression
           # obs-studio
           # nomacs
@@ -331,7 +330,7 @@
         # theme
         ++ (with pkgs; [
           (papirus-icon-theme.override
-          {color = "adwaita";})
+            {color = "adwaita";})
           orchis-theme
           bibata-cursors
         ])

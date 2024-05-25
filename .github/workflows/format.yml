@@ -27,21 +27,5 @@ jobs:
 
       - run: nix fmt --no-write-lock-file
 
-      - name: Check for changes
-        run: |
-          if git diff --exit-code; then
-            exit 0
-          fi
-
-      - name: Commit files
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a --amend --no-edit
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          force_with_lease: true
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6

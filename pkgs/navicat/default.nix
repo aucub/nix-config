@@ -32,7 +32,6 @@ in
   appimageTools.wrapType2 {
     inherit pname version src;
 
-
     buildInputs = [
       libgpg-error
       libxcb
