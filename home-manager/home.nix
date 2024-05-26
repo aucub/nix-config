@@ -14,6 +14,7 @@
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.chromium
     outputs.homeManagerModules.wofi
+    outputs.homeManagerModules.colord
 
     inputs.nix-index-database.hmModules.nix-index
   ];
