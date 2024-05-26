@@ -375,7 +375,23 @@
                 extraOutputsToInstall = ["dev"];
               })
         )
-      ]);
+      ])
+      ++ (
+        if config.services.xserver.desktopManager.gnome.enable
+        then
+          # gnomeExtensions
+          (with pkgs.gnomeExtensions; [
+            appindicator
+            caffeine
+            kimpanel
+          ])
+          # gnome
+          ++ (with pkgs.gnome; [
+            dconf-editor
+            gnome-tweaks
+          ])
+        else []
+      );
   };
 
   documentation = {

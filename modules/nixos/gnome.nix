@@ -4,18 +4,6 @@
   pkgs,
   ...
 }: {
-  environment.systemPackages =
-    # gnomeExtensions
-    (with pkgs.gnomeExtensions; [
-      appindicator
-      caffeine
-      kimpanel
-    ])
-    # gnome
-    ++ (with pkgs.gnome; [
-      dconf-editor
-      gnome-tweaks
-    ]);
   environment.gnome.excludePackages =
     (with pkgs; [
       orca
