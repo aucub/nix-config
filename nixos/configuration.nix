@@ -248,6 +248,7 @@
           "wireshark"
           "input"
           "networkmanager"
+          "colord"
           "adbusers"
         ]);
       shell = pkgs.bashInteractive;

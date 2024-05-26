@@ -4,5 +4,4 @@
   gnome = import ./gnome.nix;
   nvidia-disable = import ./nvidia-disable.nix;
   nvidia = import ./nvidia.nix;
-  stylix = import ./stylix.nix;
 }
