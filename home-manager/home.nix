@@ -16,7 +16,6 @@
     outputs.homeManagerModules.wofi
 
     inputs.nix-index-database.hmModules.nix-index
-    inputs.stylix.homeManagerModules.stylix
   ];
 
   nixpkgs = {
@@ -37,8 +36,8 @@
     homeDirectory = "/home/${vars.users.users.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
-      name = "Bibata-Modern-Classic";
-      size = 24;
+      name = lib.mkForce "Bibata-Modern-Classic";
+      size = lib.mkForce 24;
     };
   };
 
@@ -135,7 +134,7 @@
           startup_mode = "Windowed";
           decorations_theme_variant = "dark";
         };
-        font = {
+        font = lib.mkForce {
           normal = {
             family = "Sarasa Mono SC";
             style = "Regular";
@@ -166,15 +165,15 @@
           ];
         };
         colors = {
-          primary = {
+          primary = lib.mkDefault {
             background = "0x212121";
             foreground = "0xF8F8F2";
           };
-          cursor = {
+          cursor = lib.mkDefault {
             text = "0x0E1415";
             cursor = "0xECEFF4";
           };
-          normal = {
+          normal = lib.mkDefault {
             black = "0x21222C";
             red = "0xFF5555";
             green = "0x50FA7B";
@@ -184,7 +183,7 @@
             cyan = "0x8BE9FD";
             white = "0xF8F9F2";
           };
-          bright = {
+          bright = lib.mkDefault {
             black = "0x545454";
             red = "0xFF6E6E";
             green = "0x69FF94";
@@ -211,7 +210,7 @@
       enable = true;
       defaultEditor = true;
       settings = {
-        theme = "fleet_dark";
+        theme = lib.mkDefault "fleet_dark";
         editor = {
           middle-click-paste = false;
           file-picker.hidden = false;
@@ -223,7 +222,7 @@
       config = {
         style = "header-filename,header-filesize,grid";
         paging = "never";
-        theme = "Dracula";
+        theme = lib.mkDefault "Dracula";
       };
     };
     git.delta = {

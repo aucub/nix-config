@@ -2,6 +2,7 @@
   inputs,
   config,
   pkgs,
+  vars,
   ...
 }: {
   imports = [
@@ -9,7 +10,7 @@
   ];
 
   stylix = {
-    image = "${pkgs.lib.file.mkHomePath ".config/background"}";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/da-one-paper.yaml";
+    image = /home/${vars.users.users.username}/.config/background.jpg;
+    # base16Scheme = "${pkgs.base16-schemes}/share/themes/da-one-paper.yaml";
   };
 }

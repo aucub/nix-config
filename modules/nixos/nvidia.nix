@@ -5,14 +5,14 @@
   ...
 }: {
   boot.kernelParams =
-    ${vars.boot.kernelParams}
+    vars.boot.kernelParams
     ++ [
       "nvidia-drm.modeset=1"
       "NVreg_PreserveVideoMemoryAllocations=1"
       "nvidia_drm.fbdev=1"
     ];
   boot.kernelModules =
-    ${vars.boot.kernelModules}
+    vars.boot.kernelModules
     ++ [
       "bbswitch"
       "nvidia"
@@ -21,7 +21,7 @@
       "nvidia_modeset"
     ];
   boot.extraModulePackages =
-    ${vars.boot.extraModulePackages}
+    (vars.boot.extraModulePackages pkgs)
     ++ (with pkgs; [
       pkgs.linuxKernel.packages.linux_zen.bbswitch
     ]);
@@ -43,7 +43,7 @@
     };
   };
   hardware.opengl.extraPackages =
-    ${vars.hardware.opengl.extraPackages}
+    (vars.hardware.opengl.extraPackages pkgs)
     ++ (with pkgs; [
       nvidia-vaapi-driver
     ]);

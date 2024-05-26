@@ -9,7 +9,7 @@
   ];
 
   boot.extraModprobeConfig =
-    ${vars.boot.extraModprobeConfig}
+    vars.boot.extraModprobeConfig
     + ''
       blacklist nouveau
       options nouveau modeset=0

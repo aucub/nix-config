@@ -107,11 +107,11 @@
         efiSysMountPoint = "/boot";
       };
     };
-    kernelParams = ${vars.boot.kernelParams};
+    kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
-    kernelModules = ${vars.boot.kernelModules};
-    extraModulePackages = ${vars.boot.extraModulePackages};
-    extraModprobeConfig = ${vars.boot.extraModprobeConfig};
+    kernelModules = vars.boot.kernelModules;
+    extraModulePackages = vars.boot.extraModulePackages pkgs;
+    extraModprobeConfig = vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [
       "btrfs"
@@ -215,7 +215,7 @@
     opengl = {
       enable = true;
       driSupport = true;
-      extraPackages = ${vars.hardware.opengl.extraPackages};
+      extraPackages = vars.hardware.opengl.extraPackages pkgs;
     };
     # 允许视频组中的用户进行亮度控制
     brillo.enable = true;
