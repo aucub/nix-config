@@ -1,19 +1,18 @@
-name: pkgs
+name: pkg
 on:
   workflow_dispatch:
     inputs:
       package:
-        description: "build package"
+        description: "package name"
         required: true
         default: ""
         type: string
 
 jobs:
-  pkgs:
+  pkg:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Nix
-        uses: cachix/install-nix-action@V27
+      - uses: cachix/install-nix-action@V27
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
@@ -22,18 +21,16 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v6
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - uses: cachix/cachix-action@v15
         with:
           name: qihaiumi
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
-      - name: Build
-        run: |
+      - run: |
           export NIXPKGS_ALLOW_UNFREE=1
-          nix-env -f '<nixpkgs>' -iA nix-output-monitor
-          nix build --impure --show-trace .#$PACKAGE --log-format internal-json -v |& nom --json
+          nix-env -f '<nixpkgs>' -iA nh
+          nh build --impure --show-trace .#$PACKAGE
         env:
           PACKAGE: ${{ inputs.package }}

@@ -22,18 +22,21 @@
       AutofillAddressEnabled = false;
       AutofillCreditCardEnabled = false;
       BackgroundModeEnabled = false;
-      BookmarkBarEnabled = true;
+      BookmarkBarEnabled = false;
+      BrowserLabsEnabled = false;
       ClearBrowsingDataOnExitList = [
         "browsing_history"
         "download_history"
         "cached_images_and_files"
       ];
+      DefaultBrowserSettingEnabled = false;
       EncryptedClientHelloEnabled = true;
       HighEfficiencyModeEnabled = false;
       MetricsReportingEnabled = false;
       SideSearchEnabled = false;
       SpellCheckServiceEnabled = false;
       SpellcheckEnabled = false;
+      ShoppingListEnabled = false;
       TranslateEnabled = true;
       PasswordManagerEnabled = false;
       CloudPrintProxyEnabled = false;

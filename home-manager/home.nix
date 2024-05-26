@@ -9,13 +9,14 @@
 }: {
   imports = [
     outputs.homeManagerModules.dotfiles
-    outputs.homeManagerModules.firefox
+    # outputs.homeManagerModules.firefox
     outputs.homeManagerModules.vscode
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.chromium
     outputs.homeManagerModules.wofi
 
     inputs.nix-index-database.hmModules.nix-index
+    inputs.stylix.homeManagerModules.stylix
   ];
 
   nixpkgs = {
@@ -37,7 +38,6 @@
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
       name = "Bibata-Modern-Classic";
-      package = pkgs.bibata-cursors;
       size = 24;
     };
   };
@@ -57,7 +57,6 @@
   gtk = {
     cursorTheme = {
       name = "Bibata-Modern-Classic";
-      package = pkgs.bibata-cursors;
       size = 24;
     };
     iconTheme = {
@@ -87,8 +86,6 @@
       interactiveShellInit = ''
         # set -x GOPATH $HOME/go
         # set -x PATH $PATH $GOPATH/bin /usr/local/go/bin
-        # set -x PNPM_HOME $HOME/.local/share/pnpm
-        # set -x PATH $PATH $PNPM_HOME
         set -x BUN_INSTALL $HOME/.bun
         set -x PATH $PATH $BUN_INSTALL/bin
         set_proxy
@@ -123,11 +120,9 @@
       enable = true;
       settings = {
         live_config_reload = false;
-
         shell = {
           program = "fish";
         };
-
         window = {
           padding = {
             x = 6;
@@ -140,7 +135,6 @@
           startup_mode = "Windowed";
           decorations_theme_variant = "dark";
         };
-
         font = {
           normal = {
             family = "Sarasa Mono SC";
@@ -156,15 +150,12 @@
           };
           size = 20;
         };
-
         selection = {
           semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
         };
-
         debug = {
           log_level = "Off";
         };
-
         keyboard = {
           bindings = [
             {
@@ -206,7 +197,6 @@
         };
       };
     };
-
     eza = {
       enable = true;
       git = true;

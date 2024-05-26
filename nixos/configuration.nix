@@ -10,8 +10,9 @@
   imports = [
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
-
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    outputs.nixosModules.gnome
+    outputs.nixosModules.nvidia-disable
+    outputs.nixosModules.stylix
 
     ./hardware-configuration.nix
 
@@ -106,40 +107,16 @@
         efiSysMountPoint = "/boot";
       };
     };
-    kernelParams = [
-      "amd_pstate=passive"
-      "amdgpu.vm_update_mode=3"
-      "radeon.dpm=0"
-      "nvidia-drm.modeset=1"
-      "acpi_backlight=native"
-      "NVreg_PreserveVideoMemoryAllocations=1"
-      "nvidia_drm.fbdev=1"
-    ];
+    kernelParams = ${vars.boot.kernelParams};
     consoleLogLevel = 3;
-    kernelModules = [
-      "v4l2loopback"
-      "bbswitch"
-      "amdgpu"
-      "nvidia"
-      "nvidia_drm"
-      "nvidia_uvm"
-      "nvidia_modeset"
-    ];
-    extraModulePackages = [
-      # pkgs.linuxKernel.packages.linux_zen.bbswitch
-      pkgs.linuxKernel.packages.linux_zen.v4l2loopback
-    ];
-    extraModprobeConfig = ''
-      blacklist nouveau
-      options nouveau modeset=0
-      options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
-    '';
+    kernelModules = ${vars.boot.kernelModules};
+    extraModulePackages = ${vars.boot.extraModulePackages};
+    extraModprobeConfig = ${vars.boot.extraModprobeConfig};
     tmp.useTmpfs = true;
     supportedFilesystems = [
       "btrfs"
       "bcachefs"
     ];
-    blacklistedKernelModules = ["nouveau" "nvidia" "nvidia_drm" "nvidia_modeset"];
     initrd = {
       supportedFilesystems = [
         "btrfs"
@@ -235,35 +212,10 @@
   hardware = {
     pulseaudio.enable = false;
     acpilight.enable = false;
-    # nvidia = {
-    #   open = true;
-    #   modesetting.enable = true;
-    #   dynamicBoost.enable = true;
-    #   prime.sync.enable = true;
-    #   package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
-    #   powerManagement = {
-    #     enable = true;
-    #     finegrained = true;
-    #   };
-    #   prime = {
-    #     offload = {
-    #       enable = true;
-    #       enableOffloadCmd = true;
-    #     };
-    #   };
-    # };
     opengl = {
       enable = true;
       driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        amdvlk
-        vaapiVdpau
-        libGL
-        # nvidia-vaapi-driver
-        libvdpau-va-gl
-        mesa.drivers
-      ];
+      extraPackages = ${vars.hardware.opengl.extraPackages};
     };
     # 允许视频组中的用户进行亮度控制
     brillo.enable = true;
@@ -297,6 +249,7 @@
           "wireshark"
           "input"
           "networkmanager"
+          "adbusers"
         ]);
       shell = pkgs.bashInteractive;
       packages =
@@ -331,12 +284,6 @@
           orchis-theme
           bibata-cursors
         ])
-        # gnomeExtensions
-        ++ (with pkgs.gnomeExtensions; [
-          appindicator
-          caffeine
-          kimpanel
-        ])
         # custom
         ++ (with pkgs; [
           hiddify-next
@@ -345,12 +292,7 @@
           damask
         ])
         # nur
-        ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki])
-        # gnome
-        ++ (with pkgs.gnome; [
-          dconf-editor
-          gnome-tweaks
-        ]);
+        ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki]);
     };
   };
 
@@ -369,7 +311,7 @@
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
-        nix-output-monitor
+        nil
         comma
         nix-tree
         just
@@ -435,45 +377,6 @@
               })
         )
       ]);
-    gnome.excludePackages =
-      (with pkgs; [
-        orca
-        tecla
-        gnome-tecla
-        gnome-tour
-        gnome-photos
-        gnome-menus
-        baobab
-        epiphany
-        gnome-connections
-        libsForQt5.qt5ct
-        qt6Packages.qt6ct
-        gnome-console
-      ])
-      ++ (with pkgs.gnome; [
-        gnome-contacts
-        gnome-initial-setup
-        yelp
-        cheese # webcam tool
-        gnome-music
-        gnome-terminal
-        epiphany # web browser
-        geary # email reader
-        gnome-calendar
-        gnome-clocks
-        gnome-characters
-        gnome-maps
-        gnome-weather
-        gnome-software
-        simple-scan
-        totem # video player
-        tali # poker game
-        iagno # go game
-        hitori # sudoku game
-        atomix # puzzle game
-        file-roller
-        seahorse
-      ]);
   };
 
   documentation = {
@@ -487,6 +390,12 @@
     #   silent = true;
     #   nix-direnv.enable = true;
     # };
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 4d --keep 3";
+      flake = "/etc/nixos";
+    };
     htop = {
       enable = true;
       settings = {
@@ -649,9 +558,6 @@
       languagePacks = ["zh-CN"];
       preferencesStatus = "default";
     };
-    seahorse.enable = false;
-    gnome-terminal.enable = false;
-    file-roller.enable = false;
   };
 
   qt = {
@@ -661,18 +567,9 @@
   };
 
   services = {
+    colord.enable = true;
     # geoclue2.enable = true;
     udev = {
-      extraRules = ''
-        # Remove NVIDIA USB xHCI Host Controller devices, if present
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-        # Remove NVIDIA USB Type-C UCSI devices, if present
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-        # Remove NVIDIA Audio devices, if present
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-        # Remove NVIDIA VGA/3D controller devices
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-      '';
       packages = with pkgs; [
         gnome.gnome-settings-daemon
         android-udev-rules
@@ -690,19 +587,6 @@
       extraOptions = "--term xterm-256color";
       extraConfig = "font-size=14";
       hwRender = true;
-    };
-    gnome = {
-      gnome-user-share.enable = false;
-      gnome-online-accounts.enable = false;
-      gnome-browser-connector.enable = false;
-      gnome-initial-setup.enable = false;
-      gnome-online-miners.enable = lib.mkForce false;
-      games.enable = false;
-      tracker.enable = false;
-      tracker-miners.enable = false;
-      rygel.enable = false;
-      gnome-remote-desktop.enable = false;
-      evolution-data-server.enable = lib.mkForce false;
     };
     resolved = {
       enable = true;

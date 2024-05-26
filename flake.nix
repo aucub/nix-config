@@ -21,6 +21,7 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix.url = "github:danth/stylix";
   };
 
   outputs = {
@@ -44,6 +45,33 @@
         initialHashedPassword = "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
         root.initialHashedPassword = "$y$j9T$/qg2DYP0TOSZzSwlgs9mV/$uVAqBwhXEnwkMd0D4zKH9SSBQ4WzlGcnimnLrbyNwP4";
       };
+      boot = {
+        kernelParams = [
+          "amd_pstate=passive"
+          "amdgpu.vm_update_mode=3"
+          "radeon.dpm=0"
+          "acpi_backlight=native"
+        ];
+        kernelModules = [
+          "v4l2loopback"
+          "amdgpu"
+        ];
+        extraModulePackages = pkgs:
+          with pkgs; [
+            linuxKernel.packages.linux_zen.v4l2loopback
+          ];
+        extraModprobeConfig = ''
+          options v4l2loopback exclusive_caps=1 video_nr=9 card_label="Virtual Camera"
+        '';
+      };
+      hardware.opengl.extraPackages = pkgs:
+        with pkgs; [
+          amdvlk
+          vaapiVdpau
+          libGL
+          libvdpau-va-gl
+          mesa.drivers
+        ];
     };
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
