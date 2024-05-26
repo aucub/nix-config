@@ -12,7 +12,6 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.nvidia-disable
-    outputs.nixosModules.stylix
 
     ./hardware-configuration.nix
 
@@ -90,7 +89,7 @@
   networking = {
     hostName = "${vars.hostname}";
     networkmanager.enable = true;
-    firewall.enable = lib.mkDefault false;
+    firewall.enable = false;
     networkmanager.dns = "systemd-resolved";
   };
 

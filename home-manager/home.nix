@@ -9,7 +9,7 @@
 }: {
   imports = [
     outputs.homeManagerModules.dotfiles
-    # outputs.homeManagerModules.firefox
+    outputs.homeManagerModules.firefox
     outputs.homeManagerModules.vscode
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.chromium
@@ -36,8 +36,9 @@
     homeDirectory = "/home/${vars.users.users.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
-      name = lib.mkForce "Bibata-Modern-Classic";
-      size = lib.mkForce 24;
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+      size = 24;
     };
   };
 
@@ -134,7 +135,7 @@
           startup_mode = "Windowed";
           decorations_theme_variant = "dark";
         };
-        font = lib.mkForce {
+        font = {
           normal = {
             family = "Sarasa Mono SC";
             style = "Regular";
@@ -165,15 +166,15 @@
           ];
         };
         colors = {
-          primary = lib.mkDefault {
+          primary = {
             background = "0x212121";
             foreground = "0xF8F8F2";
           };
-          cursor = lib.mkDefault {
+          cursor = {
             text = "0x0E1415";
             cursor = "0xECEFF4";
           };
-          normal = lib.mkDefault {
+          normal = {
             black = "0x21222C";
             red = "0xFF5555";
             green = "0x50FA7B";
@@ -183,7 +184,7 @@
             cyan = "0x8BE9FD";
             white = "0xF8F9F2";
           };
-          bright = lib.mkDefault {
+          bright = {
             black = "0x545454";
             red = "0xFF6E6E";
             green = "0x69FF94";

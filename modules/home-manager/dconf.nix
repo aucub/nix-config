@@ -22,11 +22,11 @@ with lib.hm.gvariant; {
       font-antialiasing = "rgba";
       font-hinting = "slight";
       cursor-theme = "Bibata-Modern-Classic";
-      document-font-name = lib.mkForce "更纱黑体 UI SC 11";
-      font-name = lib.mkForce "更纱黑体 UI SC 11";
-      monospace-font-name = lib.mkForce "等距更纱黑体 SC 11";
+      document-font-name = "更纱黑体 UI SC 11";
+      font-name = "更纱黑体 UI SC 11";
+      monospace-font-name = "等距更纱黑体 SC 11";
       gtk-enable-primary-paste = false;
-      gtk-theme = lib.mkDefault "Orchis-Purple-Compact-Nord";
+      gtk-theme = "Orchis-Purple-Compact-Nord";
       icon-theme = "Papirus";
       show-battery-percentage = true;
       text-scaling-factor = 1.25;

@@ -7,6 +7,29 @@
 }: {
   programs.firefox = {
     enable = true;
+    policies = {
+      DisablePocket = true;
+      DisableTelemetry = true;
+      DontCheckDefaultBrowser = true;
+      FirefoxHome = {
+        Pocket = false;
+        SponsoredPocket = false;
+        SponsoredTopSites = false;
+        TopSites = false;
+      };
+      NetworkPrediction = false;
+      NoDefaultBookmarks = true;
+      PasswordManagerEnabled = false;
+      ShowHomeButton = true;
+      UserMessaging = {
+        WhatsNew = false;
+        ExtensionRecommendations = false;
+        FeatureRecommendations = false;
+        UrlbarInterventions = false;
+        SkipOnboarding = true;
+        MoreFromMozilla = false;
+      };
+    };
     profiles.default = {
       id = 0;
       isDefault = true;
@@ -20,29 +43,6 @@
         immersive-translate
         # single-file
       ];
-      policies = {
-        DisablePocket = true;
-        DisableTelemetry = true;
-        DontCheckDefaultBrowser = true;
-        FirefoxHome = {
-          Pocket = false;
-          SponsoredPocket = false;
-          SponsoredTopSites = false;
-          TopSites = false;
-        };
-        NetworkPrediction = false;
-        NoDefaultBookmarks = true;
-        PasswordManagerEnabled = false;
-        ShowHomeButton = true;
-        UserMessaging = {
-          WhatsNew = false;
-          ExtensionRecommendations = false;
-          FeatureRecommendations = false;
-          UrlbarInterventions = false;
-          SkipOnboarding = true;
-          MoreFromMozilla = false;
-        };
-      };
       settings = {
         # 禁用 about:config 警告
         "browser.aboutConfig.showWarning" = false;
