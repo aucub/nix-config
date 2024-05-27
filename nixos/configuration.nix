@@ -163,7 +163,7 @@
   };
 
   fonts = {
-    enableDefaultPackages = false;
+    enableDefaultPackages = true;
     fontDir.enable = true;
     packages = with pkgs; [
       noto-fonts
@@ -209,6 +209,9 @@
   security.rtkit.enable = true;
 
   hardware = {
+    firmware = with pkgs; [
+      linux-firmware
+    ];
     pulseaudio.enable = false;
     acpilight.enable = false;
     opengl = {
@@ -322,7 +325,9 @@
         helix
         delta
         git
+        gitleaks
         eza
+        lnav
         yazi
         fzf
         bat
@@ -334,6 +339,7 @@
         python3Full
         lnav
         uutils-coreutils-noprefix
+        yadm
         # android-tools
       ])
       # FHS
@@ -390,6 +396,9 @@
           ++ (with pkgs.gnome; [
             dconf-editor
             gnome-tweaks
+          ])
+          ++ (with pkgs; [
+            gtop
           ])
         else []
       );
@@ -576,11 +585,7 @@
     };
   };
 
-  qt = {
-    enable = true;
-    style = "adwaita";
-    platformTheme = "gnome";
-  };
+  qt.enable = true;
 
   services = {
     colord.enable = true;
@@ -604,6 +609,7 @@
       extraConfig = "font-size=14";
       hwRender = true;
     };
+    networkd-dispatcher.enable = true;
     resolved = {
       enable = true;
       dnsovertls = "true";
@@ -653,16 +659,10 @@
     };
     xserver = {
       enable = true;
-      displayManager.gdm.enable = true;
       videoDrivers = [
         "amdgpu"
       ];
-      desktopManager = {
-        xterm.enable = false;
-        gnome = {
-          enable = true;
-        };
-      };
+      desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [xterm];
     };
     # flatpak.enable = true;
@@ -671,6 +671,7 @@
   };
 
   systemd = {
+    network.wait-online.enable = true;
     services = {
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
