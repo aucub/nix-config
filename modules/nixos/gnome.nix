@@ -4,6 +4,8 @@
   pkgs,
   ...
 }: {
+  qt.style = "adwaita";
+  qt.platformTheme = "gnome";
   environment.gnome.excludePackages =
     (with pkgs; [
       orca

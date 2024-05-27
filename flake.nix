@@ -70,6 +70,7 @@
           libGL
           libvdpau-va-gl
           mesa.drivers
+          xorg.xf86videoamdgpu
         ];
     };
     forAllSystems = nixpkgs.lib.genAttrs systems;
