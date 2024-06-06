@@ -373,11 +373,12 @@
                     pkgs.gccStdenv
                     pkgs.python3Full
                     pkgs.uv
-                  ]++
-                  (python3.withPackages (subpkgs: with subpkgs; [
-        pip
-       virtualenv
-    ]));
+                  ]
+                  ++ (python3.withPackages (subpkgs:
+                    with subpkgs; [
+                      pip
+                      virtualenv
+                    ]));
                 profile = "export FHS=1";
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
