@@ -14,7 +14,6 @@
     outputs.homeManagerModules.dconf
     outputs.homeManagerModules.chromium
     outputs.homeManagerModules.wofi
-    outputs.homeManagerModules.colord
 
     inputs.nix-index-database.hmModules.nix-index
   ];
@@ -66,11 +65,6 @@
   };
 
   programs = {
-    # direnv = {
-    #   enable = true;
-    #   nix-direnv.enable = true;
-    #   enableBashIntegration = true;
-    # };
     bash = {
       enable = true;
       enableCompletion = true;
@@ -268,5 +262,5 @@
 
   systemd.user.startServices = "sd-switch";
 
-  home.stateVersion = "24.05";
+  home.stateVersion = "24.11";
 }

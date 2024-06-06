@@ -22,10 +22,10 @@
   libgpg-error,
 }: let
   pname = "navicat";
-  version = "17.0.2";
+  version = "17.0.4";
   src = fetchurl {
-    url = "https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-    sha256 = "53580b0099c7209a914c4ca89becb16f1812c67849992ec83ce28863f988db84";
+    url = "https://dn.navicat.com/download/navicat17-premium-cs-x86_64.AppImage";
+    sha256 = "31b8eca01cec52eadfe37a0c5c2d9bcd52399893870aa6fb19d012dfc145c75d";
   };
   appimageContents = appimageTools.extractType2 {inherit pname version src;};
 in
