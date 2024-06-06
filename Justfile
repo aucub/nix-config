@@ -30,19 +30,19 @@ gc:
 ############################################################################
 
 rs:
-  sudo nixos-rebuild switch --flake .#neko --show-trace
+  sudo nixos-rebuild switch --flake .#neko --show-trace --no-write-lock-file
 
 rsu:
-  sudo nixos-rebuild switch --flake .#neko --upgrade --show-trace
+  sudo nixos-rebuild switch --flake .#neko --upgrade --show-trace --no-write-lock-file
 
 rsb:
-  sudo nixos-rebuild switch  --flake .#neko --install-bootloader --show-trace
+  sudo nixos-rebuild switch  --flake .#neko --install-bootloader --show-trace --no-write-lock-file
 
 hs:
-  home-manager switch --flake .#uymi@neko --show-trace
+  home-manager switch --flake .#uymi@neko --show-trace --no-write-lock-file
 
 bp input:
-  nix build --impure .#{{input}} --show-trace
+  nix build --impure .#{{input}} --show-trace --no-write-lock-file
 
 ############################################################################
 #
@@ -51,7 +51,7 @@ bp input:
 ############################################################################
 
 fmt:
-  nix fmt  --no-write-lock-file
+  nix fmt --no-write-lock-file
 
 lg input:
-  nix-locate {{input}}  | grep -v '('
+  nix-locate {{input}} | grep -v '('
