@@ -351,7 +351,9 @@
             pkgs.buildFHSUserEnv (base
               // {
                 name = "fhs";
-                targetPkgs = pkgs: (base.targetPkgs pkgs) ++  (with pkgs; [
+                targetPkgs = pkgs:
+                  (base.targetPkgs pkgs)
+                  ++ (with pkgs; [
                     pkg-config
                   ]);
                 profile = "export FHS=1";
@@ -377,11 +379,13 @@
                     python3Full
                     uv
                   ])
-                  ++ [(pkgs.python3.withPackages (subpkgs:
-                    with subpkgs; [
-                      pip
-                      virtualenv
-                    ]))];
+                  ++ [
+                    (pkgs.python3.withPackages (subpkgs:
+                      with subpkgs; [
+                        pip
+                        virtualenv
+                      ]))
+                  ];
                 profile = "export FHS=1";
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
