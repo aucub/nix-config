@@ -20,7 +20,6 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - run: |
-          export NIXPKGS_ALLOW_UNFREE=1
-          nix-env -f '<nixpkgs>' -iA nh
-          nh flake check --show-trace --impure
+      - run: nix flake check --show-trace --impure
+        env:
+          NIXPKGS_ALLOW_UNFREE: 1

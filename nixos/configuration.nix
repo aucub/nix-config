@@ -18,7 +18,6 @@
     inputs.home-manager.nixosModules.home-manager
 
     inputs.nix-index-database.nixosModules.nix-index
-    # inputs.chaotic.nixosModules.default
   ];
 
   home-manager = {
@@ -204,7 +203,7 @@
     };
   };
 
-  sound.enable = false;
+  sound.enable = true;
 
   security.rtkit.enable = true;
 
@@ -410,17 +409,6 @@
 
   programs = {
     command-not-found.enable = false;
-    # direnv = {
-    #   enable = true;
-    #   silent = true;
-    #   nix-direnv.enable = true;
-    # };
-    nh = {
-      enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep-since 4d --keep 3";
-      flake = "/etc/nixos";
-    };
     htop = {
       enable = true;
       settings = {
@@ -589,7 +577,6 @@
 
   services = {
     colord.enable = true;
-    # geoclue2.enable = true;
     udev = {
       packages = with pkgs; [
         gnome.gnome-settings-daemon
@@ -678,5 +665,5 @@
     };
   };
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
 }

@@ -28,9 +28,7 @@ jobs:
           name: qihaiumi
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
-      - run: |
-          export NIXPKGS_ALLOW_UNFREE=1
-          nix-env -f '<nixpkgs>' -iA nh
-          nh build --impure --show-trace .#$PACKAGE
+      - run: nix build --impure --show-trace .#$PACKAGE
         env:
           PACKAGE: ${{ inputs.package }}
+          NIXPKGS_ALLOW_UNFREE: 1

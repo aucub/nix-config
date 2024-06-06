@@ -17,8 +17,6 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - run: |
-          nix-env -f '<nixpkgs>' -iA nh
-          nh build '.#nixosConfigurations.neko.config.system.build.toplevel' --show-trace
+      - run: nix build '.#nixosConfigurations.neko.config.system.build.toplevel' --show-trace
 
       - run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'

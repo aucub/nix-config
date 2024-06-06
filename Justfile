@@ -30,7 +30,7 @@ gc:
 ############################################################################
 
 rs:
-  nh os switch --hostname neko .
+  sudo nixos-rebuild switch --flake .#neko --show-trace
 
 rsu:
   sudo nixos-rebuild switch --flake .#neko --upgrade --show-trace
