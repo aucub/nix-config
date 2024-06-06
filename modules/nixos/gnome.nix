@@ -25,11 +25,11 @@
       gnome-contacts
       gnome-initial-setup
       yelp
-      cheese # webcam tool
+      cheese
       gnome-music
       gnome-terminal
-      epiphany # web browser
-      geary # email reader
+      epiphany
+      geary
       gnome-calendar
       gnome-clocks
       gnome-characters
@@ -37,11 +37,11 @@
       gnome-weather
       gnome-software
       simple-scan
-      totem # video player
-      tali # poker game
-      iagno # go game
-      hitori # sudoku game
-      atomix # puzzle game
+      totem
+      tali
+      iagno
+      hitori
+      atomix
       file-roller
       seahorse
     ]);

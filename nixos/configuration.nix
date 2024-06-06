@@ -371,11 +371,13 @@
                     pkgs.glib
                     pkgs.libgcc
                     pkgs.gccStdenv
-                    pkgs.python311Full
-                    pkgs.python311Packages.pip
-                    pkgs.python311Packages.virtualenv
+                    pkgs.python3Full
                     pkgs.uv
-                  ];
+                  ]++
+                  (python3.withPackages (subpkgs: with subpkgs; [
+        pip
+       virtualenv
+    ]));
                 profile = "export FHS=1";
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];

@@ -1,6 +1,0 @@
-[cache]
-auto_update = false
-languages = ["zh"]
-
-[output]
-compact = true
