@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
-}: {
+{...}: {
   programs.chromium.commandLineArgs = [
     "--process-per-site"
     "--disable-reading-from-canvas"

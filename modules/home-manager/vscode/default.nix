@@ -1,10 +1,6 @@
 {
   inputs,
-  outputs,
-  lib,
-  config,
   pkgs,
-  vars,
   ...
 }: {
   programs = {
@@ -27,6 +23,7 @@
           bmalehorn.vscode-fish
           nvarner.typst-lsp
           tomoki1207.pdf
+          jnoortheen.nix-ide
           # GitHub.codespaces
           # ms-vscode.cpptools
           # YoavBls.pretty-ts-errors
@@ -35,7 +32,6 @@
         ])
         ++ (with inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
           rangav.vscode-thunder-client
-          # bbenoist.Nix
         ]);
     };
   };

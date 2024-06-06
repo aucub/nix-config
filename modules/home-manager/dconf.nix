@@ -1,5 +1,4 @@
-{lib, ...}:
-with lib.hm.gvariant; {
+{...}: {
   dconf.settings = {
     "app/drey/Damask" = {
       active-source = "wallhaven";

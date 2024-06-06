@@ -1,10 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
-  # i18n.inputMethod.fcitx5.ignoreUserConfig = true;
+{...}: {
   i18n.inputMethod.fcitx5.settings = {
     inputMethod = {
       GroupOrder = {"0" = "Default";};

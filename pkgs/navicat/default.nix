@@ -1,7 +1,5 @@
 {
-  stdenv,
   fetchurl,
-  makeDesktopItem,
   makeWrapper,
   appimageTools,
   lib,

@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   vars,
   ...
@@ -23,7 +22,7 @@
   boot.extraModulePackages =
     (vars.boot.extraModulePackages pkgs)
     ++ (with pkgs; [
-      pkgs.linuxKernel.packages.linux_zen.bbswitch
+      linuxKernel.packages.linux_zen.bbswitch
     ]);
   hardware.nvidia = {
     open = true;

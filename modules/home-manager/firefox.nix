@@ -1,10 +1,4 @@
-{
-  inputs,
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   programs.firefox = {
     enable = true;
     policies = {
@@ -34,7 +28,7 @@
       id = 0;
       isDefault = true;
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        # ublock-origin
+        # ublock-origin # 451
         floccus
         bitwarden
         violentmonkey

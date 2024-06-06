@@ -33,8 +33,8 @@
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-      inputs.nur.overlay
+      # outputs.overlays.unstable-small-packages
+      # inputs.nur.overlay
     ];
     config = {
       allowUnfree = lib.mkForce true;
@@ -135,26 +135,14 @@
       "zh_CN.UTF-8/UTF-8"
       "en_US.UTF-8/UTF-8"
     ];
-    extraLocaleSettings = {
-      LC_NUMERIC = "zh_CN.UTF-8";
-      LC_TIME = "zh_CN.UTF-8";
-      LC_MONETARY = "zh_CN.UTF-8";
-      LC_PAPER = "zh_CN.UTF-8";
-      LC_MEASUREMENT = "zh_CN.UTF-8";
-      LC_CTYPE = "zh_CN.UTF-8";
-      LC_COLLATE = "zh_CN.UTF-8";
-      LC_MESSAGES = "zh_CN.UTF-8";
-      LC_NAME = "zh_CN.UTF-8";
-      LC_IDENTIFICATION = "zh_CN.UTF-8";
-    };
     inputMethod = {
       enabled = "fcitx5";
       fcitx5 = {
         plasma6Support = true;
         addons = with pkgs; [
           fcitx5-gtk
-          libsForQt5.fcitx5-with-addons
-          libsForQt5.fcitx5-chinese-addons
+          fcitx5-with-addons
+          fcitx5-chinese-addons
         ];
         waylandFrontend = true;
       };
@@ -255,7 +243,7 @@
         ]);
       shell = pkgs.bashInteractive;
       packages =
-        (with pkgs; [inputs.home-manager.packages.${pkgs.system}.default])
+        [inputs.home-manager.packages.${pkgs.system}.default]
         ++
         # shell
         (with pkgs; [
@@ -265,7 +253,7 @@
           ruff
           git-credential-manager
           bun
-          # nodejs_20
+          # nodePackages.nodejs
         ])
         ++ (with pkgs; [
           vscode
@@ -293,9 +281,7 @@
           gopeed
           navicat
           damask
-        ])
-        # nur
-        ++ (with pkgs.nur.repos; [ruixi-rebirth.fcitx5-pinyin-zhwiki]);
+        ]);
     };
   };
 
@@ -333,7 +319,6 @@
         bat
         fd
         ripgrep-all
-        tlrc
         typos
         htop
         python3Full
@@ -623,9 +608,7 @@
     # btrfs.autoScrub = {
     # enable = true;
     # };
-    power-profiles-daemon = {
-      enable = true;
-    };
+    power-profiles-daemon.enable = true;
     upower.enable = true;
     auto-cpufreq.enable = true;
     pipewire = {

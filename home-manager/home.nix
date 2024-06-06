@@ -2,7 +2,6 @@
   inputs,
   outputs,
   lib,
-  config,
   pkgs,
   vars,
   ...
@@ -22,9 +21,9 @@
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
-      outputs.overlays.unstable-packages
+      # outputs.overlays.unstable-small-packages
 
-      inputs.nur.overlay
+      # inputs.nur.overlay
     ];
     config = {
       allowUnfree = true;
