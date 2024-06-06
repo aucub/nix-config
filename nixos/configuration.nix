@@ -34,7 +34,7 @@
       outputs.overlays.additions
       outputs.overlays.modifications
       # outputs.overlays.unstable-small-packages
-      # inputs.nur.overlay
+      inputs.nur.overlay
     ];
     config = {
       allowUnfree = lib.mkForce true;
@@ -374,6 +374,12 @@
                 profile = "export FHS=1";
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
+                extraBindMounts = [
+                  {
+                    from = "/etc/gitconfig";
+                    to = "/etc/gitconfig";
+                  }
+                ];
               })
         )
       ])
