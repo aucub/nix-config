@@ -269,6 +269,7 @@
         ])
         ++ (with pkgs; [
           vscode
+          zed-editor
           firefox
           celluloid
           localsend
@@ -350,7 +351,9 @@
             pkgs.buildFHSUserEnv (base
               // {
                 name = "fhs";
-                targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [pkgs.pkg-config];
+                targetPkgs = pkgs: (base.targetPkgs pkgs) ++  (with pkgs; [
+                    pkg-config
+                  ]);
                 profile = "export FHS=1";
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
@@ -365,15 +368,15 @@
                 name = "pipzone";
                 targetPkgs = pkgs:
                   (base.targetPkgs pkgs)
-                  ++ [pkgs.pkg-config]
-                  ++ [
-                    pkgs.libGL
-                    pkgs.glib
-                    pkgs.libgcc
-                    pkgs.gccStdenv
-                    pkgs.python3Full
-                    pkgs.uv
-                  ]
+                  ++ (with pkgs; [
+                    pkg-config
+                    libGL
+                    glib
+                    libgcc
+                    gccStdenv
+                    python3Full
+                    uv
+                  ])
                   ++ [(pkgs.python3.withPackages (subpkgs:
                     with subpkgs; [
                       pip
