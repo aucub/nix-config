@@ -218,11 +218,12 @@
     brillo.enable = true;
     bluetooth = {
       enable = true;
-      extraConfig = ''
-        [General]
-        Enable=Socket
-        Enable=experimental
-      '';
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+          Experimental = true;
+        };
+      };
       disabledPlugins = [
         "bap"
         "bass"

@@ -1,4 +1,4 @@
-{...}: {
+{lib, ...}: {
   dconf.settings = {
     "app/drey/Damask" = {
       active-source = "wallhaven";
@@ -79,8 +79,6 @@
       idle-delay = "uint32 300";
     };
 
-    "/org/gnome/mutter/dynamic-workspaces" = true;
-
     "org/gnome/desktop/sound" = {
       allow-volume-above-100-percent = true;
     };
@@ -152,15 +150,15 @@
 
     "org/gnome/mutter" = {
       center-new-windows = true;
+      dynamic-workspaces = true;
     };
 
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
-      night-light-last-coordinates = [35.85952177224295 104.195397];
       night-light-schedule-automatic = false;
       night-light-schedule-from = 0.0;
       night-light-schedule-to = 0.0;
-      night-light-temperature = "uint32 3191";
+      night-light-temperature = lib.mkForce 3191;
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
