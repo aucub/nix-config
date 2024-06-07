@@ -238,26 +238,27 @@
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
       ];
-      extraGroups =
-        ["wheel"]
-        ++ (builtins.filter (g: config.users.groups ? ${g}) [
-          "plugdev"
-          "video"
-          "audio"
-          "docker"
-          "podman"
-          "git"
-          "libvirtd"
-          "systemd-journal"
-          "wireshark"
-          "input"
-          "networkmanager"
-          "colord"
-          "adbusers"
-        ]);
+      extraGroups = [
+        "wheel"
+        "plugdev"
+        "video"
+        "audio"
+        "docker"
+        "podman"
+        "git"
+        "libvirtd"
+        "systemd-journal"
+        "wireshark"
+        "input"
+        "networkmanager"
+        "colord"
+        "adbusers"
+      ];
       shell = pkgs.bashInteractive;
       packages =
-        [inputs.home-manager.packages.${pkgs.system}.default]
+        [
+          inputs.home-manager.packages.${pkgs.system}.default
+        ]
         ++
         # shell
         (with pkgs; [
