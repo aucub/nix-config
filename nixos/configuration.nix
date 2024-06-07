@@ -88,9 +88,15 @@
 
   networking = {
     hostName = "${vars.hostname}";
-    networkmanager.enable = true;
     firewall.enable = false;
-    networkmanager.dns = "systemd-resolved";
+    networkmanager = {
+      enable = true;
+      dns = "systemd-resolved";
+      wifi = {
+        backend = "iwd";
+        powersave = false;
+      };
+    };
   };
 
   boot = {
@@ -109,6 +115,7 @@
     kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
     kernelModules = vars.boot.kernelModules;
+    blacklistedKernelModules = ["nouveau"];
     extraModulePackages = vars.boot.extraModulePackages pkgs;
     extraModprobeConfig = vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
@@ -173,9 +180,9 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = ["Noto Serif CJK SC"];
-        sansSerif = ["Sarasa UI SC"];
-        monospace = ["Sarasa Mono SC"];
+        serif = ["Noto Serif CJK SC" "Noto Color Emoji"];
+        sansSerif = ["Sarasa UI SC" "Noto Color Emoji"];
+        monospace = ["Sarasa Mono SC" "Noto Color Emoji"];
         emoji = [
           "Twemoji"
           "Noto Color Emoji"
@@ -197,6 +204,8 @@
   security.rtkit.enable = true;
 
   hardware = {
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
     firmware = with pkgs; [
       linux-firmware
     ];
@@ -223,6 +232,7 @@
       shell = pkgs.bashInteractive;
     };
     "${vars.users.users.username}" = {
+      uid = 1000;
       initialHashedPassword = "${vars.users.users.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
@@ -231,6 +241,9 @@
       extraGroups =
         ["wheel"]
         ++ (builtins.filter (g: config.users.groups ? ${g}) [
+          "plugdev"
+          "video"
+          "audio"
           "docker"
           "podman"
           "git"
@@ -412,6 +425,11 @@
 
   programs = {
     command-not-found.enable = false;
+    nix-index = {
+        enable = true;
+        symlinkToCacheHome = true;
+      };
+      nix-index-database.comma.enable = true;
     htop = {
       enable = true;
       settings = {
@@ -580,12 +598,23 @@
 
   services = {
     colord.enable = true;
+    accounts-daemon.enable = true;
+    devmon.enable = true;
+    gvfs.enable = true;
+    udisks2.enable = true;
+    tumbler.enable = true;
     udev = {
       packages = with pkgs; [
         gnome.gnome-settings-daemon
         android-udev-rules
       ];
     };
+    dbus = {
+      implementation = "broker";
+      packages = with pkgs; [dconf gcr udisks2];
+    };
+    psd.enable = true;
+    fstrim.enable = true;
     kmscon = {
       # Instead of vt
       enable = true;

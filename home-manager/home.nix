@@ -38,6 +38,8 @@
       name = "Bibata-Modern-Classic";
       package = pkgs.bibata-cursors;
       size = 24;
+      gtk.enable = true;
+      x11.enable = true;
     };
   };
 
@@ -74,6 +76,11 @@
         ls = "ls --color=auto";
         grep = "grep --color=auto";
       };
+    };
+    dircolors = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
     };
     fish = {
       enable = true;

@@ -13,7 +13,7 @@
       blacklist nouveau
       options nouveau modeset=0
     '';
-  boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidia_drm" "nvidia_modeset"];
+  boot.blacklistedKernelModules =lib.mkForce  ["nouveau" "nvidia" "nvidia_drm" "nvidia_modeset"];
   services.udev.extraRules = ''
     # Remove NVIDIA USB xHCI Host Controller devices, if present
     ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
