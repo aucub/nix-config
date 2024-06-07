@@ -39,7 +39,10 @@
       package = pkgs.bibata-cursors;
       size = 24;
       gtk.enable = true;
-      x11.enable = true;
+      x11 = {
+        enable = true;
+        defaultCursor = "Bibata-Modern-Classic";
+      };
     };
   };
 
@@ -77,11 +80,7 @@
         grep = "grep --color=auto";
       };
     };
-    dircolors = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-    };
+    dircolors.enable = true;
     fish = {
       enable = true;
       interactiveShellInit = ''
@@ -95,8 +94,6 @@
     home-manager.enable = true;
     atuin = {
       enable = true;
-      enableFishIntegration = true;
-      enableBashIntegration = true;
       flags = [
         "--disable-up-arrow"
       ];
@@ -201,8 +198,6 @@
     eza = {
       enable = true;
       git = true;
-      enableFishIntegration = true;
-      enableBashIntegration = true;
       extraOptions = [
         "--group-directories-first"
         "--all"
@@ -257,11 +252,7 @@
   };
 
   services = {
-    udiskie = {
-      enable = true;
-      automount = true;
-      tray = "auto";
-    };
+    udiskie.enable = true;
   };
 
   news.display = "silent";

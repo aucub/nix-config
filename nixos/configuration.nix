@@ -95,6 +95,7 @@
       wifi = {
         backend = "iwd";
         powersave = false;
+        macAddress = "stable-ssid";
       };
     };
   };
@@ -106,11 +107,13 @@
         enable = true;
         graceful = true;
         configurationLimit = 10;
+        consoleMode = "auto";
       };
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
+      timeout = 4;
     };
     kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
@@ -124,6 +127,11 @@
       "bcachefs"
     ];
     initrd = {
+      systemd = {
+        enable = true;
+        dbus.enable = true;
+        network.enable = true;
+      };
       supportedFilesystems = [
         "btrfs"
         "bcachefs"
@@ -135,7 +143,7 @@
     };
   };
 
-  time.timeZone = "Asia/Shanghai";
+  # time.timeZone = "Asia/Shanghai";
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
@@ -201,11 +209,16 @@
 
   sound.enable = true;
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    polkit.enable = true;
+    sudo-rs.enable = true;
+  };
 
   hardware = {
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
+    wirelessRegulatoryDatabase =lib.mkDefault  false;
     firmware = with pkgs; [
       linux-firmware
     ];
@@ -240,6 +253,7 @@
       ];
       extraGroups = [
         "wheel"
+        "users"
         "plugdev"
         "video"
         "audio"
@@ -425,6 +439,7 @@
   };
 
   programs = {
+    ssh.enableAskPassword = false;
     command-not-found.enable = false;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
@@ -644,7 +659,10 @@
     # enable = true;
     # };
     power-profiles-daemon.enable = true;
-    upower.enable = true;
+    upower = {
+      enable = true;
+      noPollBatteries = true;
+    };
     auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
@@ -686,6 +704,7 @@
   };
 
   systemd = {
+    sysusers.enable = true;
     network.wait-online.enable = true;
     services = {
       "getty@tty1".enable = false;
@@ -693,5 +712,6 @@
     };
   };
 
+system.etc.overlay.enable = true;
   system.stateVersion = "24.11";
 }
