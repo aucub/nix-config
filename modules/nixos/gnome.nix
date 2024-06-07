@@ -59,6 +59,8 @@
     rygel.enable = false;
     gnome-remote-desktop.enable = false;
     evolution-data-server.enable = lib.mkForce false;
+    gnome-keyring.enable = true;
+    glib-networking.enable = true;
   };
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;

@@ -6,10 +6,6 @@ set shell := ["fish", "-c"]
 #
 ############################################################################
 
-# update all the flake inputs
-up:
-  nix flake update
-
 # List all generations of the system profile
 history:
   nix profile history --profile /nix/var/nix/profiles/system
@@ -49,6 +45,10 @@ bp input:
 #  Other useful commands
 #
 ############################################################################
+
+# update all the flake inputs
+up:
+  nix flake update
 
 fmt:
   nix fmt
