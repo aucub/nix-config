@@ -29,6 +29,7 @@
     };
     backupFileExtension = "bak";
   };
+
   nixpkgs = {
     overlays = [
       outputs.overlays.additions
@@ -406,6 +407,7 @@
 
   documentation = {
     nixos.enable = false;
+    man.generateCaches = false;
   };
 
   programs = {

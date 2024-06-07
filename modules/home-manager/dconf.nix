@@ -158,7 +158,7 @@
       night-light-schedule-automatic = false;
       night-light-schedule-from = 0.0;
       night-light-schedule-to = 0.0;
-      night-light-temperature = "uint32 3053";
+      night-light-temperature = "uint32 3217";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -168,7 +168,10 @@
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
-      sleep-inactive-ac-type = "nothing";
+      sleep-inactive-ac-type = "suspend";
+      sleep-inactive-battery-type = "suspend";
+      sleep-inactive-battery-timeout = 900;
+      sleep-inactive-ac-timeout = 3600;
     };
 
     "org/gnome/shell/extensions/appindicator" = {
