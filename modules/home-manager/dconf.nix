@@ -79,6 +79,8 @@
       idle-delay = "uint32 300";
     };
 
+    "/org/gnome/mutter/dynamic-workspaces" = true;
+
     "org/gnome/desktop/sound" = {
       allow-volume-above-100-percent = true;
     };
@@ -158,7 +160,7 @@
       night-light-schedule-automatic = false;
       night-light-schedule-from = 0.0;
       night-light-schedule-to = 0.0;
-      night-light-temperature = "uint32 3217";
+      night-light-temperature = "uint32 3191";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
