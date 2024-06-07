@@ -46,5 +46,5 @@
     ++ (with pkgs; [
       nvidia-vaapi-driver
     ]);
-    environment.variables.NVD_BACKEND = "direct";
+  environment.variables.NVD_BACKEND = "direct";
 }

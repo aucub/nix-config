@@ -426,10 +426,10 @@
   programs = {
     command-not-found.enable = false;
     nix-index = {
-        enable = true;
-        symlinkToCacheHome = true;
-      };
-      nix-index-database.comma.enable = true;
+      enable = true;
+      symlinkToCacheHome = true;
+    };
+    nix-index-database.comma.enable = true;
     htop = {
       enable = true;
       settings = {
