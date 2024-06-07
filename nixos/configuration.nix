@@ -216,7 +216,23 @@
     };
     # 允许视频组中的用户进行亮度控制
     brillo.enable = true;
-    bluetooth.enable = true;
+    bluetooth = {
+      enable = true;
+      extraConfig = ''
+        [General]
+        Enable=Socket
+        Enable=experimental
+      '';
+      disabledPlugins = [
+        "bap"
+        "bass"
+        "mcp"
+        "vcp"
+        "micp"
+        "ccp"
+        "csip"
+      ];
+    };
   };
 
   zramSwap = {

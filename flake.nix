@@ -45,6 +45,9 @@
           "amdgpu.vm_update_mode=3"
           "radeon.dpm=0"
           "acpi_backlight=native"
+          "acpi=force"
+          "pci=noacpi"
+          "acpi_osi="
         ];
         kernelModules = [
           "v4l2loopback"
