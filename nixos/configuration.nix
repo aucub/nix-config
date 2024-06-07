@@ -218,7 +218,7 @@
   hardware = {
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    wirelessRegulatoryDatabase =lib.mkDefault  false;
+    wirelessRegulatoryDatabase = lib.mkDefault false;
     firmware = with pkgs; [
       linux-firmware
     ];
@@ -712,6 +712,6 @@
     };
   };
 
-system.etc.overlay.enable = true;
+  system.etc.overlay.enable = true;
   system.stateVersion = "24.11";
 }
