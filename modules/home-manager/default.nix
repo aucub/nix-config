@@ -6,4 +6,5 @@
   wofi = import ./wofi.nix;
   fish = import ./fish.nix;
   dotfiles = import ./dotfiles/default.nix;
+  colord = import ./colord/default.nix;
 }

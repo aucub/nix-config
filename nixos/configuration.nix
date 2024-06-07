@@ -126,24 +126,9 @@
       "btrfs"
       "bcachefs"
     ];
-    initrd = {
-      systemd = {
-        enable = true;
-        dbus.enable = true;
-        network.enable = true;
-      };
-      supportedFilesystems = [
-        "btrfs"
-        "bcachefs"
-      ];
-      kernelModules = [
-        "btrfs"
-        "bcachefs"
-      ];
-    };
   };
 
-  # time.timeZone = "Asia/Shanghai";
+  time.timeZone = "Asia/Shanghai";
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
@@ -218,7 +203,7 @@
   hardware = {
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    wirelessRegulatoryDatabase =lib.mkDefault  false;
+    wirelessRegulatoryDatabase = lib.mkDefault false;
     firmware = with pkgs; [
       linux-firmware
     ];
@@ -641,7 +626,6 @@
       extraConfig = "font-size=14";
       hwRender = true;
     };
-    networkd-dispatcher.enable = true;
     resolved = {
       enable = true;
       dnsovertls = "true";
@@ -704,14 +688,11 @@
   };
 
   systemd = {
-    sysusers.enable = true;
-    network.wait-online.enable = true;
     services = {
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
     };
   };
 
-system.etc.overlay.enable = true;
   system.stateVersion = "24.11";
 }

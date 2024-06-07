@@ -37,7 +37,6 @@
         immersive-translate
         # single-file
       ];
-      search.default = "Google";
       settings = {
         # 禁用 about:config 警告
         "browser.aboutConfig.showWarning" = false;
