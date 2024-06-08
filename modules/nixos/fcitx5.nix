@@ -81,7 +81,7 @@
         };
       };
       clipboard = {
-        globalSection = {NumberOfEntries = 18;};
+        globalSection = {"Number of entries" = 18;};
         sections = {"TriggerKey" = {"0" = "Super+V";};};
       };
       keyboard = {
@@ -108,7 +108,7 @@
           ShowShuangpinMode = "True";
           PageSize = 9;
           SpellEnabled = "False";
-          SymbolsEnabled = "True";
+          SymbolsEnabled = "False";
           ChaiziEnabled = "True";
           ExtBEnabled = "True";
           CloudPinyinEnabled = "False";
