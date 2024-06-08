@@ -6,18 +6,8 @@ set shell := ["fish", "-c"]
 #
 ############################################################################
 
-# List all generations of the system profile
-history:
-  nix profile history --profile /nix/var/nix/profiles/system
-
-# remove all generations older than 7 days
-clean:
-  sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d
-
-# Garbage collect all unused nix store entries
-gc:
-  sudo nix store gc --debug
-  sudo nix-collect-garbage --delete-old
+bp input:
+  nix build --impure .#{{input}} --show-trace
 
 ############################################################################
 #
@@ -36,9 +26,6 @@ rsb:
 
 hs:
   home-manager switch --flake .#uymi@neko --show-trace
-
-bp input:
-  nix build --impure .#{{input}} --show-trace
 
 ############################################################################
 #

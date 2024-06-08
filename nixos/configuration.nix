@@ -590,6 +590,12 @@
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
+        # List all generations of the system profile
+        nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
+        # remove all generations older than 7 days
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        # Garbage collect all unused nix store entries
+        nix-gc="sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
       };
     };
     yazi = {
@@ -612,6 +618,12 @@
   qt.enable = true;
 
   services = {
+    cron = {
+      enable = true;
+      systemCronJobs = [
+        "0 0 * * 0  navicat   dconf reset -f /com/premiumsoft/"
+      ];
+    };
     colord.enable = true;
     accounts-daemon.enable = true;
     devmon.enable = true;
@@ -705,7 +717,9 @@
   };
 
   systemd = {
+    network.wait-online.enable = false;
     services = {
+      NetworkManager-wait-online.enable = lib.mkForce false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
     };
