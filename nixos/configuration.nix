@@ -128,11 +128,11 @@
     ];
     initrd = {
       supportedFilesystems = [
-       #  "btrfs"
+         "btrfs"
         "bcachefs"
       ];
       kernelModules = [
-       #  "btrfs"
+         "btrfs"
         "bcachefs"
       ];
     };
@@ -246,7 +246,6 @@
 
   hardware = {
     enableAllFirmware = true;
-    # enableRedistributableFirmware = true;
     wirelessRegulatoryDatabase = lib.mkDefault false;
     firmware = with pkgs; [
       linux-firmware
@@ -387,7 +386,6 @@
         helix
         delta
         git
-        git-annex
         gitleaks
         eza
         lnav

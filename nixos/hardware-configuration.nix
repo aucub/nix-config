@@ -12,9 +12,9 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["bcachefs" "nvme" "xhci_pci" "usbhid"];
-  boot.initrd.kernelModules = ["bcachefs"];
-  boot.kernelModules = ["kvm-amd" "bcachefs"];
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "usbhid"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
