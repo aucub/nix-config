@@ -595,7 +595,7 @@
         # remove all generations older than 7 days
         nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
         # Garbage collect all unused nix store entries
-        nix-gc="sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
+        nix-gc = "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
       };
     };
     yazi = {
