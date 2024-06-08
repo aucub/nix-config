@@ -106,7 +106,7 @@
       systemd-boot = {
         enable = true;
         graceful = true;
-        configurationLimit = 10;
+        configurationLimit = 15;
         consoleMode = "auto";
       };
       efi = {
@@ -126,6 +126,16 @@
       "btrfs"
       "bcachefs"
     ];
+    initrd = {
+      supportedFilesystems = [
+       #  "btrfs"
+        "bcachefs"
+      ];
+      kernelModules = [
+       #  "btrfs"
+        "bcachefs"
+      ];
+    };
   };
 
   time.timeZone = "Asia/Shanghai";
@@ -236,7 +246,7 @@
 
   hardware = {
     enableAllFirmware = true;
-    enableRedistributableFirmware = true;
+    # enableRedistributableFirmware = true;
     wirelessRegulatoryDatabase = lib.mkDefault false;
     firmware = with pkgs; [
       linux-firmware
