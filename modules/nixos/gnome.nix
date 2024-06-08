@@ -8,7 +8,6 @@
   environment.gnome.excludePackages =
     (with pkgs; [
       orca
-      tecla
       gnome-tecla
       gnome-tour
       gnome-photos
