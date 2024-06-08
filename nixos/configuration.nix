@@ -128,11 +128,11 @@
     ];
     initrd = {
       supportedFilesystems = [
-         "btrfs"
+        "btrfs"
         "bcachefs"
       ];
       kernelModules = [
-         "btrfs"
+        "btrfs"
         "bcachefs"
       ];
     };
