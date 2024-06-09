@@ -228,10 +228,10 @@
         "image/avif" = "org.gnome.Loupe.desktop";
         "image/heic" = "org.gnome.Loupe.desktop";
         "image/jxl" = "org.gnome.Loupe.desktop";
+        # "text/plain"="Helix.desktop";
       };
       addedAssociations = {
         "text/plain" = "dev.zed.Zed.desktop";
-        "inode/directory" = "dev.zed.Zed.desktop";
       };
     };
   };
@@ -488,6 +488,7 @@
     command-not-found.enable = false;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
+    npm.enable = false;
     htop = {
       enable = true;
       settings = {
