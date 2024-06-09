@@ -223,12 +223,122 @@
         theme = lib.mkDefault "Dracula";
       };
     };
-    git.delta = {
-      enable = true;
-      options = {
-        diff-so-fancy = true;
-        line-numbers = true;
-        true-color = "always";
+    git = {
+      ignores = [
+        # Compiled binary, object files, and libraries
+        "*.o"
+        "*.lo"
+        "*.obj"
+        "*.elf"
+        "*.ilk"
+        "*.map"
+        "*.exp"
+        "*.pdb"
+        "*.so"
+        "*.dylib"
+        "*.dll"
+        "*.exe"
+        "*.out"
+        "*.app"
+        "*.i*86"
+        "*.x86_64"
+        "*.hex"
+        "*.apk"
+        "*.msi"
+        "*.a"
+        "*.lib"
+        "*.la"
+        "*.lai"
+        "*.mod"
+        "*.smod"
+        "*.gch"
+        "*.pch"
+        "*.d"
+        # Dependency directories
+        "node_modules/"
+        "bower_components/"
+        "jspm_packages/"
+        # Virtual Environments
+        ".env"
+        ".env.local"
+        ".env.*.local"
+        ".Python"
+        "[Ii]nclude"
+        "[Ll]ib"
+        "[Ll]ib64"
+        "[Ll]ocal"
+        "pyvenv.cfg"
+        ".venv"
+        "pip-selfcheck.json"
+        # IDEs and Editors
+        ## JetBrains IDEs
+        ".idea/"
+        "*.iml"
+        ## Eclipse
+        ".apt_generated"
+        ".classpath"
+        ".factorypath"
+        ".project"
+        ".settings"
+        ".springBeans"
+        ## NetBeans
+        "/nbproject/private/"
+        ## Visual Studio Code
+        ".vscode/"
+        ## SublimeText
+        "*.sublime-workspace"
+        ## Visual Studio
+        ".vs/"
+        # Logs and runtime files
+        "*.log"
+        "*.seed"
+        "*.temp"
+        # Caches
+        ".ipynb_checkpoints/"
+        ".cache/"
+        ".parcel-cache/"
+        ".next/"
+        # Operating System
+        ".DS_Store"
+        # Node
+        ".npm"
+        ".eslintcache"
+        ".stylelintcache"
+        "package-lock.json"
+        # Python caches and bytecode
+        "*.py[cod]"
+        "__pycache__/"
+        # CMake
+        "CMakeFiles/"
+        "CMakeScripts/"
+        "CMakeCache.txt"
+        "cmake_install.cmake"
+        "CTestTestfile.cmake"
+        "*.cmake"
+        # Maven
+        "pom.xml.tag"
+        "pom.xml.releaseBackup"
+        "pom.xml.versionsBackup"
+        # Databases
+        "*.db"
+        "*.sqlite3-journal"
+        "*.ldf"
+        "*.mdf"
+        "*.ndf"
+        "*.dbmdl"
+        # Mobile application development
+        "*.ap_"
+        "*.dex"
+        ".res/"
+        ".symbols/"
+      ];
+      delta = {
+        enable = true;
+        options = {
+          diff-so-fancy = true;
+          line-numbers = true;
+          true-color = "always";
+        };
       };
     };
     yazi = {
