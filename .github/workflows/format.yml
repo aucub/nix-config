@@ -19,7 +19,7 @@ jobs:
 
       - uses: DeterminateSystems/magic-nix-cache-action@v7
         with:
-          diagnostic-endpoint:
+          diagnostic-endpoint: ""
           use-flakehub: false
 
       - uses: actions/checkout@v4

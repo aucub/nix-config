@@ -158,7 +158,7 @@
       night-light-schedule-automatic = false;
       night-light-schedule-from = 0.0;
       night-light-schedule-to = 0.0;
-      night-light-temperature = lib.mkForce 3191;
+      night-light-temperature = lib.mkForce "uint32 3191";
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
