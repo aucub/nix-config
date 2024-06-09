@@ -25,6 +25,7 @@
       # outputs.overlays.unstable-small-packages
 
       inputs.nur.overlay
+      # inputs.chaotic.homeManagerModules.default
     ];
     config = {
       allowUnfree = true;
@@ -62,10 +63,8 @@
   gtk = {
     cursorTheme = {
       name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
       size = 24;
-    };
-    iconTheme = {
-      name = "Papirus";
     };
   };
 

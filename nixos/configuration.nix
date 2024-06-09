@@ -36,6 +36,8 @@
       outputs.overlays.modifications
       # outputs.overlays.unstable-small-packages
       inputs.nur.overlay
+      # inputs.nixpkgs-wayland.overlay
+      # inputs.chaotic.nixosModules.default
     ];
     config = {
       allowUnfree = lib.mkForce true;
@@ -322,24 +324,17 @@
         # shell
         (with pkgs; [
           chezmoi
-          atuin
           typst
           uv
           ruff
           git-credential-manager
-          bun
           nodePackages.nodejs
         ])
         ++ (with pkgs; [
-          vscode
           zed-editor
-          firefox
           celluloid
           localsend
-          chromium
-          wofi
           impression
-          # obs-studio
           # nomacs
           # jetbrains.idea-ultimate
         ])
@@ -348,7 +343,6 @@
           (papirus-icon-theme.override
             {color = "adwaita";})
           orchis-theme
-          bibata-cursors
         ])
         # custom
         ++ (with pkgs; [
@@ -381,21 +375,17 @@
         just
       ])
       ++ (with pkgs; [
-        alacritty
         difftastic
         helix
         delta
-        git
         gitleaks
         eza
         lnav
-        yazi
         fzf
         bat
         fd
         ripgrep-all
         typos
-        htop
         python3Full
         lnav
         uutils-coreutils-noprefix
@@ -668,7 +658,7 @@
     cron = {
       enable = true;
       systemCronJobs = [
-        "0 0 * * 0  navicat   dconf reset -f /com/premiumsoft/"
+        "0 0 * * 0  navicat   dconf reset -f com/premiumsoft/navicat-premium"
       ];
     };
     colord.enable = true;
@@ -753,6 +743,8 @@
     xserver = {
       enable = true;
       videoDrivers = [
+        "modesetting"
+        "fbdev"
         "amdgpu"
       ];
       desktopManager.xterm.enable = false;

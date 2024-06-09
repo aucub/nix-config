@@ -9,19 +9,26 @@
       category-anime = true;
       category-general = false;
       category-people = false;
+      query = "+Pixiv +anime girls +Genshin Impact";
       purity-sfw = true;
     };
 
+    "ca/desrt/dconf-editor" = {
+      show-warning = false;
+    };
+
     "org/gnome/desktop/interface" = {
+      action-right-click-titlebar = "none";
       clock-show-date = true;
       clock-show-seconds = false;
       clock-show-weekday = true;
       cursor-size = 24;
+      cursor-theme = "Bibata-Modern-Classic";
+      disable-workarounds = true;
+      document-font-name = "更纱黑体 UI SC 11";
       enable-animations = true;
       font-antialiasing = "rgba";
       font-hinting = "slight";
-      cursor-theme = "Bibata-Modern-Classic";
-      document-font-name = "更纱黑体 UI SC 11";
       font-name = "更纱黑体 UI SC 11";
       monospace-font-name = "等距更纱黑体 SC 11";
       gtk-enable-primary-paste = false;
@@ -30,36 +37,18 @@
       show-battery-percentage = true;
       text-scaling-factor = 1.25;
       toolkit-accessibility = false;
-      action-right-click-titlebar = "none";
-      disable-workarounds = true;
     };
 
-    "org/gnome/file-roller/listing" = {
-      list-mode = "as-folder";
-      show-path = false;
-      sort-method = "name";
-      sort-type = "ascending";
+    "org/gnome/desktop/peripherals/keyboard" = {
+      numlock-state = false;
     };
 
-    "org/gnome/nautilus/compression" = {
-      default-compression-format = "zip";
-    };
-
-    "org/gnome/nautilus/preferences" = {
-      default-folder-viewer = "icon-view";
-      install-mime-activation = false;
-      migrated-gtk-settings = true;
-      recursive-search = "never";
-      show-hidden-files = true;
-      search-filter-time-type = "last_modified";
-    };
-
-    "system/locale" = {
-      region = "zh_CN.UTF-8";
+    "org/gnome/desktop/peripherals/touchpad" = {
+      two-finger-scrolling-enabled = true;
     };
 
     "org/gnome/desktop/privacy" = {
-      old-files-age = "uint32 3";
+      old-files-age = lib.hm.gvariant.mkUint32 3;
       recent-files-max-age = 1;
       remember-app-usage = false;
       remember-recent-files = false;
@@ -67,7 +56,8 @@
     };
 
     "org/gnome/desktop/screensaver" = {
-      lock-delay = "uint32 0";
+      color-shading-type = "solid";
+      lock-delay = lib.hm.gvariant.mkUint32 0;
       lock-enabled = false;
     };
 
@@ -76,7 +66,7 @@
     };
 
     "org/gnome/desktop/session" = {
-      idle-delay = "uint32 300";
+      idle-delay = lib.hm.gvariant.mkUint32 300;
     };
 
     "org/gnome/desktop/sound" = {
@@ -90,6 +80,8 @@
     "org/gnome/desktop/wm/preferences" = {
       action-right-click-titlebar = "none";
       button-layout = "appmenu:minimize,maximize,close";
+      disable-workarounds = true;
+      num-workspaces = 1;
     };
 
     "org/gnome/gnome-system-monitor" = {
@@ -153,12 +145,29 @@
       dynamic-workspaces = true;
     };
 
+    "org/gnome/nautilus/compression" = {
+      default-compression-format = "zip";
+    };
+
+    "org/gnome/nautilus/preferences" = {
+      recursive-search = "never";
+      show-hidden-files = true;
+    };
+
+    "org/gnome/online-accounts" = {
+      whitelisted-providers = [];
+    };
+
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
       night-light-schedule-automatic = false;
       night-light-schedule-from = 0.0;
       night-light-schedule-to = 0.0;
-      night-light-temperature = lib.mkForce "uint32 3191";
+      night-light-temperature = lib.hm.gvariant.mkUint32 3248;
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
     };
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -174,16 +183,13 @@
       sleep-inactive-ac-timeout = 3600;
     };
 
+    "org/gnome/shell" = {
+      disabled-extensions = ["launch-new-instance@gnome-shell-extensions.gcampax.github.com" "native-window-placement@gnome-shell-extensions.gcampax.github.com" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" "windowsNavigator@gnome-shell-extensions.gcampax.github.com" "window-list@gnome-shell-extensions.gcampax.github.com" "places-menu@gnome-shell-extensions.gcampax.github.com" "auto-move-windows@gnome-shell-extensions.gcampax.github.com" "apps-menu@gnome-shell-extensions.gcampax.github.com" "light-style@gnome-shell-extensions.gcampax.github.com"];
+      enabled-extensions = ["appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "kimpanel@kde.org" "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com" "system-monitor@gnome-shell-extensions.gcampax.github.com" "drive-menu@gnome-shell-extensions.gcampax.github.com"];
+    };
+
     "org/gnome/shell/extensions/appindicator" = {
       remember-mount-password = true;
-      enabled-extensions = [
-        "appindicatorsupport@rgcjonas.gmail.com"
-        "caffeine@patapon.info"
-        "kimpanel@kde.org"
-        "drive-menu@gnome-shell-extensions.gcampax.github.com"
-        "system-monitor@gnome-shell-extensions.gcampax.github.com"
-        "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com"
-      ];
       tray-pos = "left";
     };
 

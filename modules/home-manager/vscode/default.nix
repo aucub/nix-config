@@ -24,7 +24,7 @@
           nvarner.typst-lsp
           tomoki1207.pdf
           jnoortheen.nix-ide
-          # GitHub.codespaces
+          github.codespaces
           # ms-vscode.cpptools
           # YoavBls.pretty-ts-errors
           # redhat.vscode-xml
