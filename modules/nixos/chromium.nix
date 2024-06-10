@@ -10,6 +10,8 @@
       # "djflhoibgkdhkhhcedjiklpkjnoahfmg" # user-agent-switcher
       # "mpiodijhokgodhhofbcjdecpffjipkle" # singlefile
       # "jpbjcnkcffbooppibceonlgknpkniiff" # global-speed
+      # "gbkeegbaiigmenfmjfclcdgdpimamgkj" # Google文档
+      # "ghbmnnjooekpmoecnnnilnnbdlolhkhi" # Google文档的离线功能
     ];
     extraOpts = {
       AdvancedProtectionAllowed = true;

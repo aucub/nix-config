@@ -364,6 +364,11 @@
     udiskie.enable = true;
   };
 
+  xsession = {
+    enable = true;
+    numlock.enable = true;
+  };
+
   news.display = "silent";
 
   systemd.user.startServices = "sd-switch";

@@ -9,7 +9,7 @@
       category-anime = true;
       category-general = false;
       category-people = false;
-      query = "+Pixiv +anime girls +Genshin Impact";
+      query = "+anime girls +Genshin Impact";
       purity-sfw = true;
     };
 

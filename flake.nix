@@ -50,6 +50,8 @@
           "amdgpu.vm_update_mode=3"
           "radeon.dpm=0"
           "acpi_backlight=native"
+          # "i8042.nomux=1" # 禁用键鼠多路复用
+          # "i8042.reset" # 重置控制器
         ];
         kernelModules = [
           "v4l2loopback"
@@ -77,6 +79,11 @@
         package = pkgs: pkgs.bibata-cursors;
         size = 24;
       };
+      services.xserver.videoDrivers = [
+        "modesetting"
+        "fbdev"
+        "amdgpu"
+      ];
     };
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {

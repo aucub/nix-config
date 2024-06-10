@@ -95,7 +95,6 @@
       dns = "systemd-resolved";
       wifi = {
         backend = "iwd";
-        powersave = false;
         macAddress = "stable-ssid";
       };
     };
@@ -312,7 +311,7 @@
         "input"
         "networkmanager"
         "colord"
-        "adbusers"
+        # "adbusers"
       ];
       shell = pkgs.bashInteractive;
       packages =
@@ -396,7 +395,7 @@
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
           in
-            pkgs.buildFHSUserEnv (base
+            pkgs.buildFHSEnv (base
               // {
                 name = "fhs";
                 targetPkgs = pkgs:
@@ -413,7 +412,7 @@
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
           in
-            pkgs.buildFHSUserEnv (base
+            pkgs.buildFHSEnv (base
               // {
                 name = "pipzone";
                 targetPkgs = pkgs:
@@ -437,11 +436,8 @@
                 profile = "export FHS=1";
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
-                extraBindMounts = [
-                  {
-                    from = "/etc/gitconfig";
-                    to = "/etc/gitconfig";
-                  }
+                extraBwrapArgs = [
+                  "--symlink /etc/gitconfig /etc/gitconfig"
                 ];
               })
         )
@@ -467,9 +463,10 @@
       );
   };
 
-  documentation = {
-    nixos.enable = false;
-    man.generateCaches = false;
+  documentation.man = {
+    mandoc.enable = true;
+    man-db.enable = false;
+    generateCaches = false;
   };
 
   programs = {
@@ -613,7 +610,6 @@
       enable = true;
       terminal = "alacritty";
     };
-    nix-ld.enable = true;
     xwayland.enable = true;
     fish = {
       enable = true;
@@ -634,6 +630,9 @@
     yazi = {
       enable = true;
       settings.yazi = {
+        globalSection = {
+          sort_dir_first = true;
+        };
         manager = {
           sort_dir_first = true;
           show_hidden = true;
@@ -669,12 +668,15 @@
     udev = {
       packages = with pkgs; [
         gnome.gnome-settings-daemon
-        android-udev-rules
+        # android-udev-rules
       ];
+      extraRules = ''
+        ACTION=="add|change", SUBSYSTEM=="leds", KERNEL=="input10::numlock", RUN+="${pkgs.coreutils}/bin/echo 0 > /sys/class/leds/input10::numlock/brightness"
+      '';
     };
     dbus = {
       implementation = "broker";
-      packages = with pkgs; [dconf gcr udisks2];
+      packages = with pkgs; [dconf gcr_4 udisks];
     };
     psd.enable = true;
     fstrim.enable = true;
@@ -683,8 +685,8 @@
       enable = true;
       fonts = [
         {
-          name = "Source Code Pro";
-          package = pkgs.source-code-pro;
+          name = "Sarasa Mono SC";
+          package = pkgs.sarasa-gothic;
         }
       ];
       extraOptions = "--term xterm-256color";
@@ -741,13 +743,13 @@
     };
     xserver = {
       enable = true;
-      videoDrivers = [
-        "modesetting"
-        "fbdev"
-        "amdgpu"
-      ];
+      videoDrivers = lib.mkDefault vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [xterm];
+      xkb = {
+        model = "pc105";
+        options = "terminate:ctrl_alt_bksp,numlock:on";
+      };
     };
     # flatpak.enable = true;
     # printing.enable = true;
