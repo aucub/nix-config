@@ -53,6 +53,8 @@
       nix-path = config.nix.nixPath;
       auto-optimise-store = true;
       builders-use-substitutes = true;
+      show-trace = true;
+      warn-dirty = false;
       substituters = [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
         # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
@@ -73,9 +75,6 @@
         "@wheel"
       ];
     };
-    extraOptions = ''
-      warn-dirty = false
-    '';
     # nix-channel 命令和状态文件
     channel.enable = false;
 

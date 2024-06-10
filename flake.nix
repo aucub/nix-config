@@ -72,6 +72,11 @@
           mesa.drivers
           xorg.xf86videoamdgpu
         ];
+      home.pointerCursor = {
+        name = "Bibata-Modern-Classic";
+        package = pkgs: pkgs.bibata-cursors;
+        size = 24;
+      };
     };
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {

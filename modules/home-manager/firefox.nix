@@ -37,7 +37,98 @@
         immersive-translate
         # single-file
       ];
+      userChrome = ''
+        /* 隐藏右键菜单选项 */
+        #spell-add-dictionaries,
+        #spell-separator,
+        #spell-check-enabled,
+        #spell-add-dictionaries-main,
+        #spell-dictionaries-menu,
+        #spell-language-separator,
+        #spell-no-suggestions,
+        #spell-add-to-dictionary,
+        #spell-undo-add-to-dictionary,
+        #spell-suggestions-separator,
+        #context_sendTabToDevice,
+        #context_sendTabToDevicePopupMenu,
+        #context-sendlinktodevice,
+        #context-sendlinktodevice-popup,
+        #context-sep-sendlinktodevice,
+        #context-sendpagetodevice,
+        #context-sendpagetodevice-popup,
+        #fill-login,
+        #fill-login-generated-password,
+        #fill-login-popup,
+        #manage-saved-logins,
+        #context-print-selection,
+        #context-printframe,
+        #printPreviewStackTemplate,
+        #context-viewsource-goToLine,
+        #context-viewsource-wrapLongLines,
+        #context-viewsource-highlightSyntax,
+        #context-sep-viewsource-commands,
+        #context-viewsource,
+        #context-copyemail,
+        #main-context-menu-image-email,
+        #context-sendvideo,
+        #context-sendaudio,
+        #context-openlinkincurrent,
+        #context-openlink,
+        #context-openlinkprivate,
+        #context-savelink,
+        #key_savePage,
+        #context-savelinktopocket,
+        #context-video-saveimage,
+        #context-savevideo,
+        #context-saveaudio,
+        #context-sendimage,
+        #context-setDesktopBackground,
+        #context-savepage,
+        #context-pocket,
+        #use-relay-mask,
+        #context-undo,
+        #context-pdfjs-undo,
+        #context-redo,
+        #context-pdfjs-redo,
+        #spell-dictionaries,
+        #context-viewpartialsource-selection,
+        #context-media-eme-learnmore,
+        #context-showonlythisframe,
+        #context-openframeintab,
+        #context-openframe,
+        #context-reloadframe,
+        #context-bookmarkframe,
+        #context-saveframe,
+        #context-take-frame-screenshot,
+        #context-viewframesource,
+        #context-viewframeinfo,
+        #context-sep-setbackground,
+        #context-back,
+        #context-forward,
+        #context-reload,
+        #context-stop,
+        #context-bookmarkpage,
+        #context-bookmarklink,
+        #context-copyphone,
+        #context-keywordfield,
+        #context-take-screenshot,
+        #context-viewimageinfo,
+        #context-inspect,
+        #context-sep-sendpagetodevice,
+        #context_sendTabToDevice_separator,
+        #pageAction-panel-sendToDevice,
+        #pageAction-panel-emailLink,
+        #leave_this_dummy_here,
+        #context-inspect-a11y {
+          display: none !important;
+        }
+      '';
       settings = {
+        # arkenfox user.js
+        # 日期: 7 June 2024
+        # 版本号: 126
+        # 链接: https://github.com/arkenfox/user.js
+
         # 禁用 about:config 警告
         "browser.aboutConfig.showWarning" = false;
 
@@ -55,12 +146,15 @@
         "browser.newtabpage.activity-stream.showSponsored" = false;
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
         "browser.newtabpage.activity-stream.feeds.topsites" = true;
+        "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
+        "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
+        "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" = false;
+        "browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
+        "browser.newtabpage.activity-stream.feeds.recommendationprovider" = false;
         # 清除默认的热门网站
         "browser.newtabpage.activity-stream.default.sites" = "";
 
-        # --- 更安静的狐狸 ---
-        # 推荐设置
-        # 禁用 about:addons 中的推荐面板（使用 Google Analytics）
+        # 禁用 about:addons 中的推荐面板
         "extensions.getAddons.showPane" = false;
         # 禁用 about:addons 中的扩展和主题面板中的推荐
         "extensions.htmlaboutaddons.recommendations.enabled" = false;
@@ -70,11 +164,11 @@
         "browser.shopping.experience2023.enabled" = false;
 
         # --- 遥测 ---
-        # disable new data submission
+        # 禁用新数据提交
         "datareporting.policy.dataSubmissionEnabled" = false;
-        # disable Health Reports
+        # 禁用健康报告
         "datareporting.healthreport.uploadEnabled" = false;
-        # disable telemetry
+        # 禁用遥测
         "toolkit.telemetry.unified" = false;
         "toolkit.telemetry.enabled" = false;
         "toolkit.telemetry.server" = "data:,";
@@ -84,18 +178,16 @@
         "toolkit.telemetry.updatePing.enabled" = false;
         "toolkit.telemetry.bhrPing.enabled" = false;
         "toolkit.telemetry.firstShutdownPing.enabled" = false;
-        # disable Telemetry Coverage
+        # 禁用遥测覆盖
         "toolkit.telemetry.coverage.opt-out" = true;
         "toolkit.coverage.opt-out" = true;
         "toolkit.coverage.endpoint.base" = "";
-        # disable PingCentre telemetry (used in several System Add-ons)
-        "browser.ping-centre.telemetry" = false;
-        # disable Firefox Home (Activity Stream) telemetry
+        # 禁用 Firefox Home（活动流）遥测
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
         "browser.newtabpage.activity-stream.telemetry" = false;
 
-        # --- STUDIES ---
-        # 禁用 Studies
+        # --- 研究 ---
+        # 禁用研究
         "app.shield.optoutstudies.enabled" = false;
         # 禁用 Normandy/Shield
         "app.normandy.enabled" = false;
@@ -202,7 +294,6 @@
         "webchannel.allowObject.urlWhitelist" = "";
         # 在国际化域名中使用双关编码
         "network.IDN_show_punycode" = true;
-
         # 下载设置
         "browser.download.manager.addToRecentDocs" = false;
         # ETP（增强跟踪保护）
@@ -211,6 +302,8 @@
         "privacy.cpd.cache" = true;
         "privacy.cpd.formdata" = true;
         "privacy.cpd.history" = true;
+        "privacy.clearHistory.cache" = true;
+        "privacy.clearHistory.historyFormDataAndDownloads" = true;
         # 系统颜色
         "browser.display.use_system_colors" = true;
         # 禁用扩展/功能推荐
@@ -237,6 +330,7 @@
         "intl.locale.requested" = "zh-CN,en-US";
         # 拼写检查
         "layout.spellcheckDefault" = 0;
+        "devtools.accessibility.enabled" = false;
         # Cookie 行为
         "network.cookie.cookieBehavior" = 1;
         "privacy.cpd.cookies" = false;
@@ -252,6 +346,7 @@
         "privacy.donottrackheader.enabled" = true;
         # 不许出售或共享
         "privacy.globalprivacycontrol.enabled" = true;
+        "browser.ping-centre.telemetry" = true;
       };
     };
   };

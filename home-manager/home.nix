@@ -37,14 +37,21 @@
     homeDirectory = "/home/${vars.users.users.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
-      name = "Bibata-Modern-Classic";
-      package = pkgs.bibata-cursors;
-      size = 24;
+      name = vars.home.pointerCursor.name;
+      package = vars.home.pointerCursor.package pkgs;
+      size = vars.home.pointerCursor.size;
       gtk.enable = true;
       x11 = {
         enable = true;
-        defaultCursor = "Bibata-Modern-Classic";
+        defaultCursor = vars.home.pointerCursor.name;
       };
+    };
+  };
+
+  gtk = {
+    cursorTheme = {
+      name = vars.home.pointerCursor.name;
+      size = vars.home.pointerCursor.size;
     };
   };
 
@@ -58,14 +65,6 @@
       index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
       format = columns
     '';
-  };
-
-  gtk = {
-    cursorTheme = {
-      name = "Bibata-Modern-Classic";
-      package = pkgs.bibata-cursors;
-      size = 24;
-    };
   };
 
   programs = {
