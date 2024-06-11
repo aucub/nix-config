@@ -482,6 +482,12 @@
 
   programs = {
     # adb.enable = true;
+    clash-verge = {
+      enable = true;
+      package = pkgs.clash-verge-rev;
+      tunMode = true;
+      autoStart = true;
+    };
     ssh.enableAskPassword = false;
     command-not-found.enable = false;
     nix-ld.enable = true;
