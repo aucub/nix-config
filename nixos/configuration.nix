@@ -12,6 +12,7 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.nvidia-disable
+    # outputs.nixosModules.containers
 
     ./hardware-configuration.nix
 
@@ -88,7 +89,7 @@
   };
 
   networking = {
-    hostName = "${vars.hostname}";
+    hostName = vars.hostname;
     firewall.enable = false;
     nameservers = ["223.5.5.5#dns.alidns.com" "8.8.8.8#dns.google"];
     networkmanager = {
@@ -96,6 +97,7 @@
       dns = "systemd-resolved";
       wifi = {
         backend = "iwd";
+        powersave = true;
         macAddress = "stable-ssid";
       };
     };
@@ -670,10 +672,9 @@
     udev = {
       packages = with pkgs; [
         gnome.gnome-settings-daemon
-        # android-udev-rules
       ];
       extraRules = ''
-        ACTION=="add|change", SUBSYSTEM=="leds", KERNEL=="input10::numlock", RUN+="${pkgs.coreutils}/bin/echo 0 > /sys/class/leds/input10::numlock/brightness"
+        ACTION=="add|change", SUBSYSTEM=="leds", KERNEL=="input10::numlock", RUN+="${pkgs.bash}/bin/sh -c '${pkgs.coreutils}/bin/echo 0 > /sys/class/leds/input10::numlock/brightness'"
       '';
     };
     dbus = {

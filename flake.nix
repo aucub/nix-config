@@ -54,18 +54,20 @@
           # "i8042.reset" # 重置控制器
         ];
         kernelModules = [
-          "v4l2loopback"
+          # "v4l2loopback"
           "amdgpu"
         ];
         extraModulePackages = pkgs:
           with pkgs; [
-            linuxKernel.packages.linux_zen.v4l2loopback
+            # linuxKernel.packages.linux_zen.v4l2loopback
           ];
         extraModprobeConfig = ''
           blacklist nouveau
           options nouveau modeset=0
-          options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
         '';
+        # ++ ''
+        #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
+        # '';
       };
       hardware.opengl.extraPackages = pkgs:
         with pkgs; [

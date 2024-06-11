@@ -1,7 +1,6 @@
 {
   inputs,
   outputs,
-  lib,
   pkgs,
   vars,
   ...
@@ -76,6 +75,13 @@
       [global]
       index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
     '';
+    configFile."electron-flags.conf".text = ''
+      --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer
+      --ozone-platform-hint=auto
+      --force-device-scale-factor=1.25
+      --ozone-platform=wayland
+      --enable-wayland-ime
+    '';
   };
 
   programs = {
@@ -85,10 +91,6 @@
       bashrcExtra = ''
         PS1='[\u@\h \W]\$ '
       '';
-      shellAliases = {
-        ls = "ls --color=auto";
-        grep = "grep --color=auto";
-      };
     };
     dircolors.enable = true;
     tealdeer = {
@@ -131,18 +133,6 @@
             save = false;
           };
           registry = "https://npmreg.proxy.ustclug.org/";
-        };
-      };
-    };
-    rio = {
-      enable = true;
-      settings = {
-        editor = "hx";
-        confirm-before-quit = false;
-        window = {
-          opacity = 0.6;
-          blur = true;
-          decorations = "Transparent";
         };
       };
     };
@@ -239,7 +229,7 @@
       enable = true;
       defaultEditor = true;
       settings = {
-        theme = lib.mkDefault "fleet_dark";
+        theme = "fleet_dark";
         editor = {
           middle-click-paste = false;
           file-picker.hidden = false;
@@ -251,7 +241,7 @@
       config = {
         style = "header-filename,header-filesize,grid";
         paging = "never";
-        theme = lib.mkDefault "Dracula";
+        theme = "Dracula";
       };
     };
     git = {
@@ -393,9 +383,7 @@
     # };
   };
 
-  services = {
-    udiskie.enable = true;
-  };
+  services.udiskie.enable = true;
 
   xsession = {
     enable = true;

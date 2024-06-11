@@ -124,7 +124,6 @@
         }
       '';
       settings = {
-        # arkenfox user.js
         # 日期: 7 June 2024
         # 版本号: 126
         # 链接: https://github.com/arkenfox/user.js

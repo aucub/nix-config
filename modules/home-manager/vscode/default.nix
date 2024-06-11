@@ -26,12 +26,12 @@
           jnoortheen.nix-ide
           github.codespaces
           # ms-vscode.cpptools
-          # YoavBls.pretty-ts-errors
           # redhat.vscode-xml
           # rust-lang.rust-analyzer
         ])
         ++ (with inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
           rangav.vscode-thunder-client
+          # yoavbls.pretty-ts-errors
         ]);
     };
   };

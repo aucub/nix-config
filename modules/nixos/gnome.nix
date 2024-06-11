@@ -3,8 +3,10 @@
   pkgs,
   ...
 }: {
-  qt.style = "adwaita";
-  qt.platformTheme = "gnome";
+  qt = {
+    style = "adwaita";
+    platformTheme = "gnome";
+  };
   environment.gnome.excludePackages =
     (with pkgs; [
       orca
@@ -43,24 +45,30 @@
       file-roller
       seahorse
     ]);
-  programs.seahorse.enable = false;
-  programs.gnome-terminal.enable = false;
-  programs.file-roller.enable = false;
-  services.gnome = {
-    gnome-user-share.enable = false;
-    gnome-online-accounts.enable = false;
-    gnome-browser-connector.enable = false;
-    gnome-initial-setup.enable = false;
-    gnome-online-miners.enable = lib.mkForce false;
-    games.enable = false;
-    tracker.enable = false;
-    tracker-miners.enable = false;
-    rygel.enable = false;
-    gnome-remote-desktop.enable = false;
-    evolution-data-server.enable = lib.mkForce false;
-    gnome-keyring.enable = true;
-    glib-networking.enable = true;
+  programs = {
+    seahorse.enable = false;
+    gnome-terminal.enable = false;
+    file-roller.enable = false;
   };
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services = {
+    gnome = {
+      gnome-user-share.enable = false;
+      gnome-online-accounts.enable = false;
+      gnome-browser-connector.enable = false;
+      gnome-initial-setup.enable = false;
+      gnome-online-miners.enable = lib.mkForce false;
+      games.enable = false;
+      tracker.enable = false;
+      tracker-miners.enable = false;
+      rygel.enable = false;
+      gnome-remote-desktop.enable = false;
+      evolution-data-server.enable = lib.mkForce false;
+      gnome-keyring.enable = true;
+      glib-networking.enable = true;
+    };
+    xserver = {
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
+    };
+  };
 }
