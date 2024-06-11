@@ -134,6 +134,18 @@
         };
       };
     };
+    rio = {
+      enable = true;
+      settings = {
+        editor = "hx";
+        confirm-before-quit = false;
+        window = {
+          opacity = 0.6;
+          blur = true;
+          decorations = "Transparent";
+        };
+      };
+    };
     alacritty = {
       enable = true;
       settings = {

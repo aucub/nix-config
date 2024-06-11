@@ -394,11 +394,6 @@
         python3Full
         lnav
         uutils-coreutils-noprefix
-        # android-tools
-      ])
-      ++ (with pkgs; [
-        man-pages
-        man-pages-posix
       ])
       # FHS
       ++ (with pkgs; [
@@ -448,7 +443,7 @@
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
                 extraBwrapArgs = [
-                  "--symlink /etc/gitconfig /.host-etc/gitconfig"
+                  "--symlink /.host-etc/gitconfig /etc/gitconfig"
                 ];
               })
         )

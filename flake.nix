@@ -64,7 +64,7 @@
         extraModprobeConfig = ''
           blacklist nouveau
           options nouveau modeset=0
-          options v4l2loopback devices=1 video_nr=1 card_label="Virtual Cam" exclusive_caps=1
+          options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
         '';
       };
       hardware.opengl.extraPackages = pkgs:
