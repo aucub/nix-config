@@ -85,13 +85,6 @@
   };
 
   programs = {
-    bash = {
-      enable = true;
-      enableCompletion = true;
-      bashrcExtra = ''
-        PS1='[\u@\h \W]\$ '
-      '';
-    };
     dircolors.enable = true;
     tealdeer = {
       enable = true;

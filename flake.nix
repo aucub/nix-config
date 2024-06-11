@@ -50,6 +50,7 @@
           "amdgpu.vm_update_mode=3"
           "radeon.dpm=0"
           "acpi_backlight=native"
+          "mitigations=off" # 关闭 CPU 漏洞利用缓解措施提高性能
           # "i8042.nomux=1" # 禁用键鼠多路复用
           # "i8042.reset" # 重置控制器
         ];

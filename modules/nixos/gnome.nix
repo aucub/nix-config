@@ -65,6 +65,7 @@
       evolution-data-server.enable = lib.mkForce false;
       gnome-keyring.enable = true;
       glib-networking.enable = true;
+      gnome-settings-daemon.enable = true;
     };
     xserver = {
       displayManager.gdm.enable = true;

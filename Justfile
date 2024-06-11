@@ -7,7 +7,7 @@ set shell := ["fish", "-c"]
 ############################################################################
 
 bp input:
-  nix build --impure .#{{input}} --show-trace
+  nix build --impure .#{{input}} --show-trace --print-build-logs --verbose
 
 ############################################################################
 #
@@ -16,16 +16,19 @@ bp input:
 ############################################################################
 
 rs:
-  sudo nixos-rebuild switch --flake .#neko --show-trace
+  sudo nixos-rebuild switch --flake .#neko --no-build-nix --show-trace --print-build-logs --verbose
 
 rsu:
-  sudo nixos-rebuild switch --flake .#neko --upgrade --show-trace
+  sudo nixos-rebuild switch --flake .#neko --upgrade --no-build-nix --show-trace --print-build-logs --verbose
 
 rsb:
-  sudo nixos-rebuild switch  --flake .#neko --install-bootloader --show-trace
+  sudo nixos-rebuild switch  --flake .#neko --install-bootloader --no-build-nix --show-trace --print-build-logs --verbose
+
+rsr:
+  sudo nixos-rebuild switch --flake .#neko --rollback --show-trace --print-build-logs --verbose
 
 hs:
-  home-manager switch --flake .#uymi@neko --show-trace
+  home-manager switch --flake .#uymi@neko --show-trace --print-build-logs --verbose
 
 ############################################################################
 #

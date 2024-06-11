@@ -71,6 +71,12 @@
         # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
+      extra-substituters = [
+        "https://pub-9adc4fb6f5cd4b58970c4f73e8f98749.r2.dev"
+      ];
+      extra-trusted-public-keys = [
+        "0c25235045ad6791c9b6c99531934bc2.r2.cloudflarestorage.com:ToftL6wRBYQZ4dp3qv3gIvmKG3RkzgU+KPQQXQw8czc="
+      ];
       trusted-users = [
         "root"
         "@wheel"
@@ -84,7 +90,7 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 1w";
     };
   };
 
@@ -249,7 +255,7 @@
 
   hardware = {
     enableAllFirmware = true;
-    wirelessRegulatoryDatabase = lib.mkDefault false;
+    wirelessRegulatoryDatabase = lib.mkForce false;
     firmware = with pkgs; [
       linux-firmware
     ];
@@ -327,6 +333,7 @@
         ++
         # shell
         (with pkgs; [
+          # ouch
           chezmoi
           typst
           uv
@@ -387,7 +394,6 @@
         delta
         gitleaks
         eza
-        lnav
         fzf
         bat
         fd
@@ -396,6 +402,9 @@
         python3Full
         lnav
         uutils-coreutils-noprefix
+      ])
+      ++ (with pkgs.bat-extras; [
+        batman
       ])
       # FHS
       ++ (with pkgs; [
@@ -482,13 +491,10 @@
 
   programs = {
     # adb.enable = true;
-    clash-verge = {
-      enable = true;
-      package = pkgs.clash-verge-rev;
-      tunMode = true;
-      autoStart = true;
+    ssh = {
+      askPassword = "";
+      enableAskPassword = false;
     };
-    ssh.enableAskPassword = false;
     command-not-found.enable = false;
     nix-ld.enable = true;
     nix-index.enable = true;
@@ -630,10 +636,19 @@
       terminal = "alacritty";
     };
     xwayland.enable = true;
+    bash = {
+      promptInit = ''
+        PS1='[\u@\h \W]\$ '
+      '';
+      interactiveShellInit = ''
+        eval "$(batman --export-env)"
+      '';
+    };
     fish = {
       enable = true;
       interactiveShellInit = ''
         set -U fish_greeting
+        batman --export-env | source
       '';
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
@@ -666,9 +681,16 @@
   qt.enable = true;
 
   services = {
+    # locate = {
+    #   enable = true;
+    #   interval = "weekly";
+    #   package = pkgs.plocate;
+    # };
     timesyncd.enable = true;
     avahi.enable = false;
-    journald.extraConfig = "SystemMaxUse=50M\nSystemMaxFiles=5";
+    journald.extraConfig = ''
+      SystemMaxUse=50M
+    '';
     colord.enable = true;
     accounts-daemon.enable = true;
     devmon.enable = true;
@@ -676,9 +698,7 @@
     udisks2.enable = true;
     tumbler.enable = true;
     udev = {
-      packages = with pkgs; [
-        gnome.gnome-settings-daemon
-      ];
+      packages = with pkgs; [];
       extraRules = ''
         ACTION=="add|change", SUBSYSTEM=="leds", KERNEL=="input10::numlock", RUN+="${pkgs.bash}/bin/sh -c '${pkgs.coreutils}/bin/echo 0 > /sys/class/leds/input10::numlock/brightness'"
       '';
@@ -689,6 +709,8 @@
     };
     psd.enable = true;
     fstrim.enable = true;
+    # 为 Linux 虚拟控制台提供鼠标支持
+    # gpm.enable = true;
     kmscon = {
       # Instead of vt
       enable = true;
@@ -699,7 +721,7 @@
         }
       ];
       extraOptions = "--term xterm-256color";
-      extraConfig = "font-size=14";
+      extraConfig = "font-size=20";
       hwRender = true;
     };
     resolved = {
@@ -763,8 +785,16 @@
 
   systemd = {
     network.wait-online.enable = false;
+    coredump.extraConfig = ''
+      Storage=none
+      ProcessSizeMax=0
+    '';
+    sleep.extraConfig = ''
+      HibernateDelaySec=1h
+    '';
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;
+      "systemd-gpt-auto-generator".enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
       "premiumsoft-reset" = {
