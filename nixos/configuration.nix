@@ -90,6 +90,7 @@
   networking = {
     hostName = "${vars.hostname}";
     firewall.enable = false;
+    nameservers = ["223.5.5.5#dns.alidns.com" "8.8.8.8#dns.google"];
     networkmanager = {
       enable = true;
       dns = "systemd-resolved";
@@ -296,23 +297,26 @@
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
       ];
-      extraGroups = [
-        "wheel"
-        "users"
-        "plugdev"
-        "video"
-        "audio"
-        "docker"
-        "podman"
-        "git"
-        "libvirtd"
-        "systemd-journal"
-        "wireshark"
-        "input"
-        "networkmanager"
-        "colord"
-        # "adbusers"
-      ];
+      extraGroups =
+        [
+          "wheel"
+          "users"
+          "plugdev"
+          "video"
+          "audio"
+          "git"
+          "systemd-journal"
+          "input"
+          "networkmanager"
+          "colord"
+        ]
+        ++ (builtins.filter (g: config.users.groups ? ${g}) [
+          "adbusers"
+          "docker"
+          "podman"
+          "libvirtd"
+          "wireshark"
+        ]);
       shell = pkgs.bashInteractive;
       packages =
         [
@@ -332,7 +336,7 @@
           zed-editor
           celluloid
           localsend
-          impression
+          popsicle
           # nomacs
           # jetbrains.idea-ultimate
         ])
@@ -364,6 +368,9 @@
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
     };
+    sessionVariables = {
+      MOZ_USE_XINPUT2 = "1";
+    };
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
@@ -388,6 +395,10 @@
         lnav
         uutils-coreutils-noprefix
         # android-tools
+      ])
+      ++ (with pkgs; [
+        man-pages
+        man-pages-posix
       ])
       # FHS
       ++ (with pkgs; [
@@ -437,7 +448,7 @@
                 runScript = "fish";
                 extraOutputsToInstall = ["dev"];
                 extraBwrapArgs = [
-                  "--symlink /etc/gitconfig /etc/gitconfig"
+                  "--symlink /etc/gitconfig /.host-etc/gitconfig"
                 ];
               })
         )
@@ -463,15 +474,20 @@
       );
   };
 
-  documentation.man = {
-    mandoc.enable = true;
-    man-db.enable = false;
-    generateCaches = false;
+  documentation = {
+    nixos.enable = false;
+    man = {
+      mandoc.enable = true;
+      man-db.enable = false;
+      generateCaches = false;
+    };
   };
 
   programs = {
+    # adb.enable = true;
     ssh.enableAskPassword = false;
     command-not-found.enable = false;
+    nix-ld.enable = true;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
     npm.enable = false;
@@ -630,9 +646,6 @@
     yazi = {
       enable = true;
       settings.yazi = {
-        globalSection = {
-          sort_dir_first = true;
-        };
         manager = {
           sort_dir_first = true;
           show_hidden = true;
@@ -653,12 +666,6 @@
     timesyncd.enable = true;
     avahi.enable = false;
     journald.extraConfig = "SystemMaxUse=50M\nSystemMaxFiles=5";
-    cron = {
-      enable = true;
-      systemCronJobs = [
-        "0 0 * * 0  navicat   dconf reset -f com/premiumsoft/navicat-premium"
-      ];
-    };
     colord.enable = true;
     accounts-daemon.enable = true;
     devmon.enable = true;
@@ -696,12 +703,8 @@
     resolved = {
       enable = true;
       dnsovertls = "true";
-      extraConfig = ''
-        [Resolve]
-        DNS=223.5.5.5#dns.alidns.com 8.8.8.8#dns.google 1.0.0.1 2400:3200::1 2606:4700:4700::1001
-        DNSOverTLS=yes
-        Domains=~.
-      '';
+      domains = ["~."];
+      fallbackDns = ["1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" "2400:3200::1" "2606:4700:4700::1001"];
     };
     # 温控
     thermald.enable = lib.mkDefault true;
@@ -762,6 +765,24 @@
       NetworkManager-wait-online.enable = lib.mkForce false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
+      "premiumsoft-reset" = {
+        script = ''
+          set -eu
+          ${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+      };
+    };
+    timers."premiumsoft-reset" = {
+      wantedBy = ["timers.target"];
+      timerConfig = {
+        OnCalendar = "weekly";
+        Persistent = true;
+        Unit = "premiumsoft-reset.service";
+      };
     };
   };
 

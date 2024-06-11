@@ -4,4 +4,5 @@
   gnome = import ./gnome.nix;
   nvidia-disable = import ./nvidia-disable.nix;
   nvidia = import ./nvidia.nix;
+  containers = import ./containers.nix;
 }

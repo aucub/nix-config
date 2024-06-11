@@ -1,19 +1,11 @@
 {
   inputs,
-  vars,
   lib,
   ...
 }: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
   ];
-
-  boot.extraModprobeConfig =
-    vars.boot.extraModprobeConfig
-    + ''
-      blacklist nouveau
-      options nouveau modeset=0
-    '';
   boot.blacklistedKernelModules = lib.mkForce ["nouveau" "nvidia" "nvidia_drm" "nvidia_modeset"];
   services.udev.extraRules = ''
     # Remove NVIDIA USB xHCI Host Controller devices, if present

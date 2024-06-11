@@ -46,6 +46,15 @@
         defaultCursor = vars.home.pointerCursor.name;
       };
     };
+    sessionVariables = {
+      _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+    };
+    file.".cargo/config.toml".text = ''
+      [source.crates-io]
+      replace-with = 'ustc'
+      [source.ustc]
+      registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+    '';
   };
 
   gtk = {
@@ -59,11 +68,13 @@
     userDirs = {
       enable = true;
       createDirectories = true;
+      templates = null;
+      publicShare = null;
+      desktop = null;
     };
     configFile."pip/pip.conf".text = ''
       [global]
       index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
-      format = columns
     '';
   };
 
@@ -80,6 +91,13 @@
       };
     };
     dircolors.enable = true;
+    tealdeer = {
+      enable = true;
+      settings = {
+        display.compact = true;
+        updates.auto_update = true;
+      };
+    };
     fish = {
       enable = true;
       interactiveShellInit = ''
@@ -108,8 +126,11 @@
       settings = {
         smol = true;
         telemetry = false;
-        install.lockfile = {
-          save = false;
+        install = {
+          lockfile = {
+            save = false;
+          };
+          registry = "https://npmreg.proxy.ustclug.org/";
         };
       };
     };
