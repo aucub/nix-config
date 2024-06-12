@@ -8,8 +8,8 @@
         runHook postInstall
       '';
     });
-    upower = prev.upower.overrideAttrs (oldAttrs: {
-      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [final.xmlstarlet];
+    upower-with-conf = prev.upower.overrideAttrs (oldAttrs: {
+      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [prev.xmlstarlet];
       postInstall =
         oldAttrs.postInstall
         + ''

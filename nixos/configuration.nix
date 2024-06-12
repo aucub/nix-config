@@ -730,6 +730,7 @@
     power-profiles-daemon.enable = true;
     upower = {
       enable = true;
+      package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
     auto-cpufreq.enable = true;
