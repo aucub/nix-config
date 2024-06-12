@@ -761,7 +761,7 @@
     };
     xserver = {
       enable = true;
-      videoDrivers = lib.mkDefault vars.services.xserver.videoDrivers;
+      videoDrivers = vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [xterm];
       xkb.model = "pc105";
