@@ -12,7 +12,6 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.nvidia-disable
-    outputs.nixosModules.dbus-1
     # outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
 
