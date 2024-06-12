@@ -1,8 +1,4 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{inputs, ...}: {
   additions = final: _prev: import ../pkgs final.pkgs;
   modifications = final: prev: {
     orchis-theme = prev.orchis-theme.overrideAttrs (oldAttrs: {
@@ -12,9 +8,8 @@
         runHook postInstall
       '';
     });
-    upower-conf = ./org.freedesktop.UPower.conf;
     upower = prev.upower.overrideAttrs (oldAttrs: {
-      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [pkgs.xmlstarlet];
+      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [final.xmlstarlet];
       postInstall =
         oldAttrs.postInstall
         + ''
