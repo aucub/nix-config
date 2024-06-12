@@ -3,5 +3,4 @@ pkgs: {
   navicat = pkgs.callPackage ./navicat {};
   hiddify-next = pkgs.callPackage ./hiddify-next {};
   damask = pkgs.callPackage ./damask {};
-  upower-conf = pkgs.callPackage ./upower-conf {};
 }
