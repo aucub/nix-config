@@ -696,7 +696,7 @@
     tumbler.enable = true;
     dbus = {
       implementation = "broker";
-      packages = with pkgs; [dconf gcr_4 udisks];
+      packages = with pkgs; [dconf gcr_4 udisks upower-conf];
     };
     psd.enable = true;
     fstrim.enable = true;

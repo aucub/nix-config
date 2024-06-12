@@ -355,7 +355,6 @@
           true-color = "always";
         };
       };
-      difftastic.enable = true;
     };
     yazi = {
       enable = true;
