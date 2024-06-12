@@ -50,9 +50,7 @@
           "amdgpu.vm_update_mode=3"
           "radeon.dpm=0"
           "acpi_backlight=native"
-          "mitigations=off" # 关闭 CPU 漏洞利用缓解措施提高性能
-          # "i8042.nomux=1" # 禁用键鼠多路复用
-          # "i8042.reset" # 重置控制器
+          "mitigations=off" # 关闭漏洞缓解措施提高性能
         ];
         kernelModules = [
           # "v4l2loopback"
@@ -62,14 +60,16 @@
           with pkgs; [
             # linuxKernel.packages.linux_zen.v4l2loopback
           ];
-        extraModprobeConfig = ''
-          blacklist nouveau
-          options nouveau modeset=0
-          options usbhid skip_device=ATTRS{idVendor}==048D,ATTRS{idProduct}==C100
-        '';
-        # ++ ''
-        #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
-        # '';
+        extraModprobeConfig =
+          ''
+            blacklist nouveau
+            options nouveau modeset=0
+            options usbhid skip_device=ATTRS{idVendor}==048D,ATTRS{idProduct}==C100
+          ''
+          # ++ ''
+          #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
+          # ''
+          ;
       };
       hardware.opengl.extraPackages = pkgs:
         with pkgs; [

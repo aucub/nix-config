@@ -45,9 +45,7 @@
         defaultCursor = vars.home.pointerCursor.name;
       };
     };
-    sessionVariables = {
-      _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
-    };
+    sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
     file.".cargo/config.toml".text = ''
       [source.crates-io]
       replace-with = 'ustc'
@@ -56,11 +54,9 @@
     '';
   };
 
-  gtk = {
-    cursorTheme = {
-      name = vars.home.pointerCursor.name;
-      size = vars.home.pointerCursor.size;
-    };
+  gtk.cursorTheme = {
+    name = vars.home.pointerCursor.name;
+    size = vars.home.pointerCursor.size;
   };
 
   xdg = {
@@ -122,9 +118,7 @@
         smol = true;
         telemetry = false;
         install = {
-          lockfile = {
-            save = false;
-          };
+          lockfile.save = false;
           registry = "https://npmreg.proxy.ustclug.org/";
         };
       };
@@ -133,9 +127,7 @@
       enable = true;
       settings = {
         live_config_reload = false;
-        shell = {
-          program = "fish";
-        };
+        shell.program = "fish";
         window = {
           padding = {
             x = 6;
@@ -163,21 +155,15 @@
           };
           size = 20;
         };
-        selection = {
-          semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
-        };
-        debug = {
-          log_level = "Off";
-        };
-        keyboard = {
-          bindings = [
-            {
-              key = "Return";
-              mods = "Control|Shift";
-              action = "SpawnNewInstance";
-            }
-          ];
-        };
+        selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
+        debug.log_level = "Off";
+        keyboard.bindings = [
+          {
+            key = "Return";
+            mods = "Control|Shift";
+            action = "SpawnNewInstance";
+          }
+        ];
         colors = {
           primary = {
             background = "0x212121";
@@ -347,13 +333,9 @@
         ".res/"
         ".symbols/"
       ];
-      delta = {
+      difftastic = {
         enable = true;
-        options = {
-          diff-so-fancy = true;
-          line-numbers = true;
-          true-color = "always";
-        };
+        background = "dark";
       };
     };
     yazi = {
@@ -378,11 +360,6 @@
   };
 
   services.udiskie.enable = true;
-
-  xsession = {
-    enable = true;
-    numlock.enable = true;
-  };
 
   news.display = "silent";
 

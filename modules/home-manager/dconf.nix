@@ -13,9 +13,7 @@
       purity-sfw = true;
     };
 
-    "ca/desrt/dconf-editor" = {
-      show-warning = false;
-    };
+    "ca/desrt/dconf-editor".show-warning = false;
 
     "org/gnome/desktop/interface" = {
       action-right-click-titlebar = "none";
@@ -39,13 +37,9 @@
       toolkit-accessibility = false;
     };
 
-    "org/gnome/desktop/peripherals/keyboard" = {
-      numlock-state = true;
-    };
+    "org/gnome/desktop/peripherals/keyboard".numlock-state = true;
 
-    "org/gnome/desktop/peripherals/touchpad" = {
-      two-finger-scrolling-enabled = true;
-    };
+    "org/gnome/desktop/peripherals/touchpad".two-finger-scrolling-enabled = true;
 
     "org/gnome/desktop/privacy" = {
       old-files-age = lib.hm.gvariant.mkUint32 3;
@@ -61,21 +55,13 @@
       lock-enabled = false;
     };
 
-    "org/gnome/desktop/search-providers" = {
-      disable-external = true;
-    };
+    "org/gnome/desktop/search-providers".disable-external = true;
 
-    "org/gnome/desktop/session" = {
-      idle-delay = lib.hm.gvariant.mkUint32 300;
-    };
+    "org/gnome/desktop/session".idle-delay = lib.hm.gvariant.mkUint32 300;
 
-    "org/gnome/desktop/sound" = {
-      allow-volume-above-100-percent = true;
-    };
+    "org/gnome/desktop/sound".allow-volume-above-100-percent = true;
 
-    "org/gnome/desktop/wm/keybindings" = {
-      activate-window-menu = ["<Super>m"];
-    };
+    "org/gnome/desktop/wm/keybindings".activate-window-menu = ["<Super>m"];
 
     "org/gnome/desktop/wm/preferences" = {
       action-right-click-titlebar = "none";
@@ -146,18 +132,14 @@
       edge-tiling = true;
     };
 
-    "org/gnome/nautilus/compression" = {
-      default-compression-format = "zip";
-    };
+    "org/gnome/nautilus/compression".default-compression-format = "zip";
 
     "org/gnome/nautilus/preferences" = {
       recursive-search = "never";
       show-hidden-files = true;
     };
 
-    "org/gnome/online-accounts" = {
-      whitelisted-providers = [];
-    };
+    "org/gnome/online-accounts".whitelisted-providers = [];
 
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
@@ -167,9 +149,7 @@
       night-light-temperature = lib.hm.gvariant.mkUint32 3248;
     };
 
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
-    };
+    "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Alt>space";
@@ -181,7 +161,7 @@
       sleep-inactive-ac-type = "suspend";
       sleep-inactive-battery-type = "suspend";
       sleep-inactive-battery-timeout = 900;
-      sleep-inactive-ac-timeout = 3600;
+      sleep-inactive-ac-timeout = 1800;
     };
 
     "org/gnome/shell" = {
@@ -194,40 +174,29 @@
       tray-pos = "left";
     };
 
-    "org/gnome/shell/keybindings" = {
-      toggle-message-tray = [];
-    };
+    "org/gnome/shell/keybindings".toggle-message-tray = [];
 
     "org/gnome/shell/extensions/caffeine" = {
       enable-fullscreen = false;
       indicator-position-max = 4;
       show-notifications = false;
       restore-state = true;
+      screen-blank = "always";
     };
 
-    "org/gnome/shell/extensions/kimpanel" = {
-      font = "更纱黑体 UI SC 14";
-    };
+    "org/gnome/shell/extensions/kimpanel".font = "更纱黑体 UI SC 14";
 
     "org/gnome/shell/extensions/system-monitor" = {
       show-cpu = false;
       show-swap = false;
     };
 
-    "org/gnome/system/location" = {
-      enabled = false;
-    };
+    "org/gnome/system/location".enabled = false;
 
-    "org/gnome/tweaks" = {
-      show-extensions-notice = false;
-    };
+    "org/gnome/tweaks".show-extensions-notice = false;
 
-    "org/gtk/settings/file-chooser" = {
-      show-hidden = true;
-    };
+    "org/gtk/settings/file-chooser".show-hidden = true;
 
-    "org/gtk/gtk4/settings/file-chooser" = {
-      show-hidden = true;
-    };
+    "org/gtk/gtk4/settings/file-chooser".show-hidden = true;
   };
 }

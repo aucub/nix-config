@@ -43,9 +43,7 @@
         "credit_card_enabled" = false;
         "profile_enabled" = false;
       };
-      "bookmark_bar" = {
-        "show_on_all_tabs" = false;
-      };
+      "bookmark_bar"."show_on_all_tabs" = false;
       "browser" = {
         "clear_data" = {
           "cookies" = false;
@@ -67,33 +65,19 @@
       "enable_do_not_track" = true;
       "https_only_mode_auto_enabled" = false;
       "https_only_mode_enabled" = true;
-      "intl" = {
-        "selected_languages" = "zh-CN,zh";
-      };
-      "payments" = {
-        "can_make_payment_enabled" = false;
-      };
-      "privacy_guide" = {
-        "viewed" = true;
-      };
-      "privacy_sandbox" = {
-        "first_party_sets_data_access_allowed_initialized" = true;
-      };
+      "intl"."selected_languages" = "zh-CN,zh";
+      "payments"."can_make_payment_enabled" = false;
+      "privacy_guide"."viewed" = true;
+      "privacy_sandbox"."first_party_sets_data_access_allowed_initialized" = true;
       "safebrowsing" = {
         "enabled" = true;
         "enhanced" = true;
         "esb_enabled_via_tailored_security" = false;
         "esb_opt_in_with_friendlier_settings" = true;
       };
-      "search" = {
-        "suggest_enabled" = false;
-      };
-      "tracking_protection" = {
-        "tracking_protection_3pcd_enabled" = false;
-      };
-      "translate" = {
-        "enabled" = false;
-      };
+      "search"."suggest_enabled" = false;
+      "tracking_protection"."tracking_protection_3pcd_enabled" = false;
+      "translate"."enabled" = false;
     };
   };
 }

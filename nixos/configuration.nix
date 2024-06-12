@@ -240,9 +240,9 @@
         "image/jxl" = "org.gnome.Loupe.desktop";
         # "text/plain"="Helix.desktop";
       };
-      addedAssociations = {
-        "text/plain" = "dev.zed.Zed.desktop";
-      };
+      # addedAssociations = {
+      #   "text/plain" = "dev.zed.Zed.desktop";
+      # };
     };
   };
 
@@ -267,7 +267,7 @@
       driSupport = true;
       extraPackages = vars.hardware.opengl.extraPackages pkgs;
     };
-    # 允许视频组中的用户进行亮度控制
+    # 允许video组中的用户进行亮度控制
     brillo.enable = true;
     bluetooth = {
       enable = true;
@@ -343,7 +343,7 @@
           nodePackages.nodejs
         ])
         ++ (with pkgs; [
-          zed-editor
+          # zed-editor
           celluloid
           localsend
           popsicle
@@ -382,6 +382,7 @@
     };
     sessionVariables = {
       MOZ_USE_XINPUT2 = "1";
+      LESS = "-SR";
     };
     systemPackages =
       (with pkgs; [
@@ -394,7 +395,6 @@
       ++ (with pkgs; [
         difftastic
         helix
-        delta
         gitleaks
         eza
         fzf
@@ -590,37 +590,13 @@
         core = {
           editor = "hx";
           autocrlf = "input";
-          pager = "delta";
           askpass = "";
         };
-        init = {
-          defaultBranch = "main";
-        };
-        push = {
-          autoSetupRemote = true;
-        };
-        diff = {
-          tool = "difftastic";
-          colorMoved = "default";
-        };
-        difftool = {
-          prompt = false;
-          difftastic = {
-            cmd = "difft \"$LOCAL\" \"$REMOTE\"";
-          };
-        };
-        pager = {
-          difftool = true;
-        };
-        interactive = {
-          diffFilter = "delta --color-only";
-        };
-        delta = {
-          navigate = true;
-        };
-        merge = {
-          conflictstyle = "diff3";
-        };
+        init.defaultBranch = "main";
+        push.autoSetupRemote = true;
+        difftool.prompt = false;
+        pager.difftool = true;
+        merge.conflictstyle = "diff3";
         credential = {
           credentialStore = "secretservice";
           helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
@@ -636,11 +612,9 @@
       terminal = "alacritty";
     };
     xwayland.enable = true;
-    bash = {
-      promptInit = ''
-        PS1='[\u@\h \W]\$ '
-      '';
-    };
+    bash.promptInit = ''
+      PS1='[\u@\h \W]\$ '
+    '';
     fish = {
       enable = true;
       interactiveShellInit = ''
@@ -659,11 +633,9 @@
     };
     yazi = {
       enable = true;
-      settings.yazi = {
-        manager = {
-          sort_dir_first = true;
-          show_hidden = true;
-        };
+      settings.yazi.manager = {
+        sort_dir_first = true;
+        show_hidden = true;
       };
     };
     fzf.fuzzyCompletion = true;
@@ -682,13 +654,21 @@
     #   interval = "weekly";
     #   package = pkgs.plocate;
     # };
-    timesyncd.enable = true;
+    timesyncd = {
+      enable = true;
+      extraConfig = ''
+        PollIntervalMinSec=4d
+        PollIntervalMaxSec=7w
+        SaveIntervalSec=infinity
+      '';
+    };
     avahi.enable = false;
     journald.extraConfig = ''
-      SystemMaxUse=50M
+      SystemMaxUse=100M
     '';
     colord.enable = true;
     accounts-daemon.enable = true;
+    # 自动设备挂载
     devmon.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
@@ -696,10 +676,13 @@
     tumbler.enable = true;
     dbus = {
       implementation = "broker";
-      packages = with pkgs; [dconf gcr_4 udisks upower];
+      packages = with pkgs; [dconf gcr_4 udisks];
     };
     psd.enable = true;
-    fstrim.enable = true;
+    fstrim.enable =
+      if config.fileSystems."/".fsType == "bcachefs"
+      then false
+      else true;
     # 为 Linux 虚拟控制台提供鼠标支持
     # gpm.enable = true;
     kmscon = {
@@ -721,19 +704,26 @@
       domains = ["~."];
       fallbackDns = ["1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" "2400:3200::1" "2606:4700:4700::1001"];
     };
-    # 温控
-    thermald.enable = true;
     acpid.enable = true;
-    # btrfs.autoScrub = {
-    # enable = true;
-    # };
-    power-profiles-daemon.enable = true;
+    btrfs.autoScrub.enable =
+      if config.fileSystems."/".fsType == "btrfs"
+      then true
+      else false;
+    power-profiles-daemon.enable = false;
+    tlp = {
+      enable = true;
+      settings = {
+        TLP_DEFAULT_MODE = "BAT";
+        START_CHARGE_THRESH_BAT0 = 75;
+        STOP_CHARGE_THRESH_BAT0 = 80;
+      };
+    };
     upower = {
       enable = true;
       package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
-    auto-cpufreq.enable = true;
+    # auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -744,9 +734,7 @@
     };
     libinput = {
       enable = true;
-      mouse = {
-        accelProfile = "adaptive";
-      };
+      mouse.accelProfile = "adaptive";
       touchpad = {
         tapping = true;
         naturalScrolling = true;
@@ -754,11 +742,9 @@
         disableWhileTyping = true;
       };
     };
-    displayManager = {
-      autoLogin = {
-        enable = true;
-        user = "${vars.users.users.username}";
-      };
+    displayManager.autoLogin = {
+      enable = true;
+      user = "${vars.users.users.username}";
     };
     xserver = {
       enable = true;
@@ -794,16 +780,15 @@
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
           ExecStart = "${pkgs.bash}/bin/sh -c 'cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness'";
-          ExecStop = ''
-            ${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current && cd .. && for dir in ./*::numlock*/; do echo 0 > "$\{dir}brightness"; done'
-          '';
+          ExecStop = "${pkgs.bash}/bin/sh -c \"sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current && cd .. && for dir in ./*::numlock*/; do echo 0 > \\\${dir}brightness; done\"";
         };
       };
       "numlock-brightness" = {
         description = "Set numlock brightness";
-        after = ["graphical-session.target"];
+        after = ["graphical.target"];
         serviceConfig = {
           Type = "oneshot";
+          RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/";
           ExecStart = ''
             ${pkgs.bash}/bin/sh -c 'for dir in ./*::numlock*/; do echo 0 > "$\{dir}brightness"; done'
@@ -811,10 +796,7 @@
         };
       };
       "premiumsoft-reset" = {
-        script = ''
-          set -eu
-          ${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/
-        '';
+        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
         serviceConfig = {
           Type = "oneshot";
           User = "root";
