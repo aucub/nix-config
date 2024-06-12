@@ -72,12 +72,12 @@
         # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
-      extra-substituters = [
-        "https://pub-9adc4fb6f5cd4b58970c4f73e8f98749.r2.dev"
-      ];
-      extra-trusted-public-keys = [
-        "0c25235045ad6791c9b6c99531934bc2.r2.cloudflarestorage.com:ToftL6wRBYQZ4dp3qv3gIvmKG3RkzgU+KPQQXQw8czc="
-      ];
+      # extra-substituters = [
+      #   "https://pub-9adc4fb6f5cd4b58970c4f73e8f98749.r2.dev"
+      # ];
+      # extra-trusted-public-keys = [
+      #   "0c25235045ad6791c9b6c99531934bc2.r2.cloudflarestorage.com:ToftL6wRBYQZ4dp3qv3gIvmKG3RkzgU+KPQQXQw8czc="
+      # ];
       trusted-users = [
         "root"
         "@wheel"
@@ -792,8 +792,21 @@
           Type = "oneshot";
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
-          ExecStart = "${pkgs.bash}/bin/sh -c 'cat brightness >> /var/tmp/kbd_brightness_current'";
-          ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
+          ExecStart = "${pkgs.bash}/bin/sh -c 'cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness'";
+          ExecStop = ''
+            ${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current && cd .. && for dir in ./*::numlock*/; do echo 0 > "$\{dir}brightness"; done'
+          '';
+        };
+      };
+      "numlock-brightness" = {
+        description = "Set numlock brightness";
+        after = ["graphical-session.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          WorkingDirectory = "/sys/class/leds/";
+          ExecStart = ''
+            ${pkgs.bash}/bin/sh -c 'for dir in ./*::numlock*/; do echo 0 > "$\{dir}brightness"; done'
+          '';
         };
       };
       "premiumsoft-reset" = {
