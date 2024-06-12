@@ -40,7 +40,7 @@
     };
 
     "org/gnome/desktop/peripherals/keyboard" = {
-      numlock-state = false;
+      numlock-state = true;
     };
 
     "org/gnome/desktop/peripherals/touchpad" = {

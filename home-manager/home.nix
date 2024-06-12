@@ -238,6 +238,7 @@
       };
     };
     git = {
+      enable = true;
       ignores = [
         # Compiled binary, object files, and libraries
         "*.o"
@@ -354,6 +355,7 @@
           true-color = "always";
         };
       };
+      difftastic.enable = true;
     };
     yazi = {
       enable = true;

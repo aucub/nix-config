@@ -130,7 +130,7 @@
     kernelModules = vars.boot.kernelModules;
     blacklistedKernelModules = ["nouveau"];
     extraModulePackages = vars.boot.extraModulePackages pkgs;
-    extraModprobeConfig = vars.boot.extraModprobeConfig;
+    extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [
       "btrfs"
