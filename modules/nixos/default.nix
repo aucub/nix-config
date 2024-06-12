@@ -5,4 +5,5 @@
   nvidia-disable = import ./nvidia-disable.nix;
   nvidia = import ./nvidia.nix;
   containers = import ./containers.nix;
+  dbus-1 = import ./dbus-1/default.nix;
 }

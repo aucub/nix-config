@@ -12,12 +12,14 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.nvidia-disable
+    outputs.nixosModules.dbus-1
+    # outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
 
     ./hardware-configuration.nix
 
     inputs.home-manager.nixosModules.home-manager
-
+    inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nix-index-database.nixosModules.nix-index
   ];
 
@@ -376,6 +378,8 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
+      MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+      MANROFFOPT = "-c";
     };
     sessionVariables = {
       MOZ_USE_XINPUT2 = "1";
@@ -402,9 +406,6 @@
         python3Full
         lnav
         uutils-coreutils-noprefix
-      ])
-      ++ (with pkgs.bat-extras; [
-        batman
       ])
       # FHS
       ++ (with pkgs; [
@@ -640,15 +641,11 @@
       promptInit = ''
         PS1='[\u@\h \W]\$ '
       '';
-      interactiveShellInit = ''
-        eval "$(batman --export-env)"
-      '';
     };
     fish = {
       enable = true;
       interactiveShellInit = ''
         set -U fish_greeting
-        batman --export-env | source
       '';
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
@@ -696,13 +693,8 @@
     devmon.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
+    # 缩略图服务
     tumbler.enable = true;
-    udev = {
-      packages = with pkgs; [];
-      extraRules = ''
-        ACTION=="add|change", SUBSYSTEM=="leds", KERNEL=="input10::numlock", RUN+="${pkgs.bash}/bin/sh -c '${pkgs.coreutils}/bin/echo 0 > /sys/class/leds/input10::numlock/brightness'"
-      '';
-    };
     dbus = {
       implementation = "broker";
       packages = with pkgs; [dconf gcr_4 udisks];
@@ -731,7 +723,7 @@
       fallbackDns = ["1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" "2400:3200::1" "2606:4700:4700::1001"];
     };
     # 温控
-    thermald.enable = lib.mkDefault true;
+    thermald.enable = true;
     acpid.enable = true;
     # btrfs.autoScrub = {
     # enable = true;
@@ -773,10 +765,7 @@
       videoDrivers = lib.mkDefault vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [xterm];
-      xkb = {
-        model = "pc105";
-        options = "terminate:ctrl_alt_bksp,numlock:on";
-      };
+      xkb.model = "pc105";
     };
     # flatpak.enable = true;
     # printing.enable = true;
@@ -797,6 +786,17 @@
       "systemd-gpt-auto-generator".enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
+      "keyboard-brightness" = {
+        description = "Set keyboard brightness after resume";
+        wantedBy = ["sleep.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
+          ExecStart = "${pkgs.bash}/bin/sh -c 'cat brightness >> /var/tmp/kbd_brightness_current'";
+          ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
+        };
+      };
       "premiumsoft-reset" = {
         script = ''
           set -eu
