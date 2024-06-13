@@ -385,9 +385,9 @@
         nix-tree
         just
       ])
-      ++ (with pkgs; [
-        lenovo-legion
-      ])
+      # ++ (with pkgs; [
+      #   lenovo-legion
+      # ])
       ++ (with pkgs; [
         difftastic
         helix
@@ -500,19 +500,47 @@
     htop = {
       enable = true;
       settings = {
-        hide_userland_threads = true;
-        highlight_base_name = true;
-        strip_exe_from_cmdline = true;
-        cpu_count_from_one = true;
-        show_cpu_frequency = true;
-        show_cpu_temperature = true;
-        show_thread_names = true;
-        show_program_path = false;
-        show_merged_command = false;
+        fields = [0 48 20 49 39 40 111 46 47 1];
+        hide_userland_threads = 1;
+        show_thread_names = 1;
+        show_program_path = 0;
+        highlight_base_name = 1;
+        strip_exe_from_cmdline = 1;
+        show_merged_command = 0;
+        screen_tabs = 1;
+        cpu_count_from_one = 1;
+        show_cpu_frequency = 1;
+        show_cpu_temperature = 1;
         color_scheme = 6;
-        "screen:Main" = "PID USER STARTTIME TIME M_RESIDENT M_SHARE PERCENT_CPU PERCENT_MEM Command";
+        column_meters_0 = [
+          "CPU"
+          "Memory"
+          "Swap"
+        ];
+        column_meter_modes_0 = [1 1 1];
+        column_meters_1 = [
+          "Tasks"
+          "DiskIO"
+          "NetworkIO"
+        ];
+        column_meter_modes_1 = [2 2 2];
+        tree_view = 0;
         sort_key = 47;
+        sort_direction = -1;
+        "screen:Main" = [
+          "PID"
+          "USER"
+          "STARTTIME"
+          "TIME"
+          "M_RESIDENT"
+          "M_SHARE"
+          "IO_RATE"
+          "PERCENT_CPU"
+          "PERCENT_MEM"
+          "Command"
+        ];
         ".sort_key" = "PERCENT_MEM";
+        ".sort_direction" = -1;
       };
     };
     git = {
