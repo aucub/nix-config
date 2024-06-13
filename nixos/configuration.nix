@@ -726,7 +726,7 @@
       package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
-    # auto-cpufreq.enable = true;
+    auto-cpufreq.enable = true;
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -784,17 +784,19 @@
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
           ExecStart = "${pkgs.bash}/bin/sh -c \"cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness\"";
-          ExecStop = "${pkgs.bash}/bin/sh -c \"sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current && cd .. && for dir in ./*::numlock*/; do echo 0 > \"\${dir}brightness\"; done\"";
+          ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
         };
       };
       "numlock-brightness" = {
         description = "Set numlock brightness";
-        after = ["graphical.target"];
+        after = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
+        wantedBy = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/";
-          ExecStart = "${pkgs.bash}/bin/sh -c \"for dir in ./*::numlock*/; do echo 0 > \"$\{dir}brightness\"; done\"";
+          ExecStart = "${pkgs.bash}/bin/sh -c 'sleep 3s && for dir in ./*::numlock*/; do [ -d \"$dir\" ] && echo 0 > \"$dir/brightness\"; done'";
+          User = "root";
         };
       };
       "premiumsoft-reset" = {
@@ -815,10 +817,10 @@
     };
     user.services = {
       "org.gnome.SettingsDaemon.A11ySettings".enable = false;
-      "org.gnome.SettingsDaemon.Sharing.service".enable = false;
-      "org.gnome.SettingsDaemon.Smartcard.service".enable = false;
-      "org.gnome.SettingsDaemon.Wacom.service".enable = false;
-      "dbus-:1.1-org.gnome.Shell.CalendarServer@0.service".enable = false;
+      "org.gnome.SettingsDaemon.Sharing".enable = false;
+      "org.gnome.SettingsDaemon.Smartcard".enable = false;
+      "org.gnome.SettingsDaemon.Wacom".enable = false;
+      "dbus-:1.1-org.gnome.Shell.CalendarServer@0".enable = false;
     };
   };
 
