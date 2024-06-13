@@ -26,7 +26,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - run: nix fmt --no-write-lock-file
+      - run: nix fmt --no-write-lock-file --show-trace -L -v
 
       - uses: peter-evans/create-pull-request@v6
         with:

@@ -255,7 +255,6 @@
       linux-firmware
     ];
     pulseaudio.enable = false;
-    acpilight.enable = false;
     opengl = {
       enable = true;
       driSupport = true;
@@ -501,80 +500,15 @@
     htop = {
       enable = true;
       settings = {
-        fields = [
-          0
-          48
-          17
-          18
-          38
-          39
-          40
-          2
-          46
-          47
-          49
-          1
-        ];
-        hide_kernel_threads = true;
         hide_userland_threads = true;
-        hide_running_in_container = false;
-        shadow_other_users = false;
-        show_thread_names = false;
-        show_program_path = true;
         highlight_base_name = true;
-        highlight_deleted_exe = true;
-        shadow_distribution_path_prefix = false;
-        highlight_megabytes = true;
-        highlight_threads = true;
-        highlight_changes = false;
-        highlight_changes_delay_secs = 5;
-        find_comm_in_cmdline = true;
         strip_exe_from_cmdline = true;
-        show_merged_command = false;
-        header_margin = 1;
-        screen_tabs = true;
-        detailed_cpu_time = false;
-        cpu_count_from_one = false;
-        show_cpu_usage = true;
+        cpu_count_from_one = true;
         show_cpu_frequency = true;
         show_cpu_temperature = true;
-        degree_fahrenheit = false;
-        update_process_names = false;
-        account_guest_in_cpu_meter = false;
         color_scheme = 6;
-        enable_mouse = true;
-        delay = 15;
-        hide_function_bar = false;
-        header_layout = "two_50_50";
-        column_meters_0 = "LeftCPUs2 Memory Swap";
-        column_meter_modes_0 = [
-          1
-          1
-          1
-        ];
-        column_meters_1 = "RightCPUs2 Tasks LoadAverage Uptime";
-        column_meter_modes_1 = [
-          1
-          2
-          2
-          2
-        ];
-        screen_Main = "PID USER PRIORITY NICE M_VIRT M_RESIDENT M_SHARE STATE PERCENT_CPU PERCENT_MEM TIME Command";
-        screen_Main_sort_key = "PERCENT_MEM";
-        screen_Main_tree_sort_key = "PID";
-        screen_Main_tree_view_always_by_pid = false;
-        screen_Main_tree_view = false;
-        screen_Main_sort_direction = -1;
-        screen_Main_tree_sort_direction = 1;
-        screen_Main_all_branches_collapsed = false;
-        screen_IO = "PID USER IO_PRIORITY IO_RATE IO_READ_RATE IO_WRITE_RATE PERCENT_SWAP_DELAY PERCENT_IO_DELAY Command";
-        screen_IO_sort_key = "IO_RATE";
-        screen_IO_tree_sort_key = "PID";
-        screen_IO_tree_view_always_by_pid = false;
-        screen_IO_tree_view = false;
-        screen_IO_sort_direction = -1;
-        screen_IO_tree_sort_direction = 1;
-        screen_IO_all_branches_collapsed = false;
+        "screen:Main" = "PID USER M_RESIDENT M_SHARE PERCENT_CPU PERCENT_MEM Command";
+        ".sort_key" = "PERCENT_MEM";
       };
     };
     git = {
@@ -666,14 +600,12 @@
     '';
     colord.enable = true;
     accounts-daemon.enable = true;
-    # 自动设备挂载
-    devmon.enable = true;
+    devmon.enable = true; # 自动设备挂载
     hardware.bolt.enable = false;
     geoclue2.enable = false;
     gvfs.enable = true;
     udisks2.enable = true;
-    # 缩略图服务
-    tumbler.enable = true;
+    tumbler.enable = true; # 缩略图服务
     dbus = {
       implementation = "broker";
       packages = with pkgs; [dconf gcr_4 udisks];
@@ -683,8 +615,7 @@
       if config.fileSystems."/".fsType == "bcachefs"
       then false
       else true;
-    # 为 Linux 虚拟控制台提供鼠标支持
-    # gpm.enable = true;
+    # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
     kmscon = {
       # Instead of vt
       enable = true;
@@ -716,12 +647,17 @@
       settings = {
         TLP_DEFAULT_MODE = "BAT";
         START_CHARGE_THRESH_BAT0 = 75;
-        STOP_CHARGE_THRESH_BAT0 = 0;
+        STOP_CHARGE_TRESH_BAT0 = 80;
+        STOP_CHARGE_THRESH_BAT0 = 1;
+        DISK_DEVICES = "nvme0n1";
+        RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+        RUNTIME_PM_ON_AC = "auto";
+        USB_EXCLUDE_AUDIO = 0;
       };
     };
     upower = {
       enable = true;
-      package = pkgs.upower-with-conf;
+      # package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
     auto-cpufreq.enable = true;
@@ -743,7 +679,6 @@
         disableWhileTyping = true;
       };
     };
-    tp-auto-kbbl.enable = true; # 仅在输入时打开键盘背光
     displayManager.autoLogin = {
       enable = true;
       user = "${vars.users.users.username}";
@@ -754,7 +689,7 @@
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [xterm];
       xkb.model = "pc105";
-      wacom.enable = true;
+      wacom.enable = false;
     };
     # flatpak.enable = true;
     # printing.enable = true;
@@ -777,7 +712,7 @@
       "autovt@tty1".enable = false;
       "keyboard-brightness" = {
         description = "Set keyboard brightness after resume";
-        wantedBy = ["sleep.target"];
+        wantedBy = ["sleep.target" "suspend.target" "hibernate.target"];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -787,7 +722,7 @@
         };
       };
       "numlock-brightness" = {
-        description = "Set numlock brightness";
+        description = "Close numlock Brightness";
         after = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
         wantedBy = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
         serviceConfig = {
@@ -819,7 +754,6 @@
       "org.gnome.SettingsDaemon.Sharing".enable = false;
       "org.gnome.SettingsDaemon.Smartcard".enable = false;
       "org.gnome.SettingsDaemon.Wacom".enable = false;
-      "dbus-:1.1-org.gnome.Shell.CalendarServer@0".enable = false;
     };
   };
 

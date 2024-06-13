@@ -23,6 +23,6 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - run: nix flake check --show-trace --impure
+      - run: nix flake check --show-trace --impure -L -v
         env:
           NIXPKGS_ALLOW_UNFREE: 1

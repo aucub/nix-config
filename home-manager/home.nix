@@ -212,6 +212,8 @@
         editor = {
           middle-click-paste = false;
           file-picker.hidden = false;
+          soft-wrap.enable = true;
+          indent-guides.render = true;
         };
       };
     };
