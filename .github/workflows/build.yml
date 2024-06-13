@@ -18,13 +18,6 @@ jobs:
           diagnostic-endpoint: ""
           use-flakehub: false
 
-      - uses: zombiezen/setup-nix-cache-action@v0.4.0
-        with:
-          substituters: ${{ secrets.AWS_ACCESS_ENDPOINT }}
-          secret_keys: ${{ secrets.NIX_PRIVATE_KEY }}
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - uses: actions/checkout@v4
 
       - run: nix build '.#nixosConfigurations.neko.config.system.build.toplevel' --show-trace

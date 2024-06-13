@@ -346,6 +346,8 @@
         # 不许出售或共享
         "privacy.globalprivacycontrol.enabled" = true;
         "browser.ping-centre.telemetry" = true;
+        # WebGPU
+        "dom.webgpu.enabled" = true;
       };
     };
   };

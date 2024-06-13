@@ -59,6 +59,7 @@
         extraModulePackages = pkgs:
           with pkgs; [
             # linuxKernel.packages.linux_zen.v4l2loopback
+            linuxKernel.packages.linux_zen.lenovo-legion-module
           ];
         extraModprobeConfig =
           ''

@@ -72,12 +72,6 @@
         # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
-      # extra-substituters = [
-      #   "https://pub-9adc4fb6f5cd4b58970c4f73e8f98749.r2.dev"
-      # ];
-      # extra-trusted-public-keys = [
-      #   "0c25235045ad6791c9b6c99531934bc2.r2.cloudflarestorage.com:ToftL6wRBYQZ4dp3qv3gIvmKG3RkzgU+KPQQXQw8czc="
-      # ];
       trusted-users = [
         "root"
         "@wheel"
@@ -393,6 +387,9 @@
         just
       ])
       ++ (with pkgs; [
+        lenovo-legion
+      ])
+      ++ (with pkgs; [
         difftastic
         helix
         gitleaks
@@ -500,6 +497,7 @@
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
     npm.enable = false;
+    evolution.enable = false;
     htop = {
       enable = true;
       settings = {
@@ -745,6 +743,7 @@
         disableWhileTyping = true;
       };
     };
+    tp-auto-kbbl.enable = true; # 仅在输入时打开键盘背光
     displayManager.autoLogin = {
       enable = true;
       user = "${vars.users.users.username}";
