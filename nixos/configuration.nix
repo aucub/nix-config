@@ -670,6 +670,8 @@
     accounts-daemon.enable = true;
     # 自动设备挂载
     devmon.enable = true;
+    hardware.bolt.enable = false;
+    geoclue2.enable = false;
     gvfs.enable = true;
     udisks2.enable = true;
     # 缩略图服务
@@ -710,12 +712,13 @@
       then true
       else false;
     power-profiles-daemon.enable = false;
+    thermald.enable = false;
     tlp = {
       enable = true;
       settings = {
         TLP_DEFAULT_MODE = "BAT";
         START_CHARGE_THRESH_BAT0 = 75;
-        STOP_CHARGE_THRESH_BAT0 = 80;
+        STOP_CHARGE_THRESH_BAT0 = 0;
       };
     };
     upower = {
@@ -752,6 +755,7 @@
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [xterm];
       xkb.model = "pc105";
+      wacom.enable = true;
     };
     # flatpak.enable = true;
     # printing.enable = true;
@@ -779,8 +783,8 @@
           Type = "oneshot";
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
-          ExecStart = "${pkgs.bash}/bin/sh -c 'cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness'";
-          ExecStop = "${pkgs.bash}/bin/sh -c \"sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current && cd .. && for dir in ./*::numlock*/; do echo 0 > \\\${dir}brightness; done\"";
+          ExecStart = "${pkgs.bash}/bin/sh -c \"cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness\"";
+          ExecStop = "${pkgs.bash}/bin/sh -c \"sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current && cd .. && for dir in ./*::numlock*/; do echo 0 > \"\${dir}brightness\"; done\"";
         };
       };
       "numlock-brightness" = {
@@ -790,9 +794,7 @@
           Type = "oneshot";
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/";
-          ExecStart = ''
-            ${pkgs.bash}/bin/sh -c 'for dir in ./*::numlock*/; do echo 0 > "$\{dir}brightness"; done'
-          '';
+          ExecStart = "${pkgs.bash}/bin/sh -c \"for dir in ./*::numlock*/; do echo 0 > \"$\{dir}brightness\"; done\"";
         };
       };
       "premiumsoft-reset" = {
@@ -810,6 +812,13 @@
         Persistent = true;
         Unit = "premiumsoft-reset.service";
       };
+    };
+    user.services = {
+      "org.gnome.SettingsDaemon.A11ySettings".enable = false;
+      "org.gnome.SettingsDaemon.Sharing.service".enable = false;
+      "org.gnome.SettingsDaemon.Smartcard.service".enable = false;
+      "org.gnome.SettingsDaemon.Wacom.service".enable = false;
+      "dbus-:1.1-org.gnome.Shell.CalendarServer@0.service".enable = false;
     };
   };
 
