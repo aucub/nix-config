@@ -506,8 +506,12 @@
         cpu_count_from_one = true;
         show_cpu_frequency = true;
         show_cpu_temperature = true;
+        show_thread_names = true;
+        show_program_path = false;
+        show_merged_command = false;
         color_scheme = 6;
-        "screen:Main" = "PID USER M_RESIDENT M_SHARE PERCENT_CPU PERCENT_MEM Command";
+        "screen:Main" = "PID USER STARTTIME TIME M_RESIDENT M_SHARE PERCENT_CPU PERCENT_MEM Command";
+        sort_key = 47;
         ".sort_key" = "PERCENT_MEM";
       };
     };
