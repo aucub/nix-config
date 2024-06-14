@@ -8,14 +8,12 @@
   modulesPath,
   ...
 }:
-
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules = [
     "nvme"
     "xhci_pci"
-    "ahci"
     "usbhid"
   ];
   boot.initrd.kernelModules = [ ];
@@ -23,35 +21,8 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
-    fsType = "btrfs";
-    options = [ "subvol=root" ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
-    fsType = "btrfs";
-    options = [ "subvol=home" ];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
-    fsType = "btrfs";
-    options = [
-      "subvol=nix"
-      "noatime"
-    ];
-  };
-
-  fileSystems."/var/log" = {
-    device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
-    fsType = "btrfs";
-    options = [
-      "subvol=log"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
+    device = "UUID=a3fcf987-5fbf-4f81-af08-7b90acc4e340";
+    fsType = "bcachefs";
   };
 
   fileSystems."/boot" = {
@@ -71,7 +42,7 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp4s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
