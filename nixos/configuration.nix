@@ -110,7 +110,7 @@
       systemd-boot = {
         enable = true;
         graceful = true;
-        configurationLimit = 15;
+        configurationLimit = 10;
         consoleMode = "auto";
       };
       efi = {
@@ -127,17 +127,14 @@
     extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [
-      "btrfs"
-      "bcachefs"
+      config.fileSystems."/".fsType
     ];
     initrd = {
       supportedFilesystems = [
-        "btrfs"
-        "bcachefs"
+        config.fileSystems."/".fsType
       ];
       kernelModules = [
-        "btrfs"
-        "bcachefs"
+        config.fileSystems."/".fsType
       ];
     };
   };
@@ -260,8 +257,7 @@
       driSupport = true;
       extraPackages = vars.hardware.opengl.extraPackages pkgs;
     };
-    # 允许video组中的用户进行亮度控制
-    brillo.enable = true;
+    brillo.enable = true; # 允许video组中的用户进行亮度控制
     bluetooth = {
       enable = true;
       settings = {
@@ -492,7 +488,9 @@
       enableAskPassword = false;
     };
     command-not-found.enable = false;
-    nix-ld.enable = true;
+    nix-ld={enable = true;
+      package = pkgs.nix-ld-rs;
+    };
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
     npm.enable = false;
@@ -733,9 +731,6 @@
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0
-    '';
-    sleep.extraConfig = ''
-      HibernateDelaySec=1h
     '';
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;

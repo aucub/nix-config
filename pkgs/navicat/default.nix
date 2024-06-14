@@ -61,7 +61,7 @@ in
     '';
 
     meta = with lib; {
-      homepage = "https://navicat.com";
+      homepage = "https://www.navicat.com.cn/products/navicat-premium-release-note";
       description = "Navicat Premium is a multi-connection database development tool";
       platforms = ["x86_64-linux"];
       license = licenses.unfree;
