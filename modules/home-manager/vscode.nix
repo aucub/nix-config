@@ -7,21 +7,17 @@
         (with pkgs.vscode-extensions; [
           ms-ceintl.vscode-language-pack-zh-hans
           formulahendry.code-runner
-          mhutchie.git-graph
-          oderwat.indent-rainbow
           redhat.vscode-yaml
-          yzhang.markdown-all-in-one
           ms-python.python
-          ms-python.vscode-pylance
-          ms-python.debugpy
           charliermarsh.ruff
           foxundermoon.shell-format
           tamasfe.even-better-toml
-          bmalehorn.vscode-fish
           nvarner.typst-lsp
           tomoki1207.pdf
           jnoortheen.nix-ide
           github.codespaces
+          # bmalehorn.vscode-fish
+          # yzhang.markdown-all-in-one
           # ms-vscode.cpptools
           # redhat.vscode-xml
           # rust-lang.rust-analyzer

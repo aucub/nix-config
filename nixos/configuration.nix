@@ -4,7 +4,6 @@
   lib,
   config,
   pkgs,
-  vars,
   ...
 }:
 {
@@ -25,10 +24,10 @@
 
   home-manager = {
     extraSpecialArgs = {
-      inherit inputs vars outputs;
+      inherit inputs outputs;
     };
     users = {
-      "${vars.users.users.username}" = import ../home-manager/home.nix;
+      "${outputs.vars.users.users.user.username}" = import ../home-manager/home.nix;
     };
     backupFileExtension = "bak";
   };
@@ -93,7 +92,17 @@
     };
 
   networking = {
-    hostName = vars.hostname;
+    timeServers = [
+      "ntp.ntsc.ac.cn"
+      "cn.ntp.org.cn"
+      "ntp.aliyun.com"
+      "ntp.tencent.com"
+      "0.nixos.pool.ntp.org"
+      "1.nixos.pool.ntp.org"
+      "2.nixos.pool.ntp.org"
+      "3.nixos.pool.ntp.org"
+    ];
+    hostName = outputs.vars.networking.hostName;
     firewall.enable = false;
     nameservers = [
       "223.5.5.5#dns.alidns.com"
@@ -115,7 +124,6 @@
     loader = {
       systemd-boot = {
         enable = true;
-        graceful = true;
         configurationLimit = 10;
         consoleMode = "auto";
       };
@@ -125,12 +133,12 @@
       };
       timeout = 4;
     };
-    kernelParams = vars.boot.kernelParams;
+    kernelParams = outputs.vars.boot.kernelParams;
     consoleLogLevel = 3;
-    kernelModules = vars.boot.kernelModules;
+    kernelModules = outputs.vars.boot.kernelModules;
     blacklistedKernelModules = [ "nouveau" ];
-    extraModulePackages = vars.boot.extraModulePackages pkgs;
-    extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
+    extraModulePackages = outputs.vars.boot.extraModulePackages config.boot.kernelPackages;
+    extraModprobeConfig = outputs.vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
@@ -173,13 +181,7 @@
       source-han-mono
       source-han-serif-vf-otf
       source-han-sans-vf-otf
-      (nerdfonts.override {
-        fonts = [
-          "NerdFontsSymbolsOnly"
-          "Iosevka"
-        ];
-      })
-      twitter-color-emoji
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
     ];
     fontconfig = {
       enable = true;
@@ -196,10 +198,7 @@
           "Sarasa Mono SC"
           "Noto Color Emoji"
         ];
-        emoji = [
-          "Twemoji"
-          "Noto Color Emoji"
-        ];
+        emoji = [ "Noto Color Emoji" ];
       };
     };
   };
@@ -248,23 +247,16 @@
 
   sound.enable = true;
 
-  security = {
-    rtkit.enable = true;
-    polkit.enable = true;
-    sudo-rs.enable = true;
-  };
+  security.sudo-rs.enable = true;
 
   hardware = {
-    enableAllFirmware = true;
     wirelessRegulatoryDatabase = lib.mkForce false;
     firmware = with pkgs; [ linux-firmware ];
     pulseaudio.enable = false;
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      extraPackages = vars.hardware.opengl.extraPackages pkgs;
+      extraPackages = outputs.vars.hardware.graphics.extraPackages pkgs;
     };
-    brillo.enable = true; # 允许video组中的用户进行亮度控制
     bluetooth = {
       enable = true;
       settings = {
@@ -292,12 +284,12 @@
 
   users.users = {
     root = {
-      initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
+      initialHashedPassword = "${outputs.vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
-    "${vars.users.users.username}" = {
+    "${outputs.vars.users.users.user.username}" = {
       uid = 1000;
-      initialHashedPassword = "${vars.users.users.initialHashedPassword}";
+      initialHashedPassword = "${outputs.vars.users.users.user.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
@@ -307,21 +299,19 @@
           "wheel"
           "users"
           "plugdev"
+          "input"
           "video"
           "audio"
-          "git"
           "systemd-journal"
-          "input"
-          "networkmanager"
-          "colord"
         ]
-        ++ (builtins.filter (g: config.users.groups ? ${g}) [
-          "adbusers"
-          "docker"
-          "podman"
-          "libvirtd"
-          "wireshark"
-        ]);
+        ++ (if config.programs.git.enable || config.home.programs.git.enable then [ "git" ] else [ ])
+        ++ (if config.networking.networkmanager.enable then [ "networkmanager" ] else [ ])
+        ++ (if config.services.colord.enable then [ "colord" ] else [ ])
+        ++ (if config.programs.adb.enable then [ "adbusers" ] else [ ])
+        ++ (if config.programs.wireshark.enable then [ "wireshark" ] else [ ])
+        ++ (if config.virtualisation.podman.enable then [ "podman" ] else [ ])
+        ++ (if config.virtualisation.libvirtd.enable then [ "libvirtd" ] else [ ])
+        ++ (if config.virtualisation.docker.enable then [ "docker" ] else [ ]);
       shell = pkgs.bashInteractive;
       packages =
         [ inputs.home-manager.packages.${pkgs.system}.default ]
@@ -331,16 +321,18 @@
           # ouch
           chezmoi
           typst
-          uv
           ruff
           git-credential-manager
           nodePackages.nodejs
         ])
         ++ (with pkgs; [
-          # zed-editor
+          pot
           celluloid
           localsend
           popsicle
+          alacritty-theme
+          gitkraken
+          # zed-editor
           # nomacs
           # jetbrains.idea-ultimate
         ])
@@ -365,21 +357,25 @@
       fish
     ];
     variables = {
-      EDITOR = "hx";
       QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
-      MANPAGER = "sh -c 'col -bx | bat -l man -p'";
-      MANROFFOPT = "-c";
     };
     sessionVariables = {
+      EDITOR = "hx";
       MOZ_USE_XINPUT2 = "1";
       LESS = "-SR";
+      MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+      MANROFFOPT = "-c";
+      SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
+      YAZI_CONFIG_HOME = "/home/${outputs.vars.users.users.user.username}/.config/yazi";
     };
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
+        nixfmt-rfc-style
+        nix-your-shell
         nil
         comma
         nix-tree
@@ -390,6 +386,7 @@
       # ])
       ++ (with pkgs; [
         difftastic
+        sops
         helix
         gitleaks
         eza
@@ -398,10 +395,18 @@
         fd
         ripgrep-all
         typos
-        python3Full
         lnav
         uutils-coreutils-noprefix
       ])
+      # Python Package
+      ++ [
+        (pkgs.python3.withPackages (
+          ps: with ps; [
+            requests
+            python-dotenv
+          ]
+        ))
+      ]
       # FHS
       ++ (with pkgs; [
         (
@@ -412,41 +417,14 @@
             base
             // {
               name = "fhs";
-              targetPkgs = pkgs: (base.targetPkgs pkgs) ++ (with pkgs; [ pkg-config ]);
-              profile = "export FHS=1";
-              runScript = "fish";
-              extraOutputsToInstall = [ "dev" ];
-            }
-          )
-        )
-        (
-          let
-            base = pkgs.appimageTools.defaultFhsEnvArgs;
-          in
-          pkgs.buildFHSEnv (
-            base
-            // {
-              name = "pipzone";
               targetPkgs =
                 pkgs:
                 (base.targetPkgs pkgs)
                 ++ (with pkgs; [
                   pkg-config
-                  libGL
-                  glib
-                  libgcc
-                  gccStdenv
-                  python3Full
+                  python3
                   uv
-                ])
-                ++ [
-                  (pkgs.python3.withPackages (
-                    subpkgs: with subpkgs; [
-                      pip
-                      virtualenv
-                    ]
-                  ))
-                ];
+                ]);
               profile = "export FHS=1";
               runScript = "fish";
               extraOutputsToInstall = [ "dev" ];
@@ -454,28 +432,13 @@
             }
           )
         )
-      ])
-      ++ (
-        if config.services.xserver.desktopManager.gnome.enable then
-          # gnomeExtensions
-          (with pkgs.gnomeExtensions; [
-            appindicator
-            caffeine
-            kimpanel
-          ])
-          # gnome
-          ++ (with pkgs.gnome; [
-            dconf-editor
-            gnome-tweaks
-          ])
-          ++ (with pkgs; [ gtop ])
-        else
-          [ ]
-      );
+      ]);
   };
 
   documentation = {
     nixos.enable = false;
+    info.enable = false;
+    doc.enable = false;
     man = {
       mandoc.enable = true;
       man-db.enable = false;
@@ -484,20 +447,27 @@
   };
 
   programs = {
-    # adb.enable = true;
+    adb.enable = true;
     ssh = {
       askPassword = "";
       enableAskPassword = false;
+    };
+    clash-verge = {
+      enable = true;
+      package = pkgs.clash-nyanpasu;
     };
     command-not-found.enable = false;
     nix-ld = {
       enable = true;
       package = pkgs.nix-ld-rs;
     };
-    nix-index.enable = true;
+    nix-index = {
+      enable = true;
+      enableBashIntegration = false;
+      enableFishIntegration = false;
+    };
     nix-index-database.comma.enable = true;
     npm.enable = false;
-    evolution.enable = false;
     htop = {
       enable = true;
       settings = {
@@ -572,13 +542,13 @@
           name = "dr56ekgbb";
         };
         core = {
-          editor = "hx";
           autocrlf = "input";
           askpass = "";
         };
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
         difftool.prompt = false;
+        diff.sopsdiffer.textconv = "sops decrypt";
         pager.difftool = true;
         merge.conflictstyle = "diff3";
         credential = {
@@ -595,7 +565,6 @@
       enable = true;
       terminal = "alacritty";
     };
-    xwayland.enable = true;
     bash.promptInit = ''
       PS1='[\u@\h \W]\$ '
     '';
@@ -603,6 +572,7 @@
       enable = true;
       interactiveShellInit = ''
         set -U fish_greeting
+        nix-your-shell fish | source
       '';
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
@@ -610,19 +580,12 @@
         # List all generations of the system profile
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # remove all generations older than 7 days
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 1w";
         # Garbage collect all unused nix store entries
-        nix-gc = "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
+        nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 1w";
       };
     };
-    yazi = {
-      enable = true;
-      settings.yazi.manager = {
-        sort_dir_first = true;
-        show_hidden = true;
-      };
-    };
-    fzf.fuzzyCompletion = true;
+    yazi.enable = true;
     firefox = {
       enable = true;
       languagePacks = [ "zh-CN" ];
@@ -648,25 +611,17 @@
     };
     avahi.enable = false;
     journald.extraConfig = ''
+      ForwardToConsole=no
+      ForwardToKMsg=no
+      ForwardToSyslog=no
+      ForwardToWall=no
+      SystemMaxFileSize=10M
       SystemMaxUse=100M
     '';
-    colord.enable = true;
-    accounts-daemon.enable = true;
-    devmon.enable = true; # 自动设备挂载
-    hardware.bolt.enable = false;
     geoclue2.enable = false;
-    gvfs.enable = true;
-    udisks2.enable = true;
-    tumbler.enable = true; # 缩略图服务
-    dbus = {
-      implementation = "broker";
-      packages = with pkgs; [
-        dconf
-        gcr_4
-        udisks
-      ];
-    };
+    dbus.implementation = "broker";
     psd.enable = true;
+    thermald.enable = false; # intel
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
     kmscon = {
@@ -681,6 +636,7 @@
       extraOptions = "--term xterm-256color";
       extraConfig = "font-size=20";
       hwRender = true;
+      useXkbConfig = true;
     };
     resolved = {
       enable = true;
@@ -696,7 +652,6 @@
     acpid.enable = true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
-    thermald.enable = false;
     tlp = {
       enable = true;
       settings = {
@@ -715,7 +670,7 @@
       # package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
-    auto-cpufreq.enable = true;
+    auto-cpufreq.enable = true; # if config.services.tlp.enable then false else true;
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -736,11 +691,11 @@
     };
     displayManager.autoLogin = {
       enable = true;
-      user = "${vars.users.users.username}";
+      user = outputs.vars.users.users.user.username;
     };
     xserver = {
       enable = true;
-      videoDrivers = vars.services.xserver.videoDrivers;
+      videoDrivers = outputs.vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [ xterm ];
       xkb.model = "pc105";
@@ -757,12 +712,16 @@
       Storage=none
       ProcessSizeMax=0
     '';
+    sleep.extraConfig = ''
+      AllowHibernation=no
+    '';
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;
-      "systemd-gpt-auto-generator".enable = false;
+      systemd-gpt-auto-generator.enable = false;
+      alsa-store.enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
-      "keyboard-brightness" = {
+      keyboard-brightness = {
         description = "Set keyboard brightness after resume";
         wantedBy = [
           "sleep.target"
@@ -771,14 +730,13 @@
         ];
         serviceConfig = {
           Type = "oneshot";
-          RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
           ExecStart = "${pkgs.bash}/bin/sh -c \"cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness\"";
           ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
         };
       };
-      "numlock-brightness" = {
-        description = "Close numlock Brightness";
+      numlock-brightness = {
+        description = "Set numlock Brightness";
         after = [
           "graphical.target"
           "sleep.target"
@@ -799,27 +757,6 @@
           User = "root";
         };
       };
-      "premiumsoft-reset" = {
-        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
-        serviceConfig = {
-          Type = "oneshot";
-          User = "root";
-        };
-      };
-    };
-    timers."premiumsoft-reset" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "weekly";
-        Persistent = true;
-        Unit = "premiumsoft-reset.service";
-      };
-    };
-    user.services = {
-      "org.gnome.SettingsDaemon.A11ySettings".enable = false;
-      "org.gnome.SettingsDaemon.Sharing".enable = false;
-      "org.gnome.SettingsDaemon.Smartcard".enable = false;
-      "org.gnome.SettingsDaemon.Wacom".enable = false;
     };
   };
 

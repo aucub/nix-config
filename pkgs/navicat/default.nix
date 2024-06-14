@@ -1,11 +1,8 @@
 {
   fetchurl,
-  makeWrapper,
   appimageTools,
   lib,
   libGL,
-  autoPatchelfHook,
-  wrapGAppsHook,
   glib,
   glibc,
   pango,
@@ -18,18 +15,49 @@
   p11-kit,
   libxcb,
   libgpg-error,
+  stdenv,
+  cjson,
+  libxcrypt-legacy,
+  curl,
+  makeWrapper,
+  autoPatchelfHook,
+  libxkbcommon,
+  libselinux,
 }:
+
 let
   pname = "navicat";
-  version = "17.0.4";
+  version = "17.0.5";
   src = fetchurl {
     url = "https://dn.navicat.com/download/navicat17-premium-cs-x86_64.AppImage";
-    sha256 = "31b8eca01cec52eadfe37a0c5c2d9bcd52399893870aa6fb19d012dfc145c75d";
+    sha256 = "6wTykuH9atSELDWEiiWIv1ptdZPca4UxcqPeRSxC4JQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  ldLibraryPath = lib.makeLibraryPath [
+    libGL
+    glib
+    glibc
+    pango
+    harfbuzz
+    fontconfig
+    libX11
+    freetype
+    e2fsprogs
+    expat
+    p11-kit
+    libxcb
+    libgpg-error
+    libxkbcommon
+    libselinux
+  ];
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
+stdenv.mkDerivation {
+  inherit pname version;
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     libgpg-error
@@ -45,25 +73,43 @@ appimageTools.wrapType2 {
     glibc
     glib
     libGL
-    autoPatchelfHook
-    wrapGAppsHook
-    makeWrapper
+    cjson
+    curl
+    libxcrypt-legacy
+    libxkbcommon
+    libselinux
   ];
 
-  extraInstallCommands = ''
-    rm -r $out/bin
-    cp -a ${appimageContents}/* $out/
-    mkdir -p $out/bin
-    sed -i '1s|.*|#!/usr/bin/env bash|' $out/AppRun
-    sed -i '/^LD_LIBRARY_PATH=/ s|$|:${libGL}/lib:${glib}/lib:${glib.out}/lib:${glibc}/lib:${pango}/lib:${pango.out}/lib:${harfbuzz}/lib:${fontconfig}/lib:${harfbuzz.out}/lib:${fontconfig.lib}/lib:${libX11}/lib:${freetype}/lib:${e2fsprogs}/lib:${expat}/lib:${p11-kit}/lib:${libxcb}/lib:${libgpg-error}/lib:${e2fsprogs.out}/lib:${expat.out}/lib:${p11-kit.out}/lib:${libxcb.out}/lib:${libgpg-error.out}/lib|' $out/AppRun
-    ln -s $out/AppRun $out/bin/${pname}
-    install -Dm644 $out/navicat.desktop $out/share/applications/navicat.desktop
-    cp -a $out/usr/share/icons $out/share/
+  dontUnpack = true;
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    cp -a ${appimageContents}/usr $out/
+
+    chmod -R u+rwX,go+rX,go-w $out
+    chmod 755 $out/bin/navicat
+
+    mkdir -p $out/usr
+    ln -s $out/lib $out/usr/lib
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/navicat \
+    --prefix LD_LIBRARY_PATH : "${ldLibraryPath}:$out/lib/oci:$out/lib/obci:$out/lib/pq-g:$out/lib:~/.config/navicat/Premium/lib/sqlite:~/.config/navicat/Premium/lib/oci" \
+    --set QT_PLUGIN_PATH "$out/plugins" \
+    --set QT_QPA_PLATFORM xcb \
+    --set QT_STYLE_OVERRIDE Fusion \
+    --chdir "$out"
   '';
 
   meta = with lib; {
     homepage = "https://www.navicat.com.cn/products/navicat-premium-release-note";
-    description = "Navicat Premium is a multi-connection database development tool";
+    description = "Navicat Premium is a database development tool";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

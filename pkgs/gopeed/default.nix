@@ -1,23 +1,21 @@
 {
-  dpkg,
-  fetchurl,
-  gtk3,
   lib,
-  glib,
-  libayatana-appindicator,
+  fetchurl,
   stdenv,
-  at-spi2-core,
+  autoPatchelfHook,
+  dpkg,
+  makeWrapper,
+  at-spi2-atk,
   cairo,
   gdk-pixbuf,
+  glib,
+  zenity,
+  gtk3,
   harfbuzz,
-  pango,
-  libepoxy,
-  libdbusmenu,
-  wrapGAppsHook,
-  autoPatchelfHook,
+  libayatana-appindicator,
   libayatana-indicator,
-  ayatana-ido,
-  libappindicator,
+  libdbusmenu,
+  pango,
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
@@ -25,66 +23,70 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/GopeedLab/gopeed/releases/download/v${version}/Gopeed-v${version}-linux-amd64.deb";
-    sha256 = "5484719fe8879094b3957fd10780ec087801e3ea46337ac9d921396402701b01";
+    hash = "sha256-VIRxn+iHkJSzlX/RB4DsCHgB4+pGM3rJ2SE5ZAJwGwE=";
   };
+
+  dontConfigure = true;
+
+  dontBuild = true;
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook
+    makeWrapper
   ];
 
   buildInputs = [
-    at-spi2-core
+    stdenv.cc.cc
+    at-spi2-atk
+    cairo
+    gdk-pixbuf
     glib
     gtk3
-    libayatana-appindicator
-    libdbusmenu
-    libayatana-indicator
-    ayatana-ido
-    libappindicator
-    cairo
-    gdk-pixbuf
     harfbuzz
+    libayatana-appindicator
+    libayatana-indicator
+    libdbusmenu
     pango
-    libepoxy
   ];
 
-  propagatedBuildInputs = [
-    at-spi2-core
-    gtk3
-    cairo
-    gdk-pixbuf
-    harfbuzz
-    pango
-    libepoxy
-    libayatana-appindicator
-    libdbusmenu
-    libayatana-indicator
-    ayatana-ido
-    libappindicator
-  ];
+  unpackPhase = ''
+    runHook preUnpack
 
-  postPatch = ''
-    substituteInPlace --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+      dpkg-deb -x ${src} ./
+
+    runHook postUnpack
   '';
 
   installPhase = ''
     runHook preInstall
-    dpkg -x ${src} $out
+
     mkdir -p $out/bin
-    ln -s $out/opt/${pname}/${pname} $out/bin/${pname}
-    mv $out/usr/share $out/share
-    rm -rf $out/usr
+
+    mv usr/* opt -t $out
+
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://gopeed.com";
-    description = "A modern download manager that supports all platforms. Built with Golang and Flutter";
-    license = licenses.gpl3Only;
+  fixupPhase = ''
+    runHook preFixup
+    makeWrapper $out/opt/gopeed/gopeed $out/bin/gopeed \
+      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+    runHook postFixup
+  '';
+
+  meta = {
+    homepage = "https://gopeed.com/";
+    description = "Modern download manager that supports all platforms, built with Golang and Flutter";
+    longDescription = ''
+      Gopeed (full name Go Speed), a high-speed download manager, supports (HTTP, BitTorrent, Magnet) protocol,
+      and supports all platforms. It is also a highly customizable that supports implementing more features through
+      integration with APIs or installation and development of extensions.
+    '';
+    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = with lib.licenses; [ gpl3Only ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ aucub ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "gopeed";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -2,7 +2,6 @@
   inputs,
   outputs,
   pkgs,
-  vars,
   ...
 }:
 {
@@ -33,31 +32,31 @@
   };
 
   home = {
-    username = "${vars.users.users.username}";
-    homeDirectory = "/home/${vars.users.users.username}";
+    username = "${outputs.vars.users.users.user.username}";
+    homeDirectory = "/home/${outputs.vars.users.users.user.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
-      name = vars.home.pointerCursor.name;
-      package = vars.home.pointerCursor.package pkgs;
-      size = vars.home.pointerCursor.size;
+      name = outputs.vars.home.pointerCursor.name;
+      package = outputs.vars.home.pointerCursor.package pkgs;
+      size = outputs.vars.home.pointerCursor.size;
       gtk.enable = true;
       x11 = {
         enable = true;
-        defaultCursor = vars.home.pointerCursor.name;
+        defaultCursor = outputs.vars.home.pointerCursor.name;
       };
     };
     sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
-    file.".cargo/config.toml".text = ''
-      [source.crates-io]
-      replace-with = 'ustc'
-      [source.ustc]
-      registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
-    '';
+    # file.".cargo/config.toml".text = ''
+    #   [source.crates-io]
+    #   replace-with = 'ustc'
+    #   [source.ustc]
+    #   registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+    # '';
   };
 
   gtk.cursorTheme = {
-    name = vars.home.pointerCursor.name;
-    size = vars.home.pointerCursor.size;
+    name = outputs.vars.home.pointerCursor.name;
+    size = outputs.vars.home.pointerCursor.size;
   };
 
   xdg = {
@@ -73,16 +72,13 @@
       index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
     '';
     configFile."electron-flags.conf".text = ''
-      --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer
+      --log-level=0
+      --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer
       --ozone-platform-hint=auto
-      --force-device-scale-factor=1.25
-      --ozone-platform=wayland
-      --enable-wayland-ime
     '';
   };
 
   programs = {
-    dircolors.enable = true;
     tealdeer = {
       enable = true;
       settings = {
@@ -99,6 +95,9 @@
         set -x PATH $PATH $BUN_INSTALL/bin
         set_proxy
       '';
+      shellAbbrs = {
+        navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && cd ~/.config/navicat/Premium/ && ${pkgs.jq}/bin/jq 'del(.[\"014BF4EC24C114BEF46E1587042B3619\"])' preferences.json > tmp.json && mv tmp.json preferences.json";
+      };
     };
     home-manager.enable = true;
     atuin = {
@@ -109,6 +108,7 @@
         update_check = false;
         show_help = false;
         enter_accept = true;
+        prefers_reduced_motion = true;
       };
     };
     bun = {
@@ -125,6 +125,7 @@
     alacritty = {
       enable = true;
       settings = {
+        import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
         live_config_reload = false;
         shell.program = "fish";
         window = {
@@ -137,7 +138,7 @@
             lines = 26;
           };
           startup_mode = "Windowed";
-          decorations_theme_variant = "dark";
+          decorations_theme_variant = "Dark";
         };
         font = {
           normal = {
@@ -163,36 +164,6 @@
             action = "SpawnNewInstance";
           }
         ];
-        colors = {
-          primary = {
-            background = "0x212121";
-            foreground = "0xF8F8F2";
-          };
-          cursor = {
-            text = "0x0E1415";
-            cursor = "0xECEFF4";
-          };
-          normal = {
-            black = "0x21222C";
-            red = "0xFF5555";
-            green = "0x50FA7B";
-            yellow = "0xFFCB6B";
-            blue = "0x82AAFF";
-            magenta = "0xC792EA";
-            cyan = "0x8BE9FD";
-            white = "0xF8F9F2";
-          };
-          bright = {
-            black = "0x545454";
-            red = "0xFF6E6E";
-            green = "0x69FF94";
-            yellow = "0xFFCB6B";
-            blue = "0xD6ACFF";
-            magenta = "0xFF92DF";
-            cyan = "0xA4FFFF";
-            white = "0xF8F8F2";
-          };
-        };
       };
     };
     eza = {
@@ -226,6 +197,9 @@
     };
     git = {
       enable = true;
+      attributes = [
+        # "*.enc diff=sopsdiffer" 
+      ];
       ignores = [
         # Compiled binary, object files, and libraries
         "*.o"
@@ -338,6 +312,12 @@
         enable = true;
         background = "dark";
       };
+      hooks = {
+        pre-commit = pkgs.writeScript "pre-commit-script" ''
+          #!/bin/sh
+          gitleaks protect --staged --no-banner --max-target-megabytes 1
+        '';
+      };
     };
     yazi = {
       enable = true;
@@ -359,6 +339,8 @@
     #   ];
     # };
   };
+
+  manual.manpages.enable = false;
 
   services.udiskie.enable = true;
 
