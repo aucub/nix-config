@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.firefox = {
     enable = true;
     policies = {
@@ -145,11 +145,16 @@
         "browser.newtabpage.activity-stream.showSponsored" = false;
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
         "browser.newtabpage.activity-stream.feeds.topsites" = true;
-        "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
-        "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
-        "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" = false;
-        "browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
-        "browser.newtabpage.activity-stream.feeds.recommendationprovider" = false;
+        "browser.newtabpage.activity-stream.section.highlights.includeDownloads" =
+          false;
+        "browser.newtabpage.activity-stream.section.highlights.includeVisited" =
+          false;
+        "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" =
+          false;
+        "browser.newtabpage.activity-stream.section.highlights.includePocket" =
+          false;
+        "browser.newtabpage.activity-stream.feeds.recommendationprovider" =
+          false;
         # 清除默认的热门网站
         "browser.newtabpage.activity-stream.default.sites" = "";
 
@@ -215,7 +220,8 @@
         # 禁用对下载内容的远程 SB 检查
         "browser.safebrowsing.downloads.remote.enabled" = false;
         # 禁用对不受欢迎软件的 SB 检查
-        "browser.safebrowsing.downloads.remote.block_potentially_unwanted" = false;
+        "browser.safebrowsing.downloads.remote.block_potentially_unwanted" =
+          false;
         "browser.safebrowsing.downloads.remote.block_uncommon" = false;
 
         # --- 阻止隐式的出站连接 ---
@@ -306,8 +312,10 @@
         # 系统颜色
         "browser.display.use_system_colors" = true;
         # 禁用扩展/功能推荐
-        "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
-        "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+        "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" =
+          false;
+        "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" =
+          false;
         # 禁用“最新消息”工具栏图标
         "browser.messaging-system.whatsNewPanel.enabled" = false;
         # 禁用 Mozilla 产品推荐

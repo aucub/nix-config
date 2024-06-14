@@ -1,12 +1,4 @@
-{
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
-  vars,
-  ...
-}: {
+{ inputs, outputs, lib, config, pkgs, vars, ... }: {
   imports = [
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
@@ -23,9 +15,7 @@
   ];
 
   home-manager = {
-    extraSpecialArgs = {
-      inherit inputs vars outputs;
-    };
+    extraSpecialArgs = { inherit inputs vars outputs; };
     users = {
       "${vars.users.users.username}" = import ../home-manager/home.nix;
     };
@@ -41,13 +31,10 @@
       # inputs.nixpkgs-wayland.overlay
       # inputs.chaotic.nixosModules.default
     ];
-    config = {
-      allowUnfree = lib.mkForce true;
-    };
+    config = { allowUnfree = lib.mkForce true; };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  nix = let flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
       experimental-features = "nix-command flakes";
@@ -72,15 +59,12 @@
         # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       ];
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
+      trusted-users = [ "root" "@wheel" ];
     };
     # nix-channel 命令和状态文件
     channel.enable = false;
 
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     gc = {
       automatic = true;
@@ -92,7 +76,7 @@
   networking = {
     hostName = vars.hostname;
     firewall.enable = false;
-    nameservers = ["223.5.5.5#dns.alidns.com" "8.8.8.8#dns.google"];
+    nameservers = [ "223.5.5.5#dns.alidns.com" "8.8.8.8#dns.google" ];
     networkmanager = {
       enable = true;
       dns = "systemd-resolved";
@@ -122,20 +106,14 @@
     kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
     kernelModules = vars.boot.kernelModules;
-    blacklistedKernelModules = ["nouveau"];
+    blacklistedKernelModules = [ "nouveau" ];
     extraModulePackages = vars.boot.extraModulePackages pkgs;
     extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
-    supportedFilesystems = [
-      config.fileSystems."/".fsType
-    ];
+    supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
-      supportedFilesystems = [
-        config.fileSystems."/".fsType
-      ];
-      kernelModules = [
-        config.fileSystems."/".fsType
-      ];
+      supportedFilesystems = [ config.fileSystems."/".fsType ];
+      kernelModules = [ config.fileSystems."/".fsType ];
     };
   };
 
@@ -143,10 +121,7 @@
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
-    supportedLocales = [
-      "zh_CN.UTF-8/UTF-8"
-      "en_US.UTF-8/UTF-8"
-    ];
+    supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
     inputMethod = {
       enabled = "fcitx5";
       fcitx5 = {
@@ -173,24 +148,16 @@
       source-han-mono
       source-han-serif-vf-otf
       source-han-sans-vf-otf
-      (nerdfonts.override {
-        fonts = [
-          "NerdFontsSymbolsOnly"
-          "Iosevka"
-        ];
-      })
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "Iosevka" ]; })
       twitter-color-emoji
     ];
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = ["Noto Serif CJK SC" "Noto Color Emoji"];
-        sansSerif = ["Sarasa UI SC" "Noto Color Emoji"];
-        monospace = ["Sarasa Mono SC" "Noto Color Emoji"];
-        emoji = [
-          "Twemoji"
-          "Noto Color Emoji"
-        ];
+        serif = [ "Noto Serif CJK SC" "Noto Color Emoji" ];
+        sansSerif = [ "Sarasa UI SC" "Noto Color Emoji" ];
+        monospace = [ "Sarasa Mono SC" "Noto Color Emoji" ];
+        emoji = [ "Twemoji" "Noto Color Emoji" ];
       };
     };
   };
@@ -248,9 +215,7 @@
   hardware = {
     enableAllFirmware = true;
     wirelessRegulatoryDatabase = lib.mkForce false;
-    firmware = with pkgs; [
-      linux-firmware
-    ];
+    firmware = with pkgs; [ linux-firmware ];
     pulseaudio.enable = false;
     opengl = {
       enable = true;
@@ -266,15 +231,7 @@
           Experimental = true;
         };
       };
-      disabledPlugins = [
-        "bap"
-        "bass"
-        "mcp"
-        "vcp"
-        "micp"
-        "ccp"
-        "csip"
-      ];
+      disabledPlugins = [ "bap" "bass" "mcp" "vcp" "micp" "ccp" "csip" ];
     };
   };
 
@@ -295,32 +252,26 @@
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
       ];
-      extraGroups =
-        [
-          "wheel"
-          "users"
-          "plugdev"
-          "video"
-          "audio"
-          "git"
-          "systemd-journal"
-          "input"
-          "networkmanager"
-          "colord"
-        ]
-        ++ (builtins.filter (g: config.users.groups ? ${g}) [
-          "adbusers"
-          "docker"
-          "podman"
-          "libvirtd"
-          "wireshark"
-        ]);
+      extraGroups = [
+        "wheel"
+        "users"
+        "plugdev"
+        "video"
+        "audio"
+        "git"
+        "systemd-journal"
+        "input"
+        "networkmanager"
+        "colord"
+      ] ++ (builtins.filter (g: config.users.groups ? ${g}) [
+        "adbusers"
+        "docker"
+        "podman"
+        "libvirtd"
+        "wireshark"
+      ]);
       shell = pkgs.bashInteractive;
-      packages =
-        [
-          inputs.home-manager.packages.${pkgs.system}.default
-        ]
-        ++
+      packages = [ inputs.home-manager.packages.${pkgs.system}.default ] ++
         # shell
         (with pkgs; [
           # ouch
@@ -330,8 +281,7 @@
           ruff
           git-credential-manager
           nodePackages.nodejs
-        ])
-        ++ (with pkgs; [
+        ]) ++ (with pkgs; [
           # zed-editor
           celluloid
           localsend
@@ -341,25 +291,16 @@
         ])
         # theme
         ++ (with pkgs; [
-          (papirus-icon-theme.override
-            {color = "adwaita";})
+          (papirus-icon-theme.override { color = "adwaita"; })
           orchis-theme
         ])
         # custom
-        ++ (with pkgs; [
-          hiddify-next
-          gopeed
-          navicat
-          damask
-        ]);
+        ++ (with pkgs; [ hiddify-next gopeed navicat damask ]);
     };
   };
 
   environment = {
-    shells = with pkgs; [
-      bashInteractive
-      fish
-    ];
+    shells = with pkgs; [ bashInteractive fish ];
     variables = {
       EDITOR = "hx";
       QT_IM_MODULE = "fcitx";
@@ -373,17 +314,16 @@
       MOZ_USE_XINPUT2 = "1";
       LESS = "-SR";
     };
-    systemPackages =
-      (with pkgs; [
-        inputs.home-manager.packages.${pkgs.system}.default
-        nil
-        comma
-        nix-tree
-        just
-      ])
-      # ++ (with pkgs; [
-      #   lenovo-legion
-      # ])
+    systemPackages = (with pkgs; [
+      inputs.home-manager.packages.${pkgs.system}.default
+      nil
+      comma
+      nix-tree
+      just
+    ])
+    # ++ (with pkgs; [
+    #   lenovo-legion
+    # ])
       ++ (with pkgs; [
         difftastic
         helix
@@ -400,76 +340,44 @@
       ])
       # FHS
       ++ (with pkgs; [
-        (
-          let
-            base = pkgs.appimageTools.defaultFhsEnvArgs;
-          in
-            pkgs.buildFHSEnv (base
-              // {
-                name = "fhs";
-                targetPkgs = pkgs:
-                  (base.targetPkgs pkgs)
-                  ++ (with pkgs; [
-                    pkg-config
-                  ]);
-                profile = "export FHS=1";
-                runScript = "fish";
-                extraOutputsToInstall = ["dev"];
-              })
-        )
-        (
-          let
-            base = pkgs.appimageTools.defaultFhsEnvArgs;
-          in
-            pkgs.buildFHSEnv (base
-              // {
-                name = "pipzone";
-                targetPkgs = pkgs:
-                  (base.targetPkgs pkgs)
-                  ++ (with pkgs; [
-                    pkg-config
-                    libGL
-                    glib
-                    libgcc
-                    gccStdenv
-                    python3Full
-                    uv
-                  ])
-                  ++ [
-                    (pkgs.python3.withPackages (subpkgs:
-                      with subpkgs; [
-                        pip
-                        virtualenv
-                      ]))
-                  ];
-                profile = "export FHS=1";
-                runScript = "fish";
-                extraOutputsToInstall = ["dev"];
-                extraBwrapArgs = [
-                  "--symlink /.host-etc/gitconfig /etc/gitconfig"
-                ];
-              })
-        )
-      ])
-      ++ (
-        if config.services.xserver.desktopManager.gnome.enable
-        then
-          # gnomeExtensions
-          (with pkgs.gnomeExtensions; [
-            appindicator
-            caffeine
-            kimpanel
-          ])
-          # gnome
-          ++ (with pkgs.gnome; [
-            dconf-editor
-            gnome-tweaks
-          ])
-          ++ (with pkgs; [
-            gtop
-          ])
-        else []
-      );
+        (let base = pkgs.appimageTools.defaultFhsEnvArgs;
+        in pkgs.buildFHSEnv (base // {
+          name = "fhs";
+          targetPkgs = pkgs:
+            (base.targetPkgs pkgs) ++ (with pkgs; [ pkg-config ]);
+          profile = "export FHS=1";
+          runScript = "fish";
+          extraOutputsToInstall = [ "dev" ];
+        }))
+        (let base = pkgs.appimageTools.defaultFhsEnvArgs;
+        in pkgs.buildFHSEnv (base // {
+          name = "pipzone";
+          targetPkgs = pkgs:
+            (base.targetPkgs pkgs) ++ (with pkgs; [
+              pkg-config
+              libGL
+              glib
+              libgcc
+              gccStdenv
+              python3Full
+              uv
+            ]) ++ [
+              (pkgs.python3.withPackages
+                (subpkgs: with subpkgs; [ pip virtualenv ]))
+            ];
+          profile = "export FHS=1";
+          runScript = "fish";
+          extraOutputsToInstall = [ "dev" ];
+          extraBwrapArgs = [ "--symlink /.host-etc/gitconfig /etc/gitconfig" ];
+        }))
+      ]) ++ (if config.services.xserver.desktopManager.gnome.enable then
+      # gnomeExtensions
+        (with pkgs.gnomeExtensions; [ appindicator caffeine kimpanel ])
+        # gnome
+        ++ (with pkgs.gnome; [ dconf-editor gnome-tweaks ])
+        ++ (with pkgs; [ gtop ])
+      else
+        [ ]);
   };
 
   documentation = {
@@ -488,7 +396,8 @@
       enableAskPassword = false;
     };
     command-not-found.enable = false;
-    nix-ld={enable = true;
+    nix-ld = {
+      enable = true;
       package = pkgs.nix-ld-rs;
     };
     nix-index.enable = true;
@@ -498,7 +407,7 @@
     htop = {
       enable = true;
       settings = {
-        fields = [0 48 20 49 39 40 111 46 47 1];
+        fields = [ 0 48 20 49 39 40 111 46 47 1 ];
         hide_userland_threads = 1;
         show_thread_names = 1;
         show_program_path = 0;
@@ -510,18 +419,10 @@
         show_cpu_frequency = 1;
         show_cpu_temperature = 1;
         color_scheme = 6;
-        column_meters_0 = [
-          "CPU"
-          "Memory"
-          "Swap"
-        ];
-        column_meter_modes_0 = [1 1 1];
-        column_meters_1 = [
-          "Tasks"
-          "DiskIO"
-          "NetworkIO"
-        ];
-        column_meter_modes_1 = [2 2 2];
+        column_meters_0 = [ "CPU" "Memory" "Swap" ];
+        column_meter_modes_0 = [ 1 1 1 ];
+        column_meters_1 = [ "Tasks" "DiskIO" "NetworkIO" ];
+        column_meter_modes_1 = [ 2 2 2 ];
         tree_view = 0;
         sort_key = 47;
         sort_direction = -1;
@@ -583,14 +484,18 @@
         set -U fish_greeting
       '';
       shellAbbrs = {
-        nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
+        nix-wd =
+          "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
         # List all generations of the system profile
-        nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
+        nix-history =
+          "nix profile history --profile /nix/var/nix/profiles/system";
         # remove all generations older than 7 days
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        nix-clean =
+          "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
         # Garbage collect all unused nix store entries
-        nix-gc = "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
+        nix-gc =
+          "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
       };
     };
     yazi = {
@@ -603,7 +508,7 @@
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
-      languagePacks = ["zh-CN"];
+      languagePacks = [ "zh-CN" ];
       preferencesStatus = "default";
     };
   };
@@ -638,23 +543,19 @@
     tumbler.enable = true; # 缩略图服务
     dbus = {
       implementation = "broker";
-      packages = with pkgs; [dconf gcr_4 udisks];
+      packages = with pkgs; [ dconf gcr_4 udisks ];
     };
     psd.enable = true;
     fstrim.enable =
-      if config.fileSystems."/".fsType == "bcachefs"
-      then false
-      else true;
+      if config.fileSystems."/".fsType == "bcachefs" then false else true;
     # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
     kmscon = {
       # Instead of vt
       enable = true;
-      fonts = [
-        {
-          name = "Sarasa Mono SC";
-          package = pkgs.sarasa-gothic;
-        }
-      ];
+      fonts = [{
+        name = "Sarasa Mono SC";
+        package = pkgs.sarasa-gothic;
+      }];
       extraOptions = "--term xterm-256color";
       extraConfig = "font-size=20";
       hwRender = true;
@@ -662,14 +563,17 @@
     resolved = {
       enable = true;
       dnsovertls = "true";
-      domains = ["~."];
-      fallbackDns = ["1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" "2400:3200::1" "2606:4700:4700::1001"];
+      domains = [ "~." ];
+      fallbackDns = [
+        "1.1.1.1#one.one.one.one"
+        "1.0.0.1#one.one.one.one"
+        "2400:3200::1"
+        "2606:4700:4700::1001"
+      ];
     };
     acpid.enable = true;
     btrfs.autoScrub.enable =
-      if config.fileSystems."/".fsType == "btrfs"
-      then true
-      else false;
+      if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
     thermald.enable = false;
     tlp = {
@@ -717,7 +621,7 @@
       enable = true;
       videoDrivers = vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
-      excludePackages = with pkgs; [xterm];
+      excludePackages = with pkgs; [ xterm ];
       xkb.model = "pc105";
       wacom.enable = false;
     };
@@ -739,29 +643,43 @@
       "autovt@tty1".enable = false;
       "keyboard-brightness" = {
         description = "Set keyboard brightness after resume";
-        wantedBy = ["sleep.target" "suspend.target" "hibernate.target"];
+        wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
-          ExecStart = "${pkgs.bash}/bin/sh -c \"cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness\"";
-          ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
+          ExecStart = ''
+            ${pkgs.bash}/bin/sh -c "cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness"'';
+          ExecStop =
+            "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
         };
       };
       "numlock-brightness" = {
         description = "Close numlock Brightness";
-        after = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
-        wantedBy = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
+        after = [
+          "graphical.target"
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        wantedBy = [
+          "graphical.target"
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/";
-          ExecStart = "${pkgs.bash}/bin/sh -c 'sleep 3s && for dir in ./*::numlock*/; do [ -d \"$dir\" ] && echo 0 > \"$dir/brightness\"; done'";
+          ExecStart =
+            "${pkgs.bash}/bin/sh -c 'sleep 3s && for dir in ./*::numlock*/; do [ -d \"$dir\" ] && echo 0 > \"$dir/brightness\"; done'";
           User = "root";
         };
       };
       "premiumsoft-reset" = {
-        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
+        script = ''
+          ${pkgs.bash}/bin/sh -c "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/"'';
         serviceConfig = {
           Type = "oneshot";
           User = "root";
@@ -769,7 +687,7 @@
       };
     };
     timers."premiumsoft-reset" = {
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "weekly";
         Persistent = true;

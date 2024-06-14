@@ -1,30 +1,14 @@
-{
-  pkgs,
-  vars,
-  ...
-}: {
+{ pkgs, vars, ... }: {
   boot = {
-    kernelParams =
-      vars.boot.kernelParams
-      ++ [
-        "nvidia-drm.modeset=1"
-        "NVreg_PreserveVideoMemoryAllocations=1"
-        "nvidia_drm.fbdev=1"
-      ];
-    kernelModules =
-      vars.boot.kernelModules
-      ++ [
-        "bbswitch"
-        "nvidia"
-        "nvidia_drm"
-        "nvidia_uvm"
-        "nvidia_modeset"
-      ];
-    extraModulePackages =
-      (vars.boot.extraModulePackages pkgs)
-      ++ (with pkgs; [
-        linuxKernel.packages.linux_zen.bbswitch
-      ]);
+    kernelParams = vars.boot.kernelParams ++ [
+      "nvidia-drm.modeset=1"
+      "NVreg_PreserveVideoMemoryAllocations=1"
+      "nvidia_drm.fbdev=1"
+    ];
+    kernelModules = vars.boot.kernelModules
+      ++ [ "bbswitch" "nvidia" "nvidia_drm" "nvidia_uvm" "nvidia_modeset" ];
+    extraModulePackages = (vars.boot.extraModulePackages pkgs)
+      ++ (with pkgs; [ linuxKernel.packages.linux_zen.bbswitch ]);
   };
   hardware = {
     nvidia = {
@@ -44,16 +28,10 @@
         };
       };
     };
-    opengl.extraPackages =
-      (vars.hardware.opengl.extraPackages pkgs)
-      ++ (with pkgs; [
-        nvidia-vaapi-driver
-      ]);
+    opengl.extraPackages = (vars.hardware.opengl.extraPackages pkgs)
+      ++ (with pkgs; [ nvidia-vaapi-driver ]);
   };
   environment.variables.NVD_BACKEND = "direct";
-  services.xserver.videoDrivers =
-    vars.services.xserver.videoDrivers
-    ++ [
-      "nvidia"
-    ];
+  services.xserver.videoDrivers = vars.services.xserver.videoDrivers
+    ++ [ "nvidia" ];
 }

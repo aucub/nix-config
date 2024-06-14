@@ -23,102 +23,91 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    systems = [
-      "aarch64-linux"
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    vars = {
-      hostname = "neko";
-      users.users = {
-        username = "uymi";
-        initialHashedPassword = "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
-        root.initialHashedPassword = "$y$j9T$/qg2DYP0TOSZzSwlgs9mV/$uVAqBwhXEnwkMd0D4zKH9SSBQ4WzlGcnimnLrbyNwP4";
-      };
-      boot = {
-        kernelParams = [
-          "amd_pstate=passive"
-          "amdgpu.vm_update_mode=3"
-          "radeon.dpm=0"
-          "acpi_backlight=native"
-          "mitigations=off" # 关闭漏洞缓解措施提高性能
-        ];
-        kernelModules = [
-          # "v4l2loopback"
-          "amdgpu"
-        ];
-        extraModulePackages = pkgs:
-          with pkgs; [
-            # linuxKernel.packages.linux_zen.v4l2loopback
-            linuxKernel.packages.linux_zen.lenovo-legion-module
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+    let
+      inherit (self) outputs;
+      systems = [
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      vars = {
+        hostname = "neko";
+        users.users = {
+          username = "uymi";
+          initialHashedPassword =
+            "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
+          root.initialHashedPassword =
+            "$y$j9T$/qg2DYP0TOSZzSwlgs9mV/$uVAqBwhXEnwkMd0D4zKH9SSBQ4WzlGcnimnLrbyNwP4";
+        };
+        boot = {
+          kernelParams = [
+            "amd_pstate=passive"
+            "amdgpu.vm_update_mode=3"
+            "radeon.dpm=0"
+            "acpi_backlight=native"
+            "mitigations=off" # 关闭漏洞缓解措施提高性能
           ];
-        extraModprobeConfig =
-          ''
+          kernelModules = [
+            # "v4l2loopback"
+            "amdgpu"
+          ];
+          extraModulePackages = pkgs:
+            with pkgs;
+            [
+              # linuxKernel.packages.linux_zen.v4l2loopback
+              linuxKernel.packages.linux_zen.lenovo-legion-module
+            ];
+          extraModprobeConfig = ''
             blacklist nouveau
             options nouveau modeset=0
             options usbhid skip_device=ATTRS{idVendor}==048D,ATTRS{idProduct}==C100
           ''
-          # ++ ''
-          #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
-          # ''
+            # ++ ''
+            #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
+            # ''
           ;
-      };
-      hardware.opengl.extraPackages = pkgs:
-        with pkgs; [
-          vaapiVdpau
-          libGL
-          libvdpau-va-gl
-          mesa.drivers
-          xorg.xf86videoamdgpu
-        ];
-      home.pointerCursor = {
-        name = "Bibata-Modern-Classic";
-        package = pkgs: pkgs.bibata-cursors;
-        size = 24;
-      };
-      services.xserver.videoDrivers = [
-        "modesetting"
-        "fbdev"
-        "amdgpu"
-      ];
-    };
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
-    overlays = import ./overlays {inherit inputs;};
-    nixosModules = import ./modules/nixos;
-    homeManagerModules = import ./modules/home-manager;
-    nixosConfigurations = {
-      "${vars.hostname}" = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs vars outputs;
         };
-        modules = [
-          ./nixos/configuration.nix
-        ];
+        hardware.opengl.extraPackages = pkgs:
+          with pkgs; [
+            vaapiVdpau
+            libGL
+            libvdpau-va-gl
+            mesa.drivers
+            xorg.xf86videoamdgpu
+          ];
+        home.pointerCursor = {
+          name = "Bibata-Modern-Classic";
+          package = pkgs: pkgs.bibata-cursors;
+          size = 24;
+        };
+        services.xserver.videoDrivers = [ "modesetting" "fbdev" "amdgpu" ];
       };
-    };
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in {
+      packages =
+        forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      formatter =
+        forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
+      overlays = import ./overlays { inherit inputs; };
+      nixosModules = import ./modules/nixos;
+      homeManagerModules = import ./modules/home-manager;
+      nixosConfigurations = {
+        "${vars.hostname}" = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs vars outputs; };
+          modules = [ ./nixos/configuration.nix ];
+        };
+      };
 
-    homeConfigurations = {
-      "${vars.users.users.username}@${vars.hostname}" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs vars outputs;
-        };
-        modules = [
-          ./home-manager/home.nix
-        ];
+      homeConfigurations = {
+        "${vars.users.users.username}@${vars.hostname}" =
+          home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = { inherit inputs vars outputs; };
+            modules = [ ./home-manager/home.nix ];
+          };
       };
     };
-  };
 }

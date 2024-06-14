@@ -1,38 +1,17 @@
-{
-  dpkg,
-  fetchurl,
-  gtk3,
-  lib,
-  glib,
-  libayatana-appindicator,
-  stdenv,
-  at-spi2-core,
-  cairo,
-  gdk-pixbuf,
-  harfbuzz,
-  pango,
-  libepoxy,
-  libdbusmenu,
-  wrapGAppsHook,
-  autoPatchelfHook,
-  libayatana-indicator,
-  ayatana-ido,
-  libappindicator,
-}:
+{ dpkg, fetchurl, gtk3, lib, glib, libayatana-appindicator, stdenv, at-spi2-core
+, cairo, gdk-pixbuf, harfbuzz, pango, libepoxy, libdbusmenu, wrapGAppsHook
+, autoPatchelfHook, libayatana-indicator, ayatana-ido, libappindicator, }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
   version = "1.5.7";
 
   src = fetchurl {
-    url = "https://github.com/GopeedLab/gopeed/releases/download/v${version}/Gopeed-v${version}-linux-amd64.deb";
+    url =
+      "https://github.com/GopeedLab/gopeed/releases/download/v${version}/Gopeed-v${version}-linux-amd64.deb";
     sha256 = "5484719fe8879094b3957fd10780ec087801e3ea46337ac9d921396402701b01";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
 
   buildInputs = [
     at-spi2-core
@@ -81,10 +60,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gopeed.com";
-    description = "A modern download manager that supports all platforms. Built with Golang and Flutter";
+    description =
+      "A modern download manager that supports all platforms. Built with Golang and Flutter";
     license = licenses.gpl3Only;
-    platforms = ["x86_64-linux"];
-    maintainers = with lib.maintainers; [aucub];
-    sourceProvenance = with sourceTypes; [binaryNativeCode];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ aucub ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

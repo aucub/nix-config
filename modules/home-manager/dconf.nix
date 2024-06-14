@@ -1,4 +1,4 @@
-{lib, ...}: {
+{ lib, ... }: {
   dconf.settings = {
     "app/drey/Damask" = {
       active-source = "wallhaven";
@@ -39,7 +39,8 @@
 
     "org/gnome/desktop/peripherals/keyboard".numlock-state = true;
 
-    "org/gnome/desktop/peripherals/touchpad".two-finger-scrolling-enabled = true;
+    "org/gnome/desktop/peripherals/touchpad".two-finger-scrolling-enabled =
+      true;
 
     "org/gnome/desktop/privacy" = {
       old-files-age = lib.hm.gvariant.mkUint32 3;
@@ -61,7 +62,7 @@
 
     "org/gnome/desktop/sound".allow-volume-above-100-percent = true;
 
-    "org/gnome/desktop/wm/keybindings".activate-window-menu = ["<Super>m"];
+    "org/gnome/desktop/wm/keybindings".activate-window-menu = [ "<Super>m" ];
 
     "org/gnome/desktop/wm/preferences" = {
       action-right-click-titlebar = "none";
@@ -121,7 +122,8 @@
       col-20-width = 59;
       col-21-visible = false;
       col-21-width = 59;
-      columns-order = "[0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]";
+      columns-order =
+        "[0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]";
       sort-col = 8;
       sort-order = 0;
     };
@@ -139,7 +141,7 @@
       show-hidden-files = true;
     };
 
-    "org/gnome/online-accounts".whitelisted-providers = [];
+    "org/gnome/online-accounts".whitelisted-providers = [ ];
 
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
@@ -149,13 +151,16 @@
       night-light-temperature = lib.hm.gvariant.mkUint32 3248;
     };
 
-    "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
+    "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = [
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+    ];
 
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-      binding = "<Alt>space";
-      command = "wofi --normal-window --show drun";
-      name = "wofi";
-    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" =
+      {
+        binding = "<Alt>space";
+        command = "wofi --normal-window --show drun";
+        name = "wofi";
+      };
 
     "org/gnome/settings-daemon/plugins/power" = {
       sleep-inactive-ac-type = "suspend";
@@ -165,8 +170,25 @@
     };
 
     "org/gnome/shell" = {
-      disabled-extensions = ["launch-new-instance@gnome-shell-extensions.gcampax.github.com" "native-window-placement@gnome-shell-extensions.gcampax.github.com" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" "windowsNavigator@gnome-shell-extensions.gcampax.github.com" "window-list@gnome-shell-extensions.gcampax.github.com" "places-menu@gnome-shell-extensions.gcampax.github.com" "auto-move-windows@gnome-shell-extensions.gcampax.github.com" "apps-menu@gnome-shell-extensions.gcampax.github.com" "light-style@gnome-shell-extensions.gcampax.github.com"];
-      enabled-extensions = ["appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "kimpanel@kde.org" "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com" "system-monitor@gnome-shell-extensions.gcampax.github.com" "drive-menu@gnome-shell-extensions.gcampax.github.com"];
+      disabled-extensions = [
+        "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
+        "native-window-placement@gnome-shell-extensions.gcampax.github.com"
+        "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+        "windowsNavigator@gnome-shell-extensions.gcampax.github.com"
+        "window-list@gnome-shell-extensions.gcampax.github.com"
+        "places-menu@gnome-shell-extensions.gcampax.github.com"
+        "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
+        "apps-menu@gnome-shell-extensions.gcampax.github.com"
+        "light-style@gnome-shell-extensions.gcampax.github.com"
+      ];
+      enabled-extensions = [
+        "appindicatorsupport@rgcjonas.gmail.com"
+        "caffeine@patapon.info"
+        "kimpanel@kde.org"
+        "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com"
+        "system-monitor@gnome-shell-extensions.gcampax.github.com"
+        "drive-menu@gnome-shell-extensions.gcampax.github.com"
+      ];
     };
 
     "org/gnome/shell/extensions/appindicator" = {
@@ -174,7 +196,7 @@
       tray-pos = "left";
     };
 
-    "org/gnome/shell/keybindings".toggle-message-tray = [];
+    "org/gnome/shell/keybindings".toggle-message-tray = [ ];
 
     "org/gnome/shell/extensions/caffeine" = {
       enable-fullscreen = false;

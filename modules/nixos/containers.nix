@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   virtualisation = {
     containers = {
       enable = true;
@@ -13,9 +13,5 @@
       autoPrune.enable = true;
     };
   };
-  environment.systemPackages = with pkgs; [
-    podman-tui
-    podman-compose
-    youki
-  ];
+  environment.systemPackages = with pkgs; [ podman-tui podman-compose youki ];
 }

@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   programs.chromium = {
     enable = true;
     extensions = [
@@ -20,11 +20,8 @@
       BackgroundModeEnabled = false;
       BookmarkBarEnabled = false;
       BrowserLabsEnabled = false;
-      ClearBrowsingDataOnExitList = [
-        "browsing_history"
-        "download_history"
-        "cached_images_and_files"
-      ];
+      ClearBrowsingDataOnExitList =
+        [ "browsing_history" "download_history" "cached_images_and_files" ];
       DefaultBrowserSettingEnabled = false;
       EncryptedClientHelloEnabled = true;
       HighEfficiencyModeEnabled = false;
@@ -68,7 +65,8 @@
       "intl"."selected_languages" = "zh-CN,zh";
       "payments"."can_make_payment_enabled" = false;
       "privacy_guide"."viewed" = true;
-      "privacy_sandbox"."first_party_sets_data_access_allowed_initialized" = true;
+      "privacy_sandbox"."first_party_sets_data_access_allowed_initialized" =
+        true;
       "safebrowsing" = {
         "enabled" = true;
         "enhanced" = true;

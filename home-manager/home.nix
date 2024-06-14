@@ -1,10 +1,4 @@
-{
-  inputs,
-  outputs,
-  pkgs,
-  vars,
-  ...
-}: {
+{ inputs, outputs, pkgs, vars, ... }: {
   imports = [
     outputs.homeManagerModules.dotfiles
     outputs.homeManagerModules.firefox
@@ -26,9 +20,7 @@
       inputs.nur.overlay
       # inputs.chaotic.homeManagerModules.default
     ];
-    config = {
-      allowUnfree = true;
-    };
+    config = { allowUnfree = true; };
   };
 
   home = {
@@ -102,9 +94,7 @@
     home-manager.enable = true;
     atuin = {
       enable = true;
-      flags = [
-        "--disable-up-arrow"
-      ];
+      flags = [ "--disable-up-arrow" ];
       settings = {
         auto_sync = false;
         update_check = false;
@@ -155,15 +145,13 @@
           };
           size = 20;
         };
-        selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
+        selection.semantic_escape_chars = '',│`|:"' ()[]{}<>	@='';
         debug.log_level = "Off";
-        keyboard.bindings = [
-          {
-            key = "Return";
-            mods = "Control|Shift";
-            action = "SpawnNewInstance";
-          }
-        ];
+        keyboard.bindings = [{
+          key = "Return";
+          mods = "Control|Shift";
+          action = "SpawnNewInstance";
+        }];
         colors = {
           primary = {
             background = "0x212121";
@@ -199,10 +187,7 @@
     eza = {
       enable = true;
       git = true;
-      extraOptions = [
-        "--group-directories-first"
-        "--all"
-      ];
+      extraOptions = [ "--group-directories-first" "--all" ];
     };
     helix = {
       enable = true;
