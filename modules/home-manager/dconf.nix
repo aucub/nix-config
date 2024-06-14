@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   dconf.settings = {
     "app/drey/Damask" = {
       active-source = "wallhaven";
@@ -61,7 +62,7 @@
 
     "org/gnome/desktop/sound".allow-volume-above-100-percent = true;
 
-    "org/gnome/desktop/wm/keybindings".activate-window-menu = ["<Super>m"];
+    "org/gnome/desktop/wm/keybindings".activate-window-menu = [ "<Super>m" ];
 
     "org/gnome/desktop/wm/preferences" = {
       action-right-click-titlebar = "none";
@@ -139,7 +140,7 @@
       show-hidden-files = true;
     };
 
-    "org/gnome/online-accounts".whitelisted-providers = [];
+    "org/gnome/online-accounts".whitelisted-providers = [ ];
 
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
@@ -149,7 +150,9 @@
       night-light-temperature = lib.hm.gvariant.mkUint32 3248;
     };
 
-    "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
+    "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = [
+      "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+    ];
 
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       binding = "<Alt>space";
@@ -165,8 +168,25 @@
     };
 
     "org/gnome/shell" = {
-      disabled-extensions = ["launch-new-instance@gnome-shell-extensions.gcampax.github.com" "native-window-placement@gnome-shell-extensions.gcampax.github.com" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" "windowsNavigator@gnome-shell-extensions.gcampax.github.com" "window-list@gnome-shell-extensions.gcampax.github.com" "places-menu@gnome-shell-extensions.gcampax.github.com" "auto-move-windows@gnome-shell-extensions.gcampax.github.com" "apps-menu@gnome-shell-extensions.gcampax.github.com" "light-style@gnome-shell-extensions.gcampax.github.com"];
-      enabled-extensions = ["appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "kimpanel@kde.org" "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com" "system-monitor@gnome-shell-extensions.gcampax.github.com" "drive-menu@gnome-shell-extensions.gcampax.github.com"];
+      disabled-extensions = [
+        "launch-new-instance@gnome-shell-extensions.gcampax.github.com"
+        "native-window-placement@gnome-shell-extensions.gcampax.github.com"
+        "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+        "windowsNavigator@gnome-shell-extensions.gcampax.github.com"
+        "window-list@gnome-shell-extensions.gcampax.github.com"
+        "places-menu@gnome-shell-extensions.gcampax.github.com"
+        "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
+        "apps-menu@gnome-shell-extensions.gcampax.github.com"
+        "light-style@gnome-shell-extensions.gcampax.github.com"
+      ];
+      enabled-extensions = [
+        "appindicatorsupport@rgcjonas.gmail.com"
+        "caffeine@patapon.info"
+        "kimpanel@kde.org"
+        "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com"
+        "system-monitor@gnome-shell-extensions.gcampax.github.com"
+        "drive-menu@gnome-shell-extensions.gcampax.github.com"
+      ];
     };
 
     "org/gnome/shell/extensions/appindicator" = {
@@ -174,7 +194,7 @@
       tray-pos = "left";
     };
 
-    "org/gnome/shell/keybindings".toggle-message-tray = [];
+    "org/gnome/shell/keybindings".toggle-message-tray = [ ];
 
     "org/gnome/shell/extensions/caffeine" = {
       enable-fullscreen = false;

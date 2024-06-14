@@ -6,7 +6,8 @@
   pkgs,
   vars,
   ...
-}: {
+}:
+{
   imports = [
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
@@ -46,53 +47,58 @@
     };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      experimental-features = "nix-command flakes";
-      flake-registry = "";
-      nix-path = config.nix.nixPath;
-      auto-optimise-store = true;
-      builders-use-substitutes = true;
-      show-trace = true;
-      warn-dirty = false;
-      substituters = [
-        "https://mirrors.ustc.edu.cn/nix-channels/store"
-        # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        "https://cache.nixos.org"
-        "https://nix-community.cachix.org"
-        # "https://nixpkgs-wayland.cachix.org"
-        # "https://qihaiumi.cachix.org"
-        # "https://cosmic.cachix.org"
-      ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
-        # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
-      ];
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-    };
-    # nix-channel 命令和状态文件
-    channel.enable = false;
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        experimental-features = "nix-command flakes";
+        flake-registry = "";
+        nix-path = config.nix.nixPath;
+        auto-optimise-store = true;
+        builders-use-substitutes = true;
+        show-trace = true;
+        warn-dirty = false;
+        substituters = [
+          "https://mirrors.ustc.edu.cn/nix-channels/store"
+          # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+          "https://cache.nixos.org"
+          "https://nix-community.cachix.org"
+          # "https://nixpkgs-wayland.cachix.org"
+          # "https://qihaiumi.cachix.org"
+          # "https://cosmic.cachix.org"
+        ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+          # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
+          # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+        ];
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
+      };
+      # nix-channel 命令和状态文件
+      channel.enable = false;
 
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 1w";
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 1w";
+      };
     };
-  };
 
   networking = {
     hostName = vars.hostname;
     firewall.enable = false;
-    nameservers = ["223.5.5.5#dns.alidns.com" "8.8.8.8#dns.google"];
+    nameservers = [
+      "223.5.5.5#dns.alidns.com"
+      "8.8.8.8#dns.google"
+    ];
     networkmanager = {
       enable = true;
       dns = "systemd-resolved";
@@ -122,20 +128,14 @@
     kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
     kernelModules = vars.boot.kernelModules;
-    blacklistedKernelModules = ["nouveau"];
+    blacklistedKernelModules = [ "nouveau" ];
     extraModulePackages = vars.boot.extraModulePackages pkgs;
     extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
-    supportedFilesystems = [
-      config.fileSystems."/".fsType
-    ];
+    supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
-      supportedFilesystems = [
-        config.fileSystems."/".fsType
-      ];
-      kernelModules = [
-        config.fileSystems."/".fsType
-      ];
+      supportedFilesystems = [ config.fileSystems."/".fsType ];
+      kernelModules = [ config.fileSystems."/".fsType ];
     };
   };
 
@@ -184,9 +184,18 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = ["Noto Serif CJK SC" "Noto Color Emoji"];
-        sansSerif = ["Sarasa UI SC" "Noto Color Emoji"];
-        monospace = ["Sarasa Mono SC" "Noto Color Emoji"];
+        serif = [
+          "Noto Serif CJK SC"
+          "Noto Color Emoji"
+        ];
+        sansSerif = [
+          "Sarasa UI SC"
+          "Noto Color Emoji"
+        ];
+        monospace = [
+          "Sarasa Mono SC"
+          "Noto Color Emoji"
+        ];
         emoji = [
           "Twemoji"
           "Noto Color Emoji"
@@ -248,9 +257,7 @@
   hardware = {
     enableAllFirmware = true;
     wirelessRegulatoryDatabase = lib.mkForce false;
-    firmware = with pkgs; [
-      linux-firmware
-    ];
+    firmware = with pkgs; [ linux-firmware ];
     pulseaudio.enable = false;
     opengl = {
       enable = true;
@@ -317,9 +324,7 @@
         ]);
       shell = pkgs.bashInteractive;
       packages =
-        [
-          inputs.home-manager.packages.${pkgs.system}.default
-        ]
+        [ inputs.home-manager.packages.${pkgs.system}.default ]
         ++
         # shell
         (with pkgs; [
@@ -341,8 +346,7 @@
         ])
         # theme
         ++ (with pkgs; [
-          (papirus-icon-theme.override
-            {color = "adwaita";})
+          (papirus-icon-theme.override { color = "adwaita"; })
           orchis-theme
         ])
         # custom
@@ -404,56 +408,55 @@
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
           in
-            pkgs.buildFHSEnv (base
-              // {
-                name = "fhs";
-                targetPkgs = pkgs:
-                  (base.targetPkgs pkgs)
-                  ++ (with pkgs; [
-                    pkg-config
-                  ]);
-                profile = "export FHS=1";
-                runScript = "fish";
-                extraOutputsToInstall = ["dev"];
-              })
+          pkgs.buildFHSEnv (
+            base
+            // {
+              name = "fhs";
+              targetPkgs = pkgs: (base.targetPkgs pkgs) ++ (with pkgs; [ pkg-config ]);
+              profile = "export FHS=1";
+              runScript = "fish";
+              extraOutputsToInstall = [ "dev" ];
+            }
+          )
         )
         (
           let
             base = pkgs.appimageTools.defaultFhsEnvArgs;
           in
-            pkgs.buildFHSEnv (base
-              // {
-                name = "pipzone";
-                targetPkgs = pkgs:
-                  (base.targetPkgs pkgs)
-                  ++ (with pkgs; [
-                    pkg-config
-                    libGL
-                    glib
-                    libgcc
-                    gccStdenv
-                    python3Full
-                    uv
-                  ])
-                  ++ [
-                    (pkgs.python3.withPackages (subpkgs:
-                      with subpkgs; [
-                        pip
-                        virtualenv
-                      ]))
-                  ];
-                profile = "export FHS=1";
-                runScript = "fish";
-                extraOutputsToInstall = ["dev"];
-                extraBwrapArgs = [
-                  "--symlink /.host-etc/gitconfig /etc/gitconfig"
+          pkgs.buildFHSEnv (
+            base
+            // {
+              name = "pipzone";
+              targetPkgs =
+                pkgs:
+                (base.targetPkgs pkgs)
+                ++ (with pkgs; [
+                  pkg-config
+                  libGL
+                  glib
+                  libgcc
+                  gccStdenv
+                  python3Full
+                  uv
+                ])
+                ++ [
+                  (pkgs.python3.withPackages (
+                    subpkgs: with subpkgs; [
+                      pip
+                      virtualenv
+                    ]
+                  ))
                 ];
-              })
+              profile = "export FHS=1";
+              runScript = "fish";
+              extraOutputsToInstall = [ "dev" ];
+              extraBwrapArgs = [ "--symlink /.host-etc/gitconfig /etc/gitconfig" ];
+            }
+          )
         )
       ])
       ++ (
-        if config.services.xserver.desktopManager.gnome.enable
-        then
+        if config.services.xserver.desktopManager.gnome.enable then
           # gnomeExtensions
           (with pkgs.gnomeExtensions; [
             appindicator
@@ -465,10 +468,9 @@
             dconf-editor
             gnome-tweaks
           ])
-          ++ (with pkgs; [
-            gtop
-          ])
-        else []
+          ++ (with pkgs; [ gtop ])
+        else
+          [ ]
       );
   };
 
@@ -488,7 +490,8 @@
       enableAskPassword = false;
     };
     command-not-found.enable = false;
-    nix-ld={enable = true;
+    nix-ld = {
+      enable = true;
       package = pkgs.nix-ld-rs;
     };
     nix-index.enable = true;
@@ -498,7 +501,18 @@
     htop = {
       enable = true;
       settings = {
-        fields = [0 48 20 49 39 40 111 46 47 1];
+        fields = [
+          0
+          48
+          20
+          49
+          39
+          40
+          111
+          46
+          47
+          1
+        ];
         hide_userland_threads = 1;
         show_thread_names = 1;
         show_program_path = 0;
@@ -515,13 +529,21 @@
           "Memory"
           "Swap"
         ];
-        column_meter_modes_0 = [1 1 1];
+        column_meter_modes_0 = [
+          1
+          1
+          1
+        ];
         column_meters_1 = [
           "Tasks"
           "DiskIO"
           "NetworkIO"
         ];
-        column_meter_modes_1 = [2 2 2];
+        column_meter_modes_1 = [
+          2
+          2
+          2
+        ];
         tree_view = 0;
         sort_key = 47;
         sort_direction = -1;
@@ -603,7 +625,7 @@
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
-      languagePacks = ["zh-CN"];
+      languagePacks = [ "zh-CN" ];
       preferencesStatus = "default";
     };
   };
@@ -638,13 +660,14 @@
     tumbler.enable = true; # 缩略图服务
     dbus = {
       implementation = "broker";
-      packages = with pkgs; [dconf gcr_4 udisks];
+      packages = with pkgs; [
+        dconf
+        gcr_4
+        udisks
+      ];
     };
     psd.enable = true;
-    fstrim.enable =
-      if config.fileSystems."/".fsType == "bcachefs"
-      then false
-      else true;
+    fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
     kmscon = {
       # Instead of vt
@@ -662,14 +685,16 @@
     resolved = {
       enable = true;
       dnsovertls = "true";
-      domains = ["~."];
-      fallbackDns = ["1.1.1.1#one.one.one.one" "1.0.0.1#one.one.one.one" "2400:3200::1" "2606:4700:4700::1001"];
+      domains = [ "~." ];
+      fallbackDns = [
+        "1.1.1.1#one.one.one.one"
+        "1.0.0.1#one.one.one.one"
+        "2400:3200::1"
+        "2606:4700:4700::1001"
+      ];
     };
     acpid.enable = true;
-    btrfs.autoScrub.enable =
-      if config.fileSystems."/".fsType == "btrfs"
-      then true
-      else false;
+    btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
     thermald.enable = false;
     tlp = {
@@ -717,7 +742,7 @@
       enable = true;
       videoDrivers = vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
-      excludePackages = with pkgs; [xterm];
+      excludePackages = with pkgs; [ xterm ];
       xkb.model = "pc105";
       wacom.enable = false;
     };
@@ -739,7 +764,11 @@
       "autovt@tty1".enable = false;
       "keyboard-brightness" = {
         description = "Set keyboard brightness after resume";
-        wantedBy = ["sleep.target" "suspend.target" "hibernate.target"];
+        wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -750,8 +779,18 @@
       };
       "numlock-brightness" = {
         description = "Close numlock Brightness";
-        after = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
-        wantedBy = ["graphical.target" "sleep.target" "suspend.target" "hibernate.target"];
+        after = [
+          "graphical.target"
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        wantedBy = [
+          "graphical.target"
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -769,7 +808,7 @@
       };
     };
     timers."premiumsoft-reset" = {
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "weekly";
         Persistent = true;

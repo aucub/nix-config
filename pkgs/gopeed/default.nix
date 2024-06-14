@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
     homepage = "https://gopeed.com";
     description = "A modern download manager that supports all platforms. Built with Golang and Flutter";
     license = licenses.gpl3Only;
-    platforms = ["x86_64-linux"];
-    maintainers = with lib.maintainers; [aucub];
-    sourceProvenance = with sourceTypes; [binaryNativeCode];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ aucub ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

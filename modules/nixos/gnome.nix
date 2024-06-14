@@ -1,8 +1,5 @@
+{ lib, pkgs, ... }:
 {
-  lib,
-  pkgs,
-  ...
-}: {
   qt = {
     style = "adwaita";
     platformTheme = "gnome";

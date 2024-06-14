@@ -1,4 +1,5 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   additions = final: _prev: import ../pkgs final.pkgs;
   modifications = final: prev: {
     orchis-theme = prev.orchis-theme.overrideAttrs (oldAttrs: {
@@ -9,7 +10,7 @@
       '';
     });
     upower-with-conf = prev.upower.overrideAttrs (oldAttrs: {
-      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [prev.xmlstarlet];
+      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ prev.xmlstarlet ];
       postInstall =
         oldAttrs.postInstall
         + ''

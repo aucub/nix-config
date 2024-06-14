@@ -4,7 +4,8 @@
   pkgs,
   vars,
   ...
-}: {
+}:
+{
   imports = [
     outputs.homeManagerModules.dotfiles
     outputs.homeManagerModules.firefox
@@ -102,9 +103,7 @@
     home-manager.enable = true;
     atuin = {
       enable = true;
-      flags = [
-        "--disable-up-arrow"
-      ];
+      flags = [ "--disable-up-arrow" ];
       settings = {
         auto_sync = false;
         update_check = false;

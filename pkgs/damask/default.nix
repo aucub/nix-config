@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Automatically set wallpaper images from Internet sources";
     homepage = "https://gitlab.gnome.org/subpop/damask";
-    maintainers = with maintainers; [samdroid-apps];
+    maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "damask";
