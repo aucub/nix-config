@@ -134,12 +134,13 @@
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
+      systemd.enable = true;
       supportedFilesystems = [ config.fileSystems."/".fsType ];
       kernelModules = [ config.fileSystems."/".fsType ];
     };
   };
 
-  time.timeZone = "Asia/Shanghai";
+  # time.timeZone = "Asia/Shanghai";
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
@@ -264,7 +265,6 @@
       driSupport = true;
       extraPackages = vars.hardware.opengl.extraPackages pkgs;
     };
-    brillo.enable = true; # 允许video组中的用户进行亮度控制
     bluetooth = {
       enable = true;
       settings = {
@@ -638,6 +638,7 @@
     #   interval = "weekly";
     #   package = pkgs.plocate;
     # };
+    tzupdate.enable = true;
     timesyncd = {
       enable = true;
       extraConfig = ''
@@ -762,6 +763,7 @@
       "systemd-gpt-auto-generator".enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
+      "alsa-store".enable = false;
       "keyboard-brightness" = {
         description = "Set keyboard brightness after resume";
         wantedBy = [
@@ -823,5 +825,8 @@
     };
   };
 
-  system.stateVersion = "24.11";
+  system = {
+    etc.overlay.enable = true;
+    stateVersion = "24.11";
+  };
 }

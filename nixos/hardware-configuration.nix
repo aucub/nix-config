@@ -25,19 +25,26 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
     fsType = "btrfs";
-    options = [ "subvol=root" ];
+    options = [
+      "subvol=root"
+      "compress=zstd"
+    ];
   };
 
   fileSystems."/home" = {
     device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
     fsType = "btrfs";
-    options = [ "subvol=home" ];
+    options = [
+      "subvol=home"
+      "compress=zstd"
+    ];
   };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-uuid/9bd3a9bd-1e27-4eb8-b8a7-cff56dcd2ff0";
     fsType = "btrfs";
     options = [
+      "compress=zstd"
       "subvol=nix"
       "noatime"
     ];

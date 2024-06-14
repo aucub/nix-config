@@ -21,13 +21,13 @@
       open = true;
       modesetting.enable = true;
       dynamicBoost.enable = true;
-      prime.sync.enable = true;
       package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
       powerManagement = {
         enable = true;
         finegrained = true;
       };
       prime = {
+        sync.enable = true;
         offload = {
           enable = true;
           enableOffloadCmd = true;
