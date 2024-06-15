@@ -1,6 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   virtualisation = {
+    cri-o = {
+      runtime = "youki";
+      storageDriver = if config.fileSystems."/".fsType == "btrfs" then "btrfs" else "overlay";
+    };
     containers = {
       enable = true;
       containersConf.settings.containers.runtime = "youki";

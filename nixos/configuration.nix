@@ -140,7 +140,7 @@
     };
   };
 
-  # time.timeZone = "Asia/Shanghai";
+  time.timeZone = "Asia/Shanghai";
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
@@ -610,7 +610,7 @@
         # List all generations of the system profile
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # remove all generations older than 7 days
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 1w";
         # Garbage collect all unused nix store entries
         nix-gc = "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
       };
@@ -638,7 +638,6 @@
     #   interval = "weekly";
     #   package = pkgs.plocate;
     # };
-    tzupdate.enable = true;
     timesyncd = {
       enable = true;
       extraConfig = ''
@@ -654,7 +653,7 @@
     colord.enable = true;
     accounts-daemon.enable = true;
     devmon.enable = true; # 自动设备挂载
-    hardware.bolt.enable = false;
+    hardware.bolt.enable = false; # Thunderbolt
     geoclue2.enable = false;
     gvfs.enable = true;
     udisks2.enable = true;
@@ -760,11 +759,10 @@
     '';
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;
-      "systemd-gpt-auto-generator".enable = false;
+      systemd-gpt-auto-generator.enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
-      "alsa-store".enable = false;
-      "keyboard-brightness" = {
+      keyboard-brightness = {
         description = "Set keyboard brightness after resume";
         wantedBy = [
           "sleep.target"
@@ -779,8 +777,8 @@
           ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
         };
       };
-      "numlock-brightness" = {
-        description = "Close numlock Brightness";
+      numlock-brightness = {
+        description = "Set numlock Brightness";
         after = [
           "graphical.target"
           "sleep.target"
@@ -801,7 +799,7 @@
           User = "root";
         };
       };
-      "premiumsoft-reset" = {
+      premiumsoft-reset = {
         script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
         serviceConfig = {
           Type = "oneshot";
@@ -809,7 +807,7 @@
         };
       };
     };
-    timers."premiumsoft-reset" = {
+    timers.premiumsoft-reset = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "weekly";
@@ -825,8 +823,5 @@
     };
   };
 
-  system = {
-    etc.overlay.enable = true;
-    stateVersion = "24.11";
-  };
+  system.stateVersion = "24.11";
 }
