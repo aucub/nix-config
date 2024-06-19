@@ -4,7 +4,6 @@
   lib,
   config,
   pkgs,
-  vars,
   ...
 }:
 {
@@ -25,10 +24,10 @@
 
   home-manager = {
     extraSpecialArgs = {
-      inherit inputs vars outputs;
+      inherit inputs outputs;
     };
     users = {
-      "${vars.users.users.username}" = import ../home-manager/home.nix;
+      "${outputs.vars.users.users.username}" = import ../home-manager/home.nix;
     };
     backupFileExtension = "bak";
   };
@@ -93,7 +92,7 @@
     };
 
   networking = {
-    hostName = vars.hostname;
+    hostName = outputs.vars.hostname;
     firewall.enable = false;
     nameservers = [
       "223.5.5.5#dns.alidns.com"
@@ -125,12 +124,12 @@
       };
       timeout = 4;
     };
-    kernelParams = vars.boot.kernelParams;
+    kernelParams = outputs.vars.boot.kernelParams;
     consoleLogLevel = 3;
-    kernelModules = vars.boot.kernelModules;
+    kernelModules = outputs.vars.boot.kernelModules;
     blacklistedKernelModules = [ "nouveau" ];
-    extraModulePackages = vars.boot.extraModulePackages pkgs;
-    extraModprobeConfig = lib.mkForce vars.boot.extraModprobeConfig;
+    extraModulePackages = outputs.vars.boot.extraModulePackages pkgs;
+    extraModprobeConfig = lib.mkForce outputs.vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
@@ -262,7 +261,7 @@
     opengl = {
       enable = true;
       driSupport = true;
-      extraPackages = vars.hardware.opengl.extraPackages pkgs;
+      extraPackages = outputs.vars.hardware.opengl.extraPackages pkgs;
     };
     bluetooth = {
       enable = true;
@@ -291,12 +290,12 @@
 
   users.users = {
     root = {
-      initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
+      initialHashedPassword = "${outputs.vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
-    "${vars.users.users.username}" = {
+    "${outputs.vars.users.users.username}" = {
       uid = 1000;
-      initialHashedPassword = "${vars.users.users.initialHashedPassword}";
+      initialHashedPassword = "${outputs.vars.users.users.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
@@ -371,6 +370,7 @@
       GLFW_IM_MODULE = "ibus";
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
+      SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
     };
     sessionVariables = {
       MOZ_USE_XINPUT2 = "1";
@@ -379,6 +379,7 @@
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
+        nix-your-shell
         nil
         comma
         nix-tree
@@ -579,6 +580,7 @@
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
         difftool.prompt = false;
+        diff.sopsdiffer.textconv = "sops decrypt";
         pager.difftool = true;
         merge.conflictstyle = "diff3";
         credential = {
@@ -603,6 +605,7 @@
       enable = true;
       interactiveShellInit = ''
         set -U fish_greeting
+        nix-your-shell fish | source
       '';
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
@@ -736,11 +739,11 @@
     };
     displayManager.autoLogin = {
       enable = true;
-      user = "${vars.users.users.username}";
+      user = "${outputs.vars.users.users.username}";
     };
     xserver = {
       enable = true;
-      videoDrivers = vars.services.xserver.videoDrivers;
+      videoDrivers = outputs.vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [ xterm ];
       xkb.model = "pc105";

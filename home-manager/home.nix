@@ -2,7 +2,6 @@
   inputs,
   outputs,
   pkgs,
-  vars,
   ...
 }:
 {
@@ -33,17 +32,17 @@
   };
 
   home = {
-    username = "${vars.users.users.username}";
-    homeDirectory = "/home/${vars.users.users.username}";
+    username = "${outputs.vars.users.users.username}";
+    homeDirectory = "/home/${outputs.vars.users.users.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
-      name = vars.home.pointerCursor.name;
-      package = vars.home.pointerCursor.package pkgs;
-      size = vars.home.pointerCursor.size;
+      name = outputs.vars.home.pointerCursor.name;
+      package = outputs.vars.home.pointerCursor.package pkgs;
+      size = outputs.vars.home.pointerCursor.size;
       gtk.enable = true;
       x11 = {
         enable = true;
-        defaultCursor = vars.home.pointerCursor.name;
+        defaultCursor = outputs.vars.home.pointerCursor.name;
       };
     };
     sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
@@ -56,8 +55,8 @@
   };
 
   gtk.cursorTheme = {
-    name = vars.home.pointerCursor.name;
-    size = vars.home.pointerCursor.size;
+    name = outputs.vars.home.pointerCursor.name;
+    size = outputs.vars.home.pointerCursor.size;
   };
 
   xdg = {
