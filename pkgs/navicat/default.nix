@@ -21,10 +21,10 @@
 }:
 let
   pname = "navicat";
-  version = "17.0.4";
+  version = "17.0.5";
   src = fetchurl {
     url = "https://dn.navicat.com/download/navicat17-premium-cs-x86_64.AppImage";
-    sha256 = "31b8eca01cec52eadfe37a0c5c2d9bcd52399893870aa6fb19d012dfc145c75d";
+    sha256 = "6wTykuH9atSELDWEiiWIv1ptdZPca4UxcqPeRSxC4JQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

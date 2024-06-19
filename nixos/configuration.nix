@@ -134,7 +134,6 @@
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
     initrd = {
-      systemd.enable = true;
       supportedFilesystems = [ config.fileSystems."/".fsType ];
       kernelModules = [ config.fileSystems."/".fsType ];
     };
@@ -390,6 +389,7 @@
       # ])
       ++ (with pkgs; [
         difftastic
+        sops
         helix
         gitleaks
         eza

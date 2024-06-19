@@ -66,7 +66,6 @@
           extraModprobeConfig = ''
             blacklist nouveau
             options nouveau modeset=0
-            options usbhid skip_device=ATTRS{idVendor}==048D,ATTRS{idProduct}==C100
           ''
           # ++ ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
