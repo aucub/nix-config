@@ -763,6 +763,7 @@
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;
       systemd-gpt-auto-generator.enable = false;
+      "alsa-store".enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
       keyboard-brightness = {

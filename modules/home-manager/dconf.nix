@@ -31,7 +31,7 @@
       font-name = "更纱黑体 UI SC 11";
       monospace-font-name = "等距更纱黑体 SC 11";
       gtk-enable-primary-paste = false;
-      gtk-theme = "Orchis-Purple-Compact-Nord";
+      gtk-theme = "Orchis-Green-Compact-Nord";
       icon-theme = "Papirus";
       show-battery-percentage = true;
       text-scaling-factor = 1.25;
@@ -147,7 +147,7 @@
       night-light-schedule-automatic = false;
       night-light-schedule-from = 0.0;
       night-light-schedule-to = 0.0;
-      night-light-temperature = lib.hm.gvariant.mkUint32 3248;
+      night-light-temperature = lib.hm.gvariant.mkUint32 3613;
     };
 
     "org/gnome/settings-daemon/plugins/media-keys".custom-keybindings = [
@@ -177,7 +177,6 @@
         "places-menu@gnome-shell-extensions.gcampax.github.com"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "apps-menu@gnome-shell-extensions.gcampax.github.com"
-        "light-style@gnome-shell-extensions.gcampax.github.com"
       ];
       enabled-extensions = [
         "appindicatorsupport@rgcjonas.gmail.com"
@@ -186,6 +185,7 @@
         "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com"
         "system-monitor@gnome-shell-extensions.gcampax.github.com"
         "drive-menu@gnome-shell-extensions.gcampax.github.com"
+        "light-style@gnome-shell-extensions.gcampax.github.com"
       ];
     };
 
