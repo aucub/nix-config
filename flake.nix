@@ -53,6 +53,7 @@
             "radeon.dpm=0"
             "acpi_backlight=native"
             "mitigations=off" # 关闭漏洞缓解措施提高性能
+            "nowatchdog" # 台式机和笔记本电脑不需要此功能
           ];
           kernelModules = [
             # "v4l2loopback"
@@ -65,10 +66,15 @@
             ];
           extraModprobeConfig = ''
             blacklist nouveau
+            blacklist sp5100_tco
             options nouveau modeset=0
           ''
           # ++ ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
+          # ''
+
+          # ++ ''
+          #   blacklist iTCO_wdt
           # ''
           ;
         };

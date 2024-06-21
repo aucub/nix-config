@@ -3,27 +3,57 @@
   programs.firefox = {
     enable = true;
     policies = {
+      # https://github.com/mozilla/policy-templates/blob/master/linux/policies.json
+      AppAutoUpdate = false;
+      BackgroundAppUpdate = false;
+      Cookies = {
+        Behavior = "reject-tracker-and-partition-foreign";
+        BehaviorPrivateBrowsing = "reject-tracker-and-partition-foreign";
+      };
+      DisableFeedbackCommands = true;
+      DisableFirefoxStudies = true;
       DisablePocket = true;
+      DisableSecurityBypass.SafeBrowsing = false;
+      DisableSetDesktopBackground = true;
+      DisableSystemAddonUpdate = true;
       DisableTelemetry = true;
       DontCheckDefaultBrowser = true;
       FirefoxHome = {
-        Pocket = false;
-        SponsoredPocket = false;
-        SponsoredTopSites = false;
+        Search = true;
         TopSites = false;
+        SponsoredTopSites = false;
+        Highlights = false;
+        Pocket = false;
+        Snippets = false;
+        SponsoredPocket = false;
+      };
+      FirefoxSuggest = {
+        WebSuggestions = false;
+        SponsoredSuggestions = false;
+        ImproveSuggest = false;
+      };
+      HardwareAcceleration = true;
+      Homepage = {
+        URL = "about:home";
+        StartPage = "homepage";
       };
       NetworkPrediction = false;
       NoDefaultBookmarks = true;
+      OfferToSaveLogins = false;
+      OfferToSaveLoginsDefault = false;
+      OverrideFirstRunPage = "";
+      OverridePostUpdatePage = "";
       PasswordManagerEnabled = false;
       ShowHomeButton = true;
+      TranslateEnabled = false;
       UserMessaging = {
-        WhatsNew = false;
         ExtensionRecommendations = false;
         FeatureRecommendations = false;
         UrlbarInterventions = false;
         SkipOnboarding = true;
         MoreFromMozilla = false;
       };
+      UseSystemPrintDialog = true;
     };
     profiles.default = {
       id = 0;
@@ -145,7 +175,7 @@
         # 禁用 Firefox 主页上的赞助内容（Activity Stream）
         "browser.newtabpage.activity-stream.showSponsored" = false;
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
-        "browser.newtabpage.activity-stream.feeds.topsites" = true;
+        "browser.newtabpage.activity-stream.feeds.topsites" = false;
         "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = false;
         "browser.newtabpage.activity-stream.section.highlights.includeVisited" = false;
         "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" = false;
@@ -349,6 +379,13 @@
         "browser.ping-centre.telemetry" = true;
         # WebGPU
         "dom.webgpu.enabled" = true;
+        "gfx.webrender.all" = true;
+        "gfx.webrender.compositor.force-enabled" = true;
+        "gfx.x11-egl.force-enabled" = true;
+        "media.av1.enabled" = true;
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.hardware-video-decoding.force-enabled" = true;
+        "media.hls.enabled" = true;
       };
     };
   };

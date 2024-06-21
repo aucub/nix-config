@@ -14,7 +14,6 @@
       "--enable-zero-copy"
       "--use-angle=vulkan"
       "--use-gl=egl"
-      "--enable-unsafe-webgpu"
       "--enable-webgpu-developer-features"
       "--use-cmd-decoder=passthrough"
       "--enable-wayland-ime"

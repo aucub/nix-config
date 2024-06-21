@@ -15,21 +15,36 @@
       # "ghbmnnjooekpmoecnnnilnnbdlolhkhi" # Google文档的离线功能
     ];
     extraOpts = {
+      # https://chromeenterprise.google/policies/
+      AssistantWebEnabled = false;
       AdvancedProtectionAllowed = true;
       AutofillAddressEnabled = false;
       AutofillCreditCardEnabled = false;
       BackgroundModeEnabled = false;
       BookmarkBarEnabled = false;
       BrowserLabsEnabled = false;
+      BrowserNetworkTimeQueriesEnabled = false;
+      BuiltInDnsClientEnabled = false;
       ClearBrowsingDataOnExitList = [
         "browsing_history"
         "download_history"
         "cached_images_and_files"
       ];
+      ClickToCallEnabled = false;
       DefaultBrowserSettingEnabled = false;
       EncryptedClientHelloEnabled = true;
       HighEfficiencyModeEnabled = false;
+      ImportAutofillFormData = false;
+      ImportBookmarks = false;
+      ImportHistory = false;
+      ImportHomepage = false;
+      ImportSavedPasswords = false;
+      ImportSearchEngine = false;
+      LensRegionSearchEnabled = false;
+      MediaRecommendationsEnabled = false;
       MetricsReportingEnabled = false;
+      PaymentMethodQueryEnabled = false;
+      PromotionalTabsEnabled = false;
       SideSearchEnabled = false;
       SpellCheckServiceEnabled = false;
       SpellcheckEnabled = false;
@@ -38,6 +53,7 @@
       PasswordManagerEnabled = false;
       CloudPrintProxyEnabled = false;
       ShowHomeButton = true;
+      CloudReportingEnabled = false;
     };
     initialPrefs = {
       "autofill" = {

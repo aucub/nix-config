@@ -92,6 +92,16 @@
     };
 
   networking = {
+    timeServers = [
+      "ntp.ntsc.ac.cn"
+      "cn.ntp.org.cn"
+      "ntp.aliyun.com"
+      "ntp.tencent.com"
+      "0.nixos.pool.ntp.org"
+      "1.nixos.pool.ntp.org"
+      "2.nixos.pool.ntp.org"
+      "3.nixos.pool.ntp.org"
+    ];
     hostName = outputs.vars.hostname;
     firewall.enable = false;
     nameservers = [
@@ -477,6 +487,8 @@
 
   documentation = {
     nixos.enable = false;
+    info.enable = false;
+    doc.enable = false;
     man = {
       mandoc.enable = true;
       man-db.enable = false;
@@ -651,8 +663,14 @@
     };
     avahi.enable = false;
     journald.extraConfig = ''
+      ForwardToConsole=no
+      ForwardToKMsg=no
+      ForwardToSyslog=no
+      ForwardToWall=no
+      SystemMaxFileSize=10M
       SystemMaxUse=100M
     '';
+    irqbalance.enable = true;
     colord.enable = true;
     accounts-daemon.enable = true;
     devmon.enable = true; # 自动设备挂载
@@ -759,6 +777,9 @@
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0
+    '';
+    sleep.extraConfig = ''
+      AllowHibernation=no
     '';
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;

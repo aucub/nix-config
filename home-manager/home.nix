@@ -349,6 +349,7 @@
         };
       };
     };
+    info.enable = false;
     # obs-studio = {
     #   enable = true;
     #   plugins = with pkgs.obs-studio-plugins; [
@@ -357,6 +358,12 @@
     #     obs-vaapi
     #   ];
     # };
+  };
+
+  manual = {
+    html.enable = false;
+    manpages.enable = false;
+    json.enable = false;
   };
 
   services.udiskie.enable = true;
