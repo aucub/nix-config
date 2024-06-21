@@ -27,7 +27,7 @@
       inherit inputs outputs;
     };
     users = {
-      "${outputs.vars.users.users.username}" = import ../home-manager/home.nix;
+      "${outputs.vars.users.users.user.username}" = import ../home-manager/home.nix;
     };
     backupFileExtension = "bak";
   };
@@ -102,7 +102,7 @@
       "2.nixos.pool.ntp.org"
       "3.nixos.pool.ntp.org"
     ];
-    hostName = outputs.vars.hostname;
+    hostName = outputs.vars.networking.hostName;
     firewall.enable = false;
     nameservers = [
       "223.5.5.5#dns.alidns.com"
@@ -303,9 +303,9 @@
       initialHashedPassword = "${outputs.vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
-    "${outputs.vars.users.users.username}" = {
+    "${outputs.vars.users.users.user.username}" = {
       uid = 1000;
-      initialHashedPassword = "${outputs.vars.users.users.initialHashedPassword}";
+      initialHashedPassword = "${outputs.vars.users.users.user.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
@@ -413,6 +413,15 @@
         lnav
         uutils-coreutils-noprefix
       ])
+      # Python Package
+      ++ [
+        (pkgs.python3.withPackages (
+          subpkgs: with subpkgs; [
+            httpx
+            python-dotenv
+          ]
+        ))
+      ]
       # FHS
       ++ (with pkgs; [
         (
@@ -670,7 +679,7 @@
       SystemMaxFileSize=10M
       SystemMaxUse=100M
     '';
-    irqbalance.enable = true;
+    irqbalance.enable = true; # 平衡 CPU 负载
     colord.enable = true;
     accounts-daemon.enable = true;
     devmon.enable = true; # 自动设备挂载
@@ -757,7 +766,7 @@
     };
     displayManager.autoLogin = {
       enable = true;
-      user = "${outputs.vars.users.users.username}";
+      user = "${outputs.vars.users.users.user.username}";
     };
     xserver = {
       enable = true;
@@ -784,7 +793,7 @@
     services = {
       NetworkManager-wait-online.enable = lib.mkForce false;
       systemd-gpt-auto-generator.enable = false;
-      "alsa-store".enable = false;
+      alsa-store.enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
       keyboard-brightness = {

@@ -63,7 +63,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     homepage = "https://www.navicat.com.cn/products/navicat-premium-release-note";
-    description = "Navicat Premium is a multi-connection database development tool";
+    description = "Navicat Premium is a database development tool";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

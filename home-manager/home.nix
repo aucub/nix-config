@@ -32,8 +32,8 @@
   };
 
   home = {
-    username = "${outputs.vars.users.users.username}";
-    homeDirectory = "/home/${outputs.vars.users.users.username}";
+    username = "${outputs.vars.users.users.user.username}";
+    homeDirectory = "/home/${outputs.vars.users.users.user.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
       name = outputs.vars.home.pointerCursor.name;
