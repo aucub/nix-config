@@ -7,8 +7,6 @@
         (with pkgs.vscode-extensions; [
           ms-ceintl.vscode-language-pack-zh-hans
           formulahendry.code-runner
-          mhutchie.git-graph
-          oderwat.indent-rainbow
           redhat.vscode-yaml
           yzhang.markdown-all-in-one
           ms-python.python

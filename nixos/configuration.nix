@@ -268,10 +268,9 @@
     wirelessRegulatoryDatabase = lib.mkForce false;
     firmware = with pkgs; [ linux-firmware ];
     pulseaudio.enable = false;
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      extraPackages = outputs.vars.hardware.opengl.extraPackages pkgs;
+      extraPackages = outputs.vars.hardware.graphics.extraPackages pkgs;
     };
     bluetooth = {
       enable = true;

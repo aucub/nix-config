@@ -35,8 +35,8 @@
         };
       };
     };
-    opengl.extraPackages =
-      (outputs.vars.hardware.opengl.extraPackages pkgs) ++ (with pkgs; [ nvidia-vaapi-driver ]);
+    graphics.extraPackages =
+      (outputs.vars.hardware.graphics.extraPackages pkgs) ++ (with pkgs; [ nvidia-vaapi-driver ]);
   };
   environment.variables.NVD_BACKEND = "direct";
   services.xserver.videoDrivers = outputs.vars.services.xserver.videoDrivers ++ [ "nvidia" ];

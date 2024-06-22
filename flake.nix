@@ -79,7 +79,7 @@
           # ''
           ;
         };
-        hardware.opengl.extraPackages =
+        hardware.graphics.extraPackages =
           pkgs: with pkgs; [
             vaapiVdpau
             libGL
