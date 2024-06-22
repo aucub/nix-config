@@ -409,14 +409,13 @@
         fd
         ripgrep-all
         typos
-        python3Full
         lnav
         uutils-coreutils-noprefix
       ])
       # Python Package
       ++ [
         (pkgs.python3.withPackages (
-          subpkgs: with subpkgs; [
+          ps: with ps; [
             httpx
             python-dotenv
           ]
@@ -432,41 +431,15 @@
             base
             // {
               name = "fhs";
-              targetPkgs = pkgs: (base.targetPkgs pkgs) ++ (with pkgs; [ pkg-config ]);
-              profile = "export FHS=1";
-              runScript = "fish";
-              extraOutputsToInstall = [ "dev" ];
-            }
-          )
-        )
-        (
-          let
-            base = pkgs.appimageTools.defaultFhsEnvArgs;
-          in
-          pkgs.buildFHSEnv (
-            base
-            // {
-              name = "pipzone";
               targetPkgs =
                 pkgs:
                 (base.targetPkgs pkgs)
                 ++ (with pkgs; [
                   pkg-config
                   libGL
-                  glib
-                  libgcc
-                  gccStdenv
-                  python3Full
+                  python3
                   uv
-                ])
-                ++ [
-                  (pkgs.python3.withPackages (
-                    subpkgs: with subpkgs; [
-                      pip
-                      virtualenv
-                    ]
-                  ))
-                ];
+                ]);
               profile = "export FHS=1";
               runScript = "fish";
               extraOutputsToInstall = [ "dev" ];
