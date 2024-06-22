@@ -344,6 +344,7 @@
           nodePackages.nodejs
         ])
         ++ (with pkgs; [
+          crow-translate
           # zed-editor
           celluloid
           localsend

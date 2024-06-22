@@ -340,7 +340,7 @@
       hooks = {
         pre-commit = pkgs.writeScript "pre-commit-script" ''
           #!/bin/sh
-          gitleaks detect --no-banner --max-target-megabytes 1
+          gitleaks protect --staged --no-banner --max-target-megabytes 1
         '';
       };
     };
