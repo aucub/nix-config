@@ -337,6 +337,12 @@
         enable = true;
         background = "dark";
       };
+      hooks = {
+        pre-commit = pkgs.writeScript "pre-commit-script" ''
+          #!/bin/sh
+          gitleaks detect --no-banner --max-target-megabytes 1
+        '';
+      };
     };
     yazi = {
       enable = true;
