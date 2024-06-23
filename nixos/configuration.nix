@@ -718,7 +718,7 @@
       # package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
-    auto-cpufreq.enable = true;
+    auto-cpufreq.enable = true; # if config.services.tlp.enable then false else true;
     pipewire = {
       enable = true;
       audio.enable = true;
