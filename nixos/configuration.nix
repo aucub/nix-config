@@ -338,7 +338,6 @@
           # ouch
           chezmoi
           typst
-          uv
           ruff
           git-credential-manager
           nodePackages.nodejs
@@ -439,6 +438,8 @@
                   libGL
                   python3
                   uv
+                  gcc
+                  poppler_utils
                 ]);
               profile = "export FHS=1";
               runScript = "fish";
