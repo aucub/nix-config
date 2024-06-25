@@ -448,24 +448,7 @@
             }
           )
         )
-      ])
-      ++ (
-        if config.services.xserver.desktopManager.gnome.enable then
-          # gnomeExtensions
-          (with pkgs.gnomeExtensions; [
-            appindicator
-            caffeine
-            kimpanel
-          ])
-          # gnome
-          ++ (with pkgs.gnome; [
-            dconf-editor
-            gnome-tweaks
-          ])
-          ++ (with pkgs; [ gtop ])
-        else
-          [ ]
-      );
+      ]);
   };
 
   documentation = {
@@ -811,16 +794,11 @@
           User = "root";
         };
       };
-    };
-    user = {
-      services = {
-        "org.gnome.SettingsDaemon.A11ySettings".enable = false;
-        "org.gnome.SettingsDaemon.Sharing".enable = false;
-        "org.gnome.SettingsDaemon.Smartcard".enable = false;
-        "org.gnome.SettingsDaemon.Wacom".enable = false;
-        premiumsoft-reset = {
-          script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
-          serviceConfig.Type = "oneshot";
+      premiumsoft-reset = {
+        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "${outputs.vars.users.users.user.username}";
         };
       };
     };
@@ -830,6 +808,14 @@
         OnCalendar = "weekly";
         Persistent = true;
         Unit = "premiumsoft-reset.service";
+      };
+    };
+    user = {
+      services = {
+        "org.gnome.SettingsDaemon.A11ySettings".enable = false;
+        "org.gnome.SettingsDaemon.Sharing".enable = false;
+        "org.gnome.SettingsDaemon.Smartcard".enable = false;
+        "org.gnome.SettingsDaemon.Wacom".enable = false;
       };
     };
   };
