@@ -50,21 +50,6 @@ stdenv.mkDerivation rec {
     libepoxy
   ];
 
-  propagatedBuildInputs = [
-    at-spi2-core
-    gtk3
-    cairo
-    gdk-pixbuf
-    harfbuzz
-    pango
-    libepoxy
-    libayatana-appindicator
-    libdbusmenu
-    libayatana-indicator
-    ayatana-ido
-    libappindicator
-  ];
-
   postPatch = ''
     substituteInPlace --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';

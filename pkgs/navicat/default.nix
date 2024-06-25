@@ -1,11 +1,8 @@
 {
   fetchurl,
-  makeWrapper,
   appimageTools,
   lib,
   libGL,
-  autoPatchelfHook,
-  wrapGAppsHook,
   glib,
   glibc,
   pango,
@@ -45,9 +42,6 @@ appimageTools.wrapType2 {
     glibc
     glib
     libGL
-    autoPatchelfHook
-    wrapGAppsHook
-    makeWrapper
   ];
 
   extraInstallCommands = ''

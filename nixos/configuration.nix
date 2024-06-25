@@ -372,18 +372,18 @@
       fish
     ];
     variables = {
-      EDITOR = "hx";
       QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
+    };
+    sessionVariables = {
+      EDITOR = "hx";
+      MOZ_USE_XINPUT2 = "1";
+      LESS = "-SR";
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
       SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
-    };
-    sessionVariables = {
-      MOZ_USE_XINPUT2 = "1";
-      LESS = "-SR";
     };
     systemPackages =
       (with pkgs; [
@@ -490,7 +490,11 @@
       enable = true;
       package = pkgs.nix-ld-rs;
     };
-    nix-index.enable = true;
+    nix-index = {
+      enable = true;
+      enableBashIntegration = false;
+      enableFishIntegration = false;
+    };
     nix-index-database.comma.enable = true;
     npm.enable = false;
     evolution.enable = false;
@@ -807,11 +811,16 @@
           User = "root";
         };
       };
-      premiumsoft-reset = {
-        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
-        serviceConfig = {
-          Type = "oneshot";
-          User = "root";
+    };
+    user = {
+      services = {
+        "org.gnome.SettingsDaemon.A11ySettings".enable = false;
+        "org.gnome.SettingsDaemon.Sharing".enable = false;
+        "org.gnome.SettingsDaemon.Smartcard".enable = false;
+        "org.gnome.SettingsDaemon.Wacom".enable = false;
+        premiumsoft-reset = {
+          script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
+          serviceConfig.Type = "oneshot";
         };
       };
     };
@@ -822,12 +831,6 @@
         Persistent = true;
         Unit = "premiumsoft-reset.service";
       };
-    };
-    user.services = {
-      "org.gnome.SettingsDaemon.A11ySettings".enable = false;
-      "org.gnome.SettingsDaemon.Sharing".enable = false;
-      "org.gnome.SettingsDaemon.Smartcard".enable = false;
-      "org.gnome.SettingsDaemon.Wacom".enable = false;
     };
   };
 

@@ -49,6 +49,7 @@
   };
   services = {
     gnome = {
+      at-spi2-core.enable = lib.mkForce false;
       gnome-user-share.enable = false;
       gnome-online-accounts.enable = false;
       gnome-browser-connector.enable = false;
