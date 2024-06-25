@@ -8,14 +8,12 @@
           ms-ceintl.vscode-language-pack-zh-hans
           formulahendry.code-runner
           redhat.vscode-yaml
-          yzhang.markdown-all-in-one
+          # yzhang.markdown-all-in-one
           ms-python.python
-          ms-python.vscode-pylance
-          ms-python.debugpy
           charliermarsh.ruff
           foxundermoon.shell-format
           tamasfe.even-better-toml
-          bmalehorn.vscode-fish
+          # bmalehorn.vscode-fish
           nvarner.typst-lsp
           tomoki1207.pdf
           jnoortheen.nix-ide
