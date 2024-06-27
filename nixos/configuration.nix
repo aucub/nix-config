@@ -348,6 +348,7 @@
           celluloid
           localsend
           popsicle
+          alacritty-theme
           # nomacs
           # jetbrains.idea-ultimate
         ])

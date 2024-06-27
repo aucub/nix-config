@@ -124,6 +124,7 @@
     alacritty = {
       enable = true;
       settings = {
+        import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
         live_config_reload = false;
         shell.program = "fish";
         window = {
@@ -162,36 +163,6 @@
             action = "SpawnNewInstance";
           }
         ];
-        colors = {
-          primary = {
-            background = "0x212121";
-            foreground = "0xF8F8F2";
-          };
-          cursor = {
-            text = "0x0E1415";
-            cursor = "0xECEFF4";
-          };
-          normal = {
-            black = "0x21222C";
-            red = "0xFF5555";
-            green = "0x50FA7B";
-            yellow = "0xFFCB6B";
-            blue = "0x82AAFF";
-            magenta = "0xC792EA";
-            cyan = "0x8BE9FD";
-            white = "0xF8F9F2";
-          };
-          bright = {
-            black = "0x545454";
-            red = "0xFF6E6E";
-            green = "0x69FF94";
-            yellow = "0xFFCB6B";
-            blue = "0xD6ACFF";
-            magenta = "0xFF92DF";
-            cyan = "0xA4FFFF";
-            white = "0xF8F8F2";
-          };
-        };
       };
     };
     eza = {
