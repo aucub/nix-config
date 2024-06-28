@@ -322,13 +322,11 @@
           "networkmanager"
           "colord"
         ]
-        ++ (builtins.filter (g: config.users.groups ? ${g}) [
-          "adbusers"
-          "docker"
-          "podman"
-          "libvirtd"
-          "wireshark"
-        ]);
+        ++ (if config.programs.adb.enable then [ "adbusers" ] else [ ])
+        ++ (if config.programs.wireshark.enable then [ "wireshark" ] else [ ])
+        ++ (if config.virtualisation.podman.enable then [ "podman" ] else [ ])
+        ++ (if config.virtualisation.libvirtd.enable then [ "libvirtd" ] else [ ])
+        ++ (if config.virtualisation.docker.enable then [ "docker" ] else [ ]);
       shell = pkgs.bashInteractive;
       packages =
         [ inputs.home-manager.packages.${pkgs.system}.default ]
@@ -344,11 +342,12 @@
         ])
         ++ (with pkgs; [
           crow-translate
-          # zed-editor
           celluloid
           localsend
           popsicle
           alacritty-theme
+          clash-verge-rev
+          # zed-editor
           # nomacs
           # jetbrains.idea-ultimate
         ])
@@ -464,7 +463,7 @@
   };
 
   programs = {
-    # adb.enable = true;
+    adb.enable = true;
     ssh = {
       askPassword = "";
       enableAskPassword = false;
