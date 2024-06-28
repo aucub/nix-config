@@ -22,10 +22,10 @@
     });
   };
 
-  # unstable-small-packages = final: _prev: {
-  #   unstable-small = import inputs.nixpkgs-unstable-small {
-  #     system = final.system;
-  #     config.allowUnfree = true;
-  #   };
-  # };
+  unstable-small-packages = final: _prev: {
+    unstable-small = import inputs.nixpkgs-unstable-small {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
 }

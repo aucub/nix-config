@@ -36,7 +36,7 @@
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
-      # outputs.overlays.unstable-small-packages
+      outputs.overlays.unstable-small-packages
       inputs.nur.overlay
       # inputs.nixpkgs-wayland.overlay
       # inputs.chaotic.nixosModules.default
@@ -338,15 +338,15 @@
           typst
           ruff
           git-credential-manager
-          nodePackages.nodejs
+          # nodePackages.nodejs
+          # bun
         ])
         ++ (with pkgs; [
-          crow-translate
+          pot
           celluloid
           localsend
           popsicle
           alacritty-theme
-          clash-verge-rev
           # zed-editor
           # nomacs
           # jetbrains.idea-ultimate
@@ -389,7 +389,7 @@
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
         nix-your-shell
-        nil
+        unstable-small.nixd
         comma
         nix-tree
         just
@@ -437,7 +437,7 @@
                   pkg-config
                   libGL
                   python3
-                  uv
+                  unstable-small.uv
                   gcc
                   poppler_utils
                 ]);
@@ -467,6 +467,10 @@
     ssh = {
       askPassword = "";
       enableAskPassword = false;
+    };
+    clash-verge = {
+      enable = true;
+      package = pkgs.unstable-small.clash-verge-rev;
     };
     command-not-found.enable = false;
     nix-ld = {
