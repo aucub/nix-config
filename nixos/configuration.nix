@@ -36,7 +36,7 @@
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
-      outputs.overlays.unstable-small-packages
+      # outputs.overlays.unstable-small-packages
       inputs.nur.overlay
       # inputs.nixpkgs-wayland.overlay
       # inputs.chaotic.nixosModules.default
@@ -138,7 +138,7 @@
     consoleLogLevel = 3;
     kernelModules = outputs.vars.boot.kernelModules;
     blacklistedKernelModules = [ "nouveau" ];
-    extraModulePackages = outputs.vars.boot.extraModulePackages pkgs;
+    extraModulePackages = outputs.vars.boot.extraModulePackages config.boot.kernelPackages;
     extraModprobeConfig = lib.mkForce outputs.vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
@@ -389,7 +389,7 @@
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
         nix-your-shell
-        unstable-small.nixd
+        nixd
         comma
         nix-tree
         just
@@ -437,7 +437,7 @@
                   pkg-config
                   libGL
                   python3
-                  unstable-small.uv
+                  uv
                   gcc
                   poppler_utils
                 ]);
@@ -470,7 +470,7 @@
     };
     clash-verge = {
       enable = true;
-      package = pkgs.unstable-small.clash-verge-rev;
+      package = pkgs.clash-verge-rev;
     };
     command-not-found.enable = false;
     nix-ld = {

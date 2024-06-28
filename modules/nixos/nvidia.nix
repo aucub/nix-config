@@ -1,4 +1,9 @@
-{ pkgs, outputs, ... }:
+{
+  pkgs,
+  outputs,
+  config,
+  ...
+}:
 {
   boot = {
     kernelParams = outputs.vars.boot.kernelParams ++ [
@@ -14,15 +19,15 @@
       "nvidia_modeset"
     ];
     extraModulePackages =
-      (outputs.vars.boot.extraModulePackages pkgs)
-      ++ (with pkgs; [ linuxKernel.packages.linux_zen.bbswitch ]);
+      (outputs.vars.boot.extraModulePackages config.boot.kernelPackages)
+      ++ (with config.boot.kernelPackages; [ bbswitch ]);
   };
   hardware = {
     nvidia = {
       open = true;
       modesetting.enable = true;
       dynamicBoost.enable = true;
-      package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_vulkan_beta_open;
+      package = config.boot.kernelPackages.nvidia_x11_vulkan_beta_open;
       powerManagement = {
         enable = true;
         finegrained = true;

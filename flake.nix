@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    # nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -62,9 +62,9 @@
             "amdgpu"
           ];
           extraModulePackages =
-            pkgs: with pkgs; [
-              # linuxKernel.packages.linux_zen.v4l2loopback
-              linuxKernel.packages.linux_zen.lenovo-legion-module
+            kernelPackages: with kernelPackages; [
+              # v4l2loopback
+              lenovo-legion-module
             ];
           extraModprobeConfig = ''
             blacklist sp5100_tco
