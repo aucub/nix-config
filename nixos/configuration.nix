@@ -314,14 +314,14 @@
           "wheel"
           "users"
           "plugdev"
+          "input"
           "video"
           "audio"
-          "git"
           "systemd-journal"
-          "input"
-          "networkmanager"
-          "colord"
         ]
+        ++ (if config.programs.git.enable || config.home.programs.git.enable then [ "git" ] else [ ])
+        ++ (if config.networking.networkmanager.enable then [ "networkmanager" ] else [ ])
+        ++ (if config.services.colord.enable then [ "colord" ] else [ ])
         ++ (if config.programs.adb.enable then [ "adbusers" ] else [ ])
         ++ (if config.programs.wireshark.enable then [ "wireshark" ] else [ ])
         ++ (if config.virtualisation.podman.enable then [ "podman" ] else [ ])
@@ -484,7 +484,6 @@
     };
     nix-index-database.comma.enable = true;
     npm.enable = false;
-    evolution.enable = false;
     htop = {
       enable = true;
       settings = {
@@ -647,6 +646,7 @@
     gvfs.enable = true;
     udisks2.enable = true;
     tumbler.enable = true; # 缩略图服务
+    samba.enable = false;
     dbus = {
       implementation = "broker";
       packages = with pkgs; [

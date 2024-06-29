@@ -63,6 +63,8 @@
     seahorse.enable = false;
     gnome-terminal.enable = false;
     file-roller.enable = false;
+    geary.enable = false;
+    evolution.enable = false;
   };
   services = {
     gnome = {

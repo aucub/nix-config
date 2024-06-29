@@ -10,7 +10,7 @@
       category-anime = true;
       category-general = false;
       category-people = false;
-      query = "+anime girls +Genshin Impact";
+      query = "+anime girls";
       purity-sfw = true;
     };
 
