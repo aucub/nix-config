@@ -12,15 +12,11 @@
       "nvidia_drm.fbdev=1"
     ];
     kernelModules = outputs.vars.boot.kernelModules ++ [
-      "bbswitch"
       "nvidia"
       "nvidia_drm"
       "nvidia_uvm"
       "nvidia_modeset"
     ];
-    extraModulePackages =
-      (outputs.vars.boot.extraModulePackages config.boot.kernelPackages)
-      ++ (with config.boot.kernelPackages; [ bbswitch ]);
   };
   hardware = {
     nvidia = {

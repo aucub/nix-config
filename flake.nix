@@ -74,19 +74,13 @@
           # ++ ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
           # ''
+          # intel禁用watchdog
           # ++ ''
           #   blacklist iTCO_wdt
           # ''
           ;
         };
-        hardware.graphics.extraPackages =
-          pkgs: with pkgs; [
-            vaapiVdpau
-            libGL
-            libvdpau-va-gl
-            mesa.drivers
-            xorg.xf86videoamdgpu
-          ];
+        hardware.graphics.extraPackages = pkgs: with pkgs; [ libGL ];
         home.pointerCursor = {
           name = "Bibata-Modern-Classic";
           package = pkgs: pkgs.bibata-cursors;

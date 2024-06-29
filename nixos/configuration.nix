@@ -388,8 +388,9 @@
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
+        nixfmt-rfc-style
         nix-your-shell
-        nixd
+        nil
         comma
         nix-tree
         just
@@ -415,7 +416,7 @@
       ++ [
         (pkgs.python3.withPackages (
           ps: with ps; [
-            httpx
+            requests
             python-dotenv
           ]
         ))
