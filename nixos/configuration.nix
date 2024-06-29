@@ -338,8 +338,7 @@
           typst
           ruff
           git-credential-manager
-          # nodePackages.nodejs
-          # bun
+          nodePackages.nodejs
         ])
         ++ (with pkgs; [
           pot
@@ -384,6 +383,7 @@
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
       SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
+      YAZI_CONFIG_HOME = "/home/${outputs.vars.users.users.user.username}/.config/yazi";
     };
     systemPackages =
       (with pkgs; [
@@ -604,13 +604,7 @@
         nix-gc = "sudo nix store gc --debug & sudo nix-collect-garbage --delete-old";
       };
     };
-    yazi = {
-      enable = true;
-      settings.yazi.manager = {
-        sort_dir_first = true;
-        show_hidden = true;
-      };
-    };
+    yazi.enable = true;
     fzf.fuzzyCompletion = true;
     firefox = {
       enable = true;
@@ -731,7 +725,7 @@
     };
     displayManager.autoLogin = {
       enable = true;
-      user = "${outputs.vars.users.users.user.username}";
+      user = outputs.vars.users.users.user.username;
     };
     xserver = {
       enable = true;
@@ -770,7 +764,6 @@
         ];
         serviceConfig = {
           Type = "oneshot";
-          RemainAfterExit = true;
           WorkingDirectory = "/sys/class/leds/platform::kbd_backlight/";
           ExecStart = "${pkgs.bash}/bin/sh -c \"cat brightness >> /var/tmp/kbd_brightness_current && echo 0 > brightness\"";
           ExecStop = "${pkgs.bash}/bin/sh -c 'sleep 3s && cat /var/tmp/kbd_brightness_current > brightness && rm /var/tmp/kbd_brightness_current'";
@@ -797,21 +790,6 @@
           ExecStart = "${pkgs.bash}/bin/sh -c 'sleep 3s && for dir in ./*::numlock*/; do [ -d \"$dir\" ] && echo 0 > \"$dir/brightness\"; done'";
           User = "root";
         };
-      };
-      premiumsoft-reset = {
-        script = "${pkgs.bash}/bin/sh -c \"${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/\"";
-        serviceConfig = {
-          Type = "oneshot";
-          User = "${outputs.vars.users.users.user.username}";
-        };
-      };
-    };
-    timers.premiumsoft-reset = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "weekly";
-        Persistent = true;
-        Unit = "premiumsoft-reset.service";
       };
     };
     user = {

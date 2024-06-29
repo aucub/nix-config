@@ -46,12 +46,12 @@
       };
     };
     sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
-    file.".cargo/config.toml".text = ''
-      [source.crates-io]
-      replace-with = 'ustc'
-      [source.ustc]
-      registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
-    '';
+    # file.".cargo/config.toml".text = ''
+    #   [source.crates-io]
+    #   replace-with = 'ustc'
+    #   [source.ustc]
+    #   registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+    # '';
   };
 
   gtk.cursorTheme = {
@@ -98,6 +98,9 @@
         set -x PATH $PATH $BUN_INSTALL/bin
         set_proxy
       '';
+      shellAbbrs = {
+        navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && cd ~/.config/navicat/Premium/ && ${pkgs.jq}/bin/jq 'del(.[\"014BF4EC24C114BEF46E1587042B3619\"])' preferences.json > tmp.json && mv tmp.json preferences.json";
+      };
     };
     home-manager.enable = true;
     atuin = {
