@@ -418,6 +418,7 @@
           ps: with ps; [
             requests
             python-dotenv
+            uv
           ]
         ))
       ]

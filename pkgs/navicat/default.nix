@@ -15,7 +15,15 @@
   p11-kit,
   libxcb,
   libgpg-error,
+  stdenv,
+  cjson,
+  libxcrypt-legacy,
+  curl,
+  makeWrapper,
+  autoPatchelfHook,
+  patchelf,
 }:
+
 let
   pname = "navicat";
   version = "17.0.5";
@@ -24,9 +32,30 @@ let
     sha256 = "6wTykuH9atSELDWEiiWIv1ptdZPca4UxcqPeRSxC4JQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  ldLibraryPath = lib.makeLibraryPath [
+    libGL
+    glib
+    glibc
+    pango
+    harfbuzz
+    fontconfig
+    libX11
+    freetype
+    e2fsprogs
+    expat
+    p11-kit
+    libxcb
+    libgpg-error
+  ];
 in
-appimageTools.wrapType2 {
-  inherit pname version src;
+stdenv.mkDerivation {
+  inherit pname version;
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+    patchelf
+  ];
 
   buildInputs = [
     libgpg-error
@@ -42,17 +71,35 @@ appimageTools.wrapType2 {
     glibc
     glib
     libGL
+    cjson
+    curl
+    libxcrypt-legacy
   ];
 
-  extraInstallCommands = ''
-    rm -r $out/bin
-    cp -a ${appimageContents}/* $out/
-    mkdir -p $out/bin
-    sed -i '1s|.*|#!/usr/bin/env bash|' $out/AppRun
-    sed -i '/^LD_LIBRARY_PATH=/ s|$|:${libGL}/lib:${glib}/lib:${glib.out}/lib:${glibc}/lib:${pango}/lib:${pango.out}/lib:${harfbuzz}/lib:${fontconfig}/lib:${harfbuzz.out}/lib:${fontconfig.lib}/lib:${libX11}/lib:${freetype}/lib:${e2fsprogs}/lib:${expat}/lib:${p11-kit}/lib:${libxcb}/lib:${libgpg-error}/lib:${e2fsprogs.out}/lib:${expat.out}/lib:${p11-kit.out}/lib:${libxcb.out}/lib:${libgpg-error.out}/lib|' $out/AppRun
-    ln -s $out/AppRun $out/bin/${pname}
-    install -Dm644 $out/navicat.desktop $out/share/applications/navicat.desktop
-    cp -a $out/usr/share/icons $out/share/
+  dontUnpack = true;
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    cp -r ${appimageContents}/usr $out/
+
+    chmod 755 $out/bin
+    chmod 755 $out/bin/navicat
+
+    mkdir -p $out/bin/usr
+
+    ln -s $out/lib $out/bin/usr/lib
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/navicat \
+    --prefix LD_LIBRARY_PATH : "$out/lib:~/.config/navicat/Premium/lib/sqlite:~/.config/navicat/Premium/lib/oci:${ldLibraryPath}" \
+    --set QT_PLUGIN_PATH "$out/plugins" \
+    --run "cd $out/bin"
   '';
 
   meta = with lib; {

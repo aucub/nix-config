@@ -7,7 +7,7 @@ set shell := ["fish", "-c"]
 ############################################################################
 
 bp input:
-  nix build .#{{input}} --show-trace --impure -L -v
+  NIXPKGS_ALLOW_UNFREE=1 nix build .#{{input}} --show-trace --impure -L -v
 
 ############################################################################
 #
