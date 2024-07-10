@@ -5,4 +5,5 @@
   nvidia-disable = import ./nvidia-disable.nix;
   nvidia = import ./nvidia.nix;
   containers = import ./containers.nix;
+  steam = import ./steam.nix;
 }

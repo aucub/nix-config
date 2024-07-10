@@ -11,8 +11,9 @@
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
-    outputs.nixosModules.nvidia-disable
-    # outputs.nixosModules.nvidia
+    # outputs.nixosModules.nvidia-disable
+    outputs.nixosModules.nvidia
+    outputs.nixosModules.steam
     # outputs.nixosModules.containers
 
     ./hardware-configuration.nix
@@ -51,6 +52,7 @@
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in
     {
+      package = pkgs.lix;
       settings = {
         experimental-features = "nix-command flakes";
         flake-registry = "";
@@ -64,12 +66,14 @@
           # "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
           "https://nix-community.cachix.org"
+          "https://numtide.cachix.org" # nixpkgs-unfree
           # "https://nixpkgs-wayland.cachix.org"
           # "https://qihaiumi.cachix.org"
           # "https://cosmic.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
           # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
           # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
@@ -186,18 +190,9 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [
-          "Noto Serif CJK SC"
-          "Noto Color Emoji"
-        ];
-        sansSerif = [
-          "Sarasa UI SC"
-          "Noto Color Emoji"
-        ];
-        monospace = [
-          "Sarasa Mono SC"
-          "Noto Color Emoji"
-        ];
+        serif = [ "Noto Serif CJK SC" ];
+        sansSerif = [ "Sarasa UI SC" ];
+        monospace = [ "Sarasa Mono SC" ];
         emoji = [ "Noto Color Emoji" ];
       };
     };
@@ -247,11 +242,11 @@
 
   sound.enable = true;
 
-  security.sudo-rs.enable = true;
-
   hardware = {
-    wirelessRegulatoryDatabase = lib.mkForce false;
-    firmware = with pkgs; [ linux-firmware ];
+    firmware = with pkgs; [
+      linux-firmware
+      wireless-regdb
+    ];
     pulseaudio.enable = false;
     graphics = {
       enable = true;
@@ -352,6 +347,7 @@
   };
 
   environment = {
+    stub-ld.enable = false;
     shells = with pkgs; [
       bashInteractive
       fish
@@ -361,6 +357,8 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
+      __EGL_VENDOR_LIBRARY_FILENAMES = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+      __GLX_VENDOR_LIBRARY_NAME = "mesa";
     };
     sessionVariables = {
       EDITOR = "hx";
@@ -397,16 +395,18 @@
         typos
         lnav
         uutils-coreutils-noprefix
+        nvtopPackages.amd
       ])
       # Python Package
-      ++ [
-        (pkgs.python3.withPackages (
+      ++ (with pkgs; [
+        uv
+        (python3.withPackages (
           ps: with ps; [
             requests
             python-dotenv
           ]
         ))
-      ]
+      ])
       # FHS
       ++ (with pkgs; [
         (
@@ -449,7 +449,7 @@
   programs = {
     adb.enable = true;
     ssh = {
-      askPassword = "";
+      askPassword = ""; # "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
       enableAskPassword = false;
     };
     clash-verge = {
@@ -577,6 +577,7 @@
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
+        uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
         # List all generations of the system profile
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # remove all generations older than 7 days
@@ -602,12 +603,12 @@
     #   package = pkgs.plocate;
     # };
     timesyncd = {
-      enable = true;
-      extraConfig = ''
-        PollIntervalMinSec=4d
-        PollIntervalMaxSec=7w
-        SaveIntervalSec=infinity
-      '';
+      enable = false;
+      # extraConfig = ''
+      #   PollIntervalMinSec=4d
+      #   PollIntervalMaxSec=7w
+      #   SaveIntervalSec=infinity
+      # '';
     };
     avahi.enable = false;
     journald.extraConfig = ''
@@ -633,7 +634,6 @@
           package = pkgs.sarasa-gothic;
         }
       ];
-      extraOptions = "--term xterm-256color";
       extraConfig = "font-size=20";
       hwRender = true;
       useXkbConfig = true;
@@ -652,25 +652,35 @@
     acpid.enable = true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
-    tlp = {
-      enable = true;
-      settings = {
-        TLP_DEFAULT_MODE = "BAT";
-        START_CHARGE_THRESH_BAT0 = 75;
-        STOP_CHARGE_TRESH_BAT0 = 80;
-        STOP_CHARGE_THRESH_BAT0 = 1;
-        DISK_DEVICES = "nvme0n1";
-        RESTORE_DEVICE_STATE_ON_STARTUP = 1;
-        RUNTIME_PM_ON_AC = "auto";
-        USB_EXCLUDE_AUDIO = 0;
-      };
-    };
+    # tlp = {
+    #   enable = true;
+    #   settings = {
+    #     TLP_DEFAULT_MODE = "BAT";
+    #     START_CHARGE_THRESH_BAT0 = 75;
+    #     STOP_CHARGE_TRESH_BAT0 = 80;
+    #     STOP_CHARGE_THRESH_BAT0 = 1;
+    #     DISK_DEVICES = "nvme0n1";
+    #     RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+    #     RUNTIME_PM_ON_AC = "auto";
+    #     USB_EXCLUDE_AUDIO = 0;
+    #   };
+    # };
     upower = {
       enable = true;
       # package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
-    auto-cpufreq.enable = true; # if config.services.tlp.enable then false else true;
+    auto-cpufreq = {
+      enable = true; # if config.services.tlp.enable then false else true;
+      settings = {
+        charger.governor = "schedutil";
+        battery = {
+          enable_thresholds = true;
+          start_threshold = 70;
+          stop_threshold = 75;
+        };
+      };
+    };
     pipewire = {
       enable = true;
       audio.enable = true;

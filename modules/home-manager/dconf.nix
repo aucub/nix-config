@@ -14,7 +14,18 @@
       purity-sfw = true;
     };
 
+    "app/drey/Damask/sources/bing".market = "zh-CN";
+
     "ca/desrt/dconf-editor".show-warning = false;
+
+    "org/gnome/TextEditor" = {
+      discover-settings = false;
+      restore-session = false;
+      show-line-numbers = true;
+      show-map = true;
+      spellcheck = false;
+      wrap-text = true;
+    };
 
     "org/gnome/desktop/interface" = {
       action-right-click-titlebar = "none";
@@ -195,8 +206,8 @@
     "org/gnome/shell/keybindings".toggle-message-tray = [ ];
 
     "org/gnome/shell/extensions/caffeine" = {
+      duration-timer = 4;
       enable-fullscreen = false;
-      indicator-position-max = 4;
       show-notifications = false;
       restore-state = true;
       screen-blank = "always";

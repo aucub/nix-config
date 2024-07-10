@@ -67,6 +67,15 @@
       publicShare = null;
       desktop = null;
     };
+    configFile."nixpkgs/config.nix".text = ''
+      {
+        allowUnfree = true;
+      }
+    '';
+    configFile."uv/uv.toml".text = ''
+      [pip]
+      index-url = "https://mirrors.ustc.edu.cn/pypi/web/simple"
+    '';
     configFile."pip/pip.conf".text = ''
       [global]
       index-url = https://mirrors.ustc.edu.cn/pypi/web/simple

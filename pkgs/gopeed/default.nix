@@ -9,13 +9,13 @@
   cairo,
   gdk-pixbuf,
   glib,
-  zenity,
   gtk3,
   harfbuzz,
   libayatana-appindicator,
   libayatana-indicator,
   libdbusmenu,
   pango,
+  zenity,
 }:
 stdenv.mkDerivation rec {
   pname = "gopeed";
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     libayatana-indicator
     libdbusmenu
     pango
+    zenity
   ];
 
   unpackPhase = ''

@@ -19,7 +19,7 @@
       "--enable-quic"
       "--enable-smooth-scrolling"
       "--enable-webrtc-pipewire-capturer"
-      "--disable-features=UseChromeOSDirectVideoDecoder,UseSkiaRenderer"
+      "--disable-features=UseChromeOSDirectVideoDecoder,UseSkiaRenderer,ChromeLabs"
       "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,VaapiIgnoreDriverChecks,TouchpadOverscrollHistoryNavigation,CanvasOopRasterization,OverlayScrollbar,ParallelDownloading,SystemNotifications,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebContentsCaptureHiDPI,WebRtcHideLocalIpsWithMdns"
       # "--ozone-platform=wayland"
       # "--gtk-version=4"

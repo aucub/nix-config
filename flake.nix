@@ -68,14 +68,11 @@
             ];
           extraModprobeConfig = ''
             blacklist sp5100_tco
-            blacklist nouveau
-            options nouveau modeset=0
+            blacklist iTCO_wdt
+            options cfg80211 ieee80211_regdom="US"
           ''
           # ++ ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
-          # ''
-          # ++ ''
-          #   blacklist iTCO_wdt
           # ''
           ;
         };
@@ -85,11 +82,7 @@
           package = pkgs: pkgs.bibata-cursors;
           size = 24;
         };
-        services.xserver.videoDrivers = [
-          "modesetting"
-          "fbdev"
-          "amdgpu"
-        ];
+        services.xserver.videoDrivers = [ "amdgpu" ];
       };
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in
