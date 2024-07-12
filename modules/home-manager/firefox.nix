@@ -293,7 +293,7 @@
         # 禁用 HTTP 后台请求
         "dom.security.https_only_mode_send_http_background_request" = false;
 
-        # --- UI (User Interface) ---
+        # --- UI ---
         # 在挂锁上显示“安全性受损”的警告
         "security.ssl.treat_unsafe_negotiation_as_broken" = true;
         # 在不安全连接警告页面上显示高级信息
@@ -309,7 +309,7 @@
         # 强制 ICE 候选项生成使用单一网络接口
         "media.peerconnection.ice.default_address_only" = true;
 
-        # --- DOM (文档对象模型) ---
+        # --- DOM ---
         # 防止脚本移动和调整打开的窗口
         "dom.disable_window_move_resize" = true;
 
@@ -368,6 +368,8 @@
         "privacy.trackingprotection.enabled" = true;
         # Firefox Relay
         "signon.firefoxRelay.feature" = "disabled";
+        # 翻译
+        "browser.translations.enable" = false;
         # 登录管理
         "signon.generation.enabled" = false;
         "signon.management.page.breach-alerts.enabled" = false;

@@ -11,10 +11,9 @@
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
-    outputs.nixosModules.iwlwifi-lar-disable
-    # outputs.nixosModules.nvidia-disable
-    outputs.nixosModules.nvidia
+    outputs.nixosModules.nvidia-disable
     outputs.nixosModules.steam
+    # outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
 
     ./hardware-configuration.nix
@@ -43,9 +42,7 @@
       # inputs.nixpkgs-wayland.overlay
       # inputs.chaotic.nixosModules.default
     ];
-    config = {
-      allowUnfree = lib.mkForce true;
-    };
+    config.allowUnfree = lib.mkForce true;
   };
 
   nix =
@@ -92,7 +89,7 @@
       gc = {
         automatic = true;
         dates = "weekly";
-        options = "--delete-older-than 1w";
+        options = "--delete-older-than 2w";
       };
     };
 
@@ -117,7 +114,6 @@
       enable = true;
       dns = "systemd-resolved";
       wifi = {
-        # backend = "iwd";
         powersave = true;
         macAddress = "stable-ssid";
       };
@@ -141,15 +137,10 @@
     kernelParams = outputs.vars.boot.kernelParams;
     consoleLogLevel = 3;
     kernelModules = outputs.vars.boot.kernelModules;
-    blacklistedKernelModules = [ "nouveau" ];
     extraModulePackages = outputs.vars.boot.extraModulePackages config.boot.kernelPackages;
     extraModprobeConfig = outputs.vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
-    initrd = {
-      supportedFilesystems = [ config.fileSystems."/".fsType ];
-      kernelModules = [ config.fileSystems."/".fsType ];
-    };
   };
 
   time.timeZone = "Asia/Shanghai";
@@ -244,7 +235,7 @@
   sound.enable = true;
 
   hardware = {
-    firmware = with pkgs; [ linux-firmware ];
+    enableRedistributableFirmware = true;
     pulseaudio.enable = false;
     graphics = {
       enable = true;
@@ -316,7 +307,6 @@
           typst
           ruff
           git-credential-manager
-          nodePackages.nodejs
         ])
         ++ (with pkgs; [
           pot
@@ -355,8 +345,6 @@
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
       GLFW_IM_MODULE = "ibus";
-      __EGL_VENDOR_LIBRARY_FILENAMES = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
-      __GLX_VENDOR_LIBRARY_NAME = "mesa";
     };
     sessionVariables = {
       EDITOR = "hx";
@@ -394,7 +382,6 @@
         lnav
         uutils-coreutils-noprefix
         nvtopPackages.amd
-        linux-wifi-hotspot
       ])
       # Python Package
       ++ (with pkgs; [
@@ -547,7 +534,6 @@
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
         difftool.prompt = false;
-        diff.sopsdiffer.textconv = "sops decrypt";
         pager.difftool = true;
         merge.conflictstyle = "diff3";
         credential = {
@@ -598,6 +584,7 @@
   services = {
     sunshine = {
       enable = true;
+      autoStart = false;
       capSysAdmin = true;
     };
     # locate = {
@@ -655,26 +642,25 @@
     acpid.enable = true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
-    # tlp = {
-    #   enable = true;
-    #   settings = {
-    #     TLP_DEFAULT_MODE = "BAT";
-    #     START_CHARGE_THRESH_BAT0 = 75;
-    #     STOP_CHARGE_TRESH_BAT0 = 80;
-    #     STOP_CHARGE_THRESH_BAT0 = 1;
-    #     DISK_DEVICES = "nvme0n1";
-    #     RESTORE_DEVICE_STATE_ON_STARTUP = 1;
-    #     RUNTIME_PM_ON_AC = "auto";
-    #     USB_EXCLUDE_AUDIO = 0;
-    #   };
-    # };
+    tlp = {
+      enable = true;
+      settings = {
+        TLP_DEFAULT_MODE = "BAT";
+        START_CHARGE_THRESH_BAT0 = 75;
+        STOP_CHARGE_TRESH_BAT0 = 80;
+        STOP_CHARGE_THRESH_BAT0 = 1;
+        DISK_DEVICES = "nvme0n1";
+        RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+        RUNTIME_PM_ON_AC = "auto";
+        USB_EXCLUDE_AUDIO = 0;
+      };
+    };
     upower = {
       enable = true;
-      # package = pkgs.upower-with-conf;
       noPollBatteries = true;
     };
     auto-cpufreq = {
-      enable = true; # if config.services.tlp.enable then false else true;
+      enable = false; # if config.services.tlp.enable then false else true;
       settings = {
         charger.governor = "schedutil";
         battery = {
@@ -720,7 +706,7 @@
   };
 
   systemd = {
-    network.wait-online.enable = false;
+    # network.wait-online.enable = false;
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0
@@ -729,7 +715,7 @@
       AllowHibernation=no
     '';
     services = {
-      NetworkManager-wait-online.enable = lib.mkForce false;
+      # NetworkManager-wait-online.enable = lib.mkForce false;
       systemd-gpt-auto-generator.enable = false;
       alsa-store.enable = false;
       "getty@tty1".enable = false;

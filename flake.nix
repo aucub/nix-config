@@ -69,8 +69,7 @@
           extraModprobeConfig = ''
             blacklist sp5100_tco
             blacklist iTCO_wdt
-            options cfg80211 ieee80211_regdom="US"
-            options iwlwifi lar_disable=1
+            options nvidia "NVreg_EnableGpuFirmware=0"
           ''
           # ++ ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
@@ -83,7 +82,11 @@
           package = pkgs: pkgs.bibata-cursors;
           size = 24;
         };
-        services.xserver.videoDrivers = [ "amdgpu" ];
+        services.xserver.videoDrivers = [
+          "modesetting"
+          "fbdev"
+          "amdgpu"
+        ];
       };
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in

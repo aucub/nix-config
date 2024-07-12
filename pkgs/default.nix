@@ -3,5 +3,4 @@ pkgs: {
   navicat = pkgs.callPackage ./navicat { };
   hiddify-next = pkgs.callPackage ./hiddify-next { };
   damask = pkgs.callPackage ./damask { };
-  clash-nyanpasu = pkgs.callPackage ./clash-nyanpasu { };
 }

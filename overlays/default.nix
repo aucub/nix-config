@@ -9,20 +9,6 @@
         runHook postInstall
       '';
     });
-    hostapd = prev.hostapd.overrideAttrs (oldAttrs: {
-      patches = [ ./hostapd-2.10-lar.patch ];
-    });
-    upower-with-conf = prev.upower.overrideAttrs (oldAttrs: {
-      nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ prev.xmlstarlet ];
-      postInstall =
-        oldAttrs.postInstall
-        + ''
-          xmlstarlet ed -L \
-          -r "//policy/allow[@send_destination='org.freedesktop.UPower.KbdBacklight' and @send_interface='org.freedesktop.DBus.Properties']" -v "deny" \
-          -r "//policy/allow[@send_destination='org.freedesktop.UPower' and @send_interface='org.freedesktop.UPower.KbdBacklight']" -v "deny" \
-          $out/share/dbus-1/system.d/org.freedesktop.UPower.conf
-        '';
-    });
   };
 
   # unstable-small-packages = final: _prev: {

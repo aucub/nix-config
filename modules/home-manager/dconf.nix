@@ -209,7 +209,7 @@
       duration-timer = 4;
       enable-fullscreen = false;
       show-notifications = false;
-      restore-state = true;
+      restore-state = false;
       screen-blank = "always";
     };
 

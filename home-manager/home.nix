@@ -26,9 +26,7 @@
       inputs.nur.overlay
       # inputs.chaotic.homeManagerModules.default
     ];
-    config = {
-      allowUnfree = true;
-    };
+    config.allowUnfree = true;
   };
 
   home = {
@@ -45,7 +43,7 @@
         defaultCursor = outputs.vars.home.pointerCursor.name;
       };
     };
-    sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+    # sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
     # file.".cargo/config.toml".text = ''
     #   [source.crates-io]
     #   replace-with = 'ustc'
@@ -67,11 +65,11 @@
       publicShare = null;
       desktop = null;
     };
-    configFile."nixpkgs/config.nix".text = ''
-      {
-        allowUnfree = true;
-      }
-    '';
+    # configFile."nixpkgs/config.nix".text = ''
+    #   {
+    #     allowUnfree = true;
+    #   }
+    # '';
     configFile."uv/uv.toml".text = ''
       [pip]
       index-url = "https://mirrors.ustc.edu.cn/pypi/web/simple"
@@ -88,6 +86,11 @@
   };
 
   programs = {
+    nix-index = {
+      enable = true;
+      enableBashIntegration = false;
+      enableFishIntegration = false;
+    };
     tealdeer = {
       enable = true;
       settings = {
@@ -121,14 +124,15 @@
       };
     };
     bun = {
-      enable = true;
+      enable = false;
       settings = {
         smol = true;
         telemetry = false;
         install = {
-          lockfile.save = false;
+          # lockfile.save = false;
           registry = "https://npmreg.proxy.ustclug.org/";
         };
+        run.bun = true;
       };
     };
     alacritty = {
@@ -206,9 +210,6 @@
     };
     git = {
       enable = true;
-      attributes = [
-        # "*.enc diff=sopsdiffer" 
-      ];
       ignores = [
         # Compiled binary, object files, and libraries
         "*.o"
@@ -343,8 +344,8 @@
     #   enable = true;
     #   plugins = with pkgs.obs-studio-plugins; [
     #     obs-pipewire-audio-capture
-    #     obs-scale-to-sound
     #     obs-vaapi
+    #     obs-vkcapture
     #   ];
     # };
   };

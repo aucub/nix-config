@@ -17,14 +17,16 @@
   libdbusmenu,
   makeWrapper,
 }:
-stdenv.mkDerivation rec {
+let
   pname = "hiddify-next";
-  version = "1.5.2";
-
+  version = "1.6.0.dev";
   src = fetchurl {
     url = "https://github.com/hiddify/hiddify-next/releases/download/v${version}/Hiddify-Debian-x64.deb";
-    hash = "sha256-JVhrmkgfum0sOLeivIn3ERjc/MmGI5449mBh2Ha8eJs=";
+    hash = "sha256-skn9QtwNcgYcuUAcEty4bM154QXrC8d4VQqjLnkIZtw=";
   };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   dontBuild = true;
 
