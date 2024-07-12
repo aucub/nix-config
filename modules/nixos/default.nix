@@ -6,4 +6,5 @@
   nvidia = import ./nvidia.nix;
   containers = import ./containers.nix;
   steam = import ./steam.nix;
+  iwlwifi-lar-disable = import ./iwlwifi-lar-disable/default.nix;
 }

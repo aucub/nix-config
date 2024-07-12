@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     # nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
@@ -70,6 +70,7 @@
             blacklist sp5100_tco
             blacklist iTCO_wdt
             options cfg80211 ieee80211_regdom="US"
+            options iwlwifi lar_disable=1
           ''
           # ++ ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1

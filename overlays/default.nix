@@ -9,6 +9,9 @@
         runHook postInstall
       '';
     });
+    hostapd = prev.hostapd.overrideAttrs (oldAttrs: {
+      patches = [ ./hostapd-2.10-lar.patch ];
+    });
     upower-with-conf = prev.upower.overrideAttrs (oldAttrs: {
       nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ prev.xmlstarlet ];
       postInstall =

@@ -11,6 +11,7 @@
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
+    outputs.nixosModules.iwlwifi-lar-disable
     # outputs.nixosModules.nvidia-disable
     outputs.nixosModules.nvidia
     outputs.nixosModules.steam
@@ -116,7 +117,7 @@
       enable = true;
       dns = "systemd-resolved";
       wifi = {
-        backend = "iwd";
+        # backend = "iwd";
         powersave = true;
         macAddress = "stable-ssid";
       };
@@ -243,10 +244,7 @@
   sound.enable = true;
 
   hardware = {
-    firmware = with pkgs; [
-      linux-firmware
-      wireless-regdb
-    ];
+    firmware = with pkgs; [ linux-firmware ];
     pulseaudio.enable = false;
     graphics = {
       enable = true;
@@ -396,6 +394,7 @@
         lnav
         uutils-coreutils-noprefix
         nvtopPackages.amd
+        linux-wifi-hotspot
       ])
       # Python Package
       ++ (with pkgs; [
@@ -597,6 +596,10 @@
   qt.enable = true;
 
   services = {
+    sunshine = {
+      enable = true;
+      capSysAdmin = true;
+    };
     # locate = {
     #   enable = true;
     #   interval = "weekly";
