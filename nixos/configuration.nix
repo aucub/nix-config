@@ -1,6 +1,7 @@
 {
   inputs,
   outputs,
+  vars,
   lib,
   config,
   pkgs,
@@ -11,8 +12,8 @@
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
-    outputs.nixosModules.nvidia-disable
     outputs.nixosModules.steam
+    outputs.nixosModules.nvidia-disable
     # outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
 
@@ -25,11 +26,9 @@
 
   home-manager = {
     extraSpecialArgs = {
-      inherit inputs outputs;
+      inherit inputs vars outputs;
     };
-    users = {
-      "${outputs.vars.users.users.user.username}" = import ../home-manager/home.nix;
-    };
+    users."${vars.users.users.user.username}" = import ../home-manager/home.nix;
     backupFileExtension = "bak";
   };
 
@@ -37,8 +36,8 @@
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
-      # outputs.overlays.unstable-small-packages
       inputs.nur.overlay
+      # outputs.overlays.unstable-small-packages
       # inputs.nixpkgs-wayland.overlay
       # inputs.chaotic.nixosModules.default
     ];
@@ -65,6 +64,7 @@
           "https://cache.nixos.org"
           "https://nix-community.cachix.org"
           "https://numtide.cachix.org" # nixpkgs-unfree
+          "https://cache.lix.systems"
           # "https://nixpkgs-wayland.cachix.org"
           # "https://qihaiumi.cachix.org"
           # "https://cosmic.cachix.org"
@@ -72,6 +72,7 @@
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
+          "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
           # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
           # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
@@ -104,7 +105,7 @@
       "2.nixos.pool.ntp.org"
       "3.nixos.pool.ntp.org"
     ];
-    hostName = outputs.vars.networking.hostName;
+    hostName = vars.networking.hostName;
     firewall.enable = false;
     nameservers = [
       "223.5.5.5#dns.alidns.com"
@@ -134,11 +135,11 @@
       };
       timeout = 4;
     };
-    kernelParams = outputs.vars.boot.kernelParams;
+    kernelParams = vars.boot.kernelParams;
     consoleLogLevel = 3;
-    kernelModules = outputs.vars.boot.kernelModules;
-    extraModulePackages = outputs.vars.boot.extraModulePackages config.boot.kernelPackages;
-    extraModprobeConfig = outputs.vars.boot.extraModprobeConfig;
+    kernelModules = vars.boot.kernelModules;
+    extraModulePackages = vars.boot.extraModulePackages config.boot.kernelPackages;
+    extraModprobeConfig = vars.boot.extraModprobeConfig;
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
   };
@@ -239,7 +240,7 @@
     pulseaudio.enable = false;
     graphics = {
       enable = true;
-      extraPackages = outputs.vars.hardware.graphics.extraPackages pkgs;
+      extraPackages = vars.hardware.graphics.extraPackages pkgs;
     };
     bluetooth = {
       enable = true;
@@ -268,12 +269,12 @@
 
   users.users = {
     root = {
-      initialHashedPassword = "${outputs.vars.users.users.root.initialHashedPassword}";
+      initialHashedPassword = "${vars.users.users.root.initialHashedPassword}";
       shell = pkgs.bashInteractive;
     };
-    "${outputs.vars.users.users.user.username}" = {
+    "${vars.users.users.user.username}" = {
       uid = 1000;
-      initialHashedPassword = "${outputs.vars.users.users.user.initialHashedPassword}";
+      initialHashedPassword = "${vars.users.users.user.initialHashedPassword}";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
@@ -353,7 +354,7 @@
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
       SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
-      YAZI_CONFIG_HOME = "/home/${outputs.vars.users.users.user.username}/.config/yazi";
+      YAZI_CONFIG_HOME = "/home/${vars.users.users.user.username}/.config/yazi";
     };
     systemPackages =
       (with pkgs; [
@@ -690,11 +691,11 @@
     };
     displayManager.autoLogin = {
       enable = true;
-      user = outputs.vars.users.users.user.username;
+      user = vars.users.users.user.username;
     };
     xserver = {
       enable = true;
-      videoDrivers = outputs.vars.services.xserver.videoDrivers;
+      videoDrivers = vars.services.xserver.videoDrivers;
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [ xterm ];
       xkb.model = "pc105";

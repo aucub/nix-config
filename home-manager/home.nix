@@ -1,6 +1,7 @@
 {
   inputs,
   outputs,
+  vars,
   pkgs,
   ...
 }:
@@ -30,17 +31,17 @@
   };
 
   home = {
-    username = "${outputs.vars.users.users.user.username}";
-    homeDirectory = "/home/${outputs.vars.users.users.user.username}";
+    username = "${vars.users.users.user.username}";
+    homeDirectory = "/home/${vars.users.users.user.username}";
     language.base = "zh_CN.UTF-8";
     pointerCursor = {
-      name = outputs.vars.home.pointerCursor.name;
-      package = outputs.vars.home.pointerCursor.package pkgs;
-      size = outputs.vars.home.pointerCursor.size;
+      name = vars.home.pointerCursor.name;
+      package = vars.home.pointerCursor.package pkgs;
+      size = vars.home.pointerCursor.size;
       gtk.enable = true;
       x11 = {
         enable = true;
-        defaultCursor = outputs.vars.home.pointerCursor.name;
+        defaultCursor = vars.home.pointerCursor.name;
       };
     };
     # sessionVariables._JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
@@ -53,8 +54,8 @@
   };
 
   gtk.cursorTheme = {
-    name = outputs.vars.home.pointerCursor.name;
-    size = outputs.vars.home.pointerCursor.size;
+    name = vars.home.pointerCursor.name;
+    size = vars.home.pointerCursor.size;
   };
 
   xdg = {
@@ -65,11 +66,11 @@
       publicShare = null;
       desktop = null;
     };
-    # configFile."nixpkgs/config.nix".text = ''
-    #   {
-    #     allowUnfree = true;
-    #   }
-    # '';
+    configFile."nixpkgs/config.nix".text = ''
+      {
+        allowUnfree = true;
+      }
+    '';
     configFile."uv/uv.toml".text = ''
       [pip]
       index-url = "https://mirrors.ustc.edu.cn/pypi/web/simple"

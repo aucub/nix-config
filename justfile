@@ -18,7 +18,7 @@ bp input:
 ############################################################################
 
 ck:
-  nix flake check --impure --show-trace -L -v
+  NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure --show-trace -L -v
 
 rs:
   sudo {{set-proxy-env}} nixos-rebuild switch --flake .#neko --no-build-nix --show-trace -L -v

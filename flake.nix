@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
@@ -39,6 +39,7 @@
         "aarch64-darwin"
         "x86_64-darwin"
       ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
       vars = {
         networking.hostName = "neko";
         users.users = {
@@ -88,10 +89,8 @@
           "amdgpu"
         ];
       };
-      forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
-      inherit vars;
       packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
       overlays = import ./overlays { inherit inputs; };
@@ -100,19 +99,18 @@
       nixosConfigurations = {
         "${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit inputs outputs;
+            inherit inputs vars outputs;
           };
           modules = [ ./nixos/configuration.nix ];
         };
       };
-
       homeConfigurations = {
         "${vars.users.users.user.username}@${vars.networking.hostName}" =
           home-manager.lib.homeManagerConfiguration
             {
               pkgs = nixpkgs.legacyPackages.x86_64-linux;
               extraSpecialArgs = {
-                inherit inputs outputs;
+                inherit inputs vars outputs;
               };
               modules = [ ./home-manager/home.nix ];
             };
