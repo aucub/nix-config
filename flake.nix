@@ -21,6 +21,7 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
   outputs =
@@ -28,6 +29,7 @@
       self,
       nixpkgs,
       home-manager,
+      nixos-wsl,
       ...
     }@inputs:
     let
@@ -102,6 +104,13 @@
             inherit inputs vars outputs;
           };
           modules = [ ./nixos/configuration.nix ];
+        };
+        "wsl" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs vars outputs;
+          };
+          modules = [ ./nixos/wsl.nix ];
         };
       };
       homeConfigurations = {

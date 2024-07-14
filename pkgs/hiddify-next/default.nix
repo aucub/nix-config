@@ -19,10 +19,10 @@
 }:
 let
   pname = "hiddify-next";
-  version = "1.6.0.dev";
+  version = "1.6.3";
   src = fetchurl {
     url = "https://github.com/hiddify/hiddify-next/releases/download/v${version}/Hiddify-Debian-x64.deb";
-    hash = "sha256-skn9QtwNcgYcuUAcEty4bM154QXrC8d4VQqjLnkIZtw=";
+    hash = "sha256-V/M5Qjo0zD1+Hqo7rmudXDtRB1H6fai9jfy3ZSe02vA=";
   };
 in
 stdenv.mkDerivation {
