@@ -28,13 +28,13 @@
   home-manager.users."${vars.users.users.user.username}" = import ../home-manager/home.nix;
 
   nixpkgs.overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      inputs.nur.overlay
-      # outputs.overlays.unstable-small-packages
-      # inputs.nixpkgs-wayland.overlay
-      # inputs.chaotic.nixosModules.default
-    ];
+    outputs.overlays.additions
+    outputs.overlays.modifications
+    inputs.nur.overlay
+    # outputs.overlays.unstable-small-packages
+    # inputs.nixpkgs-wayland.overlay
+    # inputs.chaotic.nixosModules.default
+  ];
 
   networking = {
     timeServers = [
@@ -201,37 +201,37 @@
   };
 
   users.users."${vars.users.users.user.username}".packages =
-        # shell
-        (with pkgs; [
-          # ouch
-          chezmoi
-          typst
-          ruff
-          git-credential-manager
-        ])
-        ++ (with pkgs; [
-          pot
-          celluloid
-          localsend
-          popsicle
-          alacritty-theme
-          gitkraken
-          # zed-editor
-          # nomacs
-          # jetbrains.idea-ultimate
-        ])
-        # theme
-        ++ (with pkgs; [
-          (papirus-icon-theme.override { color = "adwaita"; })
-          orchis-theme
-        ])
-        # custom
-        ++ (with pkgs; [
-          hiddify-next
-          gopeed
-          navicat
-          damask
-        ]);
+    # shell
+    (with pkgs; [
+      # ouch
+      chezmoi
+      typst
+      ruff
+      git-credential-manager
+    ])
+    ++ (with pkgs; [
+      pot
+      celluloid
+      localsend
+      popsicle
+      alacritty-theme
+      gitkraken
+      # zed-editor
+      # nomacs
+      # jetbrains.idea-ultimate
+    ])
+    # theme
+    ++ (with pkgs; [
+      (papirus-icon-theme.override { color = "adwaita"; })
+      orchis-theme
+    ])
+    # custom
+    ++ (with pkgs; [
+      hiddify-next
+      gopeed
+      navicat
+      damask
+    ]);
 
   environment = {
     variables = {
@@ -242,9 +242,7 @@
     };
     sessionVariables.MOZ_USE_XINPUT2 = "1";
     systemPackages =
-      (with pkgs; [
-        nil
-      ])
+      (with pkgs; [ nil ])
       # ++ (with pkgs; [
       #   lenovo-legion
       # ])

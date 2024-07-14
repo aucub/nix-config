@@ -6,7 +6,5 @@
   ...
 }:
 {
-  imports = [
-    outputs.homeManagerModules.shared
-  ];
+  imports = [ outputs.homeManagerModules.shared ];
 }

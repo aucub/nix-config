@@ -122,15 +122,17 @@
       SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
       YAZI_CONFIG_HOME = "/home/${vars.users.users.user.username}/.config/yazi";
     };
-    systemPackages =
-      (with pkgs; [
+    systemPackages = (
+      with pkgs;
+      [
         inputs.home-manager.packages.${pkgs.system}.default
         nixfmt-rfc-style
         nix-your-shell
         comma
         nix-tree
         just
-      ]);
+      ]
+    );
   };
 
   documentation = {

@@ -20,13 +20,13 @@
   ];
 
   nixpkgs.overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      # outputs.overlays.unstable-small-packages
+    outputs.overlays.additions
+    outputs.overlays.modifications
+    # outputs.overlays.unstable-small-packages
 
-      inputs.nur.overlay
-      # inputs.chaotic.homeManagerModules.default
-    ];
+    inputs.nur.overlay
+    # inputs.chaotic.homeManagerModules.default
+  ];
 
   home = {
     pointerCursor = {
