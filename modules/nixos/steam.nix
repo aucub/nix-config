@@ -27,6 +27,5 @@
         else
           { };
     };
-    protontricks.enable = true;
   };
 }
