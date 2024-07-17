@@ -30,6 +30,7 @@
           "https://nix-community.cachix.org"
           "https://numtide.cachix.org" # nixpkgs-unfree
           "https://cache.lix.systems"
+          "https://ezkea.cachix.org" # an-anime-game-launcher
           # "https://nixpkgs-wayland.cachix.org"
           # "https://qihaiumi.cachix.org"
           # "https://cosmic.cachix.org"
@@ -38,6 +39,7 @@
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
           "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
+          "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
           # "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
           # "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
@@ -54,7 +56,7 @@
       gc = {
         automatic = true;
         dates = "weekly";
-        options = "--delete-older-than 2w";
+        options = "--delete-older-than 14d";
       };
     };
 
@@ -261,9 +263,9 @@
         # List all generations of the system profile
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # remove all generations older than 7 days
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 1w";
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
         # Garbage collect all unused nix store entries
-        nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 1w";
+        nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 7d";
       };
     };
     yazi.enable = true;

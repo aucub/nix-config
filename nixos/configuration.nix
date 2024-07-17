@@ -13,8 +13,8 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.steam
-    outputs.nixosModules.nvidia-disable
-    # outputs.nixosModules.nvidia
+    # outputs.nixosModules.nvidia-disable
+    outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
 
     ./hardware-configuration.nix
@@ -22,6 +22,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nix-index-database.nixosModules.nix-index
+    inputs.aagl.nixosModules.default
   ];
 
   home-manager = {
@@ -229,7 +230,6 @@
     ])
     # custom
     ++ (with pkgs; [
-      hiddify-next
       gopeed
       navicat
       damask
@@ -302,6 +302,7 @@
   };
 
   programs = {
+    anime-game-launcher.enable = true;
     nix-index = {
       enable = true;
       enableBashIntegration = false;
@@ -311,7 +312,7 @@
     adb.enable = true;
     clash-verge = {
       enable = true;
-      package = pkgs.clash-nyanpasu;
+      package = pkgs.clash-verge-rev;
     };
     # java = {
     #   enable = true;
