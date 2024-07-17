@@ -22,7 +22,6 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nix-index-database.nixosModules.nix-index
-    inputs.aagl.nixosModules.default
   ];
 
   home-manager = {
@@ -302,7 +301,6 @@
   };
 
   programs = {
-    anime-game-launcher.enable = true;
     nix-index = {
       enable = true;
       enableBashIntegration = false;
@@ -313,7 +311,7 @@
     clash-verge = {
       enable = true;
       tunMode = true;
-      package = pkgs.clash-verge;
+      package = pkgs.clash-verge-rev;
     };
     # java = {
     #   enable = true;

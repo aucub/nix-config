@@ -8,6 +8,7 @@
   programs.steam = {
     enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
+    protontricks.enable = true;
     extest.enable = true;
     gamescopeSession = {
       enable = true;
