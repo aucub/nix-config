@@ -93,7 +93,6 @@
   systemd = {
     user = {
       services = {
-        "org.gnome.SettingsDaemon.A11ySettings".enable = false;
         "org.gnome.SettingsDaemon.Sharing".enable = false;
         "org.gnome.SettingsDaemon.Smartcard".enable = false;
         "org.gnome.SettingsDaemon.Wacom".enable = false;

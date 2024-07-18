@@ -22,6 +22,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nix-index-database.nixosModules.nix-index
+    # inputs.nix-alien.overlays.default
   ];
 
   home-manager = {
@@ -179,11 +180,9 @@
     };
     bluetooth = {
       enable = true;
-      settings = {
-        General = {
-          Enable = "Source,Sink,Media,Socket";
-          Experimental = true;
-        };
+      settings.General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
       };
       disabledPlugins = [
         "bap"
@@ -235,13 +234,6 @@
     ]);
 
   environment = {
-    variables = {
-      QT_IM_MODULE = "fcitx";
-      XMODIFIERS = "@im=fcitx";
-      SDL_IM_MODULE = "fcitx";
-      GLFW_IM_MODULE = "ibus";
-    };
-    sessionVariables.MOZ_USE_XINPUT2 = "1";
     systemPackages =
       (with pkgs; [ nil ])
       # ++ (with pkgs; [
@@ -297,6 +289,7 @@
             }
           )
         )
+        # nix-alien
       ]);
   };
 
@@ -336,22 +329,9 @@
       autoStart = false;
       capSysAdmin = true;
     };
-    # locate = {
-    #   enable = true;
-    #   interval = "weekly";
-    #   package = pkgs.plocate;
-    # };
-    timesyncd = {
-      enable = false;
-      # extraConfig = ''
-      #   PollIntervalMinSec=4d
-      #   PollIntervalMaxSec=7w
-      #   SaveIntervalSec=infinity
-      # '';
-    };
     geoclue2.enable = false;
     psd.enable = true;
-    thermald.enable = false; # intel
+    thermald.enable = false; # 仅intel
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
     kmscon = {
@@ -382,7 +362,7 @@
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
     tlp = {
-      enable = true;
+      enable = false;
       settings = {
         TLP_DEFAULT_MODE = "BAT";
         START_CHARGE_THRESH_BAT0 = 75;
@@ -399,7 +379,7 @@
       noPollBatteries = true;
     };
     auto-cpufreq = {
-      enable = false; # if config.services.tlp.enable then false else true;
+      enable = true;
       settings = {
         charger.governor = "schedutil";
         battery = {
@@ -444,7 +424,6 @@
   };
 
   systemd = {
-    # network.wait-online.enable = false;
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0
@@ -453,7 +432,6 @@
       AllowHibernation=no
     '';
     services = {
-      # NetworkManager-wait-online.enable = lib.mkForce false;
       systemd-gpt-auto-generator.enable = false;
       alsa-store.enable = false;
       "getty@tty1".enable = false;

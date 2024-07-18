@@ -127,6 +127,4 @@
     #   ];
     # };
   };
-
-  services.udiskie.enable = true;
 }

@@ -82,6 +82,8 @@
       num-workspaces = 1;
     };
 
+    "org/gnome/desktop/a11y/interface".show-status-shapes = true;
+
     "org/gnome/gnome-system-monitor" = {
       cpu-stacked-area-chart = true;
       maximized = true;

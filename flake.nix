@@ -21,6 +21,7 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # nix-alien.url = "github:thiagokokada/nix-alien";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
