@@ -13,8 +13,9 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.steam
+    outputs.nixosModules.virt-manager
     # outputs.nixosModules.nvidia-disable
-    outputs.nixosModules.nvidia
+    # outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
 
     ./hardware-configuration.nix
@@ -22,7 +23,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
     inputs.nix-index-database.nixosModules.nix-index
-    # inputs.nix-alien.overlays.default
+    inputs.nix-alien.overlays.default
   ];
 
   home-manager = {
@@ -228,7 +229,6 @@
     ])
     # custom
     ++ (with pkgs; [
-      gopeed
       navicat
       damask
     ]);
@@ -289,7 +289,7 @@
             }
           )
         )
-        # nix-alien
+        nix-alien
       ]);
   };
 

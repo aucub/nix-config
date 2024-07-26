@@ -13,6 +13,7 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
     # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    nix-alien.url = "github:thiagokokada/nix-alien";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,7 +22,6 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nix-alien.url = "github:thiagokokada/nix-alien";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 

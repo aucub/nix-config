@@ -2,6 +2,10 @@ set shell := ["fish", "-c"]
 
 set-proxy-env := "env ftp_proxy=\"$ftp_proxy\" all_proxy=\"$all_proxy\" FTP_PROXY=\"$FTP_PROXY\" http_proxy=\"$http_proxy\" HTTPS_PROXY=\"$HTTPS_PROXY\" https_proxy=\"$https_proxy\" ALL_PROXY=\"$ALL_PROXY\" HTTP_PROXY=\"$HTTP_PROXY\""
 
+hostname := "neko"
+
+username := "uymi"
+
 ############################################################################
 #
 #  Common commands
@@ -21,19 +25,19 @@ ck:
   NIXPKGS_ALLOW_UNFREE=1 nix flake check --impure --show-trace -L -v
 
 rs:
-  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#neko --no-build-nix --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --no-build-nix --show-trace -L -v
 
 rsu:
-  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#neko --upgrade --no-build-nix --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --upgrade --no-build-nix --show-trace -L -v
 
 rsb:
-  sudo {{set-proxy-env}} nixos-rebuild switch  --flake .#neko --install-bootloader --no-build-nix --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch  --flake .#{{hostname}} --install-bootloader --no-build-nix --show-trace -L -v
 
 rsr:
-  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#neko --rollback --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --rollback --show-trace -L -v
 
 hs:
-  home-manager switch --flake .#uymi@neko --show-trace -L -v
+  home-manager switch --flake .#{{username}}@{{hostname}} --show-trace -L -v
 
 ############################################################################
 #

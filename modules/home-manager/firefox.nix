@@ -2,6 +2,7 @@
 {
   programs.firefox = {
     enable = true;
+    languagePacks = [ "zh-CN" ];
     policies = {
       # https://github.com/mozilla/policy-templates/blob/master/linux/policies.json
       AppAutoUpdate = false;
