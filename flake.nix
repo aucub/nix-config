@@ -60,7 +60,6 @@
           extraModulePackages =
             kernelPackages: with kernelPackages; [
               # v4l2loopback
-              # lenovo-legion-module
             ];
           extraModprobeConfig = ''
             blacklist sp5100_tco

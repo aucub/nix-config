@@ -13,9 +13,8 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.steam
-    outputs.nixosModules.virt-manager
+    outputs.nixosModules.nvidia
     # outputs.nixosModules.nvidia-disable
-    # outputs.nixosModules.nvidia
     # outputs.nixosModules.containers
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
@@ -33,7 +32,7 @@
   };
 
   nixpkgs = {
-    config.allowUnfree = lib.mkForce true;
+    config.allowUnfree = true;
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
@@ -71,8 +70,7 @@
           "@wheel"
         ];
       };
-      # nix-channel 命令和状态文件
-      channel.enable = false;
+      channel.enable = false; # nix-channel 命令和状态文件
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
       nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
       gc = {
@@ -133,7 +131,15 @@
         ++ (if config.programs.adb.enable then [ "adbusers" ] else [ ])
         ++ (if config.programs.wireshark.enable then [ "wireshark" ] else [ ])
         ++ (if config.virtualisation.podman.enable then [ "podman" ] else [ ])
-        ++ (if config.virtualisation.libvirtd.enable then [ "libvirtd" ] else [ ])
+        ++ (
+          if config.virtualisation.libvirtd.enable then
+            [
+              "libvirtd"
+              "kvm"
+            ]
+          else
+            [ ]
+        )
         ++ (if config.virtualisation.docker.enable then [ "docker" ] else [ ]);
       shell = pkgs.bashInteractive;
       packages =
@@ -191,9 +197,6 @@
         just
       ])
       ++ (with pkgs; [ nil ])
-      # ++ (with pkgs; [
-      #   lenovo-legion
-      # ])
       ++ (with pkgs; [
         difftastic
         sops
@@ -599,23 +602,11 @@
     acpid.enable = true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     power-profiles-daemon.enable = false;
-    tlp = {
-      enable = false;
-      settings = {
-        TLP_DEFAULT_MODE = "BAT";
-        START_CHARGE_THRESH_BAT0 = 75;
-        STOP_CHARGE_TRESH_BAT0 = 80;
-        STOP_CHARGE_THRESH_BAT0 = 1;
-        DISK_DEVICES = "nvme0n1";
-        RESTORE_DEVICE_STATE_ON_STARTUP = 1;
-        RUNTIME_PM_ON_AC = "auto";
-        USB_EXCLUDE_AUDIO = 0;
-      };
-    };
     upower = {
       enable = true;
       noPollBatteries = true;
     };
+    tlp.enable = false;
     auto-cpufreq = {
       enable = true;
       settings = {

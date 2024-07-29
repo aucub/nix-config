@@ -6,5 +6,4 @@
   nvidia = import ./nvidia.nix;
   containers = import ./containers.nix;
   steam = import ./steam.nix;
-  virt-manager = import ./virt-manager.nix;
 }
