@@ -1,18 +1,12 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
-    # nixpkgs-wayland = {
-    #   url = "github:nix-community/nixpkgs-wayland";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    # chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -22,7 +16,6 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
   outputs =
@@ -30,7 +23,6 @@
       self,
       nixpkgs,
       home-manager,
-      nixos-wsl,
       ...
     }@inputs:
     let
@@ -68,7 +60,7 @@
           extraModulePackages =
             kernelPackages: with kernelPackages; [
               # v4l2loopback
-              lenovo-legion-module
+              # lenovo-legion-module
             ];
           extraModprobeConfig = ''
             blacklist sp5100_tco
@@ -105,13 +97,6 @@
             inherit inputs vars outputs;
           };
           modules = [ ./nixos/configuration.nix ];
-        };
-        "wsl" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs vars outputs;
-          };
-          modules = [ ./nixos/wsl.nix ];
         };
       };
       homeConfigurations = {

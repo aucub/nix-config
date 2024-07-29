@@ -7,5 +7,4 @@
   fish = import ./fish.nix;
   dotfiles = import ./dotfiles/default.nix;
   colord = import ./colord/default.nix;
-  shared = import ./shared.nix;
 }

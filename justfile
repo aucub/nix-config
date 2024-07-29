@@ -36,6 +36,9 @@ rsb:
 rsr:
   sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --rollback --show-trace -L -v
 
+build:
+  nix build '.#nixosConfigurations.{{hostname}}.config.system.build.toplevel' --impure --show-trace -L -v  
+
 hs:
   home-manager switch --flake .#{{username}}@{{hostname}} --show-trace -L -v
 
