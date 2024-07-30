@@ -77,6 +77,7 @@
   };
 
   programs = {
+    home-manager.enable = true;
     nix-index = {
       enable = true;
       enableBashIntegration = false;
@@ -95,50 +96,6 @@
         navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && cd ~/.config/navicat/Premium/ && ${pkgs.jq}/bin/jq 'del(.[\"014BF4EC24C114BEF46E1587042B3619\"])' preferences.json > tmp.json && mv tmp.json preferences.json";
       };
     };
-    alacritty = {
-      enable = true;
-      settings = {
-        import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
-        live_config_reload = false;
-        shell.program = "fish";
-        window = {
-          padding = {
-            x = 6;
-            y = 6;
-          };
-          dimensions = {
-            columns = 120;
-            lines = 26;
-          };
-          startup_mode = "Windowed";
-          decorations_theme_variant = "Dark";
-        };
-        font = {
-          normal = {
-            family = "Sarasa Mono SC";
-            style = "Regular";
-          };
-          italic = {
-            family = "Sarasa Mono Slab SC";
-            style = "Italic";
-          };
-          bold_italic = {
-            family = "Sarasa Mono Slab SC";
-            style = "Bold Italic";
-          };
-          size = 20;
-        };
-        selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
-        debug.log_level = "Off";
-        keyboard.bindings = [
-          {
-            key = "Return";
-            mods = "Control|Shift";
-            action = "SpawnNewInstance";
-          }
-        ];
-      };
-    };
     tealdeer = {
       enable = true;
       settings = {
@@ -146,7 +103,6 @@
         updates.auto_update = false;
       };
     };
-    home-manager.enable = true;
     atuin = {
       enable = true;
       flags = [ "--disable-up-arrow" ];
@@ -329,6 +285,50 @@
           show_hidden = true;
           sort_dir_first = true;
         };
+      };
+    };
+    alacritty = {
+      enable = true;
+      settings = {
+        import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
+        live_config_reload = false;
+        shell.program = "fish";
+        window = {
+          padding = {
+            x = 6;
+            y = 6;
+          };
+          dimensions = {
+            columns = 120;
+            lines = 26;
+          };
+          startup_mode = "Windowed";
+          decorations_theme_variant = "Dark";
+        };
+        font = {
+          normal = {
+            family = "Sarasa Mono SC";
+            style = "Regular";
+          };
+          italic = {
+            family = "Sarasa Mono Slab SC";
+            style = "Italic";
+          };
+          bold_italic = {
+            family = "Sarasa Mono Slab SC";
+            style = "Bold Italic";
+          };
+          size = 20;
+        };
+        selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
+        debug.log_level = "Off";
+        keyboard.bindings = [
+          {
+            key = "Return";
+            mods = "Control|Shift";
+            action = "SpawnNewInstance";
+          }
+        ];
       };
     };
     # obs-studio = {

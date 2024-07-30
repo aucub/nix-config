@@ -17,28 +17,23 @@
     # outputs.nixosModules.nvidia-disable
     # outputs.nixosModules.containers
     inputs.home-manager.nixosModules.home-manager
-    inputs.nixos-hardware.nixosModules.lenovo-legion-15arh05h
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
+    inputs.nixos-hardware.nixosModules.common-pc-laptop
+    inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nix-index-database.nixosModules.nix-index
 
     ./hardware-configuration.nix
   ];
 
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs vars outputs;
-    };
-    users."${vars.users.users.user.username}" = import ../home-manager/home.nix;
-    backupFileExtension = "bak";
-  };
-
   nixpkgs = {
-    config.allowUnfree = true;
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
       inputs.nur.overlay
       inputs.nix-alien.overlays.default
     ];
+    config.allowUnfree = true;
   };
 
   nix =
@@ -59,10 +54,12 @@
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
           "https://nix-community.cachix.org"
+          "https://ezkea.cachix.org"
           # "https://qihaiumi.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         ];
         trusted-users = [
@@ -80,27 +77,12 @@
       };
     };
 
-  time.timeZone = "Asia/Shanghai";
-
-  i18n = {
-    defaultLocale = "zh_CN.UTF-8";
-    supportedLocales = [
-      "zh_CN.UTF-8/UTF-8"
-      "en_US.UTF-8/UTF-8"
-    ];
-    inputMethod = {
-      enable = true;
-      type = "fcitx5";
-      fcitx5 = {
-        plasma6Support = true;
-        addons = with pkgs; [
-          fcitx5-gtk
-          fcitx5-with-addons
-          fcitx5-chinese-addons
-        ];
-        waylandFrontend = true;
-      };
+  home-manager = {
+    extraSpecialArgs = {
+      inherit inputs vars outputs;
     };
+    users."${vars.users.users.user.username}" = import ../home-manager/home.nix;
+    backupFileExtension = "bak";
   };
 
   users.users = {
@@ -156,7 +138,7 @@
           pot
           celluloid
           localsend
-          popsicle
+          impression
           alacritty-theme
           gitkraken
         ])
@@ -251,170 +233,44 @@
       ]);
   };
 
-  documentation = {
-    nixos.enable = false;
-    info.enable = false;
-    doc.enable = false;
-    man = {
-      mandoc.enable = true;
-      man-db.enable = false;
-      generateCaches = false;
-    };
-  };
-
-  networking = {
-    hostName = vars.networking.hostName;
-    firewall.enable = false;
-    timeServers = [
-      "ntp.ntsc.ac.cn"
-      "cn.ntp.org.cn"
-      "ntp.aliyun.com"
-      "ntp.tencent.com"
-      "0.nixos.pool.ntp.org"
-      "1.nixos.pool.ntp.org"
-      "2.nixos.pool.ntp.org"
-      "3.nixos.pool.ntp.org"
-    ];
-    nameservers = [
-      "223.5.5.5#dns.alidns.com"
-      "8.8.8.8#dns.google"
-    ];
-    networkmanager = {
-      enable = true;
-      dns = "systemd-resolved";
-      wifi = {
-        powersave = true;
-        macAddress = "stable-ssid";
-      };
-    };
-  };
-
-  boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
-    loader = {
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 10;
-        consoleMode = "auto";
-      };
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-      timeout = 4;
-    };
-    kernelParams = vars.boot.kernelParams;
-    consoleLogLevel = 3;
-    kernelModules = vars.boot.kernelModules;
-    extraModulePackages = vars.boot.extraModulePackages config.boot.kernelPackages;
-    extraModprobeConfig = vars.boot.extraModprobeConfig;
-    tmp.useTmpfs = true;
-    supportedFilesystems = [ config.fileSystems."/".fsType ];
-  };
-
-  fonts = {
-    enableDefaultPackages = true;
-    fontDir.enable = true;
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
-      sarasa-gothic
-      source-han-mono
-      source-han-serif-vf-otf
-      source-han-sans-vf-otf
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-    ];
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        serif = [ "Noto Serif CJK SC" ];
-        sansSerif = [ "Sarasa UI SC" ];
-        monospace = [ "Sarasa Mono SC" ];
-        emoji = [ "Noto Color Emoji" ];
-      };
-    };
-  };
-
-  xdg = {
-    terminal-exec.enable = true;
-    portal = {
-      enable = true;
-      xdgOpenUsePortal = true;
-    };
-    mime.defaultApplications = {
-      "text/html" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-      "application/pdf" = "firefox.desktop";
-      "image/jpeg" = "org.gnome.Loupe.desktop";
-      "image/png" = "org.gnome.Loupe.desktop";
-      "image/gif" = "org.gnome.Loupe.desktop";
-      "image/webp" = "org.gnome.Loupe.desktop";
-      "image/tiff" = "org.gnome.Loupe.desktop";
-      "image/x-tga" = "org.gnome.Loupe.desktop";
-      "image/vnd-ms.dds" = "org.gnome.Loupe.desktop";
-      "image/x-dds" = "org.gnome.Loupe.desktop";
-      "image/bmp" = "org.gnome.Loupe.desktop";
-      "image/vnd.microsoft.icon" = "org.gnome.Loupe.desktop";
-      "image/vnd.radiance" = "org.gnome.Loupe.desktop";
-      "image/x-exr" = "org.gnome.Loupe.desktop";
-      "image/x-portable-bitmap" = "org.gnome.Loupe.desktop";
-      "image/x-portable-graymap" = "org.gnome.Loupe.desktop";
-      "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
-      "image/x-portable-anymap" = "org.gnome.Loupe.desktop";
-      "image/x-qoi" = "org.gnome.Loupe.desktop";
-      "image/svg+xml" = "org.gnome.Loupe.desktop";
-      "image/svg+xml-compressed" = "org.gnome.Loupe.desktop";
-      "image/avif" = "org.gnome.Loupe.desktop";
-      "image/heic" = "org.gnome.Loupe.desktop";
-      "image/jxl" = "org.gnome.Loupe.desktop";
-      # "text/plain"="Helix.desktop";
-    };
-  };
-
-  hardware = {
-    enableRedistributableFirmware = true;
-    pulseaudio.enable = false;
-    graphics = {
-      enable = true;
-      extraPackages = vars.hardware.graphics.extraPackages pkgs;
-    };
-    bluetooth = {
-      enable = true;
-      settings.General = {
-        Enable = "Source,Sink,Media,Socket";
-        Experimental = true;
-      };
-      disabledPlugins = [
-        "bap"
-        "bass"
-        "mcp"
-        "vcp"
-        "micp"
-        "ccp"
-        "csip"
-      ];
-    };
-  };
-
-  zramSwap = {
-    enable = true;
-    memoryPercent = 25;
-  };
-
   programs = {
-    ssh = {
-      askPassword = "";
-      enableAskPassword = false;
-    };
     command-not-found.enable = false;
+    bash.promptInit = ''
+      PS1='[\u@\h \W]\$ '
+    '';
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        set -U fish_greeting
+        nix-your-shell fish | source
+      '';
+      shellAbbrs = {
+        nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
+        ezl = "eza -lba --group-directories-first";
+        uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
+        # List all generations of the system profile
+        nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
+        # remove all generations older than 7 days
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        # Garbage collect all unused nix store entries
+        nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 7d";
+      };
+    };
     nix-ld = {
       enable = true;
       package = pkgs.nix-ld-rs;
     };
-    npm.enable = false;
+    nix-index = {
+      enable = true;
+      enableBashIntegration = false;
+      enableFishIntegration = false;
+    };
+    nix-index-database.comma.enable = true;
+    adb.enable = true;
+    ssh = {
+      askPassword = "";
+      enableAskPassword = false;
+    };
     htop = {
       enable = true;
       settings = {
@@ -480,6 +336,7 @@
         ".sort_direction" = -1;
       };
     };
+    yazi.enable = true;
     git = {
       enable = true;
       lfs.enable = true;
@@ -503,47 +360,15 @@
         };
       };
     };
-    bash.promptInit = ''
-      PS1='[\u@\h \W]\$ '
-    '';
-    fish = {
+    npm.enable = false;
+    nautilus-open-any-terminal = {
       enable = true;
-      interactiveShellInit = ''
-        set -U fish_greeting
-        nix-your-shell fish | source
-      '';
-      shellAbbrs = {
-        nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
-        ezl = "eza -lba --group-directories-first";
-        uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
-        # List all generations of the system profile
-        nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
-        # remove all generations older than 7 days
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
-        # Garbage collect all unused nix store entries
-        nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 7d";
-      };
+      terminal = "alacritty";
     };
-    yazi.enable = true;
-    nix-index = {
-      enable = true;
-      enableBashIntegration = false;
-      enableFishIntegration = false;
-    };
-    nix-index-database.comma.enable = true;
-    adb.enable = true;
     clash-verge = {
       enable = true;
       tunMode = true;
       package = pkgs.clash-verge-rev;
-    };
-    # java = {
-    #   enable = true;
-    #   package = pkgs.jetbrains.jdk;
-    # };
-    nautilus-open-any-terminal = {
-      enable = true;
-      terminal = "alacritty";
     };
     firefox = {
       enable = true;
@@ -552,60 +377,13 @@
     };
   };
 
-  qt.enable = true;
-
   services = {
-    avahi.enable = false;
-    journald.extraConfig = ''
-      ForwardToConsole=no
-      ForwardToKMsg=no
-      ForwardToSyslog=no
-      ForwardToWall=no
-      SystemMaxFileSize=10M
-      SystemMaxUse=100M
-    '';
-    dbus.implementation = "broker";
-    openssh.enable = false;
-    sunshine = {
-      enable = true;
-      autoStart = false;
-      capSysAdmin = true;
-    };
-    geoclue2.enable = false;
-    psd.enable = true;
-    thermald.enable = false; # 仅intel
-    fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
-    # gpm.enable = true; # 为 Linux 虚拟控制台提供鼠标支持
-    kmscon = {
-      enable = true; # Instead of vt
-      fonts = [
-        {
-          name = "Sarasa Mono SC";
-          package = pkgs.sarasa-gothic;
-        }
-      ];
-      extraConfig = "font-size=20";
-      hwRender = true;
-      useXkbConfig = true;
-    };
-    resolved = {
-      enable = true;
-      dnsovertls = "true";
-      domains = [ "~." ];
-      fallbackDns = [
-        "1.1.1.1#one.one.one.one"
-        "1.0.0.1#one.one.one.one"
-        "2400:3200::1"
-        "2606:4700:4700::1001"
-      ];
-    };
     acpid.enable = true;
-    btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
-    power-profiles-daemon.enable = false;
     upower = {
       enable = true;
       noPollBatteries = true;
     };
+    power-profiles-daemon.enable = false;
     tlp.enable = false;
     auto-cpufreq = {
       enable = true;
@@ -618,6 +396,32 @@
         };
       };
     };
+    fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
+    btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
+    dbus.implementation = "broker";
+    avahi.enable = false;
+    geoclue2.enable = false;
+    journald.extraConfig = ''
+      ForwardToConsole=no
+      ForwardToKMsg=no
+      ForwardToSyslog=no
+      ForwardToWall=no
+      SystemMaxFileSize=10M
+      SystemMaxUse=100M
+    '';
+    openssh.enable = false;
+    psd.enable = true;
+    resolved = {
+      enable = true;
+      dnsovertls = "true";
+      domains = [ "~." ];
+      fallbackDns = [
+        "1.1.1.1#one.one.one.one"
+        "1.0.0.1#one.one.one.one"
+        "2400:3200::1"
+        "2606:4700:4700::1001"
+      ];
+    };
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -625,6 +429,23 @@
       jack.enable = true;
       pulse.enable = true;
       wireplumber.enable = true;
+    };
+    kmscon = {
+      enable = true; # Instead of vt
+      fonts = [
+        {
+          name = "Sarasa Mono SC";
+          package = pkgs.sarasa-gothic;
+        }
+      ];
+      extraConfig = "font-size=20";
+      hwRender = true;
+      useXkbConfig = true;
+    };
+    sunshine = {
+      enable = true;
+      autoStart = false;
+      capSysAdmin = true;
     };
     libinput = {
       enable = true;
@@ -642,13 +463,169 @@
     };
     xserver = {
       enable = true;
-      videoDrivers = vars.services.xserver.videoDrivers;
+      videoDrivers = [ "amdgpu" ];
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [ xterm ];
       xkb.model = "pc105";
       wacom.enable = false;
     };
   };
+
+  hardware = {
+    enableRedistributableFirmware = true;
+    pulseaudio.enable = false;
+    graphics = {
+      enable = true;
+      extraPackages = vars.hardware.graphics.extraPackages pkgs;
+    };
+    bluetooth = {
+      enable = true;
+      settings.General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
+      };
+      disabledPlugins = [
+        "bap"
+        "bass"
+        "mcp"
+        "vcp"
+        "micp"
+        "ccp"
+        "csip"
+      ];
+    };
+  };
+
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10;
+        consoleMode = "auto";
+      };
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
+      timeout = 4;
+    };
+    kernelParams = vars.boot.kernelParams;
+    consoleLogLevel = 3;
+    kernelModules = vars.boot.kernelModules;
+    extraModulePackages = vars.boot.extraModulePackages config.boot.kernelPackages;
+    extraModprobeConfig = vars.boot.extraModprobeConfig;
+    tmp.useTmpfs = true;
+    supportedFilesystems = [ config.fileSystems."/".fsType ];
+  };
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 25;
+  };
+
+  networking = {
+    hostName = vars.networking.hostName;
+    firewall.enable = false;
+    nameservers = [
+      "223.5.5.5#dns.alidns.com"
+      "8.8.8.8#dns.google"
+    ];
+    networkmanager = {
+      enable = true;
+      dns = "systemd-resolved";
+      wifi = {
+        powersave = true;
+        macAddress = "stable-ssid";
+      };
+    };
+  };
+
+  time.timeZone = "Asia/Shanghai";
+
+  i18n = {
+    defaultLocale = "zh_CN.UTF-8";
+    supportedLocales = [
+      "zh_CN.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
+    ];
+    inputMethod = {
+      enable = true;
+      type = "fcitx5";
+      fcitx5 = {
+        addons = with pkgs; [
+          fcitx5-gtk
+          fcitx5-with-addons
+          fcitx5-chinese-addons
+        ];
+        waylandFrontend = true;
+      };
+    };
+  };
+
+  fonts = {
+    enableDefaultPackages = true;
+    fontDir.enable = true;
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+      sarasa-gothic
+      source-han-mono
+      source-han-serif-vf-otf
+      source-han-sans-vf-otf
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+    ];
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        serif = [ "Noto Serif CJK SC" ];
+        sansSerif = [ "Sarasa UI SC" ];
+        monospace = [ "Sarasa Mono SC" ];
+        emoji = [ "Noto Color Emoji" ];
+      };
+    };
+  };
+
+  xdg = {
+    terminal-exec.enable = true;
+    portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+    };
+    mime.defaultApplications = {
+      "text/html" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "application/pdf" = "firefox.desktop";
+      "image/jpeg" = "org.gnome.Loupe.desktop";
+      "image/png" = "org.gnome.Loupe.desktop";
+      "image/gif" = "org.gnome.Loupe.desktop";
+      "image/webp" = "org.gnome.Loupe.desktop";
+      "image/tiff" = "org.gnome.Loupe.desktop";
+      "image/x-tga" = "org.gnome.Loupe.desktop";
+      "image/vnd-ms.dds" = "org.gnome.Loupe.desktop";
+      "image/x-dds" = "org.gnome.Loupe.desktop";
+      "image/bmp" = "org.gnome.Loupe.desktop";
+      "image/vnd.microsoft.icon" = "org.gnome.Loupe.desktop";
+      "image/vnd.radiance" = "org.gnome.Loupe.desktop";
+      "image/x-exr" = "org.gnome.Loupe.desktop";
+      "image/x-portable-bitmap" = "org.gnome.Loupe.desktop";
+      "image/x-portable-graymap" = "org.gnome.Loupe.desktop";
+      "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
+      "image/x-portable-anymap" = "org.gnome.Loupe.desktop";
+      "image/x-qoi" = "org.gnome.Loupe.desktop";
+      "image/svg+xml" = "org.gnome.Loupe.desktop";
+      "image/svg+xml-compressed" = "org.gnome.Loupe.desktop";
+      "image/avif" = "org.gnome.Loupe.desktop";
+      "image/heic" = "org.gnome.Loupe.desktop";
+      "image/jxl" = "org.gnome.Loupe.desktop";
+      # "text/plain"="Helix.desktop";
+    };
+  };
+
+  qt.enable = true;
 
   systemd = {
     coredump.extraConfig = ''
@@ -660,9 +637,9 @@
     '';
     services = {
       systemd-gpt-auto-generator.enable = false;
-      alsa-store.enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;
+      alsa-store.enable = false;
       keyboard-brightness = {
         description = "Set keyboard brightness after resume";
         wantedBy = [
@@ -699,6 +676,17 @@
           User = "root";
         };
       };
+    };
+  };
+
+  documentation = {
+    nixos.enable = false;
+    info.enable = false;
+    doc.enable = false;
+    man = {
+      mandoc.enable = true;
+      man-db.enable = false;
+      generateCaches = false;
     };
   };
 

@@ -46,7 +46,6 @@
         };
         boot = {
           kernelParams = [
-            "amd_pstate=passive"
             "amdgpu.vm_update_mode=3"
             "radeon.dpm=0"
             "acpi_backlight=native"
@@ -77,11 +76,6 @@
           package = pkgs: pkgs.bibata-cursors;
           size = 24;
         };
-        services.xserver.videoDrivers = [
-          "modesetting"
-          "fbdev"
-          "amdgpu"
-        ];
       };
     in
     {

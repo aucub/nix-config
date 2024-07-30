@@ -1,9 +1,5 @@
 { lib, pkgs, ... }:
 {
-  qt = {
-    style = "adwaita";
-    platformTheme = "gnome";
-  };
   environment = {
     systemPackages =
       # gnomeExtensions
@@ -90,13 +86,13 @@
       desktopManager.gnome.enable = true;
     };
   };
-  systemd = {
-    user = {
-      services = {
-        "org.gnome.SettingsDaemon.Sharing".enable = false;
-        "org.gnome.SettingsDaemon.Smartcard".enable = false;
-        "org.gnome.SettingsDaemon.Wacom".enable = false;
-      };
-    };
+  qt = {
+    style = "adwaita";
+    platformTheme = "gnome";
+  };
+  systemd.user.services = {
+    "org.gnome.SettingsDaemon.Sharing".enable = false;
+    "org.gnome.SettingsDaemon.Smartcard".enable = false;
+    "org.gnome.SettingsDaemon.Wacom".enable = false;
   };
 }

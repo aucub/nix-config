@@ -19,10 +19,10 @@
 }:
 let
   pname = "hiddify-next";
-  version = "1.9.0";
+  version = "2.0.5";
   src = fetchurl {
     url = "https://github.com/hiddify/hiddify-next/releases/download/v${version}/Hiddify-Debian-x64.deb";
-    hash = "sha256-6AGnz14+C8ltWcWaXrIuU/4lM+s9bRks8WVdX4QqNc0=";
+    hash = "sha256-dGvHrP6i9B9p2XnI3umchJF0ei7xkH9aQnHRcIhEHLM=";
   };
 in
 stdenv.mkDerivation {
@@ -71,10 +71,10 @@ stdenv.mkDerivation {
 
   preFixup = ''
     wrapProgram $out/bin/hiddify \
-    --prefix LD_LIBRARY_PATH : "$out/bin/lib"
+    --prefix LD_LIBRARY_PATH : "$out/bin/lib" \
     --chdir "$out/bin"
     wrapProgram $out/bin/HiddifyCli \
-    --prefix LD_LIBRARY_PATH : "$out/bin/lib"
+    --prefix LD_LIBRARY_PATH : "$out/bin/lib" \
     --chdir "$out/bin"
   '';
 

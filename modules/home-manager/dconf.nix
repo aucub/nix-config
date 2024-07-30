@@ -229,10 +229,5 @@
     "org/gtk/settings/file-chooser".show-hidden = true;
 
     "org/gtk/gtk4/settings/file-chooser".show-hidden = true;
-
-    "org/virt-manager/virt-manager/connections" = {
-      autoconnect = [ "qemu:///system" ];
-      uris = [ "qemu:///system" ];
-    };
   };
 }

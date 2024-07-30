@@ -1,6 +1,5 @@
 pkgs: {
-  gopeed = pkgs.callPackage ./gopeed { };
-  navicat = pkgs.callPackage ./navicat { };
-  damask = pkgs.callPackage ./damask { };
-  hiddify-next = pkgs.callPackage ./hiddify-next { };
+  navicat = pkgs.callPackage ./navicat.nix { };
+  damask = pkgs.callPackage ./damask.nix { };
+  hiddify-next = pkgs.callPackage ./hiddify-next.nix { };
 }
