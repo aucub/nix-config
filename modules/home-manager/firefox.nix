@@ -60,9 +60,7 @@
       id = 0;
       isDefault = true;
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        (ublock-origin.override {
-          url = "https://github.com/gorhill/uBlock/releases/download/1.59.0/uBlock0_1.59.0.firefox.xpi";
-        })
+        ublock-origin
         floccus
         bitwarden
         violentmonkey

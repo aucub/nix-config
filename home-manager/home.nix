@@ -119,10 +119,7 @@
       settings = {
         smol = true;
         telemetry = false;
-        install = {
-          # lockfile.save = false;
-          registry = "https://npmreg.proxy.ustclug.org/";
-        };
+        install.registry = "https://npmreg.proxy.ustclug.org/";
         run.bun = true;
       };
     };

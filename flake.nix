@@ -70,7 +70,6 @@
           # ''
           ;
         };
-        hardware.graphics.extraPackages = pkgs: with pkgs; [ libGL ];
         home.pointerCursor = {
           name = "Bibata-Modern-Classic";
           package = pkgs: pkgs.bibata-cursors;

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "subpop";
     repo = "damask";
     rev = "v${version}";
-    hash = "sha256-X1snGqI6KJpXjFyPT//VEuHEI6nssIwiWbW0773NJTw=";
+    sha256 = "X1snGqI6KJpXjFyPT//VEuHEI6nssIwiWbW0773NJTw=";
   };
 
   nativeBuildInputs = [

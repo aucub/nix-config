@@ -22,7 +22,7 @@ let
   version = "2.0.5";
   src = fetchurl {
     url = "https://github.com/hiddify/hiddify-next/releases/download/v${version}/Hiddify-Debian-x64.deb";
-    hash = "sha256-dGvHrP6i9B9p2XnI3umchJF0ei7xkH9aQnHRcIhEHLM=";
+    sha256 = "dGvHrP6i9B9p2XnI3umchJF0ei7xkH9aQnHRcIhEHLM=";
   };
 in
 stdenv.mkDerivation {

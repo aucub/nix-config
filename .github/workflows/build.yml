@@ -1,4 +1,5 @@
 name: build
+
 on:
   workflow_dispatch:
 
@@ -20,14 +21,17 @@ jobs:
 
       - uses: easimon/maximize-build-space@master
         with:
-          remove-dotnet: "true"
-          remove-android: "true"
-          remove-haskell: "true"
-          remove-codeql: "true"
-          remove-docker-images: "true"
+          overprovision-lvm: true
+          remove-android: true
+          remove-dotnet: true
+          remove-haskell: true
+          remove-docker-images: true
+          remove-codeql: true
 
       - uses: actions/checkout@v4
 
-      - run: just build
+      - uses: extractions/setup-just@v2
+
+      - run: just build-os
 
       - run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'

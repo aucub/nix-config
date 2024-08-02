@@ -14,8 +14,9 @@
     outputs.nixosModules.gnome
     outputs.nixosModules.steam
     outputs.nixosModules.nvidia
-    # outputs.nixosModules.nvidia-disable
     # outputs.nixosModules.containers
+
+    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -54,12 +55,10 @@
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
           "https://nix-community.cachix.org"
-          "https://ezkea.cachix.org"
           # "https://qihaiumi.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         ];
         trusted-users = [
@@ -127,7 +126,7 @@
       packages =
         ([ inputs.home-manager.packages.${pkgs.system}.default ])
         ++
-        # shell
+        # cli
         (with pkgs; [
           chezmoi
           typst
@@ -156,7 +155,6 @@
   };
 
   environment = {
-    stub-ld.enable = false;
     shells = with pkgs; [
       bashInteractive
       fish
@@ -203,34 +201,12 @@
             python-dotenv
           ]
         ))
+        (pkgs.writeShellScriptBin "patchedpython" ''
+          export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH
+          exec python "$@"
+        '')
       ])
-      # FHS
-      ++ (with pkgs; [
-        (
-          let
-            base = pkgs.appimageTools.defaultFhsEnvArgs;
-          in
-          pkgs.buildFHSEnv (
-            base
-            // {
-              name = "fhs";
-              targetPkgs =
-                pkgs:
-                (base.targetPkgs pkgs)
-                ++ (with pkgs; [
-                  pkg-config
-                  python3
-                  uv
-                ]);
-              profile = "export FHS=1";
-              runScript = "fish";
-              extraOutputsToInstall = [ "dev" ];
-              extraBwrapArgs = [ "--symlink /.host-etc/gitconfig /etc/gitconfig" ];
-            }
-          )
-        )
-        nix-alien
-      ]);
+      ++ (with pkgs; [ nix-alien ]);
   };
 
   programs = {
@@ -248,17 +224,21 @@
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
         uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
-        # List all generations of the system profile
+        # 列出系统的 generations
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
-        # remove all generations older than 7 days
+        # 删除过期的 generations
         nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
-        # Garbage collect all unused nix store entries
+        # 删除未使用的 Nix 存储条目
         nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 7d";
       };
     };
     nix-ld = {
       enable = true;
       package = pkgs.nix-ld-rs;
+      libraries = with pkgs; [
+        libGL
+        glib
+      ];
     };
     nix-index = {
       enable = true;
@@ -431,7 +411,7 @@
       wireplumber.enable = true;
     };
     kmscon = {
-      enable = true; # Instead of vt
+      enable = true; # 替换 vt
       fonts = [
         {
           name = "Sarasa Mono SC";
@@ -466,7 +446,6 @@
       videoDrivers = [ "amdgpu" ];
       desktopManager.xterm.enable = false;
       excludePackages = with pkgs; [ xterm ];
-      xkb.model = "pc105";
       wacom.enable = false;
     };
   };
@@ -474,10 +453,7 @@
   hardware = {
     enableRedistributableFirmware = true;
     pulseaudio.enable = false;
-    graphics = {
-      enable = true;
-      extraPackages = vars.hardware.graphics.extraPackages pkgs;
-    };
+    graphics.enable = true;
     bluetooth = {
       enable = true;
       settings.General = {
