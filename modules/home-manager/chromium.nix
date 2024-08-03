@@ -12,8 +12,6 @@
       "--enable-gpu-rasterization"
       "--enable-zero-copy"
       "--ignore-gpu-blocklist"
-      "--use-angle=vulkan"
-      "--use-gl=egl"
       "--use-cmd-decoder=passthrough"
       "--enable-wayland-ime"
       "--enable-quic"

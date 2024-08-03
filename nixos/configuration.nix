@@ -137,7 +137,6 @@
           pot
           celluloid
           localsend
-          impression
           alacritty-theme
           gitkraken
         ])
@@ -597,7 +596,6 @@
       "image/avif" = "org.gnome.Loupe.desktop";
       "image/heic" = "org.gnome.Loupe.desktop";
       "image/jxl" = "org.gnome.Loupe.desktop";
-      # "text/plain"="Helix.desktop";
     };
   };
 
