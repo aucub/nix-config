@@ -266,22 +266,18 @@
         enable = true;
         background = "dark";
       };
-      hooks = {
-        pre-commit = pkgs.writeScript "pre-commit-script" ''
-          #!/bin/sh
-          gitleaks protect --staged --no-banner --max-target-megabytes 1
-        '';
-      };
+      hooks.pre-commit = pkgs.writeScript "pre-commit-script" ''
+        #!/bin/sh
+        gitleaks protect --staged --no-banner --max-target-megabytes 1
+      '';
     };
     yazi = {
       enable = true;
       enableBashIntegration = true;
       enableFishIntegration = true;
-      settings = {
-        manager = {
-          show_hidden = true;
-          sort_dir_first = true;
-        };
+      settings.manager = {
+        show_hidden = true;
+        sort_dir_first = true;
       };
     };
     alacritty = {

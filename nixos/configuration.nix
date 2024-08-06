@@ -158,8 +158,10 @@
       bashInteractive
       fish
     ];
-    sessionVariables = {
+    variables = {
       EDITOR = "hx";
+    };
+    sessionVariables = {
       LESS = "-SR";
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
@@ -528,6 +530,7 @@
       enable = true;
       type = "fcitx5";
       fcitx5 = {
+        plasma6Support = true;
         addons = with pkgs; [
           fcitx5-gtk
           fcitx5-with-addons
@@ -571,9 +574,6 @@
     };
     mime.defaultApplications = {
       "text/html" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-      "application/pdf" = "firefox.desktop";
       "image/jpeg" = "org.gnome.Loupe.desktop";
       "image/png" = "org.gnome.Loupe.desktop";
       "image/gif" = "org.gnome.Loupe.desktop";
@@ -596,6 +596,10 @@
       "image/avif" = "org.gnome.Loupe.desktop";
       "image/heic" = "org.gnome.Loupe.desktop";
       "image/jxl" = "org.gnome.Loupe.desktop";
+      "application/pdf" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
     };
   };
 
