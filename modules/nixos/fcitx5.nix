@@ -2,9 +2,7 @@
 {
   i18n.inputMethod.fcitx5.settings = {
     inputMethod = {
-      GroupOrder = {
-        "0" = "Default";
-      };
+      GroupOrder."0" = "Default";
       "Groups/0" = {
         "Default Layout" = "us";
         DefaultIM = "pinyin";
@@ -62,36 +60,28 @@
       };
     };
     addons = {
-      classicui = {
-        globalSection = {
-          VerticalCandidateList = "False";
-          WheelForPaging = "True";
-          Font = "\"更纱黑体 UI SC 14\"";
-          MenuFont = "\"更纱黑体 UI SC 14\"";
-          TrayFont = "\"更纱黑体 UI SC 14\"";
-          TrayOutlineColor = "#000000";
-          TrayTextColor = "#ffffff";
-          PreferTextIcon = "False";
-          ShowLayoutNameInIcon = "True";
-          UseInputMethodLanguageToDisplayText = "True";
-          Theme = "default";
-          DarkTheme = "default-dark";
-          UseDarkTheme = "True";
-          UseAccentColor = "True";
-          PerScreenDPI = "False";
-          ForceWaylandDPI = 0;
-          EnableFractionalScale = "True";
-        };
+      classicui.globalSection = {
+        VerticalCandidateList = "False";
+        WheelForPaging = "True";
+        Font = "\"更纱黑体 UI SC 14\"";
+        MenuFont = "\"更纱黑体 UI SC 14\"";
+        TrayFont = "\"更纱黑体 UI SC 14\"";
+        TrayOutlineColor = "#000000";
+        TrayTextColor = "#ffffff";
+        PreferTextIcon = "False";
+        ShowLayoutNameInIcon = "True";
+        UseInputMethodLanguageToDisplayText = "True";
+        Theme = "default";
+        DarkTheme = "default-dark";
+        UseDarkTheme = "True";
+        UseAccentColor = "True";
+        PerScreenDPI = "False";
+        ForceWaylandDPI = 0;
+        EnableFractionalScale = "True";
       };
       clipboard = {
-        globalSection = {
-          "Number of entries" = 18;
-        };
-        sections = {
-          "TriggerKey" = {
-            "0" = "Super+V";
-          };
-        };
+        globalSection."Number of entries" = 18;
+        sections."TriggerKey"."0" = "Super+V";
       };
       keyboard = {
         globalSection = {
@@ -104,21 +94,11 @@
           EnableLongPress = "False";
         };
         sections = {
-          PrevCandidate = {
-            "0" = "Shift+Tab";
-          };
-          NextCandidate = {
-            "0" = "Tab";
-          };
-          "Hint Trigger" = {
-            "0" = "Control+Alt+H";
-          };
-          "One Time Hint Trigger" = {
-            "0" = "Control+Alt+J";
-          };
-          LongPressBlocklist = {
-            "0" = "konsole";
-          };
+          PrevCandidate."0" = "Shift+Tab";
+          NextCandidate."0" = "Tab";
+          "Hint Trigger"."0" = "Control+Alt+H";
+          "One Time Hint Trigger"."0" = "Control+Alt+J";
+          LongPressBlocklist."0" = "konsole";
         };
       };
       pinyin = {
@@ -151,9 +131,7 @@
           QuickPhraseKey = "";
         };
         sections = {
-          ForgetWord = {
-            "0" = "Control+7";
-          };
+          ForgetWord."0" = "Control+7";
           PrevPage = {
             "0" = "minus";
             "1" = "Up";
@@ -166,19 +144,13 @@
             "2" = "KP_Down";
             "3" = "Next";
           };
-          PrevCandidate = {
-            "0" = "Shift+Tab";
-          };
-          NextCandidate = {
-            "0" = "Tab";
-          };
+          PrevCandidate."0" = "Shift+Tab";
+          NextCandidate."0" = "Tab";
           ChooseCharFromPhrase = {
             "0" = "bracketleft";
             "1" = "bracketright";
           };
-          FilterByStroke = {
-            "0" = "grave";
-          };
+          FilterByStroke."0" = "grave";
           "QuickPhrase trigger" = {
             "0" = "www.";
             "1" = "ftp.";
@@ -220,11 +192,7 @@
           TypePairedPunctuationsTogether = "False";
           Enabled = "True";
         };
-        sections = {
-          Hotkey = {
-            "0" = "Control+period";
-          };
-        };
+        sections.Hotkey."0" = "Control+period";
       };
       quickphrase = {
         globalSection = {
@@ -232,11 +200,9 @@
           Spell = "False";
           FallbackSpellLanguage = "en";
         };
-        sections = {
-          TriggerKey = {
-            "0" = "Super+grave";
-            "1" = "Super+semicolon";
-          };
+        sections.TriggerKey = {
+          "0" = "Super+grave";
+          "1" = "Super+semicolon";
         };
       };
     };

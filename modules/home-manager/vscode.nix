@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 {
   programs.vscode = {
     enable = true;
@@ -21,7 +21,7 @@
         # redhat.vscode-xml
         # rust-lang.rust-analyzer
       ])
-      ++ (with inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace; [
+      ++ (with pkgs.vscode-marketplace; [
         rangav.vscode-thunder-client
         # yoavbls.pretty-ts-errors
       ]);

@@ -1,4 +1,4 @@
-set-proxy-env := "env ftp_proxy=\"$ftp_proxy\" all_proxy=\"$all_proxy\" FTP_PROXY=\"$FTP_PROXY\" http_proxy=\"$http_proxy\" HTTPS_PROXY=\"$HTTPS_PROXY\" https_proxy=\"$https_proxy\" ALL_PROXY=\"$ALL_PROXY\" HTTP_PROXY=\"$HTTP_PROXY\""
+set-proxy-env := "env ftp_proxy=\"${ftp_proxy:-}\" all_proxy=\"${all_proxy:-}\" FTP_PROXY=\"${FTP_PROXY:-}\" http_proxy=\"${http_proxy:-}\" HTTPS_PROXY=\"${HTTPS_PROXY:-}\" https_proxy=\"${https_proxy:-}\" ALL_PROXY=\"${ALL_PROXY:-}\" HTTP_PROXY=\"${HTTP_PROXY:-}\""
 
 hostname := "neko"
 
@@ -31,8 +31,8 @@ switch-boot:
 build-os:
   nix build .#nixosConfigurations.{{hostname}}.config.system.build.toplevel --impure --show-trace -L -v
 
-eval input:
-  nix eval .#nixosConfigurations.{{hostname}}.config.{{input}} --impure --show-trace -L -v
+eval target:
+  nix eval .#nixosConfigurations.{{hostname}}.config.{{target}} --impure --show-trace -L -v
 
 hm-switch:
   home-manager switch --flake .#{{username}}@{{hostname}} --show-trace -L -v

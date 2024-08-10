@@ -28,13 +28,13 @@
   ];
 
   nixpkgs = {
+    config.allowUnfree = true;
     overlays = [
       outputs.overlays.additions
       outputs.overlays.modifications
       inputs.nur.overlay
       inputs.nix-alien.overlays.default
     ];
-    config.allowUnfree = true;
   };
 
   nix =
@@ -158,9 +158,7 @@
       bashInteractive
       fish
     ];
-    variables = {
-      EDITOR = "hx";
-    };
+    variables.EDITOR = "hx";
     sessionVariables = {
       LESS = "-SR";
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
@@ -531,12 +529,12 @@
       type = "fcitx5";
       fcitx5 = {
         plasma6Support = true;
+        waylandFrontend = true;
         addons = with pkgs; [
           fcitx5-gtk
           fcitx5-with-addons
           fcitx5-chinese-addons
         ];
-        waylandFrontend = true;
       };
     };
   };
