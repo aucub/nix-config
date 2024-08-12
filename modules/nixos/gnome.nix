@@ -18,20 +18,14 @@
       (with pkgs; [
         evince
         orca
-        gnome-tecla
         gnome-tour
-        gnome-photos
         gnome-menus
         baobab
         epiphany
         gnome-connections
-        libsForQt5.qt5ct
-        qt6Packages.qt6ct
         gnome-console
         yelp
-        cheese
         gnome-terminal
-        epiphany
         geary
         gnome-calendar
         simple-scan
@@ -54,14 +48,6 @@
         atomix
       ]);
   };
-  programs = {
-    evince.enable = false;
-    seahorse.enable = false;
-    gnome-terminal.enable = false;
-    file-roller.enable = false;
-    geary.enable = false;
-    evolution.enable = false;
-  };
   services = {
     hardware.bolt.enable = false; # Thunderbolt
     gnome = {
@@ -77,9 +63,6 @@
       rygel.enable = false;
       gnome-remote-desktop.enable = false;
       evolution-data-server.enable = lib.mkForce false;
-      gnome-keyring.enable = true;
-      glib-networking.enable = true;
-      gnome-settings-daemon.enable = true;
     };
     xserver = {
       displayManager.gdm.enable = true;

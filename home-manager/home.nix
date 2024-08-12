@@ -124,6 +124,7 @@
         run.bun = true;
       };
     };
+    broot.enable = true;
     eza = {
       enable = true;
       git = true;
@@ -156,7 +157,7 @@
     git = {
       enable = true;
       ignores = [
-        # Compiled binary, object files, and libraries
+        # Compiled
         "*.o"
         "*.lo"
         "*.obj"
@@ -185,22 +186,18 @@
         "*.gch"
         "*.pch"
         "*.d"
-        # Dependency directories
-        "node_modules/"
-        "bower_components/"
-        "jspm_packages/"
-        # Virtual Environments
-        ".env"
-        ".env.local"
-        ".env.*.local"
-        ".Python"
         "[Ii]nclude"
         "[Ll]ib"
         "[Ll]ib64"
         "[Ll]ocal"
-        "pyvenv.cfg"
-        ".venv"
-        "pip-selfcheck.json"
+        # Environments
+        ".env"
+        ".env.local"
+        ".env.*.local"
+        # Dependency directories
+        "node_modules/"
+        "bower_components/"
+        "jspm_packages/"
         # IDEs and Editors
         ## JetBrains IDEs
         ".idea/"
@@ -236,9 +233,13 @@
         ".eslintcache"
         ".stylelintcache"
         "package-lock.json"
-        # Python caches and bytecode
+        # Python
+        ".venv"
+        ".Python"
         "*.py[cod]"
         "__pycache__/"
+        "pyvenv.cfg"
+        "pip-selfcheck.json"
         # CMake
         "CMakeFiles/"
         "CMakeScripts/"
@@ -266,20 +267,12 @@
       difftastic = {
         enable = true;
         background = "dark";
+        display = "inline";
       };
       hooks.pre-commit = pkgs.writeScript "pre-commit-script" ''
         #!/bin/sh
         gitleaks protect --staged --no-banner --max-target-megabytes 1
       '';
-    };
-    yazi = {
-      enable = true;
-      enableBashIntegration = true;
-      enableFishIntegration = true;
-      settings.manager = {
-        show_hidden = true;
-        sort_dir_first = true;
-      };
     };
     alacritty = {
       enable = true;

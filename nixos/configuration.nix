@@ -124,8 +124,6 @@
         ++ (if config.virtualisation.docker.enable then [ "docker" ] else [ ]);
       shell = pkgs.bashInteractive;
       packages =
-        ([ inputs.home-manager.packages.${pkgs.system}.default ])
-        ++
         # cli
         (with pkgs; [
           chezmoi
@@ -164,13 +162,11 @@
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
       SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
-      YAZI_CONFIG_HOME = "/home/${vars.users.users.user.username}/.config/yazi";
     };
     systemPackages =
       (with pkgs; [
         inputs.home-manager.packages.${pkgs.system}.default
         nixfmt-rfc-style
-        nix-your-shell
         comma
         nix-tree
         just
@@ -217,7 +213,9 @@
       enable = true;
       interactiveShellInit = ''
         set -U fish_greeting
-        nix-your-shell fish | source
+      '';
+      promptInit = ''
+        ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
       '';
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
@@ -315,7 +313,22 @@
         ".sort_direction" = -1;
       };
     };
-    yazi.enable = true;
+    yazi = {
+      enable = true;
+      settings.yazi = {
+        opener.edit = [
+          {
+            run = "$\{EDITOR:-hx\} \"$@\"";
+            block = true;
+            for = "unix";
+          }
+        ];
+        manager = {
+          show_hidden = true;
+          sort_dir_first = true;
+        };
+      };
+    };
     git = {
       enable = true;
       lfs.enable = true;
@@ -331,15 +344,12 @@
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
         difftool.prompt = false;
-        pager.difftool = true;
-        merge.conflictstyle = "diff3";
         credential = {
           credentialStore = "secretservice";
           helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
         };
       };
     };
-    npm.enable = false;
     nautilus-open-any-terminal = {
       enable = true;
       terminal = "alacritty";
@@ -388,7 +398,6 @@
       SystemMaxFileSize=10M
       SystemMaxUse=100M
     '';
-    openssh.enable = false;
     psd.enable = true;
     resolved = {
       enable = true;
@@ -532,7 +541,6 @@
         waylandFrontend = true;
         addons = with pkgs; [
           fcitx5-gtk
-          fcitx5-with-addons
           fcitx5-chinese-addons
         ];
       };
