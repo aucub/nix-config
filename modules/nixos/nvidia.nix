@@ -6,9 +6,9 @@
     __GLX_VENDOR_LIBRARY_NAME = "mesa";
   };
   hardware.nvidia = {
-    nvidiaSettings = false;
     open = true;
     modesetting.enable = true;
+    nvidiaSettings = false;
     powerManagement = {
       enable = true;
       finegrained = true;

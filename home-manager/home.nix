@@ -78,7 +78,6 @@
   };
 
   programs = {
-    home-manager.enable = true;
     nix-index = {
       enable = true;
       enableBashIntegration = false;
@@ -95,6 +94,9 @@
       '';
       shellAbbrs = {
         navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && cd ~/.config/navicat/Premium/ && ${pkgs.jq}/bin/jq 'del(.[\"014BF4EC24C114BEF46E1587042B3619\"])' preferences.json > tmp.json && mv tmp.json preferences.json";
+      };
+      functions = {
+        nix-loc = "nix-locate $argv | rga -v '\\('";
       };
     };
     tealdeer = {
@@ -279,7 +281,7 @@
       settings = {
         import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
         live_config_reload = false;
-        shell.program = "fish";
+        shell.program = "${pkgs.fish}/bin/fish";
         window = {
           padding = {
             x = 6;

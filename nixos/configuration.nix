@@ -90,9 +90,9 @@
       shell = pkgs.bashInteractive;
     };
     "${vars.users.users.user.username}" = {
+      isNormalUser = true;
       uid = 1000;
       initialHashedPassword = vars.users.users.user.initialHashedPassword;
-      isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
       ];
@@ -126,20 +126,20 @@
       packages =
         # cli
         (with pkgs; [
+          git-credential-manager
           chezmoi
           typst
           ruff
-          git-credential-manager
         ])
         ++ (with pkgs; [
           pot
           celluloid
           localsend
-          alacritty-theme
           gitkraken
         ])
         # theme
         ++ (with pkgs; [
+          alacritty-theme
           (papirus-icon-theme.override { color = "adwaita"; })
           orchis-theme
         ])
@@ -165,7 +165,7 @@
     };
     systemPackages =
       (with pkgs; [
-        inputs.home-manager.packages.${pkgs.system}.default
+        home-manager
         nixfmt-rfc-style
         comma
         nix-tree

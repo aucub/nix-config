@@ -34,6 +34,9 @@ build-os:
 eval target:
   nix eval .#nixosConfigurations.{{hostname}}.config.{{target}} --impure --show-trace -L -v
 
+eval-hm target:
+  nix eval .#homeConfigurations.{{username}}@{{hostname}}.config.{{target}} --impure --show-trace -L -v
+
 hm-switch:
   home-manager switch --flake .#{{username}}@{{hostname}} --show-trace -L -v
 
@@ -48,6 +51,3 @@ update:
 
 fmt:
   nix fmt --show-trace -L -v
-
-locate target:
-  nix-locate {{target}} | grep -v '('

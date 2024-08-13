@@ -10,6 +10,7 @@
       "--no-default-browser-check"
       "--enable-gpu-rasterization"
       "--enable-zero-copy"
+      "--ignore-gpu-blocklist"
       "--use-cmd-decoder=passthrough"
       "--enable-quic"
       "--enable-smooth-scrolling"
