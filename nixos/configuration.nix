@@ -145,6 +145,7 @@
         ])
         # custom
         ++ (with pkgs; [
+          hiddify-next
           navicat
           damask
         ]);
@@ -353,11 +354,6 @@
     nautilus-open-any-terminal = {
       enable = true;
       terminal = "alacritty";
-    };
-    clash-verge = {
-      enable = true;
-      tunMode = true;
-      package = pkgs.clash-verge-rev;
     };
     firefox = {
       enable = true;
@@ -579,7 +575,6 @@
       xdgOpenUsePortal = true;
     };
     mime.defaultApplications = {
-      "text/html" = "firefox.desktop";
       "image/jpeg" = "org.gnome.Loupe.desktop";
       "image/png" = "org.gnome.Loupe.desktop";
       "image/gif" = "org.gnome.Loupe.desktop";
@@ -602,6 +597,7 @@
       "image/avif" = "org.gnome.Loupe.desktop";
       "image/heic" = "org.gnome.Loupe.desktop";
       "image/jxl" = "org.gnome.Loupe.desktop";
+      "text/html" = "firefox.desktop";
       "application/pdf" = "firefox.desktop";
       "x-scheme-handler/http" = "firefox.desktop";
       "x-scheme-handler/https" = "firefox.desktop";
@@ -612,6 +608,9 @@
   qt.enable = true;
 
   systemd = {
+    extraConfig = ''
+      DefaultTimeoutStopSec=25s
+    '';
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0
