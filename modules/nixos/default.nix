@@ -5,4 +5,5 @@
   nvidia = import ./nvidia.nix;
   containers = import ./containers.nix;
   steam = import ./steam.nix;
+  dae = import ./dae.nix;
 }
