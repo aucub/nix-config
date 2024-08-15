@@ -136,6 +136,9 @@
           celluloid
           localsend
           gitkraken
+          notion-app-enhanced
+          maestral-gui
+          clash-nyanpasu
         ])
         # theme
         ++ (with pkgs; [
@@ -146,9 +149,25 @@
         # custom
         ++ (with pkgs; [
           hiddify-next
+          mihomo-party
           navicat
           damask
         ]);
+    };
+  };
+
+  security.wrappers = {
+    mihomo-party = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_bind_service,cap_net_admin=+ep";
+      source = "${lib.getExe pkgs.mihomo-party}";
+    };
+    hiddify-next = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_bind_service,cap_net_admin=+ep";
+      source = "${lib.getExe pkgs.hiddify-next}";
     };
   };
 
@@ -206,6 +225,10 @@
   };
 
   programs = {
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
     command-not-found.enable = false;
     bash.promptInit = ''
       PS1='[\u@\h \W]\$ '
@@ -350,6 +373,28 @@
           helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
         };
       };
+    };
+    proxychains = {
+      enable = true;
+      quietMode = true;
+      proxies = {
+        hiddify-next = {
+          type = "socks5";
+          host = "127.0.0.1";
+          port = 12334;
+        };
+        clash-verge = {
+          enable = true;
+          type = "socks5";
+          host = "127.0.0.1";
+          port = 7890;
+        };
+      };
+    };
+    clash-verge = {
+      enable = true;
+      tunMode = true;
+      package = pkgs.clash-verge-rev;
     };
     nautilus-open-any-terminal = {
       enable = true;
