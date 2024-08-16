@@ -81,7 +81,7 @@
     extraSpecialArgs = {
       inherit inputs vars outputs;
     };
-    users."${vars.users.users.user.username}" = import ../home-manager/home.nix;
+    users."${vars.users.users.user.name}" = import ../home-manager/home.nix;
     backupFileExtension = "bak";
   };
 
@@ -90,7 +90,7 @@
       initialHashedPassword = vars.users.users.root.initialHashedPassword;
       shell = pkgs.bashInteractive;
     };
-    "${vars.users.users.user.username}" = {
+    "${vars.users.users.user.name}" = {
       isNormalUser = true;
       uid = 1000;
       initialHashedPassword = vars.users.users.user.initialHashedPassword;
@@ -107,21 +107,21 @@
           "audio"
           "systemd-journal"
         ]
-        ++ (if config.programs.git.enable || config.home.programs.git.enable then [ "git" ] else [ ])
+        ++ (
+          if
+            config.programs.git.enable
+            || config.home-manager.users."${vars.users.users.user.name}".programs.git.enable
+          then
+            [ "git" ]
+          else
+            [ ]
+        )
         ++ (if config.networking.networkmanager.enable then [ "networkmanager" ] else [ ])
         ++ (if config.services.colord.enable then [ "colord" ] else [ ])
         ++ (if config.programs.adb.enable then [ "adbusers" ] else [ ])
         ++ (if config.programs.wireshark.enable then [ "wireshark" ] else [ ])
         ++ (if config.virtualisation.podman.enable then [ "podman" ] else [ ])
-        ++ (
-          if config.virtualisation.libvirtd.enable then
-            [
-              "libvirtd"
-              "kvm"
-            ]
-          else
-            [ ]
-        )
+        ++ (if config.virtualisation.libvirtd.enable then [ "libvirtd" ] else [ ])
         ++ (if config.virtualisation.docker.enable then [ "docker" ] else [ ]);
       shell = pkgs.bashInteractive;
       packages =
@@ -447,7 +447,7 @@
     };
     displayManager.autoLogin = {
       enable = true;
-      user = vars.users.users.user.username;
+      user = vars.users.users.user.name;
     };
     xserver = {
       enable = true;
@@ -578,34 +578,47 @@
       enable = true;
       xdgOpenUsePortal = true;
     };
-    mime.defaultApplications = {
-      "image/jpeg" = "org.gnome.Loupe.desktop";
-      "image/png" = "org.gnome.Loupe.desktop";
-      "image/gif" = "org.gnome.Loupe.desktop";
-      "image/webp" = "org.gnome.Loupe.desktop";
-      "image/tiff" = "org.gnome.Loupe.desktop";
-      "image/x-tga" = "org.gnome.Loupe.desktop";
-      "image/vnd-ms.dds" = "org.gnome.Loupe.desktop";
-      "image/x-dds" = "org.gnome.Loupe.desktop";
-      "image/bmp" = "org.gnome.Loupe.desktop";
-      "image/vnd.microsoft.icon" = "org.gnome.Loupe.desktop";
-      "image/vnd.radiance" = "org.gnome.Loupe.desktop";
-      "image/x-exr" = "org.gnome.Loupe.desktop";
-      "image/x-portable-bitmap" = "org.gnome.Loupe.desktop";
-      "image/x-portable-graymap" = "org.gnome.Loupe.desktop";
-      "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
-      "image/x-portable-anymap" = "org.gnome.Loupe.desktop";
-      "image/x-qoi" = "org.gnome.Loupe.desktop";
-      "image/svg+xml" = "org.gnome.Loupe.desktop";
-      "image/svg+xml-compressed" = "org.gnome.Loupe.desktop";
-      "image/avif" = "org.gnome.Loupe.desktop";
-      "image/heic" = "org.gnome.Loupe.desktop";
-      "image/jxl" = "org.gnome.Loupe.desktop";
-      "text/html" = "firefox.desktop";
-      "application/pdf" = "firefox.desktop";
-      "x-scheme-handler/http" = "firefox.desktop";
-      "x-scheme-handler/https" = "firefox.desktop";
-      "x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
+    mime = {
+      removedAssociations = {
+        "application/x-zerosize" = "org.gnome.TextEditor.desktop";
+        "x-content/unix-software" = "nautilus-autorun-software.desktop";
+        "x-scheme-handler/unknown=" = "chromium-browser.desktop";
+        "x-scheme-handler/mailto" = "chromium-browser.desktop";
+        "x-scheme-handler/webcal" = "chromium-browser.desktop";
+        "x-scheme-handler/about" = "chromium-browser.desktop";
+        "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
+        "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
+        "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
+      };
+      defaultApplications = {
+        "image/jpeg" = "org.gnome.Loupe.desktop";
+        "image/png" = "org.gnome.Loupe.desktop";
+        "image/gif" = "org.gnome.Loupe.desktop";
+        "image/webp" = "org.gnome.Loupe.desktop";
+        "image/tiff" = "org.gnome.Loupe.desktop";
+        "image/bmp" = "org.gnome.Loupe.desktop";
+        "image/vnd-ms.dds" = "org.gnome.Loupe.desktop";
+        "image/vnd.microsoft.icon" = "org.gnome.Loupe.desktop";
+        "image/vnd.radiance" = "org.gnome.Loupe.desktop";
+        "image/x-exr" = "org.gnome.Loupe.desktop";
+        "image/x-dds" = "org.gnome.Loupe.desktop";
+        "image/x-tga" = "org.gnome.Loupe.desktop";
+        "image/x-portable-bitmap" = "org.gnome.Loupe.desktop";
+        "image/x-portable-graymap" = "org.gnome.Loupe.desktop";
+        "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
+        "image/x-portable-anymap" = "org.gnome.Loupe.desktop";
+        "image/x-qoi" = "org.gnome.Loupe.desktop";
+        "image/svg+xml" = "org.gnome.Loupe.desktop";
+        "image/svg+xml-compressed" = "org.gnome.Loupe.desktop";
+        "image/avif" = "org.gnome.Loupe.desktop";
+        "image/heic" = "org.gnome.Loupe.desktop";
+        "image/jxl" = "org.gnome.Loupe.desktop";
+        "text/html" = "firefox.desktop";
+        "application/pdf" = "firefox.desktop";
+        "x-scheme-handler/http" = "firefox.desktop";
+        "x-scheme-handler/https" = "firefox.desktop";
+        "x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
+      };
     };
   };
 

@@ -39,7 +39,7 @@
         networking.hostName = "neko";
         users.users = {
           user = {
-            username = "uymi";
+            name = "uymi";
             initialHashedPassword = "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
           };
           root.initialHashedPassword = "$y$j9T$/qg2DYP0TOSZzSwlgs9mV/$uVAqBwhXEnwkMd0D4zKH9SSBQ4WzlGcnimnLrbyNwP4";
@@ -65,7 +65,7 @@
             blacklist iTCO_wdt
             options nvidia "NVreg_EnableGpuFirmware=0"
           ''
-          # ++ ''
+          # + ''
           #   options v4l2loopback devices=1 video_nr=1 card_label="Virtual Camera" exclusive_caps=1
           # ''
           ;
@@ -92,7 +92,7 @@
         };
       };
       homeConfigurations = {
-        "${vars.users.users.user.username}@${vars.networking.hostName}" =
+        "${vars.users.users.user.name}@${vars.networking.hostName}" =
           home-manager.lib.homeManagerConfiguration
             {
               pkgs = nixpkgs.legacyPackages.x86_64-linux;

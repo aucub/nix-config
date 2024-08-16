@@ -3,6 +3,7 @@
   outputs,
   vars,
   pkgs,
+  config,
   ...
 }:
 {
@@ -39,8 +40,8 @@
         defaultCursor = vars.home.pointerCursor.name;
       };
     };
-    username = "${vars.users.users.user.username}";
-    homeDirectory = "/home/${vars.users.users.user.username}";
+    username = "${vars.users.users.user.name}";
+    homeDirectory = "/home/${vars.users.users.user.name}";
     language.base = "zh_CN.UTF-8";
   };
 
@@ -85,13 +86,19 @@
     };
     fish = {
       enable = true;
-      interactiveShellInit = ''
-        # set -x GOPATH $HOME/go
-        # set -x PATH $PATH $GOPATH/bin /usr/local/go/bin
-        set -x BUN_INSTALL $HOME/.bun
-        set -x PATH $PATH $BUN_INSTALL/bin
-        set_proxy
-      '';
+      interactiveShellInit =
+        ''
+          set_proxy
+        ''
+        + (
+          if config.programs.bun.enable then
+            ''
+              set -x BUN_INSTALL $HOME/.bun
+              set -x PATH $PATH $BUN_INSTALL/bin
+            ''
+          else
+            ""
+        );
       shellAbbrs = {
         navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && cd ~/.config/navicat/Premium/ && ${pkgs.jq}/bin/jq 'del(.[\"014BF4EC24C114BEF46E1587042B3619\"])' preferences.json > tmp.json && mv tmp.json preferences.json";
       };
