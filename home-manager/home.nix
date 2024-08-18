@@ -134,6 +134,7 @@
       };
     };
     broot.enable = true;
+    zoxide.enable = true;
     eza = {
       enable = true;
       git = true;

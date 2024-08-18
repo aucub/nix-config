@@ -54,7 +54,6 @@
         warn-dirty = false;
         substituters = [
           "https://mirrors.ustc.edu.cn/nix-channels/store"
-          "https://cache.nixos.org"
           "https://nix-community.cachix.org"
           # "https://qihaiumi.cachix.org"
         ];
@@ -62,10 +61,7 @@
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         ];
-        trusted-users = [
-          "root"
-          "@wheel"
-        ];
+        trusted-users = [ "@wheel" ];
       };
       channel.enable = false; # nix-channel 命令和状态文件
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
@@ -236,7 +232,6 @@
     };
     nix-ld = {
       enable = true;
-      package = pkgs.nix-ld-rs;
       libraries = with pkgs; [
         libGL
         glib
