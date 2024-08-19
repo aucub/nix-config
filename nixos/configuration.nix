@@ -202,10 +202,6 @@
   };
 
   programs = {
-    appimage = {
-      enable = true;
-      binfmt = true;
-    };
     command-not-found.enable = false;
     bash.promptInit = ''
       PS1='[\u@\h \W]\$ '
@@ -213,7 +209,7 @@
     fish = {
       enable = true;
       interactiveShellInit = ''
-        set -U fish_greeting
+        set fish_greeting
       '';
       promptInit = ''
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
@@ -244,6 +240,10 @@
     };
     nix-index-database.comma.enable = true;
     adb.enable = true;
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
     ssh = {
       askPassword = "";
       enableAskPassword = false;

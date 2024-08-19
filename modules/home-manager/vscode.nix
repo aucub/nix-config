@@ -11,7 +11,7 @@
         charliermarsh.ruff
         foxundermoon.shell-format
         tamasfe.even-better-toml
-        # nvarner.typst-lsp
+        myriad-dreamin.tinymist
         tomoki1207.pdf
         jnoortheen.nix-ide
         github.codespaces

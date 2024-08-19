@@ -133,8 +133,11 @@
         run.bun = true;
       };
     };
-    broot.enable = true;
-    zoxide.enable = true;
+    broot = {
+      enable = true;
+      settings.default_flags = "-ih";
+    };
+    fd.enable = true;
     eza = {
       enable = true;
       git = true;
