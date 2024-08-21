@@ -198,7 +198,13 @@
           exec python "$@"
         '')
       ])
-      ++ (with pkgs; [ nix-alien ]);
+      ++ (with pkgs; [ nix-alien ])
+      ++ (
+        if config.virtualisation.waydroid.enable then
+          [ pkgs.nur.repos.ataraxiasjel.waydroid-script ]
+        else
+          [ ]
+      );
   };
 
   programs = {
@@ -452,6 +458,8 @@
       wacom.enable = false;
     };
   };
+
+  virtualisation.waydroid.enable = true;
 
   hardware = {
     enableRedistributableFirmware = true;
