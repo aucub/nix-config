@@ -198,13 +198,7 @@
           exec python "$@"
         '')
       ])
-      ++ (with pkgs; [ nix-alien ])
-      ++ (
-        if config.virtualisation.waydroid.enable then
-          [ pkgs.nur.repos.ataraxiasjel.waydroid-script ]
-        else
-          [ ]
-      );
+      ++ (with pkgs; [ nix-alien ]);
   };
 
   programs = {
@@ -459,8 +453,6 @@
     };
   };
 
-  virtualisation.waydroid.enable = true;
-
   hardware = {
     enableRedistributableFirmware = true;
     pulseaudio.enable = false;
@@ -582,17 +574,17 @@
       xdgOpenUsePortal = true;
     };
     mime = {
-      removedAssociations = {
-        "application/x-zerosize" = "org.gnome.TextEditor.desktop";
-        "x-content/unix-software" = "nautilus-autorun-software.desktop";
-        "x-scheme-handler/unknown=" = "chromium-browser.desktop";
-        "x-scheme-handler/mailto" = "chromium-browser.desktop";
-        "x-scheme-handler/webcal" = "chromium-browser.desktop";
-        "x-scheme-handler/about" = "chromium-browser.desktop";
-        "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
-        "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
-        "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
-      };
+      # removedAssociations = {
+      #   "application/x-zerosize" = "org.gnome.TextEditor.desktop";
+      #   "x-content/unix-software" = "nautilus-autorun-software.desktop";
+      #   "x-scheme-handler/unknown=" = "chromium-browser.desktop";
+      #   "x-scheme-handler/mailto" = "chromium-browser.desktop";
+      #   "x-scheme-handler/webcal" = "chromium-browser.desktop";
+      #   "x-scheme-handler/about" = "chromium-browser.desktop";
+      #   "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
+      #   "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
+      #   "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
+      # };
       defaultApplications = {
         "image/jpeg" = "org.gnome.Loupe.desktop";
         "image/png" = "org.gnome.Loupe.desktop";
