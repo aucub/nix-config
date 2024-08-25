@@ -361,6 +361,8 @@
     };
   };
 
+  security.sudo-rs.enable = true;
+
   services = {
     acpid.enable = true;
     upower = {

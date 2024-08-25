@@ -14,39 +14,36 @@
         gnome-tweaks
         gtop
       ]);
-    gnome.excludePackages =
-      (with pkgs; [
-        evince
-        orca
-        gnome-tour
-        gnome-menus
-        baobab
-        epiphany
-        gnome-connections
-        gnome-console
-        yelp
-        gnome-terminal
-        geary
-        gnome-calendar
-        simple-scan
-        totem
-        file-roller
-        seahorse
-      ])
-      ++ (with pkgs.gnome; [
-        gnome-contacts
-        gnome-initial-setup
-        gnome-music
-        gnome-clocks
-        gnome-characters
-        gnome-maps
-        gnome-weather
-        gnome-software
-        tali
-        iagno
-        hitori
-        atomix
-      ]);
+    gnome.excludePackages = with pkgs; [
+      evince
+      orca
+      gnome-tour
+      gnome-menus
+      baobab
+      epiphany
+      gnome-connections
+      gnome-console
+      yelp
+      gnome-terminal
+      geary
+      gnome-calendar
+      simple-scan
+      totem
+      file-roller
+      seahorse
+      gnome-contacts
+      gnome-initial-setup
+      gnome-music
+      gnome-clocks
+      gnome-characters
+      gnome-maps
+      gnome-weather
+      gnome-software
+      tali
+      iagno
+      hitori
+      atomix
+    ];
   };
   services = {
     hardware.bolt.enable = false; # Thunderbolt
@@ -56,7 +53,6 @@
       gnome-online-accounts.enable = false;
       gnome-browser-connector.enable = false;
       gnome-initial-setup.enable = false;
-      gnome-online-miners.enable = lib.mkForce false;
       games.enable = false;
       tracker.enable = false;
       tracker-miners.enable = false;

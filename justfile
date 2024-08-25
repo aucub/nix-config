@@ -26,7 +26,7 @@ switch:
   sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --no-build-nix --show-trace -L -v
 
 switch-boot:
-  sudo {{set-proxy-env}} nixos-rebuild switch  --flake .#{{hostname}} --install-bootloader --no-build-nix --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch  --flake .#{{hostname}} --no-build-nix --install-bootloader --show-trace -L -v
 
 build-os:
   nix build .#nixosConfigurations.{{hostname}}.config.system.build.toplevel --impure --show-trace -L -v

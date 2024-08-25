@@ -17,6 +17,9 @@
       "--enable-webrtc-pipewire-capturer"
       "--disable-features=ChromeLabs"
       "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,OverlayScrollbar,ParallelDownloading,WebContentsCaptureHiDPI,WebRtcHideLocalIpsWithMdns"
+      # "--ozone-platform-hint=auto"
+      # "--enable-wayland-ime"
+      # "--wayland-text-input-version=3"
     ];
   };
 }
