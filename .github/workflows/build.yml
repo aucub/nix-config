@@ -33,5 +33,3 @@ jobs:
       - uses: extractions/setup-just@v2
 
       - run: just build-os
-
-      - run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'

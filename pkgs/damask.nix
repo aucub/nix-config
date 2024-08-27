@@ -19,7 +19,7 @@
   vala,
   wrapGAppsHook,
 }:
-stdenv.mkDerivation rec {
+let
   pname = "damask";
   version = "0.2.2";
 
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "X1snGqI6KJpXjFyPT//VEuHEI6nssIwiWbW0773NJTw=";
   };
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [
     blueprint-compiler

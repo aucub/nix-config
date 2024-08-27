@@ -12,18 +12,19 @@
     outputs.nixosModules.fcitx5
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
-    outputs.nixosModules.steam
     outputs.nixosModules.dae
-    outputs.nixosModules.nvidia
+    # outputs.nixosModules.nvidia
+    # outputs.nixosModules.steam
     # outputs.nixosModules.containers
 
-    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nix-index-database.nixosModules.nix-index
+    inputs.auto-cpufreq.nixosModules.default
 
     ./hardware-configuration.nix
   ];
@@ -55,10 +56,12 @@
         substituters = [
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://nix-community.cachix.org"
+          "https://cache.garnix.io"
           # "https://qihaiumi.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
           # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         ];
         trusted-users = [ "@wheel" ];
@@ -90,9 +93,6 @@
       isNormalUser = true;
       uid = 1000;
       initialHashedPassword = vars.users.users.user.initialHashedPassword;
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDk688qD+dBPXh53bQXMG6d1UkKqCg1ma931+Z3vG4vd dr56ekgbb@mozmail.com"
-      ];
       extraGroups =
         [
           "wheel"
@@ -132,7 +132,7 @@
           pot
           celluloid
           localsend
-          gitkraken
+          # gitkraken
         ])
         # theme
         ++ (with pkgs; [
@@ -144,6 +144,7 @@
         ++ (with pkgs; [
           navicat
           damask
+          # flclash
         ]);
     };
   };
@@ -166,6 +167,7 @@
         nixfmt-rfc-style
         comma
         nix-tree
+        nvd
         just
       ])
       ++ (with pkgs; [ nil ])
@@ -182,7 +184,7 @@
         typos
         lnav
         uutils-coreutils-noprefix
-        nvtopPackages.amd
+        # nvtopPackages.amd
       ])
       # Python Package
       ++ (with pkgs; [
@@ -202,6 +204,20 @@
   };
 
   programs = {
+    auto-cpufreq = {
+      enable = true;
+      settings = {
+        charger = {
+          governor = "schedutil";
+          turbo = "auto";
+        };
+        battery = {
+          enable_thresholds = true;
+          start_threshold = 70;
+          stop_threshold = 75;
+        };
+      };
+    };
     command-not-found.enable = false;
     bash.promptInit = ''
       PS1='[\u@\h \W]\$ '
@@ -371,17 +387,6 @@
     };
     power-profiles-daemon.enable = false;
     tlp.enable = false;
-    auto-cpufreq = {
-      enable = true;
-      settings = {
-        charger.governor = "schedutil";
-        battery = {
-          enable_thresholds = true;
-          start_threshold = 70;
-          stop_threshold = 75;
-        };
-      };
-    };
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     dbus.implementation = "broker";
@@ -416,7 +421,7 @@
       wireplumber.enable = true;
     };
     kmscon = {
-      enable = true; # 替换 vt
+      enable = true;
       fonts = [
         {
           name = "Sarasa Mono SC";
@@ -576,17 +581,17 @@
       xdgOpenUsePortal = true;
     };
     mime = {
-      # removedAssociations = {
-      #   "application/x-zerosize" = "org.gnome.TextEditor.desktop";
-      #   "x-content/unix-software" = "nautilus-autorun-software.desktop";
-      #   "x-scheme-handler/unknown=" = "chromium-browser.desktop";
-      #   "x-scheme-handler/mailto" = "chromium-browser.desktop";
-      #   "x-scheme-handler/webcal" = "chromium-browser.desktop";
-      #   "x-scheme-handler/about" = "chromium-browser.desktop";
-      #   "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
-      #   "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
-      #   "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
-      # };
+      removedAssociations = {
+        "application/x-zerosize" = "org.gnome.TextEditor.desktop";
+        "x-content/unix-software" = "nautilus-autorun-software.desktop";
+        "x-scheme-handler/unknown=" = "chromium-browser.desktop";
+        "x-scheme-handler/mailto" = "chromium-browser.desktop";
+        "x-scheme-handler/webcal" = "chromium-browser.desktop";
+        "x-scheme-handler/about" = "chromium-browser.desktop";
+        "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
+        "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
+        "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
+      };
       defaultApplications = {
         "image/jpeg" = "org.gnome.Loupe.desktop";
         "image/png" = "org.gnome.Loupe.desktop";

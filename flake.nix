@@ -16,6 +16,10 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -58,6 +62,7 @@
           ];
           extraModulePackages =
             kernelPackages: with kernelPackages; [
+              lenovo-legion-module
               # v4l2loopback
             ];
           extraModprobeConfig = ''
