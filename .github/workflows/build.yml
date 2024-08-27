@@ -14,7 +14,7 @@ jobs:
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v7
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
           diagnostic-endpoint: ""
           use-flakehub: false
@@ -33,5 +33,3 @@ jobs:
       - uses: extractions/setup-just@v2
 
       - run: just build-os
-
-      - run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'

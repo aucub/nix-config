@@ -17,7 +17,7 @@ jobs:
             auto-optimise-store = true
             experimental-features = nix-command flakes
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v7
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
           diagnostic-endpoint: ""
           use-flakehub: false

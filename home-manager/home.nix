@@ -61,15 +61,16 @@
     configFile."nixpkgs/config.nix".text = ''
       {
         allowUnfree = true;
+        android_sdk.accept_license = true;
       }
     '';
     configFile."uv/uv.toml".text = ''
       [pip]
-      index-url = "https://mirrors.ustc.edu.cn/pypi/web/simple"
+      index-url = "https://mirrors.bfsu.edu.cn/pypi/web/simple"
     '';
     configFile."pip/pip.conf".text = ''
       [global]
-      index-url = https://mirrors.ustc.edu.cn/pypi/web/simple
+      index-url = https://mirrors.bfsu.edu.cn/pypi/web/simple
     '';
     configFile."electron-flags.conf".text = ''
       --log-level=0
@@ -100,14 +101,14 @@
             ""
         );
       shellAbbrs = {
-        navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && cd ~/.config/navicat/Premium/ && ${pkgs.jq}/bin/jq 'del(.[\"014BF4EC24C114BEF46E1587042B3619\"])' preferences.json > tmp.json && mv tmp.json preferences.json";
+        navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && ${pkgs.jq}/bin/jq 'with_entries(select(.key | length != 32))' ~/.config/navicat/Premium/preferences.json > ~/.config/navicat/Premium/tmp.json && mv ~/.config/navicat/Premium/tmp.json ~/.config/navicat/Premium/preferences.json";
       };
       functions = {
         nix-loc = "nix-locate $argv | rga -v '\\('";
       };
     };
     tealdeer = {
-      enable = true;
+      enable = false;
       settings = {
         display.compact = true;
         updates.auto_update = false;
@@ -286,6 +287,10 @@
         #!/bin/sh
         gitleaks protect --staged --no-banner --max-target-megabytes 1
       '';
+      aliases = {
+        ca = "commit --amend --no-edit";
+        pf = "push --force";
+      };
     };
     alacritty = {
       enable = true;
