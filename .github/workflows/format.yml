@@ -28,7 +28,7 @@ jobs:
 
       - run: nix fmt --no-write-lock-file --show-trace -L -v
 
-      - uses: peter-evans/create-pull-request@v6
+      - uses: peter-evans/create-pull-request@v7
         with:
           commit-message: fmt
           branch: fmt
