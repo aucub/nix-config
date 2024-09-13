@@ -58,6 +58,53 @@
       publicShare = null;
       desktop = null;
     };
+    mimeApps = {
+      enable = true;
+      defaultApplications =
+        let
+          browser = [ "firefox.desktop" ];
+          image = [ "org.gnome.Loupe.desktop" ];
+        in
+        {
+          "text/html" = browser;
+          "application/pdf" = browser;
+          "x-scheme-handler/http" = browser;
+          "x-scheme-handler/https" = browser;
+          "image/jpeg" = image;
+          "image/png" = image;
+          "image/gif" = image;
+          "image/webp" = image;
+          "image/tiff" = image;
+          "image/bmp" = image;
+          "image/vnd-ms.dds" = image;
+          "image/vnd.microsoft.icon" = image;
+          "image/vnd.radiance" = image;
+          "image/x-exr" = image;
+          "image/x-dds" = image;
+          "image/x-tga" = image;
+          "image/x-portable-bitmap" = image;
+          "image/x-portable-graymap" = image;
+          "image/x-portable-pixmap" = image;
+          "image/x-portable-anymap" = image;
+          "image/x-qoi" = image;
+          "image/svg+xml" = image;
+          "image/svg+xml-compressed" = image;
+          "image/avif" = image;
+          "image/heic" = image;
+          "image/jxl" = image;
+        };
+      associations.removed = {
+        "application/x-zerosize" = "org.gnome.TextEditor.desktop";
+        "x-content/unix-software" = "nautilus-autorun-software.desktop";
+        "x-scheme-handler/unknown" = "chromium-browser.desktop";
+        "x-scheme-handler/mailto" = "chromium-browser.desktop";
+        "x-scheme-handler/webcal" = "chromium-browser.desktop";
+        "x-scheme-handler/about" = "chromium-browser.desktop";
+        "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
+        "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
+        "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
+      };
+    };
     configFile."nixpkgs/config.nix".text = ''
       {
         allowUnfree = true;
@@ -80,11 +127,6 @@
   };
 
   programs = {
-    nix-index = {
-      enable = true;
-      enableBashIntegration = false;
-      enableFishIntegration = false;
-    };
     fish = {
       enable = true;
       interactiveShellInit =
@@ -100,11 +142,18 @@
           else
             ""
         );
-      shellAbbrs = {
-        navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && ${pkgs.jq}/bin/jq 'with_entries(select(.key | length != 32))' ~/.config/navicat/Premium/preferences.json > ~/.config/navicat/Premium/tmp.json && mv ~/.config/navicat/Premium/tmp.json ~/.config/navicat/Premium/preferences.json";
-      };
+      shellAbbrs.navicat-reset = "${pkgs.dconf}/bin/dconf reset -f /com/premiumsoft/ && ${pkgs.jq}/bin/jq 'with_entries(select(.key | length != 32))' ~/.config/navicat/Premium/preferences.json > ~/.config/navicat/Premium/tmp.json && mv ~/.config/navicat/Premium/tmp.json ~/.config/navicat/Premium/preferences.json";
       functions = {
         nix-loc = "nix-locate $argv | rga -v '\\('";
+        nvdd = ''
+          if test (count $argv) -ne 2
+            echo "Usage: nixos-diff <old_version> <new_version>"
+            return 1
+          end
+          set old_version $argv[1]
+          set new_version $argv[2]
+          nvd diff /nix/var/nix/profiles/system-$old_version-link /nix/var/nix/profiles/system-$new_version-link
+        '';
       };
     };
     tealdeer = {
@@ -124,6 +173,10 @@
         enter_accept = true;
         prefers_reduced_motion = true;
       };
+    };
+    mise = {
+      enable = true;
+      settings.experimental = true;
     };
     bun = {
       enable = false;
@@ -277,6 +330,11 @@
         "*.dex"
         ".res/"
         ".symbols/"
+      ];
+      attributes = [
+        ".encrypted.* diff=nodiff"
+        "*.enc diff=nodiff"
+        "*.age diff=nodiff"
       ];
       difftastic = {
         enable = true;

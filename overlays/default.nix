@@ -9,5 +9,14 @@
         runHook postInstall
       '';
     });
+    gitleaks = prev.gitleaks.overrideAttrs (oldAttrs: rec {
+      version = "8.19.2";
+      src = prev.fetchFromGitHub {
+        owner = "zricethezav";
+        repo = "gitleaks";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-VC8Bf6jcxXdBws7IParh9Srk34JiYVx5Tk2LLilrNJ4=";
+      };
+    });
   };
 }

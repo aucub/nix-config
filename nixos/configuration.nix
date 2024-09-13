@@ -44,9 +44,12 @@
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in
     {
-      package = pkgs.lix;
       settings = {
-        experimental-features = "nix-command flakes";
+        experimental-features = [
+          "nix-command"
+          "flakes"
+          "ca-derivations"
+        ];
         flake-registry = "";
         nix-path = config.nix.nixPath;
         auto-optimise-store = true;
@@ -144,18 +147,20 @@
         ++ (with pkgs; [
           navicat
           damask
-          # flclash
+          flclash
         ]);
     };
   };
 
   environment = {
+    stub-ld.enable = false;
     shells = with pkgs; [
       bashInteractive
       fish
     ];
     variables.EDITOR = "hx";
     sessionVariables = {
+      NAUTILUS_4_EXTENSION_DIR = lib.mkForce "${config.system.path}/lib/nautilus/extensions-4";
       LESS = "-SR";
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
@@ -208,7 +213,7 @@
       enable = true;
       settings = {
         charger = {
-          governor = "schedutil";
+          governor = "performance";
           turbo = "auto";
         };
         battery = {
@@ -226,6 +231,7 @@
       enable = true;
       interactiveShellInit = ''
         set fish_greeting
+        set -U fish_history_max 2500
       '';
       promptInit = ''
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
@@ -256,10 +262,11 @@
     };
     nix-index-database.comma.enable = true;
     adb.enable = true;
-    appimage = {
-      enable = true;
-      binfmt = true;
-    };
+    # appimage = {
+    #   enable = true;
+    #   binfmt = true;
+    # };
+    # direnv.enable = true;
     ssh = {
       askPassword = "";
       enableAskPassword = false;
@@ -356,10 +363,15 @@
         core = {
           autocrlf = "input";
           askpass = "";
+          quotepath = false;
         };
         init.defaultBranch = "main";
         push.autoSetupRemote = true;
         difftool.prompt = false;
+        diff.nodiff.command = "${pkgs.uutils-coreutils-noprefix}/bin/true";
+        rebase.autosquash = true;
+        log.date = "iso";
+        merge.conflictStyle = "diff3";
         credential = {
           credentialStore = "secretservice";
           helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
@@ -428,7 +440,10 @@
           package = pkgs.sarasa-gothic;
         }
       ];
-      extraConfig = "font-size=20";
+      extraConfig = ''
+        font-size=20
+        hwaccel
+      '';
       hwRender = true;
       useXkbConfig = true;
     };
@@ -580,47 +595,8 @@
       enable = true;
       xdgOpenUsePortal = true;
     };
-    mime = {
-      removedAssociations = {
-        "application/x-zerosize" = "org.gnome.TextEditor.desktop";
-        "x-content/unix-software" = "nautilus-autorun-software.desktop";
-        "x-scheme-handler/unknown=" = "chromium-browser.desktop";
-        "x-scheme-handler/mailto" = "chromium-browser.desktop";
-        "x-scheme-handler/webcal" = "chromium-browser.desktop";
-        "x-scheme-handler/about" = "chromium-browser.desktop";
-        "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
-        "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
-        "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
-      };
-      defaultApplications = {
-        "image/jpeg" = "org.gnome.Loupe.desktop";
-        "image/png" = "org.gnome.Loupe.desktop";
-        "image/gif" = "org.gnome.Loupe.desktop";
-        "image/webp" = "org.gnome.Loupe.desktop";
-        "image/tiff" = "org.gnome.Loupe.desktop";
-        "image/bmp" = "org.gnome.Loupe.desktop";
-        "image/vnd-ms.dds" = "org.gnome.Loupe.desktop";
-        "image/vnd.microsoft.icon" = "org.gnome.Loupe.desktop";
-        "image/vnd.radiance" = "org.gnome.Loupe.desktop";
-        "image/x-exr" = "org.gnome.Loupe.desktop";
-        "image/x-dds" = "org.gnome.Loupe.desktop";
-        "image/x-tga" = "org.gnome.Loupe.desktop";
-        "image/x-portable-bitmap" = "org.gnome.Loupe.desktop";
-        "image/x-portable-graymap" = "org.gnome.Loupe.desktop";
-        "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
-        "image/x-portable-anymap" = "org.gnome.Loupe.desktop";
-        "image/x-qoi" = "org.gnome.Loupe.desktop";
-        "image/svg+xml" = "org.gnome.Loupe.desktop";
-        "image/svg+xml-compressed" = "org.gnome.Loupe.desktop";
-        "image/avif" = "org.gnome.Loupe.desktop";
-        "image/heic" = "org.gnome.Loupe.desktop";
-        "image/jxl" = "org.gnome.Loupe.desktop";
-        "text/html" = "firefox.desktop";
-        "application/pdf" = "firefox.desktop";
-        "x-scheme-handler/http" = "firefox.desktop";
-        "x-scheme-handler/https" = "firefox.desktop";
-        "x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
-      };
+    mime.defaultApplications = {
+      "x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
     };
   };
 

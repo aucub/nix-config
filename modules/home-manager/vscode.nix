@@ -2,6 +2,7 @@
 {
   programs.vscode = {
     enable = true;
+    package = pkgs.vscodium;
     extensions =
       (with pkgs.vscode-extensions; [
         ms-ceintl.vscode-language-pack-zh-hans
@@ -14,7 +15,7 @@
         myriad-dreamin.tinymist
         tomoki1207.pdf
         jnoortheen.nix-ide
-        github.codespaces
+        # github.codespaces
         # bmalehorn.vscode-fish
         # yzhang.markdown-all-in-one
         # ms-vscode.cpptools

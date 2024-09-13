@@ -13,13 +13,14 @@
   harfbuzz,
   pango,
   libayatana-appindicator,
+  keybinder3,
 }:
 let
   pname = "flclash";
-  version = "0.8.57";
+  version = "0.8.60";
   src = fetchurl {
     url = "https://github.com/chen08209/FlClash/releases/download/v${version}/FlClash-${version}-linux-amd64.deb";
-    sha256 = "i6Q7glYwj1C6wmxrfqBS4oXpCpgbqgKcG1LcupE7+n0=";
+    sha256 = "VIwvyCU/VRDFFFVBqQoJJJaPwzoFwosSfp2MyGobXKA=";
   };
 in
 stdenv.mkDerivation {
@@ -44,6 +45,7 @@ stdenv.mkDerivation {
     harfbuzz
     pango
     libayatana-appindicator
+    keybinder3
   ];
 
   unpackPhase = ''

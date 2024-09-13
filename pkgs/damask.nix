@@ -55,9 +55,7 @@ stdenv.mkDerivation {
     libsoup_3
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Automatically set wallpaper images from Internet sources";

@@ -4,6 +4,9 @@ hostname := "neko"
 
 username := "uymi"
 
+default:
+    @just --list
+
 ############################################################################
 #
 #  Common commands
