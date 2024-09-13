@@ -53,6 +53,7 @@
         UrlbarInterventions = false;
         SkipOnboarding = true;
         MoreFromMozilla = false;
+        FirefoxLabs = false;
       };
       UseSystemPrintDialog = true;
     };
@@ -154,8 +155,8 @@
         }
       '';
       settings = {
-        # 日期: 7 June 2024
-        # 版本号: 126
+        # 日期: 26 August 2024
+        # 版本号: 128
         # 链接: https://github.com/arkenfox/user.js
 
         # 禁用 about:config 警告
@@ -182,6 +183,7 @@
         "browser.newtabpage.activity-stream.feeds.recommendationprovider" = false;
         # 清除默认的热门网站
         "browser.newtabpage.activity-stream.default.sites" = "";
+        "browser.urlbar.suggest.quicksuggest.sponsored" = false;
 
         # 禁用 about:addons 中的推荐面板
         "extensions.getAddons.showPane" = false;

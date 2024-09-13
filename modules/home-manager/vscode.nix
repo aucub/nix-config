@@ -14,7 +14,7 @@
         myriad-dreamin.tinymist
         tomoki1207.pdf
         jnoortheen.nix-ide
-        github.codespaces
+        # github.codespaces
         # bmalehorn.vscode-fish
         # yzhang.markdown-all-in-one
         # ms-vscode.cpptools

@@ -16,10 +16,10 @@
 }:
 let
   pname = "flclash";
-  version = "0.8.57";
+  version = "0.8.59";
   src = fetchurl {
     url = "https://github.com/chen08209/FlClash/releases/download/v${version}/FlClash-${version}-linux-amd64.deb";
-    sha256 = "i6Q7glYwj1C6wmxrfqBS4oXpCpgbqgKcG1LcupE7+n0=";
+    sha256 = "Xdgs6NFxGsnqma0Zq7PPjogG9edzCQbp+qo3cHjCwto=";
   };
 in
 stdenv.mkDerivation {
