@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:NixOS/nixpkgs/eb18392075c5075981a60414ec3a07235f9480d1";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -88,24 +88,20 @@
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
       homeManagerModules = import ./modules/home-manager;
-      nixosConfigurations = {
-        "${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs vars outputs;
-          };
-          modules = [ ./nixos/configuration.nix ];
+      nixosConfigurations."${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs vars outputs;
         };
+        modules = [ ./nixos/configuration.nix ];
       };
-      homeConfigurations = {
-        "${vars.users.users.user.name}@${vars.networking.hostName}" =
-          home-manager.lib.homeManagerConfiguration
-            {
-              pkgs = nixpkgs.legacyPackages.x86_64-linux;
-              extraSpecialArgs = {
-                inherit inputs vars outputs;
-              };
-              modules = [ ./home-manager/home.nix ];
+      homeConfigurations."${vars.users.users.user.name}@${vars.networking.hostName}" =
+        home-manager.lib.homeManagerConfiguration
+          {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = {
+              inherit inputs vars outputs;
             };
-      };
+            modules = [ ./home-manager/home.nix ];
+          };
     };
 }

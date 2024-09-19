@@ -44,6 +44,7 @@
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in
     {
+      package = pkgs.nixVersions.latest;
       settings = {
         experimental-features = [
           "nix-command"
@@ -246,6 +247,7 @@
         nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
         # 删除未使用的 Nix 存储条目
         nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 7d";
+        sopsb = "env SOPS_AGE_KEY=(rbw get age) sops";
       };
     };
     nix-ld = {

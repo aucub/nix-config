@@ -178,6 +178,14 @@
       enable = true;
       settings.experimental = true;
     };
+    rbw = {
+      enable = true;
+      settings = {
+        pinentry = pkgs.pinentry-gnome3;
+        base_url = "https://vault.bitwarden.com/";
+        email = "aucub@outlook.com";
+      };
+    };
     bun = {
       enable = false;
       settings = {

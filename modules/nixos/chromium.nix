@@ -33,8 +33,8 @@
       ClickToCallEnabled = false;
       DefaultBrowserSettingEnabled = false;
       EncryptedClientHelloEnabled = true;
-      HighEfficiencyModeEnabled = false;
       ImportAutofillFormData = false;
+      DnsOverHttpsMode = "automatic";
       ImportBookmarks = false;
       ImportHistory = false;
       ImportHomepage = false;
@@ -54,6 +54,20 @@
       CloudPrintProxyEnabled = false;
       ShowHomeButton = true;
       CloudReportingEnabled = false;
+      LogUploadEnabled = false;
+      SafeBrowsingSurveysEnabled = false;
+      DisableSafeBrowsingProceedAnyway = false;
+      PrivacySandboxAdMeasurementEnabled = false;
+      PrivacySandboxAdTopicsEnabled = false;
+      PrivacySandboxPromptEnabled = false;
+      PrivacySandboxSiteEnabledAdsEnabled = false;
+      PasswordSharingEnabled = false;
+      PasswordLeakDetectionEnabled = false;
+      ZstdContentEncodingEnabled = true;
+      HighEfficiencyModeEnabled = true;
+      HardwareAccelerationModeEnabled = true;
+      GoogleSearchSidePanelEnabled = false;
+      FeedbackSurveysEnabled = false;
     };
     initialPrefs = {
       "autofill" = {
@@ -95,6 +109,16 @@
       "search"."suggest_enabled" = false;
       "tracking_protection"."tracking_protection_3pcd_enabled" = false;
       "translate"."enabled" = false;
+      "optimization_guide" = {
+        "partition" = {
+          "default_zoom_level" = {
+            "x" = 1.2239010857415449;
+          };
+          "per_host_zoom_levels" = {
+            "x" = { };
+          };
+        };
+      };
     };
   };
 }

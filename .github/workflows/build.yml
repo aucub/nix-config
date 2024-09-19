@@ -19,14 +19,16 @@ jobs:
           diagnostic-endpoint: ""
           use-flakehub: false
 
-      - uses: easimon/maximize-build-space@master
+      - uses: AdityaGarg8/remove-unwanted-software@master
         with:
-          overprovision-lvm: true
           remove-android: true
           remove-dotnet: true
           remove-haskell: true
           remove-docker-images: true
           remove-codeql: true
+          remove-large-packages: true
+          remove-cached-tools: true
+          remove-swapfile: true
 
       - uses: actions/checkout@v4
 
