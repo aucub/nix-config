@@ -63,7 +63,7 @@
       enable = true;
       defaultApplications =
         let
-          browser = [ "firefox.desktop" ];
+          browser = [ "zen.desktop" ];
           image = [ "org.gnome.Loupe.desktop" ];
         in
         {
@@ -128,7 +128,10 @@
   };
 
   programs = {
-    man.generateCaches = false;
+    man = {
+      package = pkgs.mandoc;
+      generateCaches = false;
+    };
     fish = {
       enable = true;
       interactiveShellInit =

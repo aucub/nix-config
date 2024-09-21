@@ -9,7 +9,7 @@
         runHook postInstall
       '';
     });
-    firefox-unwrapped = final.nur.repos.zzzsy.zen-browser.overrideAttrs (oldAttrs: rec {
+    firefox-unwrapped = final.nur.repos.zzzsy.zen-browser.overrideAttrs (oldAttrs: {
       gtk3 = final.gtk3;
     });
   };

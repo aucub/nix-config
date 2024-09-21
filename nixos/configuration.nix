@@ -147,7 +147,7 @@
         ++ (with pkgs; [
           navicat
           damask
-          flclash
+          warp-plus
         ]);
     };
   };
@@ -160,7 +160,6 @@
     ];
     variables.EDITOR = "hx";
     sessionVariables = {
-      NAUTILUS_4_EXTENSION_DIR = lib.mkForce "${config.system.path}/lib/nautilus/extensions-4";
       LESS = "-SR";
       MANPAGER = "sh -c 'col -bx | bat -l man -p'";
       MANROFFOPT = "-c";
