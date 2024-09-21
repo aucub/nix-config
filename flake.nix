@@ -20,6 +20,10 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -27,18 +31,18 @@
       self,
       nixpkgs,
       home-manager,
+      treefmt-nix,
       ...
     }@inputs:
     let
       inherit (self) outputs;
-      systems = [
+      forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
         "i686-linux"
         "x86_64-linux"
         "aarch64-darwin"
         "x86_64-darwin"
       ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
       vars = {
         networking.hostName = "neko";
         users.users = {
@@ -53,18 +57,17 @@
             "amdgpu.vm_update_mode=3"
             "radeon.dpm=0"
             "acpi_backlight=native"
-            "mitigations=off" # 关闭漏洞缓解措施提高性能
+            "mitigations=off" # 关闭漏洞缓解措施提高
             "nowatchdog" # PC不需要watchdog
           ];
           kernelModules = [
             # "v4l2loopback"
             "amdgpu"
           ];
-          extraModulePackages =
-            kernelPackages: with kernelPackages; [
-              lenovo-legion-module
-              # v4l2loopback
-            ];
+          extraModulePackages = kernelPackages: [
+            kernelPackages.lenovo-legion-module
+            # v4l2loopback
+          ];
           extraModprobeConfig = ''
             blacklist sp5100_tco
             blacklist iTCO_wdt
@@ -81,19 +84,36 @@
           size = 24;
         };
       };
+      treefmtConfig = {
+        projectRootFile = "flake.nix";
+        programs.nixfmt.enable = true;
+      };
     in
     {
       packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+
+      formatter = forAllSystems (
+        system:
+        (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} treefmtConfig).config.build.wrapper
+      );
+
+      checks = forAllSystems (system: {
+        formatting =
+          (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} treefmtConfig).config.build.check
+            self;
+      });
+
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
       homeManagerModules = import ./modules/home-manager;
+
       nixosConfigurations."${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs vars outputs;
         };
         modules = [ ./nixos/configuration.nix ];
       };
+
       homeConfigurations."${vars.users.users.user.name}@${vars.networking.hostName}" =
         home-manager.lib.homeManagerConfiguration
           {

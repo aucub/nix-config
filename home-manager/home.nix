@@ -127,6 +127,7 @@
   };
 
   programs = {
+    man.generateCaches = false;
     fish = {
       enable = true;
       interactiveShellInit =
@@ -175,7 +176,7 @@
       };
     };
     mise = {
-      enable = true;
+      enable = false;
       settings.experimental = true;
     };
     rbw = {
@@ -199,9 +200,27 @@
       enable = true;
       settings.default_flags = "-ih";
     };
-    fd.enable = true;
+    fd = {
+      enable = true;
+      ignores = [
+        ".git/"
+        # Dependency directories
+        "node_modules/"
+        "bower_components/"
+        "jspm_packages/"
+        # Caches
+        ".ipynb_checkpoints/"
+        ".cache/"
+        ".parcel-cache/"
+        ".next/"
+        # Python
+        ".venv/"
+        "__pycache__/"
+      ];
+    };
     eza = {
       enable = true;
+      icons = true;
       git = true;
       extraOptions = [
         "--group-directories-first"
@@ -309,7 +328,7 @@
         ".stylelintcache"
         "package-lock.json"
         # Python
-        ".venv"
+        ".venv/"
         ".Python"
         "*.py[cod]"
         "__pycache__/"
