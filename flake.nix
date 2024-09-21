@@ -1,12 +1,13 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/eb18392075c5075981a60414ec3a07235f9480d1";
+    nixpkgs.url = "github:NixOS/nixpkgs/eca2693230fe59318102f3726d2da305312c04a4";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -65,7 +66,7 @@
             "amdgpu"
           ];
           extraModulePackages = kernelPackages: [
-            kernelPackages.lenovo-legion-module
+            # kernelPackages.lenovo-legion-module
             # v4l2loopback
           ];
           extraModprobeConfig = ''
@@ -91,29 +92,24 @@
     in
     {
       packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-
       formatter = forAllSystems (
         system:
         (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} treefmtConfig).config.build.wrapper
       );
-
       checks = forAllSystems (system: {
         formatting =
           (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} treefmtConfig).config.build.check
             self;
       });
-
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules/nixos;
       homeManagerModules = import ./modules/home-manager;
-
       nixosConfigurations."${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs vars outputs;
         };
         modules = [ ./nixos/configuration.nix ];
       };
-
       homeConfigurations."${vars.users.users.user.name}@${vars.networking.hostName}" =
         home-manager.lib.homeManagerConfiguration
           {

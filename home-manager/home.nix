@@ -17,6 +17,7 @@
     outputs.homeManagerModules.colord
 
     inputs.nix-index-database.hmModules.nix-index
+    inputs.chaotic.homeManagerModules.default
   ];
 
   nixpkgs = {

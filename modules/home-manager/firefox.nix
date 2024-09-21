@@ -1,8 +1,23 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
+  home.file.".zen/profiles.ini".text = lib.mkForce ''
+    [Profile0]
+    Name=default
+    IsRelative=1
+    Path=default
+    ZenAvatarPath=chrome://browser/content/zen-avatars/avatar-48.svg
+    Default=1
+
+    [General]
+    StartWithLastProfile=1
+    Version=2
+
+  '';
   programs.firefox = {
     enable = true;
     languagePacks = [ "zh-CN" ];
+    vendorPath = ".zen";
+    configPath = ".zen";
     policies = {
       # https://github.com/mozilla/policy-templates/blob/master/linux/policies.json
       AppAutoUpdate = false;
@@ -68,92 +83,6 @@
         user-agent-string-switcher
         immersive-translate
       ];
-      userChrome = ''
-        /* 隐藏右键菜单选项 */
-        #spell-add-dictionaries,
-        #spell-separator,
-        #spell-check-enabled,
-        #spell-add-dictionaries-main,
-        #spell-dictionaries-menu,
-        #spell-language-separator,
-        #spell-no-suggestions,
-        #spell-add-to-dictionary,
-        #spell-undo-add-to-dictionary,
-        #spell-suggestions-separator,
-        #context_sendTabToDevice,
-        #context_sendTabToDevicePopupMenu,
-        #context-sendlinktodevice,
-        #context-sendlinktodevice-popup,
-        #context-sep-sendlinktodevice,
-        #context-sendpagetodevice,
-        #context-sendpagetodevice-popup,
-        #fill-login,
-        #fill-login-generated-password,
-        #fill-login-popup,
-        #manage-saved-logins,
-        #context-print-selection,
-        #context-printframe,
-        #printPreviewStackTemplate,
-        #context-viewsource-goToLine,
-        #context-viewsource-wrapLongLines,
-        #context-viewsource-highlightSyntax,
-        #context-sep-viewsource-commands,
-        #context-viewsource,
-        #context-copyemail,
-        #main-context-menu-image-email,
-        #context-sendvideo,
-        #context-sendaudio,
-        #context-openlinkincurrent,
-        #context-openlink,
-        #context-openlinkprivate,
-        #context-savelink,
-        #key_savePage,
-        #context-savelinktopocket,
-        #context-video-saveimage,
-        #context-savevideo,
-        #context-saveaudio,
-        #context-sendimage,
-        #context-setDesktopBackground,
-        #context-savepage,
-        #context-pocket,
-        #use-relay-mask,
-        #context-undo,
-        #context-pdfjs-undo,
-        #context-redo,
-        #context-pdfjs-redo,
-        #spell-dictionaries,
-        #context-viewpartialsource-selection,
-        #context-media-eme-learnmore,
-        #context-showonlythisframe,
-        #context-openframeintab,
-        #context-openframe,
-        #context-reloadframe,
-        #context-bookmarkframe,
-        #context-saveframe,
-        #context-take-frame-screenshot,
-        #context-viewframesource,
-        #context-viewframeinfo,
-        #context-sep-setbackground,
-        #context-back,
-        #context-forward,
-        #context-reload,
-        #context-stop,
-        #context-bookmarkpage,
-        #context-bookmarklink,
-        #context-copyphone,
-        #context-keywordfield,
-        #context-take-screenshot,
-        #context-viewimageinfo,
-        #context-inspect,
-        #context-sep-sendpagetodevice,
-        #context_sendTabToDevice_separator,
-        #pageAction-panel-sendToDevice,
-        #pageAction-panel-emailLink,
-        #leave_this_dummy_here,
-        #context-inspect-a11y {
-          display: none !important;
-        }
-      '';
       settings = {
         # 日期: 26 August 2024
         # 版本号: 128

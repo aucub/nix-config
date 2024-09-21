@@ -1,7 +1,8 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.chromium = {
     enable = true;
+    package = pkgs.brave;
     commandLineArgs = [
       "--process-per-site"
       "--disable-reading-from-canvas"

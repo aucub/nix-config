@@ -1,2 +1,0 @@
-https://github.com/hbjydev/hnix
-nix-store -r /nix/store/7pb35psl6g0m7p0kkli89hkxhmm9iy0n-ghostty-0.1.0 --option substituters "https://cache.nixos.org https://ghostty.cachix.org" --option trusted-public-keys "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= ghostty.cachix.org-1:QB389yTa6gTyneehvqG58y0WnHjQOqgnA+wBnpWWxns="

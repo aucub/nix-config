@@ -17,7 +17,7 @@
     # outputs.nixosModules.steam
     # outputs.nixosModules.containers
 
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -25,6 +25,7 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nix-index-database.nixosModules.nix-index
     inputs.auto-cpufreq.nixosModules.default
+    inputs.chaotic.nixosModules.default
 
     ./hardware-configuration.nix
   ];
@@ -61,12 +62,10 @@
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://nix-community.cachix.org"
           "https://cache.garnix.io"
-          # "https://qihaiumi.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-          # "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
         ];
         trusted-users = [ "@wheel" ];
       };
@@ -268,7 +267,7 @@
     #   enable = true;
     #   binfmt = true;
     # };
-    # direnv.enable = true;
+    direnv.enable = true;
     ssh = {
       askPassword = "";
       enableAskPassword = false;
@@ -384,11 +383,6 @@
       enable = true;
       terminal = "alacritty";
     };
-    firefox = {
-      enable = true;
-      languagePacks = [ "zh-CN" ];
-      preferencesStatus = "default";
-    };
   };
 
   security.sudo-rs.enable = true;
@@ -499,8 +493,10 @@
     };
   };
 
+  chaotic.scx.enable = true;
+
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_cachyos;
     loader = {
       systemd-boot = {
         enable = true;
@@ -597,24 +593,18 @@
       enable = true;
       xdgOpenUsePortal = true;
     };
-    mime.defaultApplications = {
-      "x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
-    };
+    mime.defaultApplications."x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
   };
 
   qt.enable = true;
 
   systemd = {
-    extraConfig = ''
-      DefaultTimeoutStopSec=25s
-    '';
+    extraConfig = "DefaultTimeoutStopSec=25s";
     coredump.extraConfig = ''
       Storage=none
       ProcessSizeMax=0
     '';
-    sleep.extraConfig = ''
-      AllowHibernation=no
-    '';
+    sleep.extraConfig = "AllowHibernation=no";
     services = {
       systemd-gpt-auto-generator.enable = false;
       "getty@tty1".enable = false;
