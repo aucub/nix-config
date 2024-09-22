@@ -25,7 +25,6 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nix-index-database.nixosModules.nix-index
     inputs.auto-cpufreq.nixosModules.default
-    inputs.chaotic.nixosModules.default
 
     ./hardware-configuration.nix
   ];
@@ -492,10 +491,7 @@
     };
   };
 
-  chaotic.scx.enable = true;
-
   boot = {
-    kernelPackages = pkgs.linuxPackages_cachyos;
     loader = {
       systemd-boot = {
         enable = true;
@@ -508,11 +504,12 @@
       };
       timeout = 4;
     };
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = vars.boot.kernelParams;
-    consoleLogLevel = 3;
     kernelModules = vars.boot.kernelModules;
     extraModulePackages = vars.boot.extraModulePackages config.boot.kernelPackages;
     extraModprobeConfig = vars.boot.extraModprobeConfig;
+    consoleLogLevel = 3;
     tmp.useTmpfs = true;
     supportedFilesystems = [ config.fileSystems."/".fsType ];
   };

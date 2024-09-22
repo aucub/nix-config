@@ -1,13 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/9357f4f23713673f310988025d9dc261c20e70c6";
+    nixpkgs.url = "github:NixOS/nixpkgs/179b6bce21525a3a9e725c08e6ed58d56da74825";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -117,7 +116,6 @@
             extraSpecialArgs = {
               inherit inputs vars outputs;
             };
-
             modules = [ ./home-manager/home.nix ];
           };
     };

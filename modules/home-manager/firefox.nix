@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
-  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.federicoschonborn.firefox-gnome-theme
-  }";
+  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.zzzsy.firefox-gnome-theme}/share/firefox-theme";
   programs.firefox = {
     enable = true;
     languagePacks = [ "zh-CN" ];
@@ -262,13 +261,15 @@
         "browser.sessionstore.interval" = 600000; # 延长会话信息记录之间的间隔
 
         # --- 外观 ---
-        # Enable customChrome.cs
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "browser.uidensity" = 0;
         "svg.context-properties.content.enabled" = true;
         "browser.theme.dark-private-windows" = false;
         "gnomeTheme.tabsAsHeaderbar" = true;
         "gnomeTheme.hideWebrtcIndicator" = true;
+        "gnomeTheme.normalWidthTabs" = true;
+        "gnomeTheme.activeTabContrast" = true;
+        "gnomeTheme.noThemedIcons" = true;
       };
     };
     policies = {

@@ -18,7 +18,6 @@
     outputs.homeManagerModules.colord
 
     inputs.nix-index-database.hmModules.nix-index
-    inputs.chaotic.homeManagerModules.default
   ];
 
   nixpkgs = {
@@ -66,7 +65,7 @@
       enable = true;
       defaultApplications =
         let
-          browser = [ "zen.desktop" ];
+          browser = [ "firefox.desktop" ];
           image = [ "org.gnome.Loupe.desktop" ];
         in
         {

@@ -1,7 +1,8 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.chromium = {
     enable = true;
+    package = pkgs.ungoogled-chromium;
     commandLineArgs = [
       "--process-per-site"
       "--disable-reading-from-canvas"
@@ -16,7 +17,7 @@
       "--enable-smooth-scrolling"
       "--enable-webrtc-pipewire-capturer"
       "--disable-features=ChromeLabs,LensOverlay,ShowSuggestionsOnAutofocus"
-      "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,OverlayScrollbar,ParallelDownloading,WebContentsCaptureHiDPI,WebRtcHideLocalIpsWithMdns,FluentOverlayScrollbar,FluentScrollbar,UseGpuSchedulerDfs"
+      "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,ParallelDownloading,WebContentsCaptureHiDPI,WebRtcHideLocalIpsWithMdns,FluentOverlayScrollbar,UseGpuSchedulerDfs,BackForwardCache,FontationsFontBackend,GlobalMediaControlsUpdatedUI,WebRtcPipeWireCamera" # ,OverlayScrollbar,FluentScrollbar,DefaultANGLEVulkan,Vulkan,VulkanFromANGLE
       "--ozone-platform-hint=auto"
       "--enable-wayland-ime"
       "--wayland-text-input-version=3"
