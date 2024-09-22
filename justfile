@@ -14,7 +14,7 @@ default:
 ############################################################################
 
 build target:
-  nix build .#{{target}} --show-trace --impure -L -v
+  nix build .#{{target}} --impure --show-trace -L -v
 
 ############################################################################
 #
@@ -26,10 +26,10 @@ check:
   nix flake check --impure --show-trace -L -v
 
 switch:
-  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --no-build-nix --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch --flake .#{{hostname}} --no-build-nix --impure --show-trace -L -v
 
 switch-boot:
-  sudo {{set-proxy-env}} nixos-rebuild switch  --flake .#{{hostname}} --no-build-nix --install-bootloader --show-trace -L -v
+  sudo {{set-proxy-env}} nixos-rebuild switch  --flake .#{{hostname}} --no-build-nix --install-bootloader --impure --show-trace -L -v
 
 build-os:
   nix build .#nixosConfigurations.{{hostname}}.config.system.build.toplevel --impure --show-trace -L -v
@@ -40,8 +40,8 @@ eval target:
 eval-hm target:
   nix eval .#homeConfigurations.{{username}}@{{hostname}}.config.{{target}} --impure --show-trace -L -v
 
-hm-switch:
-  home-manager switch --flake .#{{username}}@{{hostname}} --show-trace -L -v
+switch-hm:
+  home-manager switch --flake .#{{username}}@{{hostname}} --impure --show-trace -L -v
 
 ############################################################################
 #

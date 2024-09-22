@@ -1,81 +1,10 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
-  home.file = {
-    ".zen/profiles.ini".enable = false;
-    zen-profiles = {
-      target = ".zen/profiles.ini";
-      text =
-        config.home.file.".zen/profiles.ini".text
-        + ''
-          ZenAvatarPath=chrome://browser/content/zen-avatars/avatar-48.svg
-        '';
-    };
-  };
+  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.federicoschonborn.firefox-gnome-theme
+  }";
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox.overrideAttrs (oldAttrs: {
-      desktopItem = null;
-      buildCommand = builtins.replaceStrings [
-        "install -D -t $out/share/applications $desktopItem/share/applications/*"
-      ] [ "" ] oldAttrs.buildCommand;
-    });
     languagePacks = [ "zh-CN" ];
-    vendorPath = ".zen";
-    configPath = ".zen";
-    policies = {
-      # https://github.com/mozilla/policy-templates/blob/master/linux/policies.json
-      AppAutoUpdate = false;
-      BackgroundAppUpdate = false;
-      Cookies = {
-        Behavior = "reject-tracker-and-partition-foreign";
-        BehaviorPrivateBrowsing = "reject-tracker-and-partition-foreign";
-      };
-      DisableFeedbackCommands = true;
-      DisableFirefoxStudies = true;
-      DisablePocket = true;
-      DisableSecurityBypass.SafeBrowsing = false;
-      DisableSetDesktopBackground = true;
-      DisableSystemAddonUpdate = true;
-      DisableTelemetry = true;
-      DontCheckDefaultBrowser = true;
-      FirefoxHome = {
-        Search = true;
-        TopSites = false;
-        SponsoredTopSites = false;
-        Highlights = false;
-        Pocket = false;
-        Snippets = false;
-        SponsoredPocket = false;
-      };
-      FirefoxSuggest = {
-        WebSuggestions = false;
-        SponsoredSuggestions = false;
-        ImproveSuggest = false;
-      };
-      HardwareAcceleration = true;
-      Homepage = {
-        URL = "about:home";
-        StartPage = "homepage";
-      };
-      NetworkPrediction = false;
-      NoDefaultBookmarks = true;
-      OfferToSaveLogins = false;
-      OfferToSaveLoginsDefault = false;
-      OverrideFirstRunPage = "";
-      OverridePostUpdatePage = "";
-      PasswordManagerEnabled = false;
-      ShowHomeButton = true;
-      TranslateEnabled = false;
-      UserMessaging = {
-        ExtensionRecommendations = false;
-        FeatureRecommendations = false;
-        UrlbarInterventions = false;
-        SkipOnboarding = true;
-        MoreFromMozilla = false;
-        FirefoxLabs = false;
-      };
-      UseSystemPrintDialog = true;
-    };
     profiles.default = {
       id = 0;
       isDefault = true;
@@ -87,6 +16,12 @@
         user-agent-string-switcher
         immersive-translate
       ];
+      userChrome = ''
+        @import "firefox-gnome-theme/userChrome.css";
+      '';
+      userContent = ''
+        @import "firefox-gnome-theme/userContent.css";
+      '';
       settings = {
         # 日期: 26 August 2024
         # 版本号: 128
@@ -325,7 +260,70 @@
         # 避免频繁的磁盘写入
         "browser.cache.disk.enable" = false; # 关闭磁盘缓存
         "browser.sessionstore.interval" = 600000; # 延长会话信息记录之间的间隔
+
+        # --- 外观 ---
+        # Enable customChrome.cs
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "browser.uidensity" = 0;
+        "svg.context-properties.content.enabled" = true;
+        "browser.theme.dark-private-windows" = false;
+        "gnomeTheme.tabsAsHeaderbar" = true;
+        "gnomeTheme.hideWebrtcIndicator" = true;
       };
+    };
+    policies = {
+      # https://github.com/mozilla/policy-templates/blob/master/linux/policies.json
+      AppAutoUpdate = false;
+      BackgroundAppUpdate = false;
+      Cookies = {
+        Behavior = "reject-tracker-and-partition-foreign";
+        BehaviorPrivateBrowsing = "reject-tracker-and-partition-foreign";
+      };
+      DisableFeedbackCommands = true;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DisableSecurityBypass.SafeBrowsing = false;
+      DisableSetDesktopBackground = true;
+      DisableSystemAddonUpdate = true;
+      DisableTelemetry = true;
+      DontCheckDefaultBrowser = true;
+      FirefoxHome = {
+        Search = true;
+        TopSites = false;
+        SponsoredTopSites = false;
+        Highlights = false;
+        Pocket = false;
+        Snippets = false;
+        SponsoredPocket = false;
+      };
+      FirefoxSuggest = {
+        WebSuggestions = false;
+        SponsoredSuggestions = false;
+        ImproveSuggest = false;
+      };
+      HardwareAcceleration = true;
+      Homepage = {
+        URL = "about:home";
+        StartPage = "homepage";
+      };
+      NetworkPrediction = false;
+      NoDefaultBookmarks = true;
+      OfferToSaveLogins = false;
+      OfferToSaveLoginsDefault = false;
+      OverrideFirstRunPage = "";
+      OverridePostUpdatePage = "";
+      PasswordManagerEnabled = false;
+      ShowHomeButton = true;
+      TranslateEnabled = false;
+      UserMessaging = {
+        ExtensionRecommendations = false;
+        FeatureRecommendations = false;
+        UrlbarInterventions = false;
+        SkipOnboarding = true;
+        MoreFromMozilla = false;
+        FirefoxLabs = false;
+      };
+      UseSystemPrintDialog = true;
     };
   };
 }

@@ -652,11 +652,7 @@
     nixos.enable = false;
     info.enable = false;
     doc.enable = false;
-    man = {
-      mandoc.enable = true;
-      man-db.enable = false;
-      generateCaches = false;
-    };
+    man.generateCaches = false;
   };
 
   system.stateVersion = "24.11";
