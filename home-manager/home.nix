@@ -4,6 +4,7 @@
   vars,
   pkgs,
   config,
+  lib,
   ...
 }:
 {
@@ -29,6 +30,8 @@
       inputs.nix-vscode-extensions.overlays.default
     ];
   };
+
+  nix.package = lib.mkDefault pkgs.nixVersions.latest;
 
   home = {
     pointerCursor = {
@@ -128,10 +131,7 @@
   };
 
   programs = {
-    man = {
-      package = pkgs.mandoc;
-      generateCaches = false;
-    };
+    man.generateCaches = false;
     fish = {
       enable = true;
       interactiveShellInit =

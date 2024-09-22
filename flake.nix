@@ -117,6 +117,7 @@
             extraSpecialArgs = {
               inherit inputs vars outputs;
             };
+
             modules = [ ./home-manager/home.nix ];
           };
     };

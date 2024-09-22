@@ -1,27 +1,81 @@
-{ pkgs, lib, ... }:
+{ pkgs, config, ... }:
 {
-  home.file.".zen/profiles.ini".text = lib.mkForce ''
-    [Profile0]
-    Name=default
-    IsRelative=1
-    Path=default
-    ZenAvatarPath=chrome://browser/content/zen-avatars/avatar-48.svg
-    Default=1
-    [General]
-    StartWithLastProfile=1
-    Version=2
-  '';
+  home.file = {
+    ".zen/profiles.ini".enable = false;
+    zen-profiles = {
+      target = ".zen/profiles.ini";
+      text =
+        config.home.file.".zen/profiles.ini".text
+        + ''
+          ZenAvatarPath=chrome://browser/content/zen-avatars/avatar-48.svg
+        '';
+    };
+  };
   programs.firefox = {
     enable = true;
     package = pkgs.firefox.overrideAttrs (oldAttrs: {
-      postFixup = ''
-        ${oldAttrs.postFixup or ""}
-        rm -rf $out/share/applications/zen-browser.desktop
-      '';
+      desktopItem = null;
+      buildCommand = builtins.replaceStrings [
+        "install -D -t $out/share/applications $desktopItem/share/applications/*"
+      ] [ "" ] oldAttrs.buildCommand;
     });
     languagePacks = [ "zh-CN" ];
     vendorPath = ".zen";
     configPath = ".zen";
+    policies = {
+      # https://github.com/mozilla/policy-templates/blob/master/linux/policies.json
+      AppAutoUpdate = false;
+      BackgroundAppUpdate = false;
+      Cookies = {
+        Behavior = "reject-tracker-and-partition-foreign";
+        BehaviorPrivateBrowsing = "reject-tracker-and-partition-foreign";
+      };
+      DisableFeedbackCommands = true;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DisableSecurityBypass.SafeBrowsing = false;
+      DisableSetDesktopBackground = true;
+      DisableSystemAddonUpdate = true;
+      DisableTelemetry = true;
+      DontCheckDefaultBrowser = true;
+      FirefoxHome = {
+        Search = true;
+        TopSites = false;
+        SponsoredTopSites = false;
+        Highlights = false;
+        Pocket = false;
+        Snippets = false;
+        SponsoredPocket = false;
+      };
+      FirefoxSuggest = {
+        WebSuggestions = false;
+        SponsoredSuggestions = false;
+        ImproveSuggest = false;
+      };
+      HardwareAcceleration = true;
+      Homepage = {
+        URL = "about:home";
+        StartPage = "homepage";
+      };
+      NetworkPrediction = false;
+      NoDefaultBookmarks = true;
+      OfferToSaveLogins = false;
+      OfferToSaveLoginsDefault = false;
+      OverrideFirstRunPage = "";
+      OverridePostUpdatePage = "";
+      PasswordManagerEnabled = false;
+      ShowHomeButton = true;
+      TranslateEnabled = false;
+      UserMessaging = {
+        ExtensionRecommendations = false;
+        FeatureRecommendations = false;
+        UrlbarInterventions = false;
+        SkipOnboarding = true;
+        MoreFromMozilla = false;
+        FirefoxLabs = false;
+      };
+      UseSystemPrintDialog = true;
+    };
     profiles.default = {
       id = 0;
       isDefault = true;
