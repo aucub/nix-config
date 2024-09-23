@@ -17,7 +17,7 @@
     # outputs.nixosModules.steam
     # outputs.nixosModules.containers
 
-    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -211,7 +211,7 @@
       enable = true;
       settings = {
         charger = {
-          governor = "performance";
+          governor = "schedutil";
           turbo = "auto";
         };
         battery = {
@@ -222,18 +222,14 @@
       };
     };
     command-not-found.enable = false;
-    bash.promptInit = ''
-      PS1='[\u@\h \W]\$ '
-    '';
+    bash.promptInit = "PS1='[\u@\h \W]\$ '";
     fish = {
       enable = true;
       interactiveShellInit = ''
         set fish_greeting
         set -U fish_history_max 2500
       '';
-      promptInit = ''
-        ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
-      '';
+      promptInit = "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source";
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
@@ -241,9 +237,9 @@
         # 列出系统的 generations
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # 删除过期的 generations
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 7d";
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 3d && home-manager expire-generations -3days";
         # 删除未使用的 Nix 存储条目
-        nix-gc = "sudo nix store gc & sudo nix-collect-garbage --delete-older-than 7d";
+        nix-gc = "sudo nix-collect-garbage --delete-older-than 7d && nix-collect-garbage --delete-older-than 7d";
         sopsb = "env SOPS_AGE_KEY=(rbw get age) sops";
       };
     };
@@ -434,10 +430,7 @@
           package = pkgs.sarasa-gothic;
         }
       ];
-      extraConfig = ''
-        font-size=20
-        hwaccel
-      '';
+      extraConfig = "font-size=20";
       hwRender = true;
       useXkbConfig = true;
     };
@@ -596,12 +589,31 @@
 
   systemd = {
     extraConfig = "DefaultTimeoutStopSec=25s";
-    coredump.extraConfig = ''
-      Storage=none
-      ProcessSizeMax=0
-    '';
+    coredump.enable = false;
     sleep.extraConfig = "AllowHibernation=no";
+    timers.suspend-then-shutdown = {
+      wantedBy = [ "sleep.target" ];
+      timerConfig = {
+        OnUnitActiveSec = "2h";
+        Unit = "suspend-then-shutdown.service";
+        AccuracySec = "1s";
+      };
+    };
     services = {
+      suspend-then-shutdown = {
+        description = "Power off after suspend";
+        after = [ "sleep.target" ];
+        script = ''
+          SLEEP_TIME=$(${pkgs.coreutils}/bin/cat /sys/power/state_extended | ${pkgs.gawk}/bin/awk '/sleep_time_ms/ {print $2}') # 检查系统是否真的处于睡眠状态超过2小时
+          if [ $SLEEP_TIME -ge 7200000 ]; then  # 2小时 = 7200000毫秒
+            ${pkgs.systemd}/bin/systemd-run --on-active=300 ${pkgs.systemd}/bin/systemctl poweroff
+          fi
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = "yes";
+        };
+      };
       systemd-gpt-auto-generator.enable = false;
       "getty@tty1".enable = false;
       "autovt@tty1".enable = false;

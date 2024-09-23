@@ -414,7 +414,10 @@
           size = 20;
         };
         selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
-        debug.log_level = "Off";
+        debug = {
+          log_level = "Off";
+          prefer_egl = true;
+        };
         keyboard.bindings = [
           {
             key = "Return";

@@ -1,4 +1,4 @@
-{ ... }:
+{ options, ... }:
 {
   programs.chromium = {
     enable = true;
@@ -15,8 +15,8 @@
       # "ghbmnnjooekpmoecnnnilnnbdlolhkhi" # Google文档的离线功能
     ];
     defaultSearchProviderEnabled = true;
-    defaultSearchProviderSuggestURL = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
-    defaultSearchProviderSearchURL = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
+    defaultSearchProviderSuggestURL = options.programs.chromium.defaultSearchProviderSuggestURL.example;
+    defaultSearchProviderSearchURL = options.programs.chromium.defaultSearchProviderSearchURL.example;
     extraOpts = {
       # https://chromeenterprise.google/policies/
       AssistantWebEnabled = false;
