@@ -5,7 +5,9 @@
     orchis-theme = prev.orchis-theme.overrideAttrs (oldAttrs: {
       installPhase = ''
         runHook preInstall
+
         bash install.sh -d $out/share/themes -t default green --tweaks solid macos compact black primary submenu nord
+
         runHook postInstall
       '';
       src = prev.fetchFromGitHub {
