@@ -2,6 +2,17 @@ name: build
 
 on:
   workflow_dispatch:
+    inputs:
+      sshx:
+        description: "sshx"
+        required: false
+        default: false
+        type: boolean
+      attic:
+        description: "attic"
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   build:
@@ -11,8 +22,11 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
+            max-jobs = 3
             auto-optimise-store = true
             experimental-features = nix-command flakes
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo=
+            substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://cache.garnix.io https://staging.attic.rs/attic-ci
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
@@ -34,4 +48,41 @@ jobs:
 
       - uses: extractions/setup-just@v2
 
-      - run: just build-os
+      - if: ${{ inputs.attic }}
+        uses: mdgreenwald/mozilla-sops-action@v1
+
+      - if: ${{ inputs.attic }}
+        run: |
+          cd scripts/attic/
+          sops -d server.toml.enc > server.toml
+          sops -d config.toml.enc > config.toml
+          mkdir ~/.config/attic/
+          mv config.toml ~/.config/attic/config.toml
+          mv server.toml ~/.config/attic/server.toml
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+
+      - run: |
+          nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
+          nix-channel --update
+
+      - if: ${{ inputs.attic }}
+        run: |
+          nix-env -iA nixpkgs.attic-server
+          systemd-run --user --unit=atticd atticd
+          sleep 15
+          systemctl status --user atticd.service
+
+      - if: ${{ inputs.attic }}
+        run: |
+          nix-env -iA nixpkgs.attic-client
+          attic use default
+          systemd-run --user --unit=attic attic watch-store default
+          sleep 15
+          systemctl status --user attic.service
+
+      - if: ${{ inputs.sshx }}
+        run: curl -sSf https://sshx.io/get | sh -s run
+
+      - if: ${{ !inputs.sshx }}
+        run: just build-os

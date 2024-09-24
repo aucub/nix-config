@@ -1,4 +1,4 @@
 builds:
   include:
-    - nixosConfigurations.neko.config.system.build.etc
+    - nixosConfigurations.*
   branch: ci

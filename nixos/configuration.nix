@@ -61,10 +61,12 @@
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://nix-community.cachix.org"
           "https://cache.garnix.io"
+          "https://staging.attic.rs/attic-ci"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+          "attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo="
         ];
         trusted-users = [ "@wheel" ];
       };
@@ -593,26 +595,26 @@
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
+      conflicts = [ "suspend.target" ];
       timerConfig = {
-        OnActiveSec = "2h";
         OnUnitActiveSec = "2h";
         Unit = "suspend-then-shutdown.service";
         AccuracySec = "1s";
+        RemainAfterElapse = false;
       };
     };
     services = {
       suspend-then-shutdown = {
-        description = "Power off after suspend";
-        after = [ "sleep.target" ];
+        description = "Shutdown after suspend";
+        conflicts = [ "suspend.target" ];
         script = ''
-          SLEEP_TIME=$(${pkgs.coreutils}/bin/cat /sys/power/state_extended | ${pkgs.gawk}/bin/awk '/sleep_time_ms/ {print $2}') # 检查系统是否真的处于睡眠状态超过2小时
-          if [ $SLEEP_TIME -ge 7200000 ]; then  # 2小时 = 7200000毫秒
+          if [ "$(${pkgs.systemd}/bin/systemctl is-system-running)" = "sleeping" ]; then
             ${pkgs.systemd}/bin/systemd-run --on-active=300 ${pkgs.systemd}/bin/systemctl poweroff
           fi
         '';
         serviceConfig = {
           Type = "oneshot";
-          RemainAfterExit = "yes";
+          RemainAfterExit = "no";
         };
       };
       systemd-gpt-auto-generator.enable = false;
