@@ -22,11 +22,10 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
-            max-jobs = 3
             auto-optimise-store = true
             experimental-features = nix-command flakes
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo=
-            substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://cache.garnix.io https://staging.attic.rs/attic-ci
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
+            substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://cache.garnix.io
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
@@ -85,4 +84,8 @@ jobs:
         run: curl -sSf https://sshx.io/get | sh -s run
 
       - if: ${{ !inputs.sshx }}
-        run: just build-os
+        run: |
+          taskset -c 0-$(($(nproc) * 3 / 4)) ulimit -v $(($(grep MemTotal /proc/meminfo | awk '{print $2}') * 3 / 4))
+          just build-os
+
+# NIX_BUILD_CORES=3 nix build "github:aucub/nixpkgs/nixos-unstable#gnome-shell" --impure --show-trace -L -v --option extra-substituters "https://mirrors.ustc.edu.cn/nix-channels/store https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io" --option trusted-public-keys "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=" --no-check

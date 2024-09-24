@@ -114,7 +114,9 @@
         "flake-utils": "flake-utils",
         "nix-filter": "nix-filter",
         "nix-index-database": "nix-index-database",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1726398642,
@@ -226,43 +228,27 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1726062873,
-        "narHash": "sha256-IiA3jfbR7K/B5+9byVi9BZGWTD4VSbWe8VLpp9B/iYk=",
-        "owner": "NixOS",
+        "lastModified": 1727196564,
+        "narHash": "sha256-3/39DLRm7bnd6HlTz9hBGqm+FCZLQuUQJ4dIsZQVxas=",
+        "owner": "aucub",
         "repo": "nixpkgs",
-        "rev": "4f807e8940284ad7925ebd0a0993d2a1791acb2f",
+        "rev": "318c367897144d5d1084bb3b5944d6a542f6e66e",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
+        "owner": "aucub",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1727011430,
-        "narHash": "sha256-RHEalE4hokPKWDvNApBJh63u4X6K/SxwLmroSx2ixBg=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "317cadcb9b385939d688771a52b95f567a2740a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "gnome",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "nur": {
       "locked": {
-        "lastModified": 1727175029,
-        "narHash": "sha256-KBoPqFKJJVpx13xgHG63Rk6myjzOrURHngXGRBeeOss=",
+        "lastModified": 1727201865,
+        "narHash": "sha256-nqHWxGhUFS6xyiVminVIECdG0Gu5em7LPf1mb4+5PEw=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "8f17850ce3bad58e860c4764d15e061410237a5c",
+        "rev": "c7225411f6e9087829c3a120e2698867d1b05319",
         "type": "github"
       },
       "original": {
@@ -279,7 +265,7 @@
         "nix-index-database": "nix-index-database_2",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nur": "nur",
         "treefmt-nix": "treefmt-nix"
       }

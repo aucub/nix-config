@@ -61,12 +61,10 @@
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://nix-community.cachix.org"
           "https://cache.garnix.io"
-          "https://staging.attic.rs/attic-ci"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-          "attic-ci:U5Sey4mUxwBXM3iFapmP0/ogODXywKLRNgRPQpEXxbo="
         ];
         trusted-users = [ "@wheel" ];
       };
@@ -499,7 +497,7 @@
       };
       timeout = 4;
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = vars.boot.kernelParams;
     kernelModules = vars.boot.kernelModules;
     extraModulePackages = vars.boot.extraModulePackages config.boot.kernelPackages;
@@ -590,11 +588,12 @@
   qt.enable = true;
 
   systemd = {
-    extraConfig = "DefaultTimeoutStopSec=25s";
     coredump.enable = false;
+    extraConfig = "DefaultTimeoutStopSec=25s";
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
+      after = [ "sleep.target" ];
       conflicts = [ "suspend.target" ];
       timerConfig = {
         OnUnitActiveSec = "2h";
