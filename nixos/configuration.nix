@@ -594,6 +594,7 @@
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
       timerConfig = {
+        OnActiveSec = "2h";
         OnUnitActiveSec = "2h";
         Unit = "suspend-then-shutdown.service";
         AccuracySec = "1s";
