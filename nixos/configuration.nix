@@ -25,6 +25,7 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nix-index-database.nixosModules.nix-index
     inputs.auto-cpufreq.nixosModules.default
+    (import "${inputs.styx}/module/default.nix" { inherit config lib pkgs; })
 
     ./hardware-configuration.nix
   ];
@@ -39,8 +40,15 @@
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in
     {
-      package = pkgs.nixVersions.latest;
+      # package = pkgs.nixVersions.latest;
       settings = {
+        styx-include = [
+          "list"
+          "of"
+          "package"
+          "name"
+          "regexp-.*"
+        ];
         experimental-features = [
           "nix-command"
           "flakes"
@@ -378,6 +386,12 @@
   security.sudo-rs.enable = true;
 
   services = {
+    styx = {
+      enable = true;
+      enableKernelOptions = true;
+      enablePatchedNix = true;
+      enableStyxNixCache = true;
+    };
     acpid.enable = true;
     upower = {
       enable = true;

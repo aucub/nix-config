@@ -244,11 +244,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1727250299,
-        "narHash": "sha256-c1lp1n//ltreWKOWqGmMenVarSm0Jq7m63rias+M88A=",
+        "lastModified": 1727254159,
+        "narHash": "sha256-UXMCFYHE1WSy84+7ImKZuSHn5oi/w2X8xDLWpz4+zm0=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "647a9128c5836fb89f3d42cdfe081f9c881bda0a",
+        "rev": "22dc1d778dedae7f29772c7a3b117d44eeade6ab",
         "type": "github"
       },
       "original": {
@@ -267,7 +267,24 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
+        "styx": "styx",
         "treefmt-nix": "treefmt-nix"
+      }
+    },
+    "styx": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1727165264,
+        "narHash": "sha256-uUcpLfkFytsKLJOw4IyT9iEOw7l0uqJe3ajY0ekq4tA=",
+        "owner": "dnr",
+        "repo": "styx",
+        "rev": "d44e6e93373be42278a1626849e77f99c963bdaf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dnr",
+        "repo": "styx",
+        "type": "github"
       }
     },
     "systems": {
