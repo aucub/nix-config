@@ -22,12 +22,7 @@
 
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      inputs.nur.overlay
-      inputs.nix-vscode-extensions.overlays.default
-    ];
+    overlays = outputs.defaultOverlays;
   };
 
   nix.package = lib.mkDefault pkgs.nixVersions.latest;

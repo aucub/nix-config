@@ -17,5 +17,14 @@
         hash = "sha256-rgbqVU2tKLnp+ZQpLTthpo9vPFRkGuayJCADrI2R1ls=";
       };
     });
+    nix-search-cli = prev.nix-search-cli.overrideAttrs (oldAttrs: {
+      version = "0.2";
+      src = prev.fetchFromGitHub {
+        owner = "peterldowns";
+        repo = "nix-search-cli";
+        rev = "7d6b4c501ee448dc2e5c123aa4c6d9db44a6dd12";
+        hash = "sha256-YM1Lf7py79rU8aJE0PfQaMr5JWx5J1covUf1aCjRkc8=";
+      };
+    });
   };
 }

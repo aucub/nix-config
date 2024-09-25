@@ -32,9 +32,6 @@ build-os-kernel:
 switch:
     sudo {{ set-proxy-env }} nixos-rebuild switch --flake .#{{ hostname }} --no-build-nix --impure --show-trace -L -v
 
-switch-boot:
-    sudo {{ set-proxy-env }} nixos-rebuild switch  --flake .#{{ hostname }} --no-build-nix --install-bootloader --impure --show-trace -L -v
-
 eval target:
     nix eval .#nixosConfigurations.{{ hostname }}.config.{{ target }} --impure --show-trace -L -v
 
@@ -57,4 +54,4 @@ fmt:
     nix fmt --show-trace -L -v
 
 check:
-    nix flake check --impure --show-trace -L -v
+    nix flake check --no-build --impure --show-trace -L -v

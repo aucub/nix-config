@@ -19,6 +19,8 @@ jobs:
           extra_nix_config: |
             auto-optimise-store = true
             experimental-features = nix-command flakes
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
+            extra-substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://cache.garnix.io
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
@@ -41,7 +43,9 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - run: nix build .#$PACKAGE --impure --show-trace -L -v
+      - uses: extractions/setup-just@v2
+
+      - run: just build $PACKAGE
         env:
           PACKAGE: ${{ inputs.package }}
           NIXPKGS_ALLOW_UNFREE: 1

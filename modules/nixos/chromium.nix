@@ -117,9 +117,6 @@
           "default_zoom_level" = {
             "x" = 1.2239010857415449;
           };
-          "per_host_zoom_levels" = {
-            "x" = { };
-          };
         };
       };
     };

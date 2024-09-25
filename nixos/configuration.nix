@@ -31,12 +31,7 @@
 
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      inputs.nur.overlay
-      inputs.nix-alien.overlays.default
-    ];
+    overlays = outputs.defaultOverlays;
   };
 
   nix =
@@ -172,6 +167,7 @@
         nix-tree
         nvd
         just
+        nix-search-cli
       ])
       ++ (with pkgs; [ nil ])
       ++ (with pkgs; [

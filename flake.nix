@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:aucub/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/30439d93eb8b19861ccbe3e581abf97bdc91b093";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -90,10 +90,29 @@
       treefmtConfig = {
         projectRootFile = "flake.nix";
         programs.nixfmt.enable = true;
+        settings.global.excludes = [
+          "*.toml"
+          "*.yml"
+          "*.yaml"
+          "*.icc"
+          "*.fish"
+          "*.dae"
+          "*.enc"
+          "*.sh"
+          "justfile"
+        ];
       };
+      customOverlays = import ./overlays { inherit inputs; };
+      defaultOverlays = [
+        customOverlays.additions
+        customOverlays.modifications
+        inputs.nur.overlay
+        inputs.nix-alien.overlays.default
+        inputs.nix-vscode-extensions.overlays.default
+      ];
     in
     {
-      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      inherit defaultOverlays;
       formatter = forAllSystems (
         system:
         (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} treefmtConfig).config.build.wrapper
@@ -103,7 +122,16 @@
           (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} treefmtConfig).config.build.check
             self;
       });
-      overlays = import ./overlays { inherit inputs; };
+      overlays = customOverlays;
+      legacyPackages = forAllSystems (
+        system:
+        import nixpkgs {
+          inherit system;
+          overlays = defaultOverlays;
+          config.allowUnfree = true;
+        }
+      );
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       nixosModules = import ./modules/nixos;
       homeManagerModules = import ./modules/home-manager;
       nixosConfigurations."${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
