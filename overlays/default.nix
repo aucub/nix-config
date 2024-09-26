@@ -18,7 +18,7 @@
       };
     });
     nix-search-cli = prev.nix-search-cli.overrideAttrs (oldAttrs: {
-      version = "0.2";
+      version = "0.2-unstable-2024-09-24";
       src = prev.fetchFromGitHub {
         owner = "peterldowns";
         repo = "nix-search-cli";

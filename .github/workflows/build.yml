@@ -8,11 +8,6 @@ on:
         required: false
         default: false
         type: boolean
-      attic:
-        description: "attic"
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   build:
@@ -24,8 +19,8 @@ jobs:
           extra_nix_config: |
             auto-optimise-store = true
             experimental-features = nix-command flakes
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
             extra-substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://cache.garnix.io
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
@@ -47,45 +42,10 @@ jobs:
 
       - uses: extractions/setup-just@v2
 
-      - if: ${{ inputs.attic }}
-        uses: mdgreenwald/mozilla-sops-action@v1
-
-      - if: ${{ inputs.attic }}
-        run: |
-          cd scripts/attic/
-          sops -d server.toml.enc > server.toml
-          sops -d config.toml.enc > config.toml
-          mkdir ~/.config/attic/
-          mv config.toml ~/.config/attic/config.toml
-          mv server.toml ~/.config/attic/server.toml
-        env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-
-      - if: ${{ inputs.attic }}
-        run: |
-          nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
-          nix-channel --update
-
-      - if: ${{ inputs.attic }}
-        run: |
-          nix-env -iA nixpkgs.attic-server
-          systemd-run --user --unit=atticd atticd
-          sleep 15
-          systemctl status --user atticd.service
-
-      - if: ${{ inputs.attic }}
-        run: |
-          nix-env -iA nixpkgs.attic-client
-          attic use default
-          systemd-run --user --unit=attic attic watch-store default
-          sleep 15
-          systemctl status --user attic.service
-
       - if: ${{ inputs.sshx }}
         run: curl -sSf https://sshx.io/get | sh -s run
       # ulimit -v 6291456
-      # ulimit -v 10485760
-      # NIX_BUILD_CORES=3 nix build "github:aucub/nixpkgs/nixos-unstable#nix" --impure --show-trace -L -v --option extra-substituters "https://mirrors.ustc.edu.cn/nix-channels/store https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io" --option trusted-public-keys "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      # NIX_BUILD_CORES=3 nix build "github:NixOS/nixpkgs/nixos-unstable#nix" --impure --show-trace -L -v --option extra-substituters "https://mirrors.ustc.edu.cn/nix-channels/store https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io" --option trusted-public-keys "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
 
       - if: ${{ !inputs.sshx }}
         run: just build-os

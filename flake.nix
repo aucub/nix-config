@@ -27,10 +27,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    styx = {
-      url = "github:dnr/styx";
-      flake = false;
-    };
   };
 
   outputs =
@@ -114,7 +110,6 @@
         inputs.nur.overlay
         inputs.nix-alien.overlays.default
         inputs.nix-vscode-extensions.overlays.default
-        (final: prev: import "${inputs.styx}/default.nix" { pkgs = final; })
       ];
     in
     {

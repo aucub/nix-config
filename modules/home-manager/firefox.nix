@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
-  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.zzzsy.firefox-gnome-theme}/share/firefox-theme";
+  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.federicoschonborn.firefox-gnome-theme
+  }";
   programs.firefox = {
     enable = true;
     languagePacks = [ "zh-CN" ];
@@ -182,6 +183,7 @@
         "dom.disable_window_move_resize" = true;
 
         # --- 杂项 ---
+        "browser.tabs.searchclipboardfor.middleclick" = false;
         # 禁用 UITour 后端
         "browser.uitour.enabled" = false;
         # 重置远程调试为禁用状态
@@ -306,6 +308,9 @@
       Homepage = {
         URL = "about:home";
         StartPage = "homepage";
+      };
+      EnableTrackingProtection = {
+        Exceptions = [ "https://github.dev" ];
       };
       NetworkPrediction = false;
       NoDefaultBookmarks = true;

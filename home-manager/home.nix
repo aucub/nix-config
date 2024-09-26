@@ -126,6 +126,10 @@
 
   programs = {
     man.generateCaches = false;
+    nix-index = {
+      enableBashIntegration = false;
+      enableFishIntegration = false;
+    };
     fish = {
       enable = true;
       interactiveShellInit =

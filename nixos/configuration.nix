@@ -25,7 +25,6 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nix-index-database.nixosModules.nix-index
     inputs.auto-cpufreq.nixosModules.default
-    (import "${inputs.styx}/module/default.nix" { inherit config lib pkgs; })
 
     ./hardware-configuration.nix
   ];
@@ -40,15 +39,8 @@
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in
     {
-      # package = pkgs.nixVersions.latest;
+      package = pkgs.nixVersions.latest;
       settings = {
-        styx-include = [
-          "list"
-          "of"
-          "package"
-          "name"
-          "regexp-.*"
-        ];
         experimental-features = [
           "nix-command"
           "flakes"
@@ -146,7 +138,7 @@
         ])
         # custom
         ++ (with pkgs; [
-          navicat
+          navicat-premium
           damask
           warp-plus
         ]);
@@ -240,7 +232,7 @@
         # 列出系统的 generations
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # 删除过期的 generations
-        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 3d && home-manager expire-generations -3days";
+        nix-clean = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system && home-manager expire-generations 0days";
         # 删除未使用的 Nix 存储条目
         nix-gc = "sudo nix-collect-garbage --delete-older-than 7d && nix-collect-garbage --delete-older-than 7d";
         sopsb = "env SOPS_AGE_KEY=(rbw get age) sops";
@@ -385,11 +377,6 @@
   security.sudo-rs.enable = true;
 
   services = {
-    styx = {
-      enable = true;
-      enableKernelOptions = true;
-      enablePatchedNix = true;
-    };
     acpid.enable = true;
     upower = {
       enable = true;

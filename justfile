@@ -1,4 +1,3 @@
-set-proxy-env := "env ftp_proxy=\"${ftp_proxy:-}\" all_proxy=\"${all_proxy:-}\" FTP_PROXY=\"${FTP_PROXY:-}\" http_proxy=\"${http_proxy:-}\" HTTPS_PROXY=\"${HTTPS_PROXY:-}\" https_proxy=\"${https_proxy:-}\" ALL_PROXY=\"${ALL_PROXY:-}\" HTTP_PROXY=\"${HTTP_PROXY:-}\""
 hostname := "neko"
 username := "uymi"
 
@@ -30,7 +29,7 @@ build-os-kernel:
 ############################################################################
 
 switch:
-    sudo {{ set-proxy-env }} nixos-rebuild switch --flake .#{{ hostname }} --no-build-nix --impure --show-trace -L -v
+    sudo nixos-rebuild switch --flake .#{{ hostname }} --no-build-nix --impure --show-trace -L -v
 
 eval target:
     nix eval .#nixosConfigurations.{{ hostname }}.config.{{ target }} --impure --show-trace -L -v
