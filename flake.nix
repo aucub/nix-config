@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/30439d93eb8b19861ccbe3e581abf97bdc91b093";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -98,6 +98,7 @@
           "*.toml"
           "*.yml"
           "*.yaml"
+          "*.json"
           "*.icc"
           "*.fish"
           "*.dae"

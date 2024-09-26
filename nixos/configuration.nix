@@ -52,7 +52,6 @@
         experimental-features = [
           "nix-command"
           "flakes"
-          "ca-derivations"
         ];
         flake-registry = "";
         nix-path = config.nix.nixPath;
@@ -390,7 +389,6 @@
       enable = true;
       enableKernelOptions = true;
       enablePatchedNix = true;
-      enableStyxNixCache = true;
     };
     acpid.enable = true;
     upower = {
@@ -604,7 +602,6 @@
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
       after = [ "sleep.target" ];
-      conflicts = [ "suspend.target" ];
       timerConfig = {
         OnUnitActiveSec = "2h";
         Unit = "suspend-then-shutdown.service";
@@ -615,10 +612,16 @@
     services = {
       suspend-then-shutdown = {
         description = "Shutdown after suspend";
-        conflicts = [ "suspend.target" ];
         script = ''
           if [ "$(${pkgs.systemd}/bin/systemctl is-system-running)" = "sleeping" ]; then
-            ${pkgs.systemd}/bin/systemd-run --on-active=300 ${pkgs.systemd}/bin/systemctl poweroff
+            current_timestamp=$(${pkgs.coreutils}/bin/date +%s)
+            active_enter_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveEnterTimestamp sleep.target | cut -d= -f2)" +%s)
+            active_exit_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveExitTimestamp sleep.target | cut -d= -f2)" +%s)
+            if [ $active_enter_timestamp -ge $active_exit_timestamp ]; then
+              if [ $((current_timestamp - active_enter_timestamp)) -ge 7200 ]; then
+                ${pkgs.systemd}/bin/systemd-run --on-active=300 ${pkgs.systemd}/bin/systemctl poweroff
+              fi
+            fi
           fi
         '';
         serviceConfig = {
