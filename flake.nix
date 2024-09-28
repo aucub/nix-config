@@ -50,6 +50,7 @@
         networking.hostName = "neko";
         users.users = {
           user = {
+            uid = 1000;
             name = "uymi";
             initialHashedPassword = "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
           };

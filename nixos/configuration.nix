@@ -87,7 +87,7 @@
     };
     "${vars.users.users.user.name}" = {
       isNormalUser = true;
-      uid = 1000;
+      uid = vars.users.users.user.uid;
       initialHashedPassword = vars.users.users.user.initialHashedPassword;
       extraGroups =
         [
@@ -588,32 +588,32 @@
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
-      after = [ "sleep.target" ];
       timerConfig = {
-        OnUnitActiveSec = "2h";
-        Unit = "suspend-then-shutdown.service";
-        AccuracySec = "1s";
+        OnActiveSec = "3h";
         RemainAfterElapse = false;
+        WakeSystem = true;
       };
     };
     services = {
       suspend-then-shutdown = {
         description = "Shutdown after suspend";
+        path = with pkgs; [ dbus ];
+        environment = {
+          DISPLAY = ":0";
+          DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${toString vars.users.users.user.uid}/bus";
+          XDG_RUNTIME_DIR = "/run/user/${toString vars.users.users.user.uid}";
+        };
         script = ''
-          if [ "$(${pkgs.systemd}/bin/systemctl is-system-running)" = "sleeping" ]; then
-            current_timestamp=$(${pkgs.coreutils}/bin/date +%s)
-            active_enter_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveEnterTimestamp sleep.target | cut -d= -f2)" +%s)
-            active_exit_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveExitTimestamp sleep.target | cut -d= -f2)" +%s)
-            if [ $active_enter_timestamp -ge $active_exit_timestamp ]; then
-              if [ $((current_timestamp - active_enter_timestamp)) -ge 7200 ]; then
-                ${pkgs.systemd}/bin/systemd-run --on-active=300 ${pkgs.systemd}/bin/systemctl poweroff
-              fi
-            fi
+          sleep 1m
+          current_timestamp=$(${pkgs.coreutils}/bin/date +%s)
+          active_enter_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveEnterTimestamp sleep.target | cut -d= -f2)" +%s)
+          if [ $((current_timestamp - active_enter_timestamp)) -ge 10800 ]; then
+            ${pkgs.gnome-session}/bin/gnome-session-quit --power-off
           fi
         '';
         serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = "no";
+          Type = "simple";
+          User = vars.users.users.user.name;
         };
       };
       systemd-gpt-auto-generator.enable = false;
