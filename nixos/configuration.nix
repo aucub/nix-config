@@ -198,7 +198,8 @@
           exec python "$@"
         '')
       ])
-      ++ (with pkgs; [ nix-alien ]);
+      ++ (with pkgs; [ nix-alien ])
+      ++ (if config.programs.iay.enable then with pkgs; [ iay ] else [ ]);
   };
 
   programs = {
@@ -217,12 +218,19 @@
       };
     };
     command-not-found.enable = false;
-    bash.promptInit = "PS1='[\u@\h \W]\$ '";
+    bash.promptInit = "export IAY_SHORTEN_CWD=0";
+    iay = {
+      enable = true;
+      minimalPrompt = true;
+    };
     fish = {
       enable = true;
       interactiveShellInit = ''
         set fish_greeting
         set -U fish_history_max 2500
+        set -gx fish_prompt_pwd_dir_length 0
+        fish_config theme choose 'Tomorrow Night Bright'
+        fish_config prompt choose simple
       '';
       promptInit = "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source";
       shellAbbrs = {
@@ -588,7 +596,7 @@
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
-      requiredBy = [ "sleep.target" ];
+      partOf = [ "sleep.target" ];
       onSuccess = [ "suspend-then-shutdown.service" ];
       timerConfig = {
         OnActiveSec = "3h";
