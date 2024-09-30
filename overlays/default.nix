@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ ... }:
 {
   additions = final: _prev: import ../pkgs final.pkgs;
   modifications = final: prev: {
@@ -26,11 +26,5 @@
         hash = "sha256-YM1Lf7py79rU8aJE0PfQaMr5JWx5J1covUf1aCjRkc8=";
       };
     });
-  };
-  staging-next-packages = final: _prev: {
-    staging-next = import inputs.nixpkgs-staging-next {
-      system = final.system;
-      config.allowUnfree = true;
-    };
   };
 }

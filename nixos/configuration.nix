@@ -518,7 +518,6 @@
       enable = true;
       dns = "systemd-resolved";
       wifi = {
-        backend = "iwd";
         powersave = true;
         macAddress = "stable-ssid";
       };

@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/b5c4f45cfcaa5a44632c7119922987e131249cd2";
-    nixpkgs-staging-next.url = "github:NixOS/nixpkgs/staging-next";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -109,7 +108,6 @@
       defaultOverlays = [
         customOverlays.additions
         customOverlays.modifications
-        customOverlays.staging-next-packages
         inputs.nur.overlay
         inputs.nix-alien.overlays.default
         inputs.nix-vscode-extensions.overlays.default
