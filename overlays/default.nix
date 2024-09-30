@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 {
   additions = final: _prev: import ../pkgs final.pkgs;
   modifications = final: prev: {
@@ -14,7 +14,7 @@
         repo = "Orchis-theme";
         owner = "vinceliuice";
         rev = "d067106f77710a41c072995fe139f56844363da2";
-        hash = "sha256-rgbqVU2tKLnp+ZQpLTthpo9vPFRkGuayJCADrI2R1ls=";
+        hash = "sha256-5uQcpx8LQTu2NHvxmGgxXpYYL1mpUG/kbGr9oBV+NT0=";
       };
     });
     nix-search-cli = prev.nix-search-cli.overrideAttrs (oldAttrs: {
@@ -26,5 +26,11 @@
         hash = "sha256-YM1Lf7py79rU8aJE0PfQaMr5JWx5J1covUf1aCjRkc8=";
       };
     });
+  };
+  staging-next-packages = final: _prev: {
+    staging-next = import inputs.nixpkgs-staging-next {
+      system = final.system;
+      config.allowUnfree = true;
+    };
   };
 }

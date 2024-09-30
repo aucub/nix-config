@@ -518,6 +518,7 @@
       enable = true;
       dns = "systemd-resolved";
       wifi = {
+        backend = "iwd";
         powersave = true;
         macAddress = "stable-ssid";
       };
@@ -588,8 +589,11 @@
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
+      requiredBy = [ "sleep.target" ];
+      onSuccess = [ "suspend-then-shutdown.service" ];
       timerConfig = {
         OnActiveSec = "3h";
+        AccuracySec = "30m";
         RemainAfterElapse = false;
         WakeSystem = true;
       };
@@ -607,7 +611,7 @@
           sleep 1m
           current_timestamp=$(${pkgs.coreutils}/bin/date +%s)
           active_enter_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveEnterTimestamp sleep.target | cut -d= -f2)" +%s)
-          if [ $((current_timestamp - active_enter_timestamp)) -ge 10800 ]; then
+          if [ $((current_timestamp - active_enter_timestamp)) -ge 10000 ]; then
             ${pkgs.gnome-session}/bin/gnome-session-quit --power-off
           fi
         '';
