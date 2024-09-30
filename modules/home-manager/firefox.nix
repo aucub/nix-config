@@ -13,7 +13,7 @@
         bitwarden
         violentmonkey
         user-agent-string-switcher
-        immersive-translate
+        kiss-translator
       ];
       userChrome = ''
         @import "firefox-gnome-theme/userChrome.css";
@@ -235,6 +235,7 @@
         "privacy.cpd.cookies" = false;
         # 跟踪保护
         "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
         # Firefox Relay
         "signon.firefoxRelay.feature" = "disabled";
         # 翻译
@@ -309,7 +310,7 @@
         StartPage = "homepage";
       };
       EnableTrackingProtection = {
-        Exceptions = [ "https://github.dev" ];
+        Exceptions = [ "https://*.github.dev" ];
       };
       NetworkPrediction = false;
       NoDefaultBookmarks = true;

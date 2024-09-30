@@ -13,7 +13,7 @@ jobs:
   pkg:
     runs-on: ubuntu-latest
     steps:
-      - uses: cachix/install-nix-action@V28
+      - uses: cachix/install-nix-action@v29
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
