@@ -30,7 +30,7 @@
   ];
 
   nixpkgs = {
-    config.allowUnfree = true;
+    config = vars.nixpkgs.config;
     overlays = outputs.defaultOverlays;
   };
 
@@ -44,13 +44,15 @@
         experimental-features = [
           "nix-command"
           "flakes"
+          "cgroups"
         ];
         flake-registry = "";
         nix-path = config.nix.nixPath;
         auto-optimise-store = true;
         builders-use-substitutes = true;
-        show-trace = true;
+        use-cgroups = true;
         warn-dirty = false;
+        fsync-metadata = false;
         substituters = [
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://nix-community.cachix.org"
@@ -395,6 +397,10 @@
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     dbus.implementation = "broker";
+    earlyoom = {
+      enable = true;
+      freeMemThreshold = 5;
+    };
     avahi.enable = false;
     geoclue2.enable = false;
     journald.extraConfig = ''
@@ -591,6 +597,7 @@
   qt.enable = true;
 
   systemd = {
+    oomd.enable = false;
     coredump.enable = false;
     extraConfig = "DefaultTimeoutStopSec=25s";
     sleep.extraConfig = "AllowHibernation=no";

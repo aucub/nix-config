@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/35d02934a17a4fdc53a8857826ed35f3694e5f1c";
+    nixpkgs.url = "github:NixOS/nixpkgs/c98ddb920493f24dd57ea34a18dafdbd16eeace0";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -39,13 +39,16 @@
     }@inputs:
     let
       inherit (self) outputs;
-      forAllSystems = nixpkgs.lib.genAttrs [
-        "aarch64-linux"
+      linuxSystems = [
         "i686-linux"
         "x86_64-linux"
+        "aarch64-linux"
+      ];
+      darwinSystems = [
         "aarch64-darwin"
         "x86_64-darwin"
       ];
+      forAllSystems = nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems);
       vars = {
         networking.hostName = "neko";
         users.users = {
@@ -87,6 +90,7 @@
           package = pkgs: pkgs.bibata-cursors;
           size = 24;
         };
+        nixpkgs.config.allowUnfree = true;
       };
       treefmtConfig = {
         projectRootFile = "flake.nix";
@@ -130,7 +134,7 @@
         import nixpkgs {
           inherit system;
           overlays = defaultOverlays;
-          config.allowUnfree = true;
+          config = vars.nixpkgs.config;
         }
       );
       packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});

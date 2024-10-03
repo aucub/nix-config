@@ -21,7 +21,7 @@
   ];
 
   nixpkgs = {
-    config.allowUnfree = true;
+    config = vars.nixpkgs.config;
     overlays = outputs.defaultOverlays;
   };
 
