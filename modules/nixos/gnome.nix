@@ -7,6 +7,7 @@
         appindicator
         caffeine
         kimpanel
+        battery-health-charging
       ])
       # gnome
       ++ (with pkgs; [

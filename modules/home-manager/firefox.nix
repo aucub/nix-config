@@ -183,6 +183,8 @@
 
         # --- 杂项 ---
         "browser.tabs.searchclipboardfor.middleclick" = false;
+        # 标签页预览
+        "browser.tabs.hoverPreview.showThumbnails" = false;
         # 禁用 UITour 后端
         "browser.uitour.enabled" = false;
         # 重置远程调试为禁用状态

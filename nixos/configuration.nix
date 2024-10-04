@@ -207,16 +207,9 @@
   programs = {
     auto-cpufreq = {
       enable = true;
-      settings = {
-        charger = {
-          governor = "schedutil";
-          turbo = "auto";
-        };
-        battery = {
-          enable_thresholds = true;
-          start_threshold = 70;
-          stop_threshold = 75;
-        };
+      settings.charger = {
+        governor = "schedutil";
+        turbo = "auto";
       };
     };
     command-not-found.enable = false;
@@ -469,6 +462,7 @@
       excludePackages = with pkgs; [ xterm ];
       wacom.enable = false;
     };
+    # flatpak.enable = true;
   };
 
   hardware = {
@@ -598,7 +592,7 @@
 
   systemd = {
     oomd.enable = false;
-    coredump.enable = false;
+    # coredump.enable = false;
     extraConfig = "DefaultTimeoutStopSec=25s";
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {

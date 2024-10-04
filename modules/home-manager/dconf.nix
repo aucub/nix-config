@@ -197,6 +197,7 @@
         "system-monitor@gnome-shell-extensions.gcampax.github.com"
         "drive-menu@gnome-shell-extensions.gcampax.github.com"
         "light-style@gnome-shell-extensions.gcampax.github.com"
+        "Battery-Health-Charging@maniacx.github.com"
       ];
     };
 
@@ -204,6 +205,8 @@
       remember-mount-password = true;
       tray-pos = "left";
     };
+
+    "org/gnome/shell/extensions/Battery-Health-Charging".show-system-indicator = false;
 
     "org/gnome/shell/keybindings".toggle-message-tray = [ ];
 

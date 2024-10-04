@@ -134,6 +134,7 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ aucub ];
-    platforms = [ "x86_64-linux" ];
+    platforms = with lib.platforms; linux ++ darwin;
+    broken = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
   };
 }
