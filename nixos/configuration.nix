@@ -13,11 +13,10 @@
     outputs.nixosModules.chromium
     outputs.nixosModules.gnome
     outputs.nixosModules.dae
-    # outputs.nixosModules.nvidia
+    outputs.nixosModules.nvidia
     # outputs.nixosModules.steam
     # outputs.nixosModules.containers
 
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -226,8 +225,8 @@
         set -gx fish_prompt_pwd_dir_length 0
         fish_config theme choose 'Tomorrow Night Bright'
         fish_config prompt choose simple
+        ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
       '';
-      promptInit = "${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source";
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";

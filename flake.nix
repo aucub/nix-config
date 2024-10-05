@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/bc947f541ae55e999ffdb4013441347d83b00feb";
+    nixpkgs.url = "github:NixOS/nixpkgs/gnome";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -129,7 +129,7 @@
             self;
       });
       overlays = customOverlays;
-      legacyPackages = forAllSystems (
+      packages = forAllSystems (
         system:
         import nixpkgs {
           inherit system;
@@ -137,7 +137,7 @@
           config = vars.nixpkgs.config;
         }
       );
-      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      # packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       nixosModules = import ./modules/nixos;
       homeManagerModules = import ./modules/home-manager;
       nixosConfigurations."${vars.networking.hostName}" = nixpkgs.lib.nixosSystem {
