@@ -13,8 +13,8 @@
       src = prev.fetchFromGitHub {
         repo = "Orchis-theme";
         owner = "vinceliuice";
-        rev = "d067106f77710a41c072995fe139f56844363da2";
-        hash = "sha256-5uQcpx8LQTu2NHvxmGgxXpYYL1mpUG/kbGr9oBV+NT0=";
+        rev = "6cda1476f059a0f96b475e80112f333e1ba66a80";
+        hash = "sha256-Oxtlu67OFGdj1GkYiGcUdsdvt/KWyuAhsABzBTOkBes=";
       };
     });
     nix-search-cli = prev.nix-search-cli.overrideAttrs (oldAttrs: {

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  nix-update-script,
   blueprint-compiler,
   desktop-file-utils,
   gettext,
@@ -20,9 +19,7 @@
   wrapGAppsHook,
 }:
 let
-  pname = "damask";
   version = "0.2.2";
-
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "subpop";
@@ -32,7 +29,9 @@ let
   };
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit version src;
+
+  pname = "damask";
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -55,14 +54,12 @@ stdenv.mkDerivation {
     libsoup_3
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
+  meta = {
     description = "Automatically set wallpaper images from Internet sources";
     homepage = "https://gitlab.gnome.org/subpop/damask";
-    maintainers = with maintainers; [ samdroid-apps ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ samdroid-apps ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "damask";
   };
 }

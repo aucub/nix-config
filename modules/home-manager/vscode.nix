@@ -8,7 +8,7 @@
         ms-ceintl.vscode-language-pack-zh-hans
         formulahendry.code-runner
         redhat.vscode-yaml
-        ms-python.python
+        # ms-python.python
         charliermarsh.ruff
         foxundermoon.shell-format
         tamasfe.even-better-toml

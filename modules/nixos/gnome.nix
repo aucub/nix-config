@@ -55,8 +55,8 @@
       gnome-browser-connector.enable = false;
       gnome-initial-setup.enable = false;
       games.enable = false;
-      tracker.enable = false;
-      tracker-miners.enable = false;
+      tinysparql.enable = false;
+      localsearch.enable = false;
       rygel.enable = false;
       gnome-remote-desktop.enable = false;
       evolution-data-server.enable = lib.mkForce false;

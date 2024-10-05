@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/bc947f541ae55e999ffdb4013441347d83b00feb";
+    nixpkgs.url = "github:aucub/nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -156,4 +156,26 @@
             modules = [ ./home-manager/home.nix ];
           };
     };
+  nixConfig = {
+    accept-flake-config = true;
+    experimental-features = [
+      "nix-command"
+      "flakes"
+      "cgroups"
+    ];
+    use-cgroups = true;
+    warn-dirty = false;
+    fsync-metadata = false;
+    extra-substituters = [
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://nix-community.cachix.org"
+      "https://cache.garnix.io"
+      "https://qihaiumi.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
+    ];
+  };
 }

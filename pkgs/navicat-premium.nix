@@ -34,39 +34,23 @@ assert lib.isBool isLite;
 let
   pname = if isLite then "navicat-premium-lite" else "navicat-premium";
   version = "17.1.1";
+  srcHashes = {
+    en = {
+      lite = "sha256-etKXXttd+bSQTyOyzbDx1mXhBH6xqQ1e+aqZIGgKcHs=";
+      full = "sha256-A+JSvzt2E/zq5rajjmRlNFkxUGyu33fAkkBYkTMHcYM=";
+    };
+    cs = {
+      lite = "sha256-CFNJQXf8vX1NDY81n2/P2cs/N3ZcWFJVjv9yY7yZyJQ=";
+      full = "sha256-TGSnn6fa8qLLMltOAdmZvPgdfM1Ut9eCsuV4G/uZjDw=";
+    };
+  };
   src = fetchurl {
     url = "https://dn.navicat.com/download/navicat17-premium-${
       if isLite then "lite-" else ""
     }${language}-x86_64.AppImage";
-    sha256 =
-      if language == "en" then
-        if isLite then
-          "etKXXttd+bSQTyOyzbDx1mXhBH6xqQ1e+aqZIGgKcHs="
-        else
-          "A+JSvzt2E/zq5rajjmRlNFkxUGyu33fAkkBYkTMHcYM="
-      else if isLite then
-        "CFNJQXf8vX1NDY81n2/P2cs/N3ZcWFJVjv9yY7yZyJQ="
-      else
-        "TGSnn6fa8qLLMltOAdmZvPgdfM1Ut9eCsuV4G/uZjDw=";
+    hash = srcHashes.${language}.${if isLite then "lite" else "full"};
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
-  libraryPath = lib.makeLibraryPath [
-    libGL
-    glib
-    glibc
-    pango
-    harfbuzz
-    fontconfig
-    libX11
-    freetype
-    e2fsprogs
-    expat
-    p11-kit
-    libxcb
-    libgpg-error
-    libxkbcommon
-    libselinux
-  ];
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -112,11 +96,29 @@ stdenv.mkDerivation {
 
   preFixup = ''
     wrapProgram $out/bin/navicat \
-    --prefix LD_LIBRARY_PATH : "${libraryPath}:$out/lib/oci:$out/lib/obci:$out/lib/pq-g:$out/lib:~/.config/navicat/Premium/lib/sqlite:~/.config/navicat/Premium/lib/oci" \
-    --set QT_PLUGIN_PATH "$out/plugins" \
-    --set QT_QPA_PLATFORM xcb \
-    --set QT_STYLE_OVERRIDE Fusion \
-    --chdir "$out"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libGL
+          glib
+          glibc
+          pango
+          harfbuzz
+          fontconfig
+          libX11
+          freetype
+          e2fsprogs
+          expat
+          p11-kit
+          libxcb
+          libgpg-error
+          libxkbcommon
+          libselinux
+        ]
+      }:$out/lib" \
+      --set QT_PLUGIN_PATH "$out/plugins" \
+      --set QT_QPA_PLATFORM xcb \
+      --set QT_STYLE_OVERRIDE Fusion \
+      --chdir "$out"
   '';
 
   meta = {
