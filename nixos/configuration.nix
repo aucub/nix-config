@@ -40,6 +40,7 @@
     {
       package = pkgs.nixVersions.latest;
       settings = {
+        accept-flake-config = true;
         experimental-features = [
           "nix-command"
           "flakes"
@@ -232,7 +233,20 @@
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
-        uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
+        uv-venv = "uv venv --python=${
+          pkgs.python3
+          # 13.override {
+          #   enableOptimizations = true;
+          #   enableGIL = false;
+          #   sourceVersion = {
+          #     major = "3";
+          #     minor = "13";
+          #     patch = "0";
+          #     suffix = "";
+          #   };
+          #   hash = "sha256-CG3liC48sxDU3KSEV1IuLkgBjs1D2pzfgn9qB1nvsH0=";
+          # }
+        }/bin/python";
         # 列出系统的 generations
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # 删除过期的 generations
@@ -463,6 +477,7 @@
       excludePackages = with pkgs; [ xterm ];
       wacom.enable = false;
     };
+    printing.webInterface = false;
     # flatpak.enable = true;
   };
 
@@ -586,14 +601,13 @@
       enable = true;
       xdgOpenUsePortal = true;
     };
-    mime.defaultApplications."x-scheme-handler/mailto" = "bluetooth-sendto.desktop";
   };
 
   qt.enable = true;
 
   systemd = {
-    oomd.enable = false;
     # coredump.enable = false;
+    oomd.enable = false;
     extraConfig = "DefaultTimeoutStopSec=25s";
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {

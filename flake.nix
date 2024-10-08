@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:aucub/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:aucub/nixpkgs/staging-next";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -163,6 +163,9 @@
       "flakes"
       "cgroups"
     ];
+    flake-registry = "";
+    auto-optimise-store = true;
+    builders-use-substitutes = true;
     use-cgroups = true;
     warn-dirty = false;
     fsync-metadata = false;

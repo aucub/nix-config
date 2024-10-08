@@ -33,7 +33,7 @@ assert lib.elem language [
 assert lib.isBool isLite;
 let
   pname = if isLite then "navicat-premium-lite" else "navicat-premium";
-  version = "17.1.1";
+  version = "17.1.3";
   srcHashes = {
     en = {
       lite = "sha256-etKXXttd+bSQTyOyzbDx1mXhBH6xqQ1e+aqZIGgKcHs=";
@@ -41,7 +41,7 @@ let
     };
     cs = {
       lite = "sha256-CFNJQXf8vX1NDY81n2/P2cs/N3ZcWFJVjv9yY7yZyJQ=";
-      full = "sha256-TGSnn6fa8qLLMltOAdmZvPgdfM1Ut9eCsuV4G/uZjDw=";
+      full = "sha256-sXmGSs4DuHFhv6wH8IuEmYE99i99Y1Nsppptj0kCAt0=";
     };
   };
   src = fetchurl {

@@ -47,6 +47,7 @@
       show-battery-percentage = true;
       text-scaling-factor = 1.25;
       toolkit-accessibility = false;
+      accent-color = "green";
     };
 
     "org/gnome/desktop/peripherals/keyboard".numlock-state = true;

@@ -26,5 +26,14 @@
         hash = "sha256-YM1Lf7py79rU8aJE0PfQaMr5JWx5J1covUf1aCjRkc8=";
       };
     });
+    nautilus = prev.nautilus.overrideAttrs (oldAttrs: {
+      postPatch =
+        (oldAttrs.postPatch or "")
+        + ''
+          sed -i '/static void\s*action_send_email/,/^\}/d' src/nautilus-files-view.c
+          sed -i '/\.name = "send-email"/d' src/nautilus-files-view.c
+          sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
+        '';
+    });
   };
 }
