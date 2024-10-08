@@ -52,8 +52,8 @@ switch-hm:
 update:
   nix flake update
 
-# Lint nix files
-lint:
+# Format nix files
+fmt:
   nix fmt --show-trace -L -v
 
 # Check nix flake

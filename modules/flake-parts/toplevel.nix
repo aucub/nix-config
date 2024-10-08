@@ -37,10 +37,6 @@
 
       _module.args.pkgs = import inputs.nixpkgs {
         inherit system;
-      };
-
-      legacyPackages = import inputs.nixpkgs {
-        config.allowUnfree = true;
         overlays = [
           (import ../../overlays {
             flake = {
@@ -51,6 +47,11 @@
           inputs.nix-alien.overlays.default
           inputs.nix-vscode-extensions.overlays.default
         ];
+        config.allowUnfree = true;
       };
+
+      # legacyPackages = pkgs;
+
+      packages.ungoogled-chromium = pkgs.ungoogled-chromium;
     };
 }

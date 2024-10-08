@@ -41,4 +41,15 @@ self: prev: {
         sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
       '';
   });
+  qt6Packages = prev.qt6Packages // {
+    fcitx5-qt = prev.qt6Packages.fcitx5-qt.overrideAttrs (oldAttrs: rec {
+      version = "5.1.7";
+      src = prev.fetchFromGitHub {
+        owner = "fcitx";
+        repo = "fcitx5-qt";
+        rev = version;
+        hash = "sha256-C/LRpC6w/2cb/+xAwsmOVEvWmHMtJKD1pAwMoeLVIYY=";
+      };
+    });
+  };
 }

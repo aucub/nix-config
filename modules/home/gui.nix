@@ -1,27 +1,33 @@
-{ pkgs, ... }:
+{
+  flake,
+  pkgs,
+  config,
+  ...
+}:
 let
-  cursorname = "Bibata-Modern-Classic";
-  cursorpackage = pkgs: pkgs.bibata-cursors;
-  cursorsize = 24;
+  user = flake.config.users."${config.home.username}";
+  cursorName = user.cursorName;
+  cursorPackage = user.cursorPackage pkgs;
+  cursorSize = user.cursorSize;
 in
 {
   home = {
     pointerCursor = {
-      name = cursorname;
-      package = cursorpackage pkgs;
-      size = cursorsize;
+      name = cursorName;
+      package = cursorPackage;
+      size = cursorSize;
       gtk.enable = true;
       x11 = {
         enable = true;
-        defaultCursor = cursorname;
+        defaultCursor = cursorName;
       };
     };
     language.base = "zh_CN.UTF-8";
   };
 
   gtk.cursorTheme = {
-    name = cursorname;
-    size = cursorsize;
+    name = cursorName;
+    size = cursorSize;
   };
 
   xdg = {

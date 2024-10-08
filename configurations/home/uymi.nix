@@ -2,13 +2,9 @@
   flake,
   pkgs,
   lib,
-  specialArgs ? {
-    useGlobalPkgs = false;
-  },
   ...
 }:
 let
-  useGlobalPkgs = specialArgs.useGlobalPkgs or false;
   inherit (flake) inputs;
   inherit (inputs) self;
   username = "uymi";
@@ -25,20 +21,6 @@ in
     self.homeModules.vscode
     self.homeModules.wofi
   ];
-
-  nixpkgs =
-    if !useGlobalPkgs then
-      {
-        config.allowUnfree = true;
-        overlays = [
-          self.overlays.default
-          inputs.nur.overlay
-          inputs.nix-alien.overlays.default
-          inputs.nix-vscode-extensions.overlays.default
-        ];
-      }
-    else
-      { };
 
   home = {
     username = username;
