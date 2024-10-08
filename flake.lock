@@ -51,6 +51,24 @@
         "type": "github"
       }
     },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1727826117,
+        "narHash": "sha256-K5ZLCyfO/Zj9mPFldf3iwS6oZStJcU4tSpiXTMYaaL0=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "3d04084d54bedc3d6b8b736c70ef449225c361b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -226,29 +244,56 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
+    "nixos-unified": {
       "locked": {
-        "lastModified": 1728385687,
-        "narHash": "sha256-Z9w+MQqhQR1xXrULyzyWgcnlhl/S2lVahY2k9FOnu/o=",
-        "owner": "aucub",
-        "repo": "nixpkgs",
-        "rev": "295ffedc0a364d9893e1d5155942fcbb06f99d60",
+        "lastModified": 1728325549,
+        "narHash": "sha256-WSzcPgZ18W/yEuF2w6t3jcS2jSRnBxG0zW42Q069lTg=",
+        "owner": "srid",
+        "repo": "nixos-unified",
+        "rev": "4c9a3c503952b256d6989bbfcd3a443b7eb13647",
         "type": "github"
       },
       "original": {
-        "owner": "aucub",
-        "ref": "staging-next",
+        "owner": "srid",
+        "repo": "nixos-unified",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1728400689,
+        "narHash": "sha256-QGZg+aJZd3/bAwjFMEyJ7aRtb8MmtAZGebpvCZ7VBIo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "5cdc927e9bb9aa3337576bff533ffeed7bdf1ae7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "gnome",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
+    "nixpkgs-lib": {
+      "locked": {
+        "lastModified": 1727825735,
+        "narHash": "sha256-0xHYkMkeLVQAMa7gvkddbPqpxph+hDzdu1XdGPJR+Os=",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/fb192fec7cc7a4c26d51779e9bab07ce6fa5597a.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/fb192fec7cc7a4c26d51779e9bab07ce6fa5597a.tar.gz"
+      }
+    },
     "nur": {
       "locked": {
-        "lastModified": 1728385750,
-        "narHash": "sha256-M2Qgz4Opif8uN9/I/dWRtyZRcuHRv+02B1+FgJk6LyY=",
+        "lastModified": 1728424123,
+        "narHash": "sha256-b3+q3s/gDa5TefN1zdcMmua9iAlw3VrrujcziVKdlnw=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "7fc13fc5ea634482f96525f06132646d5aa01f7f",
+        "rev": "854a676df29bb977182b7bc63ed3ab6a0f820b06",
         "type": "github"
       },
       "original": {
@@ -260,11 +305,13 @@
     "root": {
       "inputs": {
         "auto-cpufreq": "auto-cpufreq",
+        "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "nix-alien": "nix-alien",
         "nix-index-database": "nix-index-database_2",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-hardware": "nixos-hardware",
+        "nixos-unified": "nixos-unified",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "treefmt-nix": "treefmt-nix"

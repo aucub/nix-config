@@ -36,11 +36,11 @@ let
   version = "17.1.3";
   srcHashes = {
     en = {
-      lite = "sha256-etKXXttd+bSQTyOyzbDx1mXhBH6xqQ1e+aqZIGgKcHs=";
-      full = "sha256-A+JSvzt2E/zq5rajjmRlNFkxUGyu33fAkkBYkTMHcYM=";
+      lite = "";
+      full = "";
     };
     cs = {
-      lite = "sha256-CFNJQXf8vX1NDY81n2/P2cs/N3ZcWFJVjv9yY7yZyJQ=";
+      lite = "";
       full = "sha256-sXmGSs4DuHFhv6wH8IuEmYE99i99Y1Nsppptj0kCAt0=";
     };
   };
@@ -122,6 +122,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    # https://www.navicat.com/en/products/navicat-premium-release-note
     homepage =
       if isLite then
         "https://www.navicat.com/products/navicat-premium-lite"

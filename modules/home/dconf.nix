@@ -189,6 +189,7 @@
         "places-menu@gnome-shell-extensions.gcampax.github.com"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "apps-menu@gnome-shell-extensions.gcampax.github.com"
+        "status-icons@gnome-shell-extensions.gcampax.github.com"
       ];
       enabled-extensions = [
         "appindicatorsupport@rgcjonas.gmail.com"
@@ -229,9 +230,5 @@
     "org/gnome/system/location".enabled = false;
 
     "org/gnome/tweaks".show-extensions-notice = false;
-
-    "org/gtk/settings/file-chooser".show-hidden = true;
-
-    "org/gtk/gtk4/settings/file-chooser".show-hidden = true;
   };
 }

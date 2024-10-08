@@ -264,6 +264,8 @@
         # 避免频繁的磁盘写入
         "browser.cache.disk.enable" = false; # 关闭磁盘缓存
         "browser.sessionstore.interval" = 600000; # 延长会话信息记录之间的间隔
+        # 使用 xdg 文件选择器
+        "widget.use-xdg-desktop-portal.file-picker" = 1;
 
         # --- 外观 ---
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

@@ -2,8 +2,9 @@ set-proxy-env := "env ftp_proxy=\"${ftp_proxy:-}\" all_proxy=\"${all_proxy:-}\" 
 hostname := "neko"
 username := "uymi"
 
+# Default command when 'just' is run without arguments
 default:
-    @just --list
+  @just --list
 
 ############################################################################
 #
@@ -36,10 +37,10 @@ eval target:
     nix eval .#nixosConfigurations.{{ hostname }}.config.{{ target }} --impure --show-trace -L -v
 
 eval-hm target:
-    nix eval .#homeConfigurations.{{ username }}@{{ hostname }}.config.{{ target }} --impure --show-trace -L -v
+    nix eval .#homeConfigurations.{{ username }}.config.{{ target }} --impure --show-trace -L -v
 
 switch-hm:
-    home-manager switch --flake .#{{ username }}@{{ hostname }} --impure --show-trace -L -v
+    home-manager switch --flake .#{{ username }} --impure --show-trace -L -v
 
 ############################################################################
 #
@@ -47,11 +48,14 @@ switch-hm:
 #
 ############################################################################
 
+# Update nix flake
 update:
-    nix flake update
+  nix flake update
 
-fmt:
-    nix fmt --show-trace -L -v
+# Lint nix files
+lint:
+  nix fmt --show-trace -L -v
 
+# Check nix flake
 check:
-    nix flake check --no-build --impure --show-trace -L -v
+  nix flake check --no-build --impure --show-trace -L -v

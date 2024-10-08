@@ -1,108 +1,15 @@
 {
-  inputs,
-  outputs,
-  vars,
-  pkgs,
+  flake,
   config,
-  lib,
+  pkgs,
   ...
 }:
 {
   imports = [
-    outputs.homeManagerModules.dotfiles
-    outputs.homeManagerModules.firefox
-    outputs.homeManagerModules.vscode
-    outputs.homeManagerModules.dconf
-    outputs.homeManagerModules.chromium
-    outputs.homeManagerModules.wofi
-    outputs.homeManagerModules.colord
-
-    inputs.nix-index-database.hmModules.nix-index
+    flake.inputs.nix-index-database.hmModules.nix-index
   ];
 
-  nixpkgs = {
-    config = vars.nixpkgs.config;
-    overlays = outputs.defaultOverlays;
-  };
-
-  nix.package = lib.mkDefault pkgs.nixVersions.latest;
-
-  home = {
-    pointerCursor = {
-      name = vars.home.pointerCursor.name;
-      package = vars.home.pointerCursor.package pkgs;
-      size = vars.home.pointerCursor.size;
-      gtk.enable = true;
-      x11 = {
-        enable = true;
-        defaultCursor = vars.home.pointerCursor.name;
-      };
-    };
-    username = "${vars.users.users.user.name}";
-    homeDirectory = "/home/${vars.users.users.user.name}";
-    language.base = "zh_CN.UTF-8";
-  };
-
-  gtk.cursorTheme = {
-    name = vars.home.pointerCursor.name;
-    size = vars.home.pointerCursor.size;
-  };
-
   xdg = {
-    userDirs = {
-      enable = true;
-      createDirectories = true;
-      templates = null;
-      publicShare = null;
-      desktop = null;
-    };
-    mimeApps = {
-      enable = true;
-      defaultApplications =
-        let
-          browser = [ "firefox.desktop" ];
-          image = [ "org.gnome.Loupe.desktop" ];
-        in
-        {
-          "text/html" = browser;
-          "application/pdf" = browser;
-          "x-scheme-handler/http" = browser;
-          "x-scheme-handler/https" = browser;
-          "image/jpeg" = image;
-          "image/png" = image;
-          "image/gif" = image;
-          "image/webp" = image;
-          "image/tiff" = image;
-          "image/bmp" = image;
-          "image/vnd-ms.dds" = image;
-          "image/vnd.microsoft.icon" = image;
-          "image/vnd.radiance" = image;
-          "image/x-exr" = image;
-          "image/x-dds" = image;
-          "image/x-tga" = image;
-          "image/x-portable-bitmap" = image;
-          "image/x-portable-graymap" = image;
-          "image/x-portable-pixmap" = image;
-          "image/x-portable-anymap" = image;
-          "image/x-qoi" = image;
-          "image/svg+xml" = image;
-          "image/svg+xml-compressed" = image;
-          "image/avif" = image;
-          "image/heic" = image;
-          "image/jxl" = image;
-        };
-      associations.removed = {
-        "application/x-zerosize" = "org.gnome.TextEditor.desktop";
-        "x-content/unix-software" = "nautilus-autorun-software.desktop";
-        "x-scheme-handler/unknown" = "chromium-browser.desktop";
-        "x-scheme-handler/mailto" = "chromium-browser.desktop";
-        "x-scheme-handler/webcal" = "chromium-browser.desktop";
-        "x-scheme-handler/about" = "chromium-browser.desktop";
-        "x-scheme-handler/rlogin" = "ktelnetservice6.desktop";
-        "x-scheme-handler/ssh" = "ktelnetservice6.desktop";
-        "x-scheme-handler/telnet" = "ktelnetservice6.desktop";
-      };
-    };
     configFile."nixpkgs/config.nix".text = ''
       {
         allowUnfree = true;
@@ -441,6 +348,4 @@
   news.display = "silent";
 
   systemd.user.startServices = "sd-switch";
-
-  home.stateVersion = "24.11";
 }

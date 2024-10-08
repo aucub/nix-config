@@ -1,0 +1,56 @@
+# Top-level flake glue to get our configuration working
+{ inputs, ... }:
+
+{
+  imports = [
+    inputs.nixos-unified.flakeModules.default
+    inputs.nixos-unified.flakeModules.autoWire
+    inputs.treefmt-nix.flakeModule
+  ];
+
+  perSystem =
+    {
+      self',
+      pkgs,
+      system,
+      ...
+    }:
+    {
+      # For 'nix fmt'
+      treefmt = {
+        projectRootFile = "flake.nix";
+        programs.nixfmt.enable = true;
+        settings.global.excludes = [
+          "*.toml"
+          "*.yml"
+          "*.yaml"
+          "*.json"
+          "*.icc"
+          "*.fish"
+          "*.dae"
+          "*.enc"
+          "*.sh"
+          ".envrc"
+          "justfile"
+        ];
+      };
+
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit system;
+      };
+
+      legacyPackages = import inputs.nixpkgs {
+        config.allowUnfree = true;
+        overlays = [
+          (import ../../overlays {
+            flake = {
+              inherit inputs;
+            };
+          })
+          inputs.nur.overlay
+          inputs.nix-alien.overlays.default
+          inputs.nix-vscode-extensions.overlays.default
+        ];
+      };
+    };
+}

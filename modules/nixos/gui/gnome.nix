@@ -47,7 +47,7 @@
     ];
   };
   services = {
-    hardware.bolt.enable = false; # Thunderbolt
+    hardware.bolt.enable = false;
     gnome = {
       at-spi2-core.enable = lib.mkForce false;
       gnome-user-share.enable = false;
@@ -67,6 +67,7 @@
     };
   };
   qt = {
+    enable = true;
     style = "adwaita";
     platformTheme = "gnome";
   };

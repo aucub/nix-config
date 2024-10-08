@@ -1,9 +1,10 @@
 {
+  flake,
   pkgs,
-  inputs,
   ...
 }:
 let
+  inherit (flake) inputs;
   nvidiaDriver = false;
   primeEnable = true && nvidiaDriver;
 in
