@@ -23,14 +23,26 @@ self: prev: {
       hash = "sha256-Oxtlu67OFGdj1GkYiGcUdsdvt/KWyuAhsABzBTOkBes=";
     };
   });
-  nix-search-cli = prev.nix-search-cli.overrideAttrs (oldAttrs: {
+  nix-search-cli = prev.nix-search-cli.overrideAttrs (oldAttrs: rec {
     version = "0.2-unstable-2024-09-24";
     src = prev.fetchFromGitHub {
       owner = "peterldowns";
       repo = "nix-search-cli";
       rev = "7d6b4c501ee448dc2e5c123aa4c6d9db44a6dd12";
-      hash = "sha256-YM1Lf7py79rU8aJE0PfQaMr5JWx5J1covUf1aCjRkc8=";
+      hash = "sha256-0Zms/QVCUKxILLLJYsaodSW64DJrVr/yB13SnNL8+Wg=";
     };
+    vendorHash = "sha256-RZuB0aRiMSccPhX30cGKBBEMCSvmC6r53dWaqDYbmyA=";
+    commit = "7d6b4c5";
+    ldflags = [
+      "-X main.Version=${version}"
+      "-X main.Commit=${commit}"
+    ];
+    GOWORK = "off";
+    modRoot = ".";
+    doCheck = false;
+    subPackages = [
+      "cmd/nix-search"
+    ];
   });
   nautilus = prev.nautilus.overrideAttrs (oldAttrs: {
     postPatch =
@@ -41,4 +53,15 @@ self: prev: {
         sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
       '';
   });
+  qt6Packages = prev.qt6Packages // {
+    fcitx5-qt = prev.qt6Packages.fcitx5-qt.overrideAttrs (oldAttrs: rec {
+      version = "5.1.7";
+      src = prev.fetchFromGitHub {
+        owner = "fcitx";
+        repo = "fcitx5-qt";
+        rev = version;
+        hash = "sha256-C/LRpC6w/2cb/+xAwsmOVEvWmHMtJKD1pAwMoeLVIYY=";
+      };
+    });
+  };
 }

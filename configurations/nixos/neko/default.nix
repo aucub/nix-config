@@ -8,7 +8,8 @@ let
   inherit (flake) inputs;
   inherit (inputs) self;
   hostname = "neko";
-  username = "uymi";
+  defaultUserName = flake.config.hosts."${hostname}".defaultUserName;
+  defaultUser = flake.config.users."${defaultUserName}";
 in
 {
   imports =
@@ -129,24 +130,21 @@ in
   };
 
   home-manager = {
-    extraSpecialArgs = {
-      useGlobalPkgs = config.home-manager.useGlobalPkgs or false;
-    };
-    users."${username}" = {
-      imports = [ (self + /configurations/home/${username}.nix) ];
+    users."${defaultUserName}" = {
+      imports = [ (self + /configurations/home/${defaultUserName}.nix) ];
     };
     backupFileExtension = "bak";
   };
 
   users.users = {
     root = {
-      initialHashedPassword = "$y$j9T$/qg2DYP0TOSZzSwlgs9mV/$uVAqBwhXEnwkMd0D4zKH9SSBQ4WzlGcnimnLrbyNwP4";
+      initialHashedPassword = flake.config.users.root.initialHashedPassword;
       shell = pkgs.bashInteractive;
     };
-    "${username}" = {
+    "${defaultUserName}" = {
       isNormalUser = true;
-      uid = 1000;
-      initialHashedPassword = "$y$j9T$XOU8eqbT/uiYRkLNMVma91$FpP9C3IIhl1t/i9LH0k5LxqwnRKH9baVotniFxx7vG4";
+      uid = defaultUser.uid;
+      initialHashedPassword = defaultUser.initialHashedPassword;
       extraGroups =
         [
           "wheel"
@@ -158,7 +156,7 @@ in
           "systemd-journal"
         ]
         ++ (
-          if config.programs.git.enable || config.home-manager.users."${username}".programs.git.enable then
+          if config.programs.git.enable || config.home-manager.users."${defaultUser}".programs.git.enable then
             [ "git" ]
           else
             [ ]

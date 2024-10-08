@@ -1,7 +1,12 @@
-{ pkgs, config, ... }:
+{
+  flake,
+  pkgs,
+  config,
+  ...
+}:
 let
-  username = "uymi";
-  uid = 1000;
+  defaultUserName = flake.config.hosts."${config.networking.hostName}".defaultUserName;
+  defaultUserUid = flake.config.users."${defaultUserName}".uid;
 in
 {
   services = {
@@ -78,7 +83,7 @@ in
     };
     displayManager.autoLogin = {
       enable = true;
-      user = username;
+      user = defaultUserName;
     };
     xserver = {
       enable = true;
@@ -87,7 +92,6 @@ in
       excludePackages = with pkgs; [ xterm ];
       wacom.enable = false;
     };
-    printing.webInterface = false;
     # flatpak.enable = true;
   };
 
@@ -113,8 +117,8 @@ in
         path = with pkgs; [ dbus ];
         environment = {
           DISPLAY = ":0";
-          DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${toString uid}/bus";
-          XDG_RUNTIME_DIR = "/run/user/${toString uid}";
+          DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/${toString defaultUserUid}/bus";
+          XDG_RUNTIME_DIR = "/run/user/${toString defaultUserUid}";
         };
         script = ''
           sleep 1m
@@ -126,7 +130,7 @@ in
         '';
         serviceConfig = {
           Type = "simple";
-          User = username;
+          User = defaultUserUid;
         };
       };
       systemd-gpt-auto-generator.enable = false;

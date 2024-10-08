@@ -32,9 +32,8 @@
         ezl = "eza -lba --group-directories-first";
         uv-venv = "uv venv --python=${
           pkgs.python3
-          # 13.override {
+          # python313FreeThreading.override {
           #   enableOptimizations = true;
-          #   enableGIL = false;
           #   sourceVersion = {
           #     major = "3";
           #     minor = "13";

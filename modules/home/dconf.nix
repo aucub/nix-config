@@ -230,5 +230,9 @@
     "org/gnome/system/location".enabled = false;
 
     "org/gnome/tweaks".show-extensions-notice = false;
+
+    "org/gtk/gtk4/settings/file-chooser".show-hidden = true;
+
+    "org/gtk/settings/file-chooser".show-hidden = true;
   };
 }

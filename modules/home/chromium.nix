@@ -14,11 +14,11 @@
       "--ignore-gpu-blocklist"
       "--use-cmd-decoder=passthrough"
       "--enable-quic"
-      # "--use-vulkan"
+      "--use-vulkan"
       "--enable-smooth-scrolling"
       "--enable-webrtc-pipewire-capturer"
       "--disable-features=ChromeLabs,LensOverlay,ShowSuggestionsOnAutofocus"
-      "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,ParallelDownloading,WebContentsCaptureHiDPI,WebRtcHideLocalIpsWithMdns,FluentOverlayScrollbar,UseGpuSchedulerDfs,BackForwardCache,FontationsFontBackend,GlobalMediaControlsUpdatedUI,WebRtcPipeWireCamera,OverlayScrollbar" # ,Vulkan
+      "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,ParallelDownloading,WebContentsCaptureHiDPI,WebRtcHideLocalIpsWithMdns,FluentOverlayScrollbar,UseGpuSchedulerDfs,BackForwardCache,FontationsFontBackend,GlobalMediaControlsUpdatedUI,WebRtcPipeWireCamera,OverlayScrollbar,Vulkan"
       "--ozone-platform-hint=auto"
       "--enable-wayland-ime"
       "--wayland-text-input-version=3"

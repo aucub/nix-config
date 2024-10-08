@@ -1,35 +1,35 @@
 {
   inputs = {
-    # Principle inputs (updated by `nix run .#update`)
-    nixpkgs.url = "github:NixOS/nixpkgs/gnome";
+    # Principle inputs
+    nixpkgs.url = "github:aucub/nixpkgs/staging-next";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    nixos-unified.url = "github:srid/nixos-unified";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    nixos-unified.url = "github:srid/nixos-unified";
-
-    # Software inputs
-    nur.url = "github:nix-community/NUR";
-    nix-alien = {
-      url = "github:thiagokokada/nix-alien";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
+    nix-alien = {
+      url = "github:thiagokokada/nix-alien";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
+
+    # Software inputs
+    nur.url = "github:nix-community/NUR";
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -55,8 +55,6 @@
       "flakes"
       "cgroups"
     ];
-    flake-registry = "";
-    auto-optimise-store = true;
     builders-use-substitutes = true;
     use-cgroups = true;
     warn-dirty = false;
