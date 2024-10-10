@@ -2,4 +2,4 @@ builds:
   include:
     # []
     # - nixosConfigurations.*
-    - "packages.x86_64-linux.ungoogled-chromium"
+    - "packages.x86_64-linux.gnome-session"
