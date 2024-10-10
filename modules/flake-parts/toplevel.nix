@@ -52,6 +52,6 @@
 
       # legacyPackages = pkgs;
 
-      packages.ungoogled-chromium = pkgs.ungoogled-chromium;
+      packages.gnome-session = pkgs.gnome-session;
     };
 }
