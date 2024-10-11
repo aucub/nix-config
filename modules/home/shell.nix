@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  inherit (flake) inputs;
+in
 {
   imports = [
     flake.inputs.nix-index-database.hmModules.nix-index
@@ -39,6 +42,7 @@
     };
     fish = {
       enable = true;
+      package = inputs.niqspkgs.packages.${pkgs.system}.fish-git;
       interactiveShellInit =
         ''
           set_proxy
@@ -291,7 +295,7 @@
       settings = {
         import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
         live_config_reload = false;
-        shell.program = "${pkgs.fish}/bin/fish";
+        shell.program = "fish";
         window = {
           padding = {
             x = 6;

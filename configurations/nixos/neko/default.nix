@@ -180,7 +180,6 @@ in
         ++ (with pkgs; [
           pot
           celluloid
-          localsend
           # gitkraken
         ])
         # theme
@@ -240,7 +239,7 @@ in
       # Python Package
       ++ (with pkgs; [
         uv
-        (python3.withPackages (
+        (python-optimization.withPackages (
           ps: with ps; [
             requests
             python-dotenv
@@ -251,8 +250,7 @@ in
           exec python "$@"
         '')
       ])
-      ++ (with pkgs; [ nix-alien ])
-      ++ (if config.programs.iay.enable then with pkgs; [ iay ] else [ ]);
+      ++ (with pkgs; [ nix-alien ]);
   };
 
   system.stateVersion = "24.11";

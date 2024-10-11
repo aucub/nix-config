@@ -12,8 +12,8 @@
       # gnome
       ++ (with pkgs; [
         dconf-editor
-        gnome-tweaks
         gtop
+        gnome-tweaks
       ]);
     gnome.excludePackages = with pkgs; [
       evince
@@ -44,6 +44,7 @@
       iagno
       hitori
       atomix
+      gnome-text-editor
     ];
   };
   services = {

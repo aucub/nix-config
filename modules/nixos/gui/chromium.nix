@@ -112,13 +112,6 @@
       "search"."suggest_enabled" = false;
       "tracking_protection"."tracking_protection_3pcd_enabled" = false;
       "translate"."enabled" = false;
-      "optimization_guide" = {
-        "partition" = {
-          "default_zoom_level" = {
-            "x" = 1.2239010857415449;
-          };
-        };
-      };
     };
   };
 }

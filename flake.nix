@@ -1,7 +1,7 @@
 {
   inputs = {
     # Principle inputs
-    nixpkgs.url = "github:aucub/nixpkgs/staging-next";
+    nixpkgs.url = "github:NixOS/nixpkgs/staging-next";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixos-unified.url = "github:srid/nixos-unified";
@@ -32,6 +32,10 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    niqspkgs = {
+      url = "github:diniamo/niqspkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -54,6 +58,9 @@
       "nix-command"
       "flakes"
       "cgroups"
+      "ca-derivations"
+      "git-hashing"
+      "dynamic-derivations"
     ];
     builders-use-substitutes = true;
     use-cgroups = true;
@@ -64,11 +71,13 @@
       "https://nix-community.cachix.org"
       "https://cache.garnix.io"
       "https://qihaiumi.cachix.org"
+      "https://cache.ngi0.nixos.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
+      "cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA="
     ];
   };
 }

@@ -47,7 +47,10 @@
           inputs.nix-alien.overlays.default
           inputs.nix-vscode-extensions.overlays.default
         ];
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+          contentAddressedByDefault = true;
+        };
       };
 
       legacyPackages = pkgs;

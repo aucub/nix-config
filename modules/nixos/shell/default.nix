@@ -23,13 +23,15 @@ in
     {
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
       nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-      package = pkgs.nixVersions.latest;
+      package = pkgs.lix;
       settings = {
         accept-flake-config = true;
         experimental-features = [
           "nix-command"
           "flakes"
           "cgroups"
+          "git-hashing"
+          "dynamic-derivations"
         ];
         nix-path = config.nix.nixPath;
         flake-registry = "";

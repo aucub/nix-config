@@ -17,6 +17,8 @@ global {
   auto_config_kernel_parameter: true
   check_interval: 900s
   allow_insecure: false
+  enable_local_tcp_fast_redirect: true
+  mptcp: true
 }
 dns {
   upstream {

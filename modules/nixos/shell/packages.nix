@@ -1,7 +1,11 @@
 {
+  flake,
   pkgs,
   ...
 }:
+let
+  inherit (flake) inputs;
+in
 {
   programs = {
     auto-cpufreq = {
@@ -12,13 +16,12 @@
       };
     };
     command-not-found.enable = false;
-    bash.promptInit = "export IAY_SHORTEN_CWD=0";
-    iay = {
-      enable = true;
-      minimalPrompt = true;
-    };
+    bash.promptInit = ''
+      PS1='\u@\h\[\e[32m\]\w\[\e[0m\] \\$ '
+    '';
     fish = {
       enable = true;
+      package = inputs.niqspkgs.packages.${pkgs.system}.fish-git;
       interactiveShellInit = ''
         set fish_greeting
         set -U fish_history_max 2500
@@ -30,19 +33,7 @@
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
-        uv-venv = "uv venv --python=${
-          pkgs.python3
-          # python313FreeThreading.override {
-          #   enableOptimizations = true;
-          #   sourceVersion = {
-          #     major = "3";
-          #     minor = "13";
-          #     patch = "0";
-          #     suffix = "";
-          #   };
-          #   hash = "sha256-CG3liC48sxDU3KSEV1IuLkgBjs1D2pzfgn9qB1nvsH0=";
-          # }
-        }/bin/python";
+        uv-venv = "uv venv --python=${pkgs.python-optimization}/bin/python";
         # 列出系统的 generations
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # 删除过期的 generations
@@ -55,8 +46,8 @@
     nix-ld = {
       enable = true;
       libraries = with pkgs; [
-        libGL
         glib
+        libGL
       ];
     };
     nix-index = {
@@ -186,6 +177,7 @@
       enable = true;
       terminal = "alacritty";
     };
+    localsend.enable = true;
   };
 
   xdg = {
