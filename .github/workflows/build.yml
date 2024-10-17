@@ -17,18 +17,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [10, 12, 14]
     steps:
       - uses: cachix/install-nix-action@v30
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             auto-optimise-store = true
+            always-allow-substitutes = true
+            builders-use-substitutes = true
+            cores = 3
+            max-jobs = 1
+            min-free = 10240
+            build-dir = /tmp
+            sandbox = false
+            warn-dirty = false
+            use-registries = false
+            use-cgroups = true
             experimental-features = nix-command flakes cgroups git-hashing dynamic-derivations ca-derivations
-            extra-substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://qihaiumi.cachix.org https://cache.ngi0.nixos.org
+            substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://qihaiumi.cachix.org https://cache.ngi0.nixos.org
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c= cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA=
+        env:
+          TMPDIR: "/tmp"
 
       - uses: DeterminateSystems/magic-nix-cache-action@v8
         with:
@@ -57,17 +66,20 @@ jobs:
       - uses: actions/checkout@v4
 
       - if: ${{ inputs.sshx }}
+        continue-on-error: true
         run: curl -sSf https://sshx.io/get | sh -s run
         env:
           NIXPKGS_ALLOW_UNFREE: 1
-          NIX_BUILD_CORES: 3
+          TMPDIR: "/tmp"
 
       # nix build "github:NixOS/nixpkgs/nixos-unstable#nix" --impure --show-trace -L -v
 
       - if: ${{ !inputs.sshx }}
+        continue-on-error: true
         run: |
-          ulimit -v 9831110
-          just build-os
+          sudo sysctl vm.swappiness=10
+          ulimit -v 8831110
+          ionice -c 3 just build-os
         env:
           NIXPKGS_ALLOW_UNFREE: 1
-          NIX_BUILD_CORES: 3
+          TMPDIR: "/tmp"

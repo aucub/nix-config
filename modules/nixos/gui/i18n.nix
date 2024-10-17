@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  time.timeZone = "Asia/Shanghai";
+  time.timeZone = "Asia/Singapore";
 
   fonts = {
     enableDefaultPackages = true;

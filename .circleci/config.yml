@@ -1,0 +1,55 @@
+version: 2.1
+
+jobs:
+  run-build:
+    docker:
+      - image: cimg/base:current
+        user: root
+    steps:
+      - checkout
+
+      - run: |
+          sudo apt-get update -y && sudo apt-get install -y neofetch curl systemd
+          neofetch
+          free
+          df -h
+
+      - run: |
+          curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install linux  --extra-conf "sandbox = false" --no-start-daemon --no-confirm
+          sudo chmod 755 /nix/var/nix/profiles/per-user
+
+      - run: |
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          sudo mkdir -p /etc/nix/
+          echo "auto-optimise-store = true
+          always-allow-substitutes = true
+          builders-use-substitutes = true
+          cores = 32
+          max-jobs = 1
+          min-free = 10240
+          build-dir = /tmp
+          sandbox = false
+          warn-dirty = false
+          use-registries = false
+          filter-syscalls = false
+          use-cgroups = false
+          experimental-features = nix-command flakes cgroups git-hashing dynamic-derivations ca-derivations
+          substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://qihaiumi.cachix.org https://cache.ngi0.nixos.org
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c= cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA=" | sudo tee -a /etc/nix/nix.conf
+
+      - run: |
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          curl -sSf https://sshx.io/get | sh -s run
+          nix build .#webkitgtk --impure  --show-trace -L -v
+
+      - run: |
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+          export USER=root
+          nix-env -iA cachix -f https://cachix.org/api/v1/install
+          cachix use qihaiumi
+          nix path-info --all | cachix push qihaiumi
+
+workflows:
+  build-workflow:
+    jobs:
+      - run-build
