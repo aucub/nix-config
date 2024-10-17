@@ -32,12 +32,4 @@ self: prev: {
         sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
       '';
   });
-  python-optimization =
-    (prev.python3.override {
-      enableOptimizations = true;
-      enableGIL = false;
-    }).overrideAttrs
-      (oldAttrs: {
-        doCheck = false;
-      });
 }

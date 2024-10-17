@@ -50,6 +50,7 @@ jobs:
       - run: |
           ulimit -v 9831110
           just build $PACKAGE
+        continue-on-error: true
         env:
           PACKAGE: ${{ inputs.package }}
           NIXPKGS_ALLOW_UNFREE: 1

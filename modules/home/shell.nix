@@ -133,7 +133,7 @@ in
     };
     eza = {
       enable = true;
-      icons = true;
+      icons = "auto";
       git = true;
       extraOptions = [
         "--group-directories-first"

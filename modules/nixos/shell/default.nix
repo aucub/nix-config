@@ -23,13 +23,14 @@ in
     {
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
       nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-      package = pkgs.lix;
+      package = pkgs.nixVersions.latest;
       settings = {
         accept-flake-config = true;
         experimental-features = [
           "nix-command"
           "flakes"
           "cgroups"
+          "ca-derivations"
           "git-hashing"
           "dynamic-derivations"
         ];
@@ -45,11 +46,13 @@ in
           "https://nix-community.cachix.org"
           "https://cache.garnix.io"
           "https://qihaiumi.cachix.org"
+          "https://cache.ngi0.nixos.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
           "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
+          "cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA="
         ];
         trusted-users = [ (if pkgs.stdenv.isDarwin then defaultUserName else "@wheel") ];
       };

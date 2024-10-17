@@ -239,7 +239,7 @@ in
       # Python Package
       ++ (with pkgs; [
         uv
-        (python-optimization.withPackages (
+        (python3.withPackages (
           ps: with ps; [
             requests
             python-dotenv
