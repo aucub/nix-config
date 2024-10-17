@@ -32,12 +32,25 @@ self: prev: {
         sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
       '';
   });
-  python-optimization =
-    (prev.python3.override {
-      enableOptimizations = true;
-      enableGIL = false;
-    }).overrideAttrs
-      (oldAttrs: {
-        doCheck = false;
-      });
+  glycin-loaders = prev.glycin-loaders.overrideAttrs (oldAttrs: rec {
+    version = "1.1.1";
+    src = prev.fetchurl {
+      url = "mirror://gnome/sources/glycin/${prev.lib.versions.majorMinor version}/glycin-${version}.tar.xz";
+      hash = "sha256-Vg7kIWfB7SKCZhjmHYPkkUDbW/R6Zam6js4s1z0qSqg=";
+    };
+    buildInputs =
+      oldAttrs.buildInputs
+      ++ (with prev; [
+        lcms2
+        librsvg
+      ]);
+    mesonFlags = [
+      "-Dglycin-loaders=true"
+      "-Dlibglycin=false"
+      "-Dvapi=false"
+    ];
+  });
+  libsecret = prev.libsecret.overrideAttrs (oldAttrs: {
+    doCheck = false;
+  });
 }

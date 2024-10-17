@@ -33,7 +33,7 @@ in
       shellAbbrs = {
         nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
-        uv-venv = "uv venv --python=${pkgs.python-optimization}/bin/python";
+        uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
         # 列出系统的 generations
         nix-history = "nix profile history --profile /nix/var/nix/profiles/system";
         # 删除过期的 generations

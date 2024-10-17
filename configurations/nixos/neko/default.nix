@@ -218,7 +218,6 @@ in
         nix-tree
         nvd
         just
-        nix-search-cli
       ])
       ++ (with pkgs; [ nil ])
       ++ (with pkgs; [
@@ -239,7 +238,7 @@ in
       # Python Package
       ++ (with pkgs; [
         uv
-        (python-optimization.withPackages (
+        (python3.withPackages (
           ps: with ps; [
             requests
             python-dotenv

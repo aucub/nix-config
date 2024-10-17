@@ -1,6 +1,5 @@
 {
   inputs = {
-    # Principle inputs
     nixpkgs.url = "github:NixOS/nixpkgs/staging-next";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -21,8 +20,6 @@
       url = "github:thiagokokada/nix-alien";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Software inputs
     nur.url = "github:nix-community/NUR";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
@@ -62,18 +59,21 @@
       "git-hashing"
       "dynamic-derivations"
     ];
-    builders-use-substitutes = true;
     use-cgroups = true;
+    use-registries = false;
     warn-dirty = false;
     fsync-metadata = false;
-    extra-substituters = [
+    always-allow-substitutes = true;
+    builders-use-substitutes = true;
+    substituters = [
       "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://nix-community.cachix.org"
       "https://cache.garnix.io"
       "https://qihaiumi.cachix.org"
       "https://cache.ngi0.nixos.org"
     ];
-    extra-trusted-public-keys = [
+    trusted-public-keys = [
+      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
