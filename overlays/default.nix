@@ -50,7 +50,21 @@ self: prev: {
       "-Dvapi=false"
     ];
   });
-  libsecret = prev.libsecret.overrideAttrs (oldAttrs: {
-    doCheck = false;
-  });
+  apacheHttpdPackages = prev.apacheHttpdPackages // {
+    mod_dnssd = prev.apacheHttpdPackages.mod_dnssd.overrideAttrs (oldAttrs: {
+      patches = [ ];
+    });
+  };
+  webkitgtk_4_0 =
+    (import inputs.nixpkgs-unstable-small {
+      system = self.system;
+    }).webkitgtk_4_0;
+  webkitgtk_4_1 =
+    (import inputs.nixpkgs-unstable-small {
+      system = self.system;
+    }).webkitgtk_4_1;
+  webkitgtk_6_0 =
+    (import inputs.nixpkgs-unstable-small {
+      system = self.system;
+    }).webkitgtk_6_0;
 }

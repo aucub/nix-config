@@ -18,40 +18,6 @@ jobs:
   pkg:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          sudo chmod 1777 /mnt
-          sudo mkdir -p /mnt/tmp
-          sudo chmod 1777 /mnt/tmp
-          sudo mount --bind /mnt/tmp /tmp
-          sudo mkdir -p /nix
-          sudo mkdir -p /mnt/nix
-          sudo mount --bind /mnt/nix /nix
-          sudo mount -o remount,size=16G /dev/shm
-          df -h
-      - uses: cachix/install-nix-action@v30
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-          extra_nix_config: |
-            auto-optimise-store = true
-            always-allow-substitutes = true
-            builders-use-substitutes = true
-            cores = 3
-            max-jobs = 1
-            min-free = 10240
-            build-dir = /tmp
-            sandbox = false
-            warn-dirty = false
-            use-registries = false
-            use-cgroups = true
-            experimental-features = nix-command flakes cgroups git-hashing dynamic-derivations ca-derivations
-            substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://qihaiumi.cachix.org https://cache.ngi0.nixos.org
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c= cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA=
-
-      - uses: DeterminateSystems/magic-nix-cache-action@v8
-        with:
-          diagnostic-endpoint: ""
-          use-flakehub: false
-
       - uses: AdityaGarg8/remove-unwanted-software@master
         with:
           remove-android: true
@@ -63,16 +29,53 @@ jobs:
           remove-cached-tools: true
           remove-swapfile: true
 
+      - run: |
+          sudo fallocate -l 8G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          sudo chmod 1777 /mnt
+          sudo mkdir -p /mnt/tmp
+          sudo chmod 1777 /mnt/tmp
+          sudo mount --bind /mnt/tmp /tmp
+          sudo mkdir -p /nix
+          sudo mkdir -p /mnt/nix
+          sudo mount --bind /mnt/nix /nix
+          sudo mount -o remount,size=16G /dev/shm
+          df -h
+          free
+
+      - uses: cachix/install-nix-action@v30
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            auto-optimise-store = true
+            always-allow-substitutes = true
+            builders-use-substitutes = true
+            min-free = 10240
+            build-dir = /tmp
+            require-sigs = false
+            sandbox = true
+            warn-dirty = false
+            use-registries = false
+            use-cgroups = true
+            experimental-features = nix-command flakes cgroups git-hashing dynamic-derivations ca-derivations
+            substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://qihaiumi.cachix.org https://cache.ngi0.nixos.org
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c= cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA=
+
       - uses: cachix/cachix-action@v15
         with:
           name: qihaiumi
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+        with:
+          diagnostic-endpoint: ""
+          use-flakehub: false
+
       - uses: extractions/setup-just@v2
 
       - uses: actions/checkout@v4
 
-      - run: |
-          nix-shell -p lix
-          just build $PACKAGE
+      - run: just build $PACKAGE
         continue-on-error: true

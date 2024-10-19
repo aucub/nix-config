@@ -74,7 +74,10 @@ in
       };
       timeout = 4;
     };
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages =
+      (import inputs.nixpkgs-unstable-small {
+        system = pkgs.system;
+      }).linuxPackages_zen;
     kernelParams = [
       "amdgpu.vm_update_mode=3"
       "radeon.dpm=0"

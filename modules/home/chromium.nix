@@ -2,7 +2,7 @@
 {
   programs.chromium = {
     enable = true;
-    package = pkgs.ungoogled-chromium;
+    package = pkgs.google-chrome;
     commandLineArgs = [
       "--process-per-site"
       "--disable-reading-from-canvas"
