@@ -16,7 +16,7 @@ in
   ];
 
   nix = {
-    package = pkgs.nixVersions.latest;
+    package = pkgs.lix;
     settings = {
       flake-registry = "";
       experimental-features = [

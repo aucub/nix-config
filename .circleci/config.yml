@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  run-build:
+  build:
     docker:
       - image: cimg/base:current
         user: root
@@ -39,7 +39,7 @@ jobs:
 
       - run: |
           . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-          curl -sSf https://sshx.io/get | sh -s run
+          nix-shell -p lix
           nix build .#webkitgtk --impure  --show-trace -L -v
 
       - run: |
@@ -52,4 +52,4 @@ jobs:
 workflows:
   build-workflow:
     jobs:
-      - run-build
+      - build
