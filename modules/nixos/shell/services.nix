@@ -20,10 +20,6 @@ in
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     dbus.implementation = "broker";
-    earlyoom = {
-      enable = true;
-      freeMemThreshold = 5;
-    };
     avahi.enable = false;
     geoclue2.enable = false;
     journald.extraConfig = ''
@@ -64,7 +60,6 @@ in
       ];
       extraConfig = "font-size=20";
       hwRender = true;
-      useXkbConfig = true;
     };
     sunshine = {
       enable = true;
@@ -97,7 +92,6 @@ in
 
   systemd = {
     # coredump.enable = false;
-    oomd.enable = false;
     extraConfig = "DefaultTimeoutStopSec=25s";
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {

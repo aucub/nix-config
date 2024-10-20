@@ -55,6 +55,12 @@ self: prev: {
       patches = [ ];
     });
   };
+  gst_all_1 = prev.gst_all_1 // {
+    gst-plugins-rs =
+      (import inputs.nixpkgs-unstable-small {
+        system = self.system;
+      }).gst_all_1.gst-plugins-rs;
+  };
   webkitgtk_4_0 =
     (import inputs.nixpkgs-unstable-small {
       system = self.system;
@@ -67,4 +73,7 @@ self: prev: {
     (import inputs.nixpkgs-unstable-small {
       system = self.system;
     }).webkitgtk_6_0;
+  gnome-calculator = prev.gnome-calculator.overrideAttrs (oldAttrs: {
+    doCheck = false;
+  });
 }

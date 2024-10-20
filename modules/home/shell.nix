@@ -163,6 +163,7 @@ in
     };
     git = {
       enable = true;
+      package = pkgs.gitFull;
       ignores = [
         # Compiled
         "*.o"
