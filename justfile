@@ -1,7 +1,6 @@
 hostname := "neko"
 username := "uymi"
 
-# Default command when 'just' is run without arguments
 default:
   @just --list
 
@@ -11,14 +10,14 @@ default:
 #
 ############################################################################
 
-build target:
-    nix build .#{{ target }} --impure --show-trace -L -v --accept-flake-config
+build target i='':
+    nix build .#{{ target }} --impure --show-trace -L -v {{ i }}
 
-build-os:
-    @just build nixosConfigurations.{{ hostname }}.config.system.build.toplevel
+build-os i='':
+    @just build nixosConfigurations.{{ hostname }}.config.system.build.toplevel {{ i }}
 
-build-os-kernel:
-    @just build nixosConfigurations.{{ hostname }}.config.system.build.kernel
+build-os-kernel i='':
+    @just build nixosConfigurations.{{ hostname }}.config.system.build.kernel {{ i }}
 
 ############################################################################
 #
@@ -26,8 +25,8 @@ build-os-kernel:
 #
 ############################################################################
 
-switch:
-    sudo nixos-rebuild switch --flake .#{{ hostname }} --no-build-nix --impure --show-trace -L -v
+switch i='':
+    sudo nixos-rebuild switch --flake .#{{ hostname }} --no-build-nix --impure --show-trace -L -v {{ i }}
 
 eval target:
     nix eval .#nixosConfigurations.{{ hostname }}.config.{{ target }} --impure --show-trace -L -v
@@ -35,8 +34,8 @@ eval target:
 eval-hm target:
     nix eval .#homeConfigurations.{{ username }}.config.{{ target }} --impure --show-trace -L -v
 
-switch-hm:
-    home-manager switch --flake .#{{ username }} --impure --show-trace -L -v
+switch-hm i='':
+    home-manager switch --flake .#{{ username }} --impure --show-trace -L -v {{ i }}
 
 ############################################################################
 #
@@ -44,14 +43,11 @@ switch-hm:
 #
 ############################################################################
 
-# Update nix flake
 update:
   nix flake update
 
-# Format nix files
 fmt:
   nix fmt --show-trace -L -v
 
-# Check nix flake
 check:
   nix flake check --no-build --impure --show-trace -L -v

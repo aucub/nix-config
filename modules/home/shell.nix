@@ -163,6 +163,7 @@ in
     };
     git = {
       enable = true;
+      package = pkgs.gitFull;
       ignores = [
         # Compiled
         "*.o"
@@ -293,9 +294,11 @@ in
     alacritty = {
       enable = true;
       settings = {
-        import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
-        live_config_reload = false;
-        shell.program = "fish";
+        general = {
+          import = [ "${pkgs.alacritty-theme}/dracula_plus.toml" ];
+          live_config_reload = false;
+        };
+        terminal.shell.program = "fish";
         window = {
           padding = {
             x = 6;
@@ -323,7 +326,6 @@ in
           };
           size = 20;
         };
-        selection.semantic_escape_chars = ",│`|:\"' ()[]{}<>\t@=";
         debug = {
           log_level = "Off";
           prefer_egl = true;

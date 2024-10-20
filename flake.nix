@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/staging-next";
-    nixpkgs-unstable-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixos-unified.url = "github:srid/nixos-unified";
@@ -50,35 +49,32 @@
         map (fn: ./modules/flake-parts/${fn}) (attrNames (readDir ./modules/flake-parts));
     };
 
-  nixConfig = {
-    accept-flake-config = true;
-    experimental-features = [
-      "nix-command"
-      "flakes"
-      "cgroups"
-      "ca-derivations"
-      "git-hashing"
-      "dynamic-derivations"
-    ];
-    use-cgroups = true;
-    use-registries = false;
-    warn-dirty = false;
-    fsync-metadata = false;
-    always-allow-substitutes = true;
-    builders-use-substitutes = true;
-    substituters = [
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
-      "https://nix-community.cachix.org"
-      "https://cache.garnix.io"
-      "https://qihaiumi.cachix.org"
-      "https://cache.ngi0.nixos.org"
-    ];
-    trusted-public-keys = [
-      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c="
-      "cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA="
-    ];
-  };
+  # nixConfig = {
+  #   experimental-features = [
+  #     "nix-command"
+  #     "flakes"
+  #     "cgroups"
+  #     "ca-derivations"
+  #     "git-hashing"
+  #     "dynamic-derivations"
+  #   ];
+  #   use-cgroups = true;
+  #   use-registries = false;
+  #   warn-dirty = false;
+  #   fsync-metadata = false;
+  #   always-allow-substitutes = true;
+  #   builders-use-substitutes = true;
+  #   require-sigs = false;
+  #   extra-substituters = [
+  #     "https://mirrors.ustc.edu.cn/nix-channels/store"
+  #     "https://nix-community.cachix.org"
+  #     "https://cache.garnix.io"
+  #     "https://nanari.cachix.org"
+  #   ];
+  #   extra-trusted-public-keys = [
+  #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  #     "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+  #     "nanari.cachix.org-1:g2X+SmJHsI0siZez0IUUgVyOuvPG5CWhrhoE11MqALA="
+  #   ];
+  # };
 }

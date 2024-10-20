@@ -3,7 +3,7 @@
   home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.zzzsy.firefox-gnome-theme}/share/firefox-theme";
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-bin;
+    package = pkgs.firefox;
     languagePacks = [ "zh-CN" ];
     profiles.default = {
       id = 0;

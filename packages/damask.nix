@@ -25,12 +25,11 @@ let
     owner = "subpop";
     repo = "damask";
     rev = "v${version}";
-    sha256 = "X1snGqI6KJpXjFyPT//VEuHEI6nssIwiWbW0773NJTw=";
+    hash = "sha256-X1snGqI6KJpXjFyPT//VEuHEI6nssIwiWbW0773NJTw=";
   };
 in
 stdenv.mkDerivation {
   inherit version src;
-
   pname = "damask";
 
   nativeBuildInputs = [

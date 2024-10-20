@@ -20,10 +20,6 @@ in
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     dbus.implementation = "broker";
-    earlyoom = {
-      enable = true;
-      freeMemThreshold = 5;
-    };
     avahi.enable = false;
     geoclue2.enable = false;
     journald.extraConfig = ''
@@ -64,7 +60,6 @@ in
       ];
       extraConfig = "font-size=20";
       hwRender = true;
-      useXkbConfig = true;
     };
     sunshine = {
       enable = true;
@@ -96,8 +91,6 @@ in
   };
 
   systemd = {
-    # coredump.enable = false;
-    oomd.enable = false;
     extraConfig = "DefaultTimeoutStopSec=25s";
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
@@ -105,7 +98,7 @@ in
       partOf = [ "sleep.target" ];
       onSuccess = [ "suspend-then-shutdown.service" ];
       timerConfig = {
-        OnActiveSec = "3h";
+        OnActiveSec = "2h";
         AccuracySec = "30m";
         RemainAfterElapse = false;
         WakeSystem = true;
@@ -124,7 +117,7 @@ in
           sleep 1m
           current_timestamp=$(${pkgs.coreutils}/bin/date +%s)
           active_enter_timestamp=$(${pkgs.coreutils}/bin/date -d "$(systemctl show -p ActiveEnterTimestamp sleep.target | cut -d= -f2)" +%s)
-          if [ $((current_timestamp - active_enter_timestamp)) -ge 10000 ]; then
+          if [ $((current_timestamp - active_enter_timestamp)) -ge 6000 ]; then
             ${pkgs.gnome-session}/bin/gnome-session-quit --power-off
           fi
         '';

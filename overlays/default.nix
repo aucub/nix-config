@@ -8,6 +8,7 @@ self: prev: {
   damask = self.callPackage "${packages}/damask.nix" { };
   navicat-premium = self.callPackage "${packages}/navicat-premium.nix" { language = "cs"; };
   warp-plus = self.callPackage "${packages}/warp-plus.nix" { };
+  flclash = self.callPackage "${packages}/flclash.nix" { };
   orchis-theme = prev.orchis-theme.overrideAttrs (oldAttrs: {
     installPhase = ''
       runHook preInstall
@@ -32,39 +33,14 @@ self: prev: {
         sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
       '';
   });
-  glycin-loaders = prev.glycin-loaders.overrideAttrs (oldAttrs: rec {
-    version = "1.1.1";
-    src = prev.fetchurl {
-      url = "mirror://gnome/sources/glycin/${prev.lib.versions.majorMinor version}/glycin-${version}.tar.xz";
-      hash = "sha256-Vg7kIWfB7SKCZhjmHYPkkUDbW/R6Zam6js4s1z0qSqg=";
-    };
-    buildInputs =
-      oldAttrs.buildInputs
-      ++ (with prev; [
-        lcms2
-        librsvg
-      ]);
-    mesonFlags = [
-      "-Dglycin-loaders=true"
-      "-Dlibglycin=false"
-      "-Dvapi=false"
-    ];
-  });
   apacheHttpdPackages = prev.apacheHttpdPackages // {
     mod_dnssd = prev.apacheHttpdPackages.mod_dnssd.overrideAttrs (oldAttrs: {
-      patches = [ ];
+      patches = [
+        (prev.fetchpatch {
+          url = "https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/head:/debian/patches/port-for-apache2.4.patch";
+          sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
+        })
+      ];
     });
   };
-  webkitgtk_4_0 =
-    (import inputs.nixpkgs-unstable-small {
-      system = self.system;
-    }).webkitgtk_4_0;
-  webkitgtk_4_1 =
-    (import inputs.nixpkgs-unstable-small {
-      system = self.system;
-    }).webkitgtk_4_1;
-  webkitgtk_6_0 =
-    (import inputs.nixpkgs-unstable-small {
-      system = self.system;
-    }).webkitgtk_6_0;
 }

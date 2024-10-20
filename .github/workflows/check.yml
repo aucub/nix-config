@@ -14,29 +14,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: cachix/install-nix-action@v30
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-          extra_nix_config: |
-            auto-optimise-store = true
-            always-allow-substitutes = true
-            builders-use-substitutes = true
-            min-free = 10240
-            build-dir = /tmp
-            require-sigs = false
-            sandbox = true
-            warn-dirty = false
-            use-registries = false
-            use-cgroups = true
-            experimental-features = nix-command flakes cgroups git-hashing dynamic-derivations ca-derivations
-            substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://qihaiumi.cachix.org https://cache.ngi0.nixos.org
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= qihaiumi.cachix.org-1:Cf4Vm5/i3794SYj3RYlYxsGQZejcWOwC+X558LLdU6c= cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA=
-
-      - uses: DeterminateSystems/magic-nix-cache-action@v8
-        with:
-          diagnostic-endpoint: ""
-          use-flakehub: false
-
       - uses: actions/checkout@v4
-
-      - run: nix flake check --impure --show-trace -L -v
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/composite
+      - run: |
+          nix fmt --show-trace -L
+          nix flake check --impure --show-trace -L

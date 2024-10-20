@@ -149,6 +149,7 @@ in
     };
     git = {
       enable = true;
+      package = pkgs.gitFull;
       lfs.enable = true;
       config = {
         user = {
@@ -167,10 +168,7 @@ in
         rebase.autosquash = true;
         log.date = "iso";
         merge.conflictStyle = "diff3";
-        credential = {
-          credentialStore = "secretservice";
-          helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
-        };
+        credential.credentialStore = "secretservice";
       };
     };
     nautilus-open-any-terminal = {
