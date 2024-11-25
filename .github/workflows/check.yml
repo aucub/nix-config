@@ -1,0 +1,23 @@
+name: check
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  TMPDIR: "/tmp"
+  NIXPKGS_ALLOW_UNFREE: 1
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/composite
+      - run: |
+          just fmt
+          just check

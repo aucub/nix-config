@@ -1,0 +1,24 @@
+name: aarch64-linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: uraimo/run-on-arch-action@v2
+        with:
+          base_image: nixos/nix:latest-arm64
+          arch: none
+          distro: none
+          githubToken: ${{ github.token }}
+          shell: /bin/sh
+          install: |
+            mkdir -p ~/.config/nix/
+            echo -e 'filter-syscalls = false\nextra-experimental-features = nix-command flakes\nsandbox = true' > ~/.config/nix/nix.conf
+            nix-channel --remove nixos
+            nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+            nix-channel --update
+          run: |
+            curl -sSf https://sshx.io/get | sh -s run

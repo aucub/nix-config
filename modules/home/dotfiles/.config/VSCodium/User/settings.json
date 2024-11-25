@@ -1,0 +1,109 @@
+{
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[typst]": {
+        "editor.defaultFormatter": "myriad-dreamin.tinymist"
+    },
+    "code-runner.enableAppInsights": false,
+    "code-runner.runInTerminal": true,
+    "code-runner.showExecutionMessage": false,
+    "code-runner.showRunCommandInEditorContextMenu": false,
+    "code-runner.showRunCommandInExplorerContextMenu": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.codeLensFontFamily": "\"Sarasa Mono SC\",monospace",
+    "editor.cursorBlinking": "solid",
+    "editor.cursorSmoothCaretAnimation": "off",
+    "editor.fontFamily": "\"Sarasa Mono SC\",monospace",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 18,
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.inlineSuggest.suppressSuggestions": true,
+    "editor.suggestSelection": "first",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.wordWrap": "on",
+    "explorer.confirmDelete": false,
+    "explorer.sortOrder": "type",
+    "extensions.autoCheckUpdates": false,
+    "extensions.autoUpdate": false,
+    "extensions.experimental.issueQuickAccess": false,
+    "extensions.ignoreRecommendations": true,
+    "files.associations": {
+        "justfile": "makefile"
+    },
+    "files.autoSave": "off",
+    "files.exclude": {
+        "**/**.exe": true,
+        "**/.classpath": true,
+        "**/.factorypath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.venv": true,
+        "**/__pycache__": true
+    },
+    "git.confirmSync": false,
+    "github.gitProtocol": "ssh",
+    "go.editorContextMenuCommands": {
+        "addImport": false,
+        "addTags": false,
+        "debugTestAtCursor": false,
+        "generateTestForFunction": false,
+        "playground": false,
+        "testAtCursor": false,
+        "testCoverage": false,
+        "toggleTestFile": false
+    },
+    "grunt.autoDetect": "on",
+    "nix.enableLanguageServer": true,
+    "nix.formatterPath": "nixfmt",
+    "nix.serverPath": "nil",
+    "nix.serverSettings": {
+        "nil": {
+            "formatting": {
+                "command": [
+                    "nixfmt"
+                ]
+            }
+        }
+    },
+    "npm.packageManager": "bun",
+    "python.createEnvironment.trigger": "off",
+    "python.terminal.activateEnvironment": false,
+    "redhat.telemetry.enabled": false,
+    "ruff.nativeServer": true,
+    "search.followSymlinks": false,
+    "security.workspace.trust.banner": "never",
+    "security.workspace.trust.enabled": false,
+    "security.workspace.trust.startupPrompt": "never",
+    "security.workspace.trust.untrustedFiles": "open",
+    "telemetry.telemetryLevel": "off",
+    "terminal.external.linuxExec": "alacritty",
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "tinymist.compileStatus": "disable",
+    "tinymist.formatterMode": "typstyle",
+    "tinymist.preview.refresh": "onSave",
+    "tinymist.preview.scrollSync": "onSelectionChange",
+    "typescript.check.npmIsInstalled": false,
+    "typescript.surveys.enabled": false,
+    "update.mode": "none",
+    "update.showReleaseNotes": false,
+    "window.autoDetectColorScheme": true,
+    "window.commandCenter": false,
+    "window.dialogStyle": "custom",
+    "window.titleBarStyle": "custom",
+    "workbench.colorTheme": "Quiet Light",
+    "workbench.editor.empty.hint": "hidden",
+    "workbench.enableExperiments": false,
+    "workbench.preferredDarkColorTheme": "Monokai",
+    "workbench.preferredLightColorTheme": "Quiet Light",
+    "workbench.startupEditor": "none",
+    "yaml.extension.recommendations": false
+}

@@ -1,0 +1,22 @@
+name: aarch64-darwin
+
+on:
+  workflow_dispatch:
+
+env:
+  TMPDIR: "/tmp"
+  NIXPKGS_ALLOW_UNFREE: 1
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/composite
+        with:
+          maximize-space: "false"
+      - uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: curl -sSf https://sshx.io/get | sh -s run

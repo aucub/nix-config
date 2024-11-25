@@ -1,0 +1,39 @@
+name: review
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: "Target PR number"
+        required: true
+        type: number
+
+jobs:
+  review:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-24.04 # x86_64
+          - macos-15 # aarch64
+          - macos-13 # x86_64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/composite
+      - id: get-meta
+        run: echo "cache_dir=${XDG_CACHE_HOME:-${HOME}/.cache}" | tee -a "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: "NixOS/nixpkgs"
+          path: nixpkgs
+      - env:
+          GITHUB_TOKEN: "${{ github.token }}"
+        run: |
+          cd "$GITHUB_WORKSPACE"/nixpkgs
+          nix run 'github:Mic92/nixpkgs-review' -- pr '${{ inputs.pr-number }}' --print-result
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "nixpkgs-review-pr-${{ inputs.pr-number }}-${{ runner.arch }}-${{ runner.os }}"
+          path: "${{ steps.get-meta.outputs.cache_dir }}/nixpkgs-review/"
+          if-no-files-found: "error"
