@@ -15,6 +15,7 @@ global {
   wan_interface: auto
   log_level: info
   auto_config_kernel_parameter: true
+  check_tolerance: 150ms
   check_interval: 900s
   allow_insecure: false
   enable_local_tcp_fast_redirect: true
@@ -42,6 +43,7 @@ group {
   }
 }
 routing {
+  pname(systemd-networkd, systemd-resolved, smartdns, dnsproxy, coredns, mosdns, naive, hysteria, tuic-client, sing-box, juicity, mosproxy) -> must_direct
   pname(NetworkManager) -> direct
   dip(224.0.0.0/3, 'ff00::/8') -> direct
   l4proto(udp) && dport(443) -> block

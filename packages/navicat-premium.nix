@@ -24,19 +24,17 @@
   libxkbcommon,
   libselinux,
 }:
-let
+stdenv.mkDerivation rec {
   pname = "navicat-premium";
   version = "17.1.6";
-  appimageContents = appimageTools.extractType2 {
+
+  src = appimageTools.extractType2 {
     inherit pname version;
     src = fetchurl {
       url = "https://dn.navicat.com/download/navicat17-premium-cs-x86_64.AppImage";
       hash = "sha256-b6tuBpXFH9jO3He6d3xrWFEJ6MccUMWPToR+NKpSKMU=";
     };
   };
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -64,12 +62,10 @@ stdenv.mkDerivation {
     libselinux
   ];
 
-  dontUnpack = true;
-
   installPhase = ''
     runHook preInstall
 
-    cp -a ${appimageContents}/usr $out/
+    cp -r ./usr $out/
     chmod -R u+rwX,go+rX,go-w $out
     mkdir -p $out/usr
     ln -s $out/lib $out/usr/lib

@@ -1,6 +1,5 @@
 {
   flake,
-  pkgs,
   lib,
   ...
 }:
@@ -14,10 +13,6 @@ in
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
   ];
   services.xserver.videoDrivers = lib.optionals nvidiaDriver [ "nvidia" ];
-  environment.variables = lib.optionalAttrs nvidiaDriver {
-    __EGL_VENDOR_LIBRARY_FILENAMES = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
-    __GLX_VENDOR_LIBRARY_NAME = "mesa";
-  };
   hardware.nvidia = lib.optionalAttrs nvidiaDriver {
     open = true;
     modesetting.enable = true;

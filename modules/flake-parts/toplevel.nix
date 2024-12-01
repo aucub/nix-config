@@ -1,4 +1,3 @@
-# Top-level flake glue to get our configuration working
 { inputs, ... }:
 
 {

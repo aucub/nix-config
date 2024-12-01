@@ -207,10 +207,12 @@ in
     variables = {
       NIX_REMOTE = "daemon";
       EDITOR = "hx";
+      __EGL_VENDOR_LIBRARY_FILENAMES = "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+      __GLX_VENDOR_LIBRARY_NAME = "mesa";
     };
     sessionVariables = {
       LESS = "-SR";
-      MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+      MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
       MANROFFOPT = "-c";
       SOPS_AGE_RECIPIENTS = "age1n4f3l2tk5qq6snguy5pdl0e7ylyah6ptlrfeyt2pq3whr5edha5q9y0qdu";
     };
@@ -314,7 +316,7 @@ in
       source-han-mono
       source-han-serif-vf-otf
       source-han-sans-vf-otf
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      nerd-fonts.symbols-only
     ];
     fontconfig = {
       enable = true;

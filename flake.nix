@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/6c3afcf70a9909ad919da1a77e7ad033af2d369e";
+    nixpkgs.url = "github:NixOS/nixpkgs/0b3416b40b3b6a467cae1d7ca40ec1d57a85d774";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixos-unified.url = "github:srid/nixos-unified";

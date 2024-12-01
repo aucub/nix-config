@@ -6,6 +6,7 @@ let
 in
 self: prev: {
   navicat-premium = self.callPackage "${packages}/navicat-premium.nix" { };
+  firefox-gnome-theme = self.callPackage "${packages}/firefox-gnome-theme.nix" { };
   orchis-theme = prev.orchis-theme.overrideAttrs (oldAttrs: {
     installPhase = ''
       runHook preInstall

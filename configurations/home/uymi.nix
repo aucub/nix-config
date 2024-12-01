@@ -357,7 +357,7 @@ in
       };
       hooks.pre-commit = pkgs.writeScript "pre-commit-script" ''
         #!/bin/sh
-        gitleaks protect --staged --no-banner --max-target-megabytes 1
+        ${pkgs.gitleaks}/bin/gitleaks protect --staged --no-banner --max-target-megabytes 1
       '';
       aliases = {
         ca = "commit --amend --no-edit --reset-author";

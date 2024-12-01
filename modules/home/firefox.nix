@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = "${pkgs.nur.repos.zzzsy.firefox-gnome-theme}/share/firefox-theme";
+  home.file.".mozilla/firefox/default/chrome/firefox-gnome-theme".source = pkgs.firefox-gnome-theme;
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;

@@ -19,7 +19,8 @@ runs:
         remove-large-packages: true
         remove-cached-tools: true
         remove-swapfile: true
-    - shell: bash
+    - if: runner.os == 'Linux'
+      shell: bash
       run: |
         sudo fallocate -l 8G /swapfile
         sudo chmod 600 /swapfile
@@ -37,7 +38,7 @@ runs:
         free
     - uses: cachix/install-nix-action@v30
       with:
-        nix_path: nixpkgs=channel:nixos-unstable-small
+        nix_path: nixpkgs=channel:nixos-unstable
         extra_nix_config: |
           auto-optimise-store = true
           always-allow-substitutes = true
