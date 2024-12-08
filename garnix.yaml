@@ -1,4 +1,5 @@
 builds:
   include:
-    # []
-    - nixosConfigurations.*
+    []
+    # - nixosConfigurations.*
+    # - "packages.aarch64-linux.*"

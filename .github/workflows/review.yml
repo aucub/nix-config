@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/composite
+      - uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - id: get-meta
         run: echo "cache_dir=${XDG_CACHE_HOME:-${HOME}/.cache}" | tee -a "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
@@ -37,3 +41,23 @@ jobs:
           name: "nixpkgs-review-pr-${{ inputs.pr-number }}-${{ runner.arch }}-${{ runner.os }}"
           path: "${{ steps.get-meta.outputs.cache_dir }}/nixpkgs-review/"
           if-no-files-found: "error"
+  review-aarch64-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: uraimo/run-on-arch-action@v2
+        with:
+          base_image: nixos/nix:latest-arm64
+          arch: none
+          distro: none
+          githubToken: ${{ github.token }}
+          shell: /bin/sh
+          install: |
+            mkdir -p ~/.config/nix/
+            echo -e 'filter-syscalls = false\nextra-experimental-features = nix-command flakes\nsandbox = true' > ~/.config/nix/nix.conf
+            nix-channel --remove nixos
+            nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+            nix-channel --update
+          run: |
+            git clone https://github.com/NixOS/nixpkgs.git --depth 1
+            cd nixpkgs
+            nix run 'github:Mic92/nixpkgs-review' -- pr '${{ inputs.pr-number }}' --print-result

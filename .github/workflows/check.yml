@@ -18,6 +18,9 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/composite
+      - uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          just fmt
-          just check
+          task fmt
+          task check
