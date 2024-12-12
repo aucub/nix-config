@@ -13,8 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/composite
+      - uses: arduino/setup-task@v2
         with:
-          maximize-space: "false"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: cachix/cachix-action@v15
         with:
           name: ${{ secrets.CACHIX_NAME }}

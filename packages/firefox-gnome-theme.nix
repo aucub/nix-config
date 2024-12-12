@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation (finalAttr: {
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "firefox-gnome-theme";
-    rev = "c1d082e47cb38b9e8d8d6899398f3bae51a72c34"; # "refs/tags/v${finalAttr.version}";
-    hash = "sha256-Hf2NK58bTV1hy6FxvKpyNzm59tyMPzDjc8cGcWiTLyQ=";
+    rev = "aa9b67045fcdec7ae045b36d7a41b36b3463b842"; # "refs/tags/v${finalAttr.version}";
+    hash = "sha256-Q8W1YlsZmxhUaXLOJhPCeEzKqaqmspT9VKYZxn5Kh40=";
   };
 
   installPhase = ''

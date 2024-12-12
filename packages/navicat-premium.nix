@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    cp -r ./usr $out/
+    cp -r ./usr $out
     chmod -R u+rwX,go+rX,go-w $out
     mkdir -p $out/usr
     ln -s $out/lib $out/usr/lib

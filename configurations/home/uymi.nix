@@ -132,7 +132,6 @@ in
     };
     fish = {
       enable = true;
-      package = inputs.niqspkgs.packages.${pkgs.system}.fish-git;
       interactiveShellInit =
         ''
           set_proxy
@@ -168,6 +167,10 @@ in
         enter_accept = true;
         prefers_reduced_motion = true;
       };
+    };
+    ripgrep = {
+      enable = true;
+      arguments = [ "--ignore-case" ];
     };
     mise = {
       enable = false;

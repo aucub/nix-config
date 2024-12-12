@@ -14,6 +14,7 @@ jobs:
           distro: none
           githubToken: ${{ github.token }}
           shell: /bin/sh
+          dockerRunArgs: --cap-add SYS_ADMIN --privileged
           install: |
             mkdir -p ~/.config/nix/
             echo -e 'filter-syscalls = false\nextra-experimental-features = nix-command flakes\nsandbox = true' > ~/.config/nix/nix.conf
