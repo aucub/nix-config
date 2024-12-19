@@ -25,14 +25,34 @@ self: prev: {
         sed -i '/action = g_action_map_lookup_action.*(view_action_group, "send-email");/,/^\s*}$/d' src/nautilus-files-view.c
       '';
   });
-  apacheHttpdPackages = prev.apacheHttpdPackages // {
-    mod_dnssd = prev.apacheHttpdPackages.mod_dnssd.overrideAttrs (oldAttrs: {
-      patches = [
-        (prev.fetchpatch {
-          url = "https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/vivid/mod-dnssd/vivid/download/head:/debian/patches/port-for-apache2.4.patch";
-          sha256 = "1hgcxwy1q8fsxfqyg95w8m45zbvxzskf1jxd87ljj57l7x1wwp4r";
-        })
-      ];
-    });
-  };
+  fhs = (
+    let
+      base = prev.appimageTools.defaultFhsEnvArgs;
+    in
+    prev.buildFHSEnv (
+      base
+      // {
+        name = "fhs";
+        targetPkgs =
+          pkgs:
+          (base.targetPkgs pkgs)
+          ++ (with pkgs; [
+            fish
+          ])
+          ++ (with pkgs; [
+            udev
+            alsa-lib
+            icu
+          ])
+          ++ (with pkgs.xorg; [
+            libX11
+            libXcursor
+            libXrandr
+          ]);
+        profile = "export FHS=1";
+        runScript = "fish";
+        extraOutputsToInstall = [ "dev" ];
+      }
+    )
+  );
 }

@@ -9,6 +9,7 @@ on:
 env:
   TMPDIR: "/tmp"
   NIXPKGS_ALLOW_UNFREE: 1
+  NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE: 1
 
 jobs:
   check:
@@ -18,6 +19,9 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/composite
+      - uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          just fmt
-          just check
+          task fmt
+          task check

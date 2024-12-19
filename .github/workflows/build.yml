@@ -8,10 +8,19 @@ on:
         required: false
         default: false
         type: boolean
+      maximize-space:
+        description: "maximize-space"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
 
 env:
   TMPDIR: "/tmp"
   NIXPKGS_ALLOW_UNFREE: 1
+  NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE: 1
 
 jobs:
   build:
@@ -19,15 +28,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/composite
+        with:
+          maximize-space: ${{ inputs.maximize-space }}
+      - uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: cachix/cachix-action@v15
         with:
           name: ${{ secrets.CACHIX_NAME }}
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - run: nix-env -i nixos-rebuild-ng -f '<nixpkgs>'
       - if: ${{ inputs.sshx }}
         run: curl -sSf https://sshx.io/get | sh -s run
       - if: ${{ !inputs.sshx }}
-        run: |
-          nix-env -i nixos-rebuild-ng -f '<nixpkgs>'
-          just build-os
+        run: task build-os
         # nix build "github:NixOS/nixpkgs/nixos-unstable#lix" --impure --show-trace -L -v
         # nix-shell maintainers/scripts/update.nix --argstr package mihomo-party --argstr commit true
