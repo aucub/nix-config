@@ -41,7 +41,7 @@
               inherit inputs;
             };
           })
-          inputs.nur.overlay
+          inputs.nur.overlays.default
           inputs.nix-alien.overlays.default
           inputs.nix-vscode-extensions.overlays.default
         ];
