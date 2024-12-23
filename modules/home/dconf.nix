@@ -210,5 +210,7 @@
       show-hidden = true;
       sort-directories-first = true;
     };
+
+    "org/gnome/desktop/notifications/application/chromium-browser".enable = false;
   };
 }

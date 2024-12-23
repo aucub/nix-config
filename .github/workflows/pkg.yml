@@ -8,21 +8,61 @@ on:
         required: true
         default: ""
         type: string
+      system:
+        description: "system"
+        required: true
+        default: "ubuntu-latest"
+        type: choice
+        options:
+          - ubuntu-latest
+          - macos-latest
+          - macos-13
+          - aarch64-linux
 
 env:
   TMPDIR: "/tmp"
   NIXPKGS_ALLOW_UNFREE: 1
+  NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE: 1
 
 jobs:
   pkg:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.system }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/composite
+      - uses: arduino/setup-task@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: cachix/cachix-action@v15
         with:
           name: ${{ secrets.CACHIX_NAME }}
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - run: just build $PACKAGE
+      - run: task build -- $PACKAGE
         env:
           PACKAGE: ${{ inputs.package }}
+  pkg-aarch64-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - if: inputs.system != 'aarch64-linux'
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          base_image: nixos/nix:latest-arm64
+          arch: none
+          distro: none
+          githubToken: ${{ github.token }}
+          env: |
+            PACKAGE: ${{ inputs.package }}
+            GITHUB_TOKEN: ${{ github.token }}
+          shell: /bin/sh
+          dockerRunArgs: --cap-add SYS_ADMIN --privileged
+          install: |
+            mkdir -p ~/.config/nix/
+            echo -e 'filter-syscalls = false\nextra-experimental-features = nix-command flakes\nsandbox = true' > ~/.config/nix/nix.conf
+            cp -f ~/.config/nix/nix.conf /etc/nix/nix.conf
+            nix-channel --remove nixos
+            nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+            nix-channel --update
+          run: |
+            git clone https://github.com/aucub/nix-config.git --depth 1
+            cd nix-config
+            nix build .#$PACKAGE --impure --show-trace -L -v

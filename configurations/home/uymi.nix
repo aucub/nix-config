@@ -132,7 +132,6 @@ in
     };
     fish = {
       enable = true;
-      package = inputs.niqspkgs.packages.${pkgs.system}.fish-git;
       interactiveShellInit =
         ''
           set_proxy
@@ -168,6 +167,10 @@ in
         enter_accept = true;
         prefers_reduced_motion = true;
       };
+    };
+    ripgrep = {
+      enable = true;
+      arguments = [ "--ignore-case" ];
     };
     mise = {
       enable = false;
@@ -224,14 +227,6 @@ in
           soft-wrap.enable = true;
           indent-guides.render = true;
         };
-      };
-    };
-    bat = {
-      enable = true;
-      config = {
-        style = "header-filename,header-filesize,grid";
-        paging = "never";
-        theme = "Dracula";
       };
     };
     git = {
@@ -430,6 +425,7 @@ in
     sessionVariables = {
       QT_AUTO_SCREEN_SCALE_FACTOR = 1;
       QT_ENABLE_HIGHDPI_SCALING = 1;
+      QT_FONT_DPI = 120;
     };
     startServices = "sd-switch";
   };

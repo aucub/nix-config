@@ -53,13 +53,12 @@ runs:
           use-registries = false
           use-cgroups = true
           experimental-features = nix-command flakes cgroups git-hashing dynamic-derivations ca-derivations
-          extra-substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://cache.ngi0.nixos.org https://nanari.cachix.org
-          extra-trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA= nanari.cachix.org-1:g2X+SmJHsI0siZez0IUUgVyOuvPG5CWhrhoE11MqALA=
+          extra-substituters = https://cache.nixos.org https://nix-community.cachix.org https://cache.garnix.io https://nanari.cachix.org
+          extra-trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= nanari.cachix.org-1:g2X+SmJHsI0siZez0IUUgVyOuvPG5CWhrhoE11MqALA=
     - uses: DeterminateSystems/magic-nix-cache-action@v8
       with:
         diagnostic-endpoint: ""
         use-flakehub: false
-    - uses: extractions/setup-just@v2
     - shell: bash
       run: |
         git config --global user.name "${GITHUB_ACTOR}"

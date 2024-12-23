@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/0b3416b40b3b6a467cae1d7ca40ec1d57a85d774";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixos-unified.url = "github:srid/nixos-unified";
@@ -23,14 +23,6 @@
     nur.url = "github:nix-community/NUR";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    niqspkgs = {
-      url = "github:diniamo/niqspkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

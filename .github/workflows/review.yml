@@ -8,19 +8,28 @@ on:
         required: true
         type: number
 
+env:
+  TMPDIR: "/tmp"
+  NIXPKGS_ALLOW_UNFREE: 1
+  NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE: 1
+
 jobs:
   review:
     strategy:
       fail-fast: false
       matrix:
         runner:
-          - ubuntu-24.04 # x86_64
-          - macos-15 # aarch64
+          - ubuntu-latest # x86_64
+          - macos-latest # aarch64
           - macos-13 # x86_64
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/composite
+      - uses: cachix/cachix-action@v15
+        with:
+          name: ${{ secrets.CACHIX_NAME }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - id: get-meta
         run: echo "cache_dir=${XDG_CACHE_HOME:-${HOME}/.cache}" | tee -a "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
@@ -31,9 +40,33 @@ jobs:
           GITHUB_TOKEN: "${{ github.token }}"
         run: |
           cd "$GITHUB_WORKSPACE"/nixpkgs
-          nix run 'github:Mic92/nixpkgs-review' -- pr '${{ inputs.pr-number }}' --print-result
+          nix run 'github:Mic92/nixpkgs-review' -- pr '${{ inputs.pr-number }}' --print-result --extra-nixpkgs-config '{ allowUnfree = true; android_sdk.accept_license = true; cudaSupport = true; }' --no-shell
       - uses: actions/upload-artifact@v4
         with:
           name: "nixpkgs-review-pr-${{ inputs.pr-number }}-${{ runner.arch }}-${{ runner.os }}"
           path: "${{ steps.get-meta.outputs.cache_dir }}/nixpkgs-review/"
           if-no-files-found: "error"
+  review-aarch64-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: uraimo/run-on-arch-action@v2
+        with:
+          base_image: nixos/nix:latest-arm64
+          arch: none
+          distro: none
+          githubToken: ${{ github.token }}
+          env: |
+            GITHUB_TOKEN: ${{ github.token }}
+          shell: /bin/sh
+          dockerRunArgs: --cap-add SYS_ADMIN --privileged
+          install: |
+            mkdir -p ~/.config/nix/
+            echo -e 'filter-syscalls = false\nextra-experimental-features = nix-command flakes\nsandbox = true' > ~/.config/nix/nix.conf
+            cp -f ~/.config/nix/nix.conf /etc/nix/nix.conf
+            nix-channel --remove nixos
+            nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+            nix-channel --update
+          run: |
+            git clone https://github.com/NixOS/nixpkgs.git --depth 3
+            cd nixpkgs
+            nix run 'github:Mic92/nixpkgs-review' -- pr '${{ inputs.pr-number }}' --print-result --extra-nixpkgs-config '{ allowUnfree = true; android_sdk.accept_license = true; cudaSupport = true; }' --no-shell

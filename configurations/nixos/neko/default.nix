@@ -17,7 +17,6 @@ in
   imports =
     [
       inputs.nix-index-database.nixosModules.nix-index
-      inputs.auto-cpufreq.nixosModules.default
     ]
     ++ [
       inputs.nixos-hardware.nixosModules.common-cpu-amd
@@ -27,18 +26,19 @@ in
       ./hardware-configuration.nix
     ]
     ++ [
-      self.nixosModules.nvidia
       self.nixosModules.dae
       self.nixosModules.gnome
       self.nixosModules.fcitx5
       self.nixosModules.chromium
+      self.nixosModules.nvidia
+      self.nixosModules.steam
     ];
 
   nixpkgs = {
     config.allowUnfree = true;
     overlays = [
       self.overlays.default
-      inputs.nur.overlay
+      inputs.nur.overlays.default
       inputs.nix-alien.overlays.default
       inputs.nix-vscode-extensions.overlays.default
     ];
@@ -79,7 +79,7 @@ in
       };
       timeout = 4;
     };
-    kernelPackages = pkgs.linuxPackages_lqx;
+    kernelPackages = pkgs.linuxPackages_testing;
     kernelParams = [
       "amdgpu.vm_update_mode=3"
       "radeon.dpm=0"
@@ -183,6 +183,7 @@ in
           sly
           celluloid
           pot
+          telegram-desktop
           # gitkraken
         ])
         # theme
@@ -224,7 +225,7 @@ in
         comma
         nix-tree
         nvd
-        just
+        go-task
       ])
       ++ (with pkgs; [
         nil
@@ -236,8 +237,8 @@ in
         gitleaks
         eza
         fzf
-        bat
         fd
+        ripgrep
         ripgrep-all
         typos
         lnav
@@ -339,31 +340,22 @@ in
       enable = true;
       type = "fcitx5";
       fcitx5 = {
-        plasma6Support = false;
         waylandFrontend = true;
         addons = with pkgs; [
           fcitx5-gtk
-          fcitx5-chinese-addons
+          libsForQt5.fcitx5-chinese-addons
         ];
       };
     };
   };
 
   programs = {
-    auto-cpufreq = {
-      enable = true;
-      settings.charger = {
-        governor = "schedutil";
-        turbo = "auto";
-      };
-    };
     command-not-found.enable = false;
     bash.promptInit = ''
       PS1='\u@\h\[\e[32m\]\w\[\e[0m\] \\$ '
     '';
     fish = {
       enable = true;
-      package = inputs.niqspkgs.packages.${pkgs.system}.fish-git;
       interactiveShellInit = ''
         set fish_greeting
         set -U fish_history_max 2500
@@ -373,7 +365,7 @@ in
         ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
       '';
       shellAbbrs = {
-        nix-wd = "nix-store --gc --print-roots | rga -v '/proc/' | rga -Po '(?<= -> ).*' | xargs -o nix-tree";
+        nix-wd = "nix-store --gc --print-roots | rg -v '/proc/' | rg -Po '(?<= -> ).*' | xargs -o nix-tree";
         ezl = "eza -lba --group-directories-first";
         uv-venv = "uv venv --python=${pkgs.python3}/bin/python";
         # 列出系统的 generations
@@ -489,6 +481,14 @@ in
         };
       };
     };
+    bat = {
+      enable = true;
+      settings = {
+        style = "header-filename,header-filesize,grid";
+        paging = "never";
+        theme = "Dracula";
+      };
+    };
     git = {
       enable = true;
       package = pkgs.gitFull;
@@ -549,6 +549,13 @@ in
     };
     power-profiles-daemon.enable = false;
     tlp.enable = false;
+    auto-cpufreq = {
+      enable = true;
+      settings.charger = {
+        governor = "schedutil";
+        turbo = "auto";
+      };
+    };
     fstrim.enable = if config.fileSystems."/".fsType == "bcachefs" then false else true;
     btrfs.autoScrub.enable = if config.fileSystems."/".fsType == "btrfs" then true else false;
     dbus.implementation = "broker";
@@ -623,7 +630,10 @@ in
   };
 
   systemd = {
-    extraConfig = "DefaultTimeoutStopSec=25s";
+    extraConfig = ''
+      DefaultTimeoutStopSec=25s
+      DefaultTimeoutAbortSec=25s
+    '';
     sleep.extraConfig = "AllowHibernation=no";
     timers.suspend-then-shutdown = {
       wantedBy = [ "sleep.target" ];
@@ -702,5 +712,8 @@ in
     };
   };
 
-  system.stateVersion = lib.trivial.release;
+  system = {
+    rebuild.enableNg = true;
+    stateVersion = lib.trivial.release;
+  };
 }

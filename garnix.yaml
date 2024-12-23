@@ -2,3 +2,4 @@ builds:
   include:
     # []
     - nixosConfigurations.*
+    # - "packages.aarch64-linux.default"

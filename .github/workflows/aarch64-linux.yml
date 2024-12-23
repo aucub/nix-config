@@ -3,6 +3,11 @@ name: aarch64-linux
 on:
   workflow_dispatch:
 
+env:
+  TMPDIR: "/tmp"
+  NIXPKGS_ALLOW_UNFREE: 1
+  NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE: 1
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,10 +18,14 @@ jobs:
           arch: none
           distro: none
           githubToken: ${{ github.token }}
+          env: |
+            GITHUB_TOKEN: ${{ github.token }}
           shell: /bin/sh
+          dockerRunArgs: --cap-add SYS_ADMIN --privileged
           install: |
             mkdir -p ~/.config/nix/
             echo -e 'filter-syscalls = false\nextra-experimental-features = nix-command flakes\nsandbox = true' > ~/.config/nix/nix.conf
+            cp -f ~/.config/nix/nix.conf /etc/nix/nix.conf
             nix-channel --remove nixos
             nix-channel --add https://nixos.org/channels/nixos-unstable nixos
             nix-channel --update
